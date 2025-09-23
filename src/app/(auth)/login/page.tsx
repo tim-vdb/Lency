@@ -25,8 +25,8 @@ export default function SignIn() {
   const [rememberMe, setRememberMe] = useState(false);
 
   return (
-    <div className="container flex justify-center p-4">
-      <Card className="max-w-md">
+    <div className="container flex justify-center p-15 pt-40">
+      <Card className="w-[50vw]">
         <CardHeader>
           <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
           <CardDescription className="text-xs md:text-sm">
@@ -58,7 +58,7 @@ export default function SignIn() {
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-white border-1 border-black"
               disabled={loading}
               onClick={async () => {
                 await signIn.email(

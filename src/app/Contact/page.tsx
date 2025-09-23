@@ -1,16 +1,11 @@
-import React from 'react';
+import React from "react";
 
 export default function ContactPage() {
   return (
-    <main className="p-8 sm:p-12 md:p-16 lg:px-24 lg:py-12">
-      
-     
-      <h1 className="text-4xl md:text-5xl font-cooper font-bold mb-8 text-center md:text-left">
-        Contactez-nous
-      </h1>
+    <section className="p-8 lg:px-24 pt-40">
+      <h1 className="mb-8 text-center">Contactez-nous</h1>
 
-      
-      <div className="grid md:grid-cols-2 gap-12">
+      <div className="grid md:grid-cols-2 gap-12 rounded-xl p-8 shadow-md">
         <form className="bg-white p-6 rounded-xl shadow-md dark:shadow-black/40 flex flex-col gap-4">
           <label className="flex flex-col text-sm md:text-base">
             Nom
@@ -47,31 +42,26 @@ export default function ContactPage() {
           </button>
         </form>
 
-        <div className="flex flex-col gap-6 text-sm md:text-base p-1">
+        <div className="flex flex-col gap-6 p-1">
+          <h2 className="font-bold">Where to find us !</h2>
           <div>
-            <h2 className="text-2xl font-cooper font-semibold mb-2">Adresse</h2>
+            <h3 className="mb-2">Adresse</h3>
             <p>3 Rue Turbil, 69003 Lyon, France</p>
           </div>
 
           <div>
-            <h2 className="text-2xl font-cooper font-semibold mb-2">Email</h2>
-            <p>contact@MOLKKY.fr</p>
-          </div>
-
-          <div>
-            <h2 className="text-2xl font-cooper font-semibold mb-2">Téléphone</h2>
+            <h3 className="mb-2">Téléphone</h3>
             <p>+33 6 12 34 56 78</p>
           </div>
 
           <div>
-            <h2 className="text-2xl font-cooper font-semibold mb-2">Horaires</h2>
+            <h3 className="mb-2">Horaires</h3>
             <p>Lundi - Vendredi : 10h - 18h</p>
           </div>
         </div>
       </div>
 
-      
-      <div className="mt-16 flex flex-col md:flex-row items-center gap-8 p-8 rounded-xl">
+      <div className="mt-16 flex flex-col md:flex-row items-center gap-8 p-8 rounded-xl shadow-md">
         <div className="md:w-1/2 shadow-md dark:shadow-black">
           <img
             src="/molkky_contact.jpeg"
@@ -80,9 +70,11 @@ export default function ContactPage() {
           />
         </div>
         <div className="md:w-1/2">
-          <h1 className="text-3xl font-cooper font-bold mb-4">Notre mission</h1>
+          <h1 className="mb-4">Notre mission</h1>
           <p className="text-sm md:text-base">
-            Chez MOLKKY, nous nous efforçons de promouvoir la convivialité et le sport à travers le Mölkky. Rejoignez-nous pour partager des moments uniques avec notre communauté !
+            Chez MOLKKY, nous nous efforçons de promouvoir la convivialité et le
+            sport à travers le Mölkky. Rejoignez-nous pour partager des moments
+            uniques avec notre communauté !
           </p>
           <button
             type="button"
@@ -93,7 +85,6 @@ export default function ContactPage() {
         </div>
       </div>
 
-    
       <div className="mt-16 flex flex-col md:flex-row gap-8 p-8 rounded-xl shadow-md">
         <div className="md:w-1/2 h-64 md:h-auto">
           <iframe
@@ -104,9 +95,10 @@ export default function ContactPage() {
         </div>
 
         <div className="md:w-1/2 flex flex-col justify-center gap-4">
-          <h2 className="text-3xl font-cooper font-bold">Venez nous rencontrer !</h2>
+          <h2 className="font-bold">Venez nous rencontrer !</h2>
           <p className="text-sm">
-            Retrouvez-nous au parc de Lyon pour découvrir le Mölkky en vrai ! Consultez nos événements et inscrivez-vous directement en ligne.
+            Retrouvez-nous au parc de Lyon pour découvrir le Mölkky en vrai !
+            Consultez nos événements et inscrivez-vous directement en ligne.
           </p>
           <button
             type="button"
@@ -116,7 +108,6 @@ export default function ContactPage() {
           </button>
         </div>
       </div>
-
-    </main>
+    </section>
   );
 }
