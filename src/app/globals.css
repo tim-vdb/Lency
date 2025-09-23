@@ -1,4 +1,4 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 /* Déclaration des polices Cooper */
 /* @font-face {
@@ -357,7 +357,7 @@
   }
 
   p {
-    @apply text-black dark:text-white prose prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem];
+    @apply text-black dark:text-white prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem];
   }
 }
 
