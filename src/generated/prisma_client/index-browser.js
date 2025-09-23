@@ -137,7 +137,8 @@ exports.Prisma.EventScalarFieldEnum = {
   description: 'description',
   image: 'image',
   location: 'location',
-  date: 'date',
+  dateStart: 'dateStart',
+  dateEnd: 'dateEnd',
   openAt: 'openAt',
   closeAt: 'closeAt',
   visibleToGuests: 'visibleToGuests',
@@ -152,6 +153,7 @@ exports.Prisma.RegistrationScalarFieldEnum = {
   name: 'name',
   email: 'email',
   phone: 'phone',
+  participants: 'participants',
   createdAt: 'createdAt',
   eventId: 'eventId',
   userId: 'userId'
