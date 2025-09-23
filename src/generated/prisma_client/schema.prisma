@@ -9,38 +9,97 @@ generator client {
   output        = "../generated/prisma_client"
 }
 
+/**
+ * ---------------- USERS & ROLES ----------------
+ */
 model User {
-  id            String    @id
+  id            String   @id @default(cuid())
   name          String
-  email         String
-  emailVerified Boolean   @default(false)
+  email         String   @unique
+  emailVerified Boolean  @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+  role          Role     @default(MEMBER) // visiteur = pas de compte, membre par défaut
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
   sessions      Session[]
   accounts      Account[]
+  events        Event[]        @relation("CreatedEvents") // si contributeur
+  registrations Registration[]
 
-  @@unique([email])
   @@map("user")
 }
 
+enum Role {
+  MEMBER // utilisateur inscrit normal
+  CONTRIBUTOR // membre qui peut créer des événements et voir inscrits
+  ADMIN // admin
+}
+
+/**
+ * ---------------- EVENTS ----------------
+ */
+model Event {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  image           String?
+  location        String
+  date            DateTime
+  openAt          DateTime
+  closeAt         DateTime
+  visibleToGuests Boolean  @default(false) // accessible aux visiteurs ou non
+  maxParticipants Int // nombre max de personnes autorisées à s’inscrire
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+
+  creatorId String
+  creator   User   @relation("CreatedEvents", fields: [creatorId], references: [id])
+
+  registrations Registration[]
+
+  @@map("event")
+}
+
+/**
+ * ---------------- REGISTRATIONS ----------------
+ */
+model Registration {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  createdAt DateTime @default(now())
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
+
+  userId String? // facultatif : un visiteur peut s’inscrire sans compte
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@map("registration")
+}
+
+/**
+ * ---------------- SESSIONS & ACCOUNTS ----------------
+ */
 model Session {
-  id        String   @id
+  id        String   @id @default(cuid())
   expiresAt DateTime
-  token     String
+  token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("session")
 }
 
 model Account {
-  id                    String    @id
+  id                    String    @id @default(cuid())
   accountId             String
   providerId            String
   userId                String
@@ -53,13 +112,13 @@ model Account {
   scope                 String?
   password              String?
   createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  updatedAt             DateTime  @default(now()) @updatedAt
 
   @@map("account")
 }
 
 model Verification {
-  id         String   @id
+  id         String   @id @default(cuid())
   identifier String
   value      String
   expiresAt  DateTime

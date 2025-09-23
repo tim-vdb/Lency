@@ -126,8 +126,35 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EventScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  image: 'image',
+  location: 'location',
+  date: 'date',
+  openAt: 'openAt',
+  closeAt: 'closeAt',
+  visibleToGuests: 'visibleToGuests',
+  maxParticipants: 'maxParticipants',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  creatorId: 'creatorId'
+};
+
+exports.Prisma.RegistrationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  createdAt: 'createdAt',
+  eventId: 'eventId',
+  userId: 'userId'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -180,10 +207,16 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.Role = exports.$Enums.Role = {
+  MEMBER: 'MEMBER',
+  CONTRIBUTOR: 'CONTRIBUTOR',
+  ADMIN: 'ADMIN'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Event: 'Event',
+  Registration: 'Registration',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification'

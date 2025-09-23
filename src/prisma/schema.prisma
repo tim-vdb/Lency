@@ -1,70 +1,121 @@
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x"]
-    output        = "../generated/prisma_client"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x"]
+  output        = "../generated/prisma_client"
 }
 
+/* ---------------- USERS & ROLES ---------------- */
 model User {
-    id            String    @id
-    name          String
-    email         String
-    emailVerified Boolean   @default(false)
-    image         String?
-    createdAt     DateTime  @default(now())
-    updatedAt     DateTime  @default(now()) @updatedAt
-    sessions      Session[]
-    accounts      Account[]
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  emailVerified Boolean      @default(false)
+  image         String?
+  role          Role         @default(MEMBER) // visiteur = pas de compte, membre par défaut
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
 
-    @@unique([email])
-    @@map("user")
+  sessions      Session[]
+  accounts      Account[]
+  events        Event[]      @relation("CreatedEvents") // si contributeur
+  registrations Registration[]
+
+  @@map("user")
 }
 
-model Session {
-    id        String   @id
-    expiresAt DateTime
-    token     String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    ipAddress String?
-    userAgent String?
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+enum Role {
+  MEMBER       // utilisateur inscrit normal
+  CONTRIBUTOR  // membre qui peut créer des événements et voir inscrits
+  ADMIN        // admin
+}
 
-    @@unique([token])
-    @@map("session")
+/* ---------------- EVENTS ---------------- */
+model Event {
+  id               String          @id @default(cuid())
+  name             String
+  description      String?
+  image            String?
+  location         String
+  date             DateTime
+  openAt           DateTime
+  closeAt          DateTime
+  visibleToGuests  Boolean         @default(false) // accessible aux visiteurs ou non
+  maxParticipants  Int             // nombre max de personnes autorisées à s’inscrire
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt
+
+  creatorId        String
+  creator          User            @relation("CreatedEvents", fields: [creatorId], references: [id])
+
+  registrations    Registration[]
+  
+  @@map("event")
+}
+
+/* ---------------- REGISTRATIONS ---------------- */
+model Registration {
+  id            String   @id @default(cuid())
+  name          String
+  email         String
+  phone         String?
+  createdAt     DateTime @default(now())
+
+  eventId       String
+  event         Event    @relation(fields: [eventId], references: [id])
+
+  userId        String?  // facultatif : un visiteur peut s’inscrire sans compte
+  user          User?    @relation(fields: [userId], references: [id])
+
+  @@map("registration")
+}
+
+/* ---------------- SESSIONS & ACCOUNTS ---------------- */
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
 }
 
 model Account {
-    id                    String    @id
-    accountId             String
-    providerId            String
-    userId                String
-    user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    accessToken           String?
-    refreshToken          String?
-    idToken               String?
-    accessTokenExpiresAt  DateTime?
-    refreshTokenExpiresAt DateTime?
-    scope                 String?
-    password              String?
-    createdAt             DateTime  @default(now())
-    updatedAt             DateTime  @updatedAt
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @default(now()) @updatedAt
 
-    @@map("account")
+  @@map("account")
 }
 
 model Verification {
-    id         String   @id
-    identifier String
-    value      String
-    expiresAt  DateTime
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @default(now()) @updatedAt
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
 
-    @@map("verification")
+  @@map("verification")
 }
