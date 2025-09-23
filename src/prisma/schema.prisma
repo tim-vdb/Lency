@@ -9,72 +9,82 @@ generator client {
   output        = "../generated/prisma_client"
 }
 
-/* ---------------- USERS & ROLES ---------------- */
+/**
+ * ---------------- USERS & ROLES ----------------
+ */
 model User {
-  id            String       @id @default(cuid())
+  id            String   @id @default(cuid())
   name          String
-  email         String       @unique
-  emailVerified Boolean      @default(false)
+  email         String   @unique
+  emailVerified Boolean  @default(false)
   image         String?
-  role          Role         @default(MEMBER) // visiteur = pas de compte, membre par défaut
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now()) @updatedAt
+  role          Role     @default(MEMBER) // visiteur = pas de compte, membre par défaut
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
 
   sessions      Session[]
   accounts      Account[]
-  events        Event[]      @relation("CreatedEvents") // si contributeur
+  events        Event[]        @relation("CreatedEvents") // si contributeur
   registrations Registration[]
 
   @@map("user")
 }
 
 enum Role {
-  MEMBER       // utilisateur inscrit normal
-  CONTRIBUTOR  // membre qui peut créer des événements et voir inscrits
-  ADMIN        // admin
+  MEMBER // utilisateur inscrit normal
+  CONTRIBUTOR // membre qui peut créer des événements et voir inscrits
+  ADMIN // admin
 }
 
-/* ---------------- EVENTS ---------------- */
+/**
+ * ---------------- EVENTS ----------------
+ */
 model Event {
-  id               String          @id @default(cuid())
-  name             String
-  description      String?
-  image            String?
-  location         String
-  date             DateTime
-  openAt           DateTime
-  closeAt          DateTime
-  visibleToGuests  Boolean         @default(false) // accessible aux visiteurs ou non
-  maxParticipants  Int             // nombre max de personnes autorisées à s’inscrire
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @default(now()) @updatedAt
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  image           String?
+  location        String
+  dateStart       DateTime @default(now())
+  dateEnd         DateTime @default(now())
+  openAt          DateTime @default(now())
+  closeAt         DateTime @default(now())
+  visibleToGuests Boolean  @default(false) // accessible aux visiteurs ou non
+  maxParticipants Int // nombre max de personnes autorisées à s’inscrire
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
 
-  creatorId        String
-  creator          User            @relation("CreatedEvents", fields: [creatorId], references: [id])
+  creatorId String
+  creator   User   @relation("CreatedEvents", fields: [creatorId], references: [id])
 
-  registrations    Registration[]
-  
+  registrations Registration[]
+
   @@map("event")
 }
 
-/* ---------------- REGISTRATIONS ---------------- */
+/**
+ * ---------------- REGISTRATIONS ----------------
+ */
 model Registration {
-  id            String   @id @default(cuid())
-  name          String
-  email         String
-  phone         String?
-  createdAt     DateTime @default(now())
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  participants Int      @default(1) // nombre de participants à l'événement
+  createdAt    DateTime @default(now())
 
-  eventId       String
-  event         Event    @relation(fields: [eventId], references: [id])
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
 
-  userId        String?  // facultatif : un visiteur peut s’inscrire sans compte
-  user          User?    @relation(fields: [userId], references: [id])
+  userId String? // facultatif : un visiteur peut s’inscrire sans compte
+  user   User?   @relation(fields: [userId], references: [id])
 
   @@map("registration")
 }
 
-/* ---------------- SESSIONS & ACCOUNTS ---------------- */
+/**
+ * ---------------- SESSIONS & ACCOUNTS ----------------
+ */
 model Session {
   id        String   @id @default(cuid())
   expiresAt DateTime
@@ -84,8 +94,8 @@ model Session {
   ipAddress String?
   userAgent String?
 
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("session")
 }

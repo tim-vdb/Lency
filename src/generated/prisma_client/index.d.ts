@@ -15,22 +15,26 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 /**
  * Model User
- * ---------------- USERS & ROLES ----------------
+ * *
+ *  * ---------------- USERS & ROLES ----------------
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
  * Model Event
- * ---------------- EVENTS ----------------
+ * *
+ *  * ---------------- EVENTS ----------------
  */
 export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
 /**
  * Model Registration
- * ---------------- REGISTRATIONS ----------------
+ * *
+ *  * ---------------- REGISTRATIONS ----------------
  */
 export type Registration = $Result.DefaultSelection<Prisma.$RegistrationPayload>
 /**
  * Model Session
- * ---------------- SESSIONS & ACCOUNTS ----------------
+ * *
+ *  * ---------------- SESSIONS & ACCOUNTS ----------------
  */
 export type Session = $Result.DefaultSelection<Prisma.$SessionPayload>
 /**
@@ -2640,7 +2644,8 @@ export namespace Prisma {
     description: string | null
     image: string | null
     location: string | null
-    date: Date | null
+    dateStart: Date | null
+    dateEnd: Date | null
     openAt: Date | null
     closeAt: Date | null
     visibleToGuests: boolean | null
@@ -2656,7 +2661,8 @@ export namespace Prisma {
     description: string | null
     image: string | null
     location: string | null
-    date: Date | null
+    dateStart: Date | null
+    dateEnd: Date | null
     openAt: Date | null
     closeAt: Date | null
     visibleToGuests: boolean | null
@@ -2672,7 +2678,8 @@ export namespace Prisma {
     description: number
     image: number
     location: number
-    date: number
+    dateStart: number
+    dateEnd: number
     openAt: number
     closeAt: number
     visibleToGuests: number
@@ -2698,7 +2705,8 @@ export namespace Prisma {
     description?: true
     image?: true
     location?: true
-    date?: true
+    dateStart?: true
+    dateEnd?: true
     openAt?: true
     closeAt?: true
     visibleToGuests?: true
@@ -2714,7 +2722,8 @@ export namespace Prisma {
     description?: true
     image?: true
     location?: true
-    date?: true
+    dateStart?: true
+    dateEnd?: true
     openAt?: true
     closeAt?: true
     visibleToGuests?: true
@@ -2730,7 +2739,8 @@ export namespace Prisma {
     description?: true
     image?: true
     location?: true
-    date?: true
+    dateStart?: true
+    dateEnd?: true
     openAt?: true
     closeAt?: true
     visibleToGuests?: true
@@ -2833,7 +2843,8 @@ export namespace Prisma {
     description: string | null
     image: string | null
     location: string
-    date: Date
+    dateStart: Date
+    dateEnd: Date
     openAt: Date
     closeAt: Date
     visibleToGuests: boolean
@@ -2868,7 +2879,8 @@ export namespace Prisma {
     description?: boolean
     image?: boolean
     location?: boolean
-    date?: boolean
+    dateStart?: boolean
+    dateEnd?: boolean
     openAt?: boolean
     closeAt?: boolean
     visibleToGuests?: boolean
@@ -2887,7 +2899,8 @@ export namespace Prisma {
     description?: boolean
     image?: boolean
     location?: boolean
-    date?: boolean
+    dateStart?: boolean
+    dateEnd?: boolean
     openAt?: boolean
     closeAt?: boolean
     visibleToGuests?: boolean
@@ -2904,7 +2917,8 @@ export namespace Prisma {
     description?: boolean
     image?: boolean
     location?: boolean
-    date?: boolean
+    dateStart?: boolean
+    dateEnd?: boolean
     openAt?: boolean
     closeAt?: boolean
     visibleToGuests?: boolean
@@ -2921,7 +2935,8 @@ export namespace Prisma {
     description?: boolean
     image?: boolean
     location?: boolean
-    date?: boolean
+    dateStart?: boolean
+    dateEnd?: boolean
     openAt?: boolean
     closeAt?: boolean
     visibleToGuests?: boolean
@@ -2931,7 +2946,7 @@ export namespace Prisma {
     creatorId?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "image" | "location" | "date" | "openAt" | "closeAt" | "visibleToGuests" | "maxParticipants" | "createdAt" | "updatedAt" | "creatorId", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "image" | "location" | "dateStart" | "dateEnd" | "openAt" | "closeAt" | "visibleToGuests" | "maxParticipants" | "createdAt" | "updatedAt" | "creatorId", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | UserDefaultArgs<ExtArgs>
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
@@ -2956,7 +2971,8 @@ export namespace Prisma {
       description: string | null
       image: string | null
       location: string
-      date: Date
+      dateStart: Date
+      dateEnd: Date
       openAt: Date
       closeAt: Date
       visibleToGuests: boolean
@@ -3394,7 +3410,8 @@ export namespace Prisma {
     readonly description: FieldRef<"Event", 'String'>
     readonly image: FieldRef<"Event", 'String'>
     readonly location: FieldRef<"Event", 'String'>
-    readonly date: FieldRef<"Event", 'DateTime'>
+    readonly dateStart: FieldRef<"Event", 'DateTime'>
+    readonly dateEnd: FieldRef<"Event", 'DateTime'>
     readonly openAt: FieldRef<"Event", 'DateTime'>
     readonly closeAt: FieldRef<"Event", 'DateTime'>
     readonly visibleToGuests: FieldRef<"Event", 'Boolean'>
@@ -3846,8 +3863,18 @@ export namespace Prisma {
 
   export type AggregateRegistration = {
     _count: RegistrationCountAggregateOutputType | null
+    _avg: RegistrationAvgAggregateOutputType | null
+    _sum: RegistrationSumAggregateOutputType | null
     _min: RegistrationMinAggregateOutputType | null
     _max: RegistrationMaxAggregateOutputType | null
+  }
+
+  export type RegistrationAvgAggregateOutputType = {
+    participants: number | null
+  }
+
+  export type RegistrationSumAggregateOutputType = {
+    participants: number | null
   }
 
   export type RegistrationMinAggregateOutputType = {
@@ -3855,6 +3882,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     phone: string | null
+    participants: number | null
     createdAt: Date | null
     eventId: string | null
     userId: string | null
@@ -3865,6 +3893,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     phone: string | null
+    participants: number | null
     createdAt: Date | null
     eventId: string | null
     userId: string | null
@@ -3875,6 +3904,7 @@ export namespace Prisma {
     name: number
     email: number
     phone: number
+    participants: number
     createdAt: number
     eventId: number
     userId: number
@@ -3882,11 +3912,20 @@ export namespace Prisma {
   }
 
 
+  export type RegistrationAvgAggregateInputType = {
+    participants?: true
+  }
+
+  export type RegistrationSumAggregateInputType = {
+    participants?: true
+  }
+
   export type RegistrationMinAggregateInputType = {
     id?: true
     name?: true
     email?: true
     phone?: true
+    participants?: true
     createdAt?: true
     eventId?: true
     userId?: true
@@ -3897,6 +3936,7 @@ export namespace Prisma {
     name?: true
     email?: true
     phone?: true
+    participants?: true
     createdAt?: true
     eventId?: true
     userId?: true
@@ -3907,6 +3947,7 @@ export namespace Prisma {
     name?: true
     email?: true
     phone?: true
+    participants?: true
     createdAt?: true
     eventId?: true
     userId?: true
@@ -3951,6 +3992,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: RegistrationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RegistrationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: RegistrationMinAggregateInputType
@@ -3981,6 +4034,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: RegistrationCountAggregateInputType | true
+    _avg?: RegistrationAvgAggregateInputType
+    _sum?: RegistrationSumAggregateInputType
     _min?: RegistrationMinAggregateInputType
     _max?: RegistrationMaxAggregateInputType
   }
@@ -3990,10 +4045,13 @@ export namespace Prisma {
     name: string
     email: string
     phone: string | null
+    participants: number
     createdAt: Date
     eventId: string
     userId: string | null
     _count: RegistrationCountAggregateOutputType | null
+    _avg: RegistrationAvgAggregateOutputType | null
+    _sum: RegistrationSumAggregateOutputType | null
     _min: RegistrationMinAggregateOutputType | null
     _max: RegistrationMaxAggregateOutputType | null
   }
@@ -4017,6 +4075,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    participants?: boolean
     createdAt?: boolean
     eventId?: boolean
     userId?: boolean
@@ -4029,6 +4088,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    participants?: boolean
     createdAt?: boolean
     eventId?: boolean
     userId?: boolean
@@ -4041,6 +4101,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    participants?: boolean
     createdAt?: boolean
     eventId?: boolean
     userId?: boolean
@@ -4053,12 +4114,13 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    participants?: boolean
     createdAt?: boolean
     eventId?: boolean
     userId?: boolean
   }
 
-  export type RegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "createdAt" | "eventId" | "userId", ExtArgs["result"]["registration"]>
+  export type RegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "participants" | "createdAt" | "eventId" | "userId", ExtArgs["result"]["registration"]>
   export type RegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | Registration$userArgs<ExtArgs>
@@ -4083,6 +4145,7 @@ export namespace Prisma {
       name: string
       email: string
       phone: string | null
+      participants: number
       createdAt: Date
       eventId: string
       userId: string | null
@@ -4515,6 +4578,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Registration", 'String'>
     readonly email: FieldRef<"Registration", 'String'>
     readonly phone: FieldRef<"Registration", 'String'>
+    readonly participants: FieldRef<"Registration", 'Int'>
     readonly createdAt: FieldRef<"Registration", 'DateTime'>
     readonly eventId: FieldRef<"Registration", 'String'>
     readonly userId: FieldRef<"Registration", 'String'>
@@ -8252,7 +8316,8 @@ export namespace Prisma {
     description: 'description',
     image: 'image',
     location: 'location',
-    date: 'date',
+    dateStart: 'dateStart',
+    dateEnd: 'dateEnd',
     openAt: 'openAt',
     closeAt: 'closeAt',
     visibleToGuests: 'visibleToGuests',
@@ -8270,6 +8335,7 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     phone: 'phone',
+    participants: 'participants',
     createdAt: 'createdAt',
     eventId: 'eventId',
     userId: 'userId'
@@ -8520,7 +8586,8 @@ export namespace Prisma {
     description?: StringNullableFilter<"Event"> | string | null
     image?: StringNullableFilter<"Event"> | string | null
     location?: StringFilter<"Event"> | string
-    date?: DateTimeFilter<"Event"> | Date | string
+    dateStart?: DateTimeFilter<"Event"> | Date | string
+    dateEnd?: DateTimeFilter<"Event"> | Date | string
     openAt?: DateTimeFilter<"Event"> | Date | string
     closeAt?: DateTimeFilter<"Event"> | Date | string
     visibleToGuests?: BoolFilter<"Event"> | boolean
@@ -8538,7 +8605,8 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     location?: SortOrder
-    date?: SortOrder
+    dateStart?: SortOrder
+    dateEnd?: SortOrder
     openAt?: SortOrder
     closeAt?: SortOrder
     visibleToGuests?: SortOrder
@@ -8559,7 +8627,8 @@ export namespace Prisma {
     description?: StringNullableFilter<"Event"> | string | null
     image?: StringNullableFilter<"Event"> | string | null
     location?: StringFilter<"Event"> | string
-    date?: DateTimeFilter<"Event"> | Date | string
+    dateStart?: DateTimeFilter<"Event"> | Date | string
+    dateEnd?: DateTimeFilter<"Event"> | Date | string
     openAt?: DateTimeFilter<"Event"> | Date | string
     closeAt?: DateTimeFilter<"Event"> | Date | string
     visibleToGuests?: BoolFilter<"Event"> | boolean
@@ -8577,7 +8646,8 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     location?: SortOrder
-    date?: SortOrder
+    dateStart?: SortOrder
+    dateEnd?: SortOrder
     openAt?: SortOrder
     closeAt?: SortOrder
     visibleToGuests?: SortOrder
@@ -8601,7 +8671,8 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Event"> | string | null
     image?: StringNullableWithAggregatesFilter<"Event"> | string | null
     location?: StringWithAggregatesFilter<"Event"> | string
-    date?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    dateStart?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    dateEnd?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     openAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     closeAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     visibleToGuests?: BoolWithAggregatesFilter<"Event"> | boolean
@@ -8619,6 +8690,7 @@ export namespace Prisma {
     name?: StringFilter<"Registration"> | string
     email?: StringFilter<"Registration"> | string
     phone?: StringNullableFilter<"Registration"> | string | null
+    participants?: IntFilter<"Registration"> | number
     createdAt?: DateTimeFilter<"Registration"> | Date | string
     eventId?: StringFilter<"Registration"> | string
     userId?: StringNullableFilter<"Registration"> | string | null
@@ -8631,6 +8703,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrderInput | SortOrder
+    participants?: SortOrder
     createdAt?: SortOrder
     eventId?: SortOrder
     userId?: SortOrderInput | SortOrder
@@ -8646,6 +8719,7 @@ export namespace Prisma {
     name?: StringFilter<"Registration"> | string
     email?: StringFilter<"Registration"> | string
     phone?: StringNullableFilter<"Registration"> | string | null
+    participants?: IntFilter<"Registration"> | number
     createdAt?: DateTimeFilter<"Registration"> | Date | string
     eventId?: StringFilter<"Registration"> | string
     userId?: StringNullableFilter<"Registration"> | string | null
@@ -8658,12 +8732,15 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrderInput | SortOrder
+    participants?: SortOrder
     createdAt?: SortOrder
     eventId?: SortOrder
     userId?: SortOrderInput | SortOrder
     _count?: RegistrationCountOrderByAggregateInput
+    _avg?: RegistrationAvgOrderByAggregateInput
     _max?: RegistrationMaxOrderByAggregateInput
     _min?: RegistrationMinOrderByAggregateInput
+    _sum?: RegistrationSumOrderByAggregateInput
   }
 
   export type RegistrationScalarWhereWithAggregatesInput = {
@@ -8674,6 +8751,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Registration"> | string
     email?: StringWithAggregatesFilter<"Registration"> | string
     phone?: StringNullableWithAggregatesFilter<"Registration"> | string | null
+    participants?: IntWithAggregatesFilter<"Registration"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
     eventId?: StringWithAggregatesFilter<"Registration"> | string
     userId?: StringNullableWithAggregatesFilter<"Registration"> | string | null
@@ -9000,7 +9078,8 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    date: Date | string
+    dateStart: Date | string
+    dateEnd: Date | string
     openAt: Date | string
     closeAt: Date | string
     visibleToGuests?: boolean
@@ -9017,7 +9096,8 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    date: Date | string
+    dateStart: Date | string
+    dateEnd: Date | string
     openAt: Date | string
     closeAt: Date | string
     visibleToGuests?: boolean
@@ -9034,7 +9114,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     openAt?: DateTimeFieldUpdateOperationsInput | Date | string
     closeAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visibleToGuests?: BoolFieldUpdateOperationsInput | boolean
@@ -9051,7 +9132,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     openAt?: DateTimeFieldUpdateOperationsInput | Date | string
     closeAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visibleToGuests?: BoolFieldUpdateOperationsInput | boolean
@@ -9068,7 +9150,8 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    date: Date | string
+    dateStart: Date | string
+    dateEnd: Date | string
     openAt: Date | string
     closeAt: Date | string
     visibleToGuests?: boolean
@@ -9084,7 +9167,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     openAt?: DateTimeFieldUpdateOperationsInput | Date | string
     closeAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visibleToGuests?: BoolFieldUpdateOperationsInput | boolean
@@ -9099,7 +9183,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     openAt?: DateTimeFieldUpdateOperationsInput | Date | string
     closeAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visibleToGuests?: BoolFieldUpdateOperationsInput | boolean
@@ -9114,6 +9199,7 @@ export namespace Prisma {
     name: string
     email: string
     phone?: string | null
+    participants?: number
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
     user?: UserCreateNestedOneWithoutRegistrationsInput
@@ -9124,6 +9210,7 @@ export namespace Prisma {
     name: string
     email: string
     phone?: string | null
+    participants?: number
     createdAt?: Date | string
     eventId: string
     userId?: string | null
@@ -9134,6 +9221,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     user?: UserUpdateOneWithoutRegistrationsNestedInput
@@ -9144,6 +9232,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventId?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9154,6 +9243,7 @@ export namespace Prisma {
     name: string
     email: string
     phone?: string | null
+    participants?: number
     createdAt?: Date | string
     eventId: string
     userId?: string | null
@@ -9164,6 +9254,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -9172,6 +9263,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventId?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9648,7 +9740,8 @@ export namespace Prisma {
     description?: SortOrder
     image?: SortOrder
     location?: SortOrder
-    date?: SortOrder
+    dateStart?: SortOrder
+    dateEnd?: SortOrder
     openAt?: SortOrder
     closeAt?: SortOrder
     visibleToGuests?: SortOrder
@@ -9668,7 +9761,8 @@ export namespace Prisma {
     description?: SortOrder
     image?: SortOrder
     location?: SortOrder
-    date?: SortOrder
+    dateStart?: SortOrder
+    dateEnd?: SortOrder
     openAt?: SortOrder
     closeAt?: SortOrder
     visibleToGuests?: SortOrder
@@ -9684,7 +9778,8 @@ export namespace Prisma {
     description?: SortOrder
     image?: SortOrder
     location?: SortOrder
-    date?: SortOrder
+    dateStart?: SortOrder
+    dateEnd?: SortOrder
     openAt?: SortOrder
     closeAt?: SortOrder
     visibleToGuests?: SortOrder
@@ -9729,9 +9824,14 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    participants?: SortOrder
     createdAt?: SortOrder
     eventId?: SortOrder
     userId?: SortOrder
+  }
+
+  export type RegistrationAvgOrderByAggregateInput = {
+    participants?: SortOrder
   }
 
   export type RegistrationMaxOrderByAggregateInput = {
@@ -9739,6 +9839,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    participants?: SortOrder
     createdAt?: SortOrder
     eventId?: SortOrder
     userId?: SortOrder
@@ -9749,9 +9850,14 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    participants?: SortOrder
     createdAt?: SortOrder
     eventId?: SortOrder
     userId?: SortOrder
+  }
+
+  export type RegistrationSumOrderByAggregateInput = {
+    participants?: SortOrder
   }
 
   export type SessionCountOrderByAggregateInput = {
@@ -10468,7 +10574,8 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    date: Date | string
+    dateStart: Date | string
+    dateEnd: Date | string
     openAt: Date | string
     closeAt: Date | string
     visibleToGuests?: boolean
@@ -10484,7 +10591,8 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    date: Date | string
+    dateStart: Date | string
+    dateEnd: Date | string
     openAt: Date | string
     closeAt: Date | string
     visibleToGuests?: boolean
@@ -10509,6 +10617,7 @@ export namespace Prisma {
     name: string
     email: string
     phone?: string | null
+    participants?: number
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
   }
@@ -10518,6 +10627,7 @@ export namespace Prisma {
     name: string
     email: string
     phone?: string | null
+    participants?: number
     createdAt?: Date | string
     eventId: string
   }
@@ -10622,7 +10732,8 @@ export namespace Prisma {
     description?: StringNullableFilter<"Event"> | string | null
     image?: StringNullableFilter<"Event"> | string | null
     location?: StringFilter<"Event"> | string
-    date?: DateTimeFilter<"Event"> | Date | string
+    dateStart?: DateTimeFilter<"Event"> | Date | string
+    dateEnd?: DateTimeFilter<"Event"> | Date | string
     openAt?: DateTimeFilter<"Event"> | Date | string
     closeAt?: DateTimeFilter<"Event"> | Date | string
     visibleToGuests?: BoolFilter<"Event"> | boolean
@@ -10656,6 +10767,7 @@ export namespace Prisma {
     name?: StringFilter<"Registration"> | string
     email?: StringFilter<"Registration"> | string
     phone?: StringNullableFilter<"Registration"> | string | null
+    participants?: IntFilter<"Registration"> | number
     createdAt?: DateTimeFilter<"Registration"> | Date | string
     eventId?: StringFilter<"Registration"> | string
     userId?: StringNullableFilter<"Registration"> | string | null
@@ -10699,6 +10811,7 @@ export namespace Prisma {
     name: string
     email: string
     phone?: string | null
+    participants?: number
     createdAt?: Date | string
     user?: UserCreateNestedOneWithoutRegistrationsInput
   }
@@ -10708,6 +10821,7 @@ export namespace Prisma {
     name: string
     email: string
     phone?: string | null
+    participants?: number
     createdAt?: Date | string
     userId?: string | null
   }
@@ -10783,7 +10897,8 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    date: Date | string
+    dateStart: Date | string
+    dateEnd: Date | string
     openAt: Date | string
     closeAt: Date | string
     visibleToGuests?: boolean
@@ -10799,7 +10914,8 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    date: Date | string
+    dateStart: Date | string
+    dateEnd: Date | string
     openAt: Date | string
     closeAt: Date | string
     visibleToGuests?: boolean
@@ -10864,7 +10980,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     openAt?: DateTimeFieldUpdateOperationsInput | Date | string
     closeAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visibleToGuests?: BoolFieldUpdateOperationsInput | boolean
@@ -10880,7 +10997,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     openAt?: DateTimeFieldUpdateOperationsInput | Date | string
     closeAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visibleToGuests?: BoolFieldUpdateOperationsInput | boolean
@@ -11104,7 +11222,8 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    date: Date | string
+    dateStart: Date | string
+    dateEnd: Date | string
     openAt: Date | string
     closeAt: Date | string
     visibleToGuests?: boolean
@@ -11118,6 +11237,7 @@ export namespace Prisma {
     name: string
     email: string
     phone?: string | null
+    participants?: number
     createdAt?: Date | string
     eventId: string
   }
@@ -11203,7 +11323,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     openAt?: DateTimeFieldUpdateOperationsInput | Date | string
     closeAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visibleToGuests?: BoolFieldUpdateOperationsInput | boolean
@@ -11219,7 +11340,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     openAt?: DateTimeFieldUpdateOperationsInput | Date | string
     closeAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visibleToGuests?: BoolFieldUpdateOperationsInput | boolean
@@ -11235,7 +11357,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateEnd?: DateTimeFieldUpdateOperationsInput | Date | string
     openAt?: DateTimeFieldUpdateOperationsInput | Date | string
     closeAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visibleToGuests?: BoolFieldUpdateOperationsInput | boolean
@@ -11249,6 +11372,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
   }
@@ -11258,6 +11382,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventId?: StringFieldUpdateOperationsInput | string
   }
@@ -11267,6 +11392,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventId?: StringFieldUpdateOperationsInput | string
   }
@@ -11276,6 +11402,7 @@ export namespace Prisma {
     name: string
     email: string
     phone?: string | null
+    participants?: number
     createdAt?: Date | string
     userId?: string | null
   }
@@ -11285,6 +11412,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutRegistrationsNestedInput
   }
@@ -11294,6 +11422,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -11303,6 +11432,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
   }

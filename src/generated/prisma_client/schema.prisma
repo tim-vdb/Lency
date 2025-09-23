@@ -45,7 +45,8 @@ model Event {
   description     String?
   image           String?
   location        String
-  date            DateTime
+  dateStart       DateTime
+  dateEnd         DateTime
   openAt          DateTime
   closeAt         DateTime
   visibleToGuests Boolean  @default(false) // accessible aux visiteurs ou non
@@ -65,11 +66,12 @@ model Event {
  * ---------------- REGISTRATIONS ----------------
  */
 model Registration {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  phone     String?
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  participants Int      @default(1) // nombre de participants à l'événement
+  createdAt    DateTime @default(now())
 
   eventId String
   event   Event  @relation(fields: [eventId], references: [id])
