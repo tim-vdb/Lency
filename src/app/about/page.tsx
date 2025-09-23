@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Page() {
   return (
-    <div className="w-3xl m-auto">
+    <div className="w-3xl m-auto pt-50 container">
       <h1>Qui sommes-nous?</h1>
       <p>
         Le Club Rhodanien de Mölkky (CRHOM) est une association conviviale qui
@@ -24,14 +24,14 @@ export default function Page() {
         communauté autour de valeurs de convivialité, de respect et de
         fair-play.
       </p>
-      <h2 className="text-[1.5rem]">Nos valeurs</h2>
+      <h2>Nos valeurs</h2>
       <p>
         Le CRHOM défend une pratique conviviale, intergénérationnelle et
         inclusive. Chez nous, pas besoin d’être un expert pour s’amuser : le
         mölkky est un jeu simple, accessible à tous, où la bonne humeur prime
         toujours sur le résultat.
       </p>
-      <h2 className="text-[1.5rem]">Pourquoi nous rejoindre ?</h2>
+      <h2>Pourquoi nous rejoindre ?</h2>
       <ul>
         <li>Partager des moments chaleureux et sportifs</li>
         <li>Découvrir ou perfectionner sa pratique du mölkky</li>
