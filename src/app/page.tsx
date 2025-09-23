@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="bg-[url(/molkky.jpg)] overflow-hidden bg-center bg-cover h-full">
-      <article className="w-full h-[100vh] flex flex-col items-start pt-40 pl-15">
+      <article className="w-full h-[100vh] flex flex-col items-start pt-65 pl-15">
         <h1 className="z-99 text-white pb-10">Club Rhodanien de Mölkky</h1>
         <p className="z-99 text-white w-[90vw]">
           The Rhodanian Mölkky Club (CRHOM) is a Lyon-based association
@@ -13,7 +13,7 @@ export default function Home() {
           events, and tournaments in a friendly atmosphere—whether during
           festive gatherings, casual meetups, or competitions.
         </p>
-        <Button className="z-99 mt-20">
+        <Button className="z-99 mt-20 bg-[#ffffff] text-black">
           <Link href="/login">Join The CRHOM</Link>
         </Button>
       </article>
