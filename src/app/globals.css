@@ -118,11 +118,11 @@
   h4,
   h5,
   h6 {
-    @apply font-cooper text-[length:inherit] font-[weight:inherit];
+    @apply font-cooper text-[length:inherit] font-[weight:inherit] mt-5 mb-3;
   }
 
   h1 {
-    @apply font-cooper text-[1.75rem] mb-5 font-bold;
+    @apply font-cooper text-[2rem] mt-10 mb-5 font-bold text-center;
   }
 
   b,
