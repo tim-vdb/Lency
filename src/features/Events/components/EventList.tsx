@@ -1,4 +1,4 @@
-// import EventCard from "./EventCard";
+import EventCard from "./EventCard";
 import { GetEvents } from "./events.action";
 
 export default async function EventList() {
@@ -7,11 +7,11 @@ export default async function EventList() {
   return (
     <>
       <h2>Découvrez tous nos événements</h2>
-      {/* <div className="grid grid-cols-1 md:gridcols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:gridcols-2 lg:grid-cols-3 gap-6">
         {events.map((event) => (
           <EventCard key={event.id} {...event} />
         ))}
-      </div> */}
+      </div>
     </>
   );
 }
