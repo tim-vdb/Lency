@@ -9078,10 +9078,10 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    dateStart: Date | string
-    dateEnd: Date | string
-    openAt: Date | string
-    closeAt: Date | string
+    dateStart?: Date | string
+    dateEnd?: Date | string
+    openAt?: Date | string
+    closeAt?: Date | string
     visibleToGuests?: boolean
     maxParticipants: number
     createdAt?: Date | string
@@ -9096,10 +9096,10 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    dateStart: Date | string
-    dateEnd: Date | string
-    openAt: Date | string
-    closeAt: Date | string
+    dateStart?: Date | string
+    dateEnd?: Date | string
+    openAt?: Date | string
+    closeAt?: Date | string
     visibleToGuests?: boolean
     maxParticipants: number
     createdAt?: Date | string
@@ -9150,10 +9150,10 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    dateStart: Date | string
-    dateEnd: Date | string
-    openAt: Date | string
-    closeAt: Date | string
+    dateStart?: Date | string
+    dateEnd?: Date | string
+    openAt?: Date | string
+    closeAt?: Date | string
     visibleToGuests?: boolean
     maxParticipants: number
     createdAt?: Date | string
@@ -10574,10 +10574,10 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    dateStart: Date | string
-    dateEnd: Date | string
-    openAt: Date | string
-    closeAt: Date | string
+    dateStart?: Date | string
+    dateEnd?: Date | string
+    openAt?: Date | string
+    closeAt?: Date | string
     visibleToGuests?: boolean
     maxParticipants: number
     createdAt?: Date | string
@@ -10591,10 +10591,10 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    dateStart: Date | string
-    dateEnd: Date | string
-    openAt: Date | string
-    closeAt: Date | string
+    dateStart?: Date | string
+    dateEnd?: Date | string
+    openAt?: Date | string
+    closeAt?: Date | string
     visibleToGuests?: boolean
     maxParticipants: number
     createdAt?: Date | string
@@ -10897,10 +10897,10 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    dateStart: Date | string
-    dateEnd: Date | string
-    openAt: Date | string
-    closeAt: Date | string
+    dateStart?: Date | string
+    dateEnd?: Date | string
+    openAt?: Date | string
+    closeAt?: Date | string
     visibleToGuests?: boolean
     maxParticipants: number
     createdAt?: Date | string
@@ -10914,10 +10914,10 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    dateStart: Date | string
-    dateEnd: Date | string
-    openAt: Date | string
-    closeAt: Date | string
+    dateStart?: Date | string
+    dateEnd?: Date | string
+    openAt?: Date | string
+    closeAt?: Date | string
     visibleToGuests?: boolean
     maxParticipants: number
     createdAt?: Date | string
@@ -11222,10 +11222,10 @@ export namespace Prisma {
     description?: string | null
     image?: string | null
     location: string
-    dateStart: Date | string
-    dateEnd: Date | string
-    openAt: Date | string
-    closeAt: Date | string
+    dateStart?: Date | string
+    dateEnd?: Date | string
+    openAt?: Date | string
+    closeAt?: Date | string
     visibleToGuests?: boolean
     maxParticipants: number
     createdAt?: Date | string

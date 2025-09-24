@@ -9,7 +9,9 @@ export default async function EventList() {
       <h2>Découvrez tous nos événements</h2>
       <div className="grid grid-cols-1 md:gridcols-2 lg:grid-cols-3 gap-6">
         {events.map((event) => (
-          <EventCard key={event.id} {...event} />
+          <div key={event.id}>
+            <EventCard event={event} />
+          </div>
         ))}
       </div>
     </>

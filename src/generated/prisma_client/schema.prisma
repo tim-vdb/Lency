@@ -5,7 +5,7 @@ datasource db {
 
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x"]
+  binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x", "darwin-arm64"]
   output        = "../generated/prisma_client"
 }
 
@@ -45,10 +45,10 @@ model Event {
   description     String?
   image           String?
   location        String
-  dateStart       DateTime
-  dateEnd         DateTime
-  openAt          DateTime
-  closeAt         DateTime
+  dateStart       DateTime @default(now())
+  dateEnd         DateTime @default(now())
+  openAt          DateTime @default(now())
+  closeAt         DateTime @default(now())
   visibleToGuests Boolean  @default(false) // accessible aux visiteurs ou non
   maxParticipants Int // nombre max de personnes autorisées à s’inscrire
   createdAt       DateTime @default(now())
