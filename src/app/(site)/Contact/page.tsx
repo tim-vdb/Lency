@@ -6,11 +6,21 @@ export default function ContactPage() {
       <h1 className="mb-8 text-center">Contactez-nous</h1>
 
       <div className="grid md:grid-cols-2 gap-12 rounded-xl p-8 shadow-md">
-        <form className="bg-white p-6 rounded-xl shadow-md dark:shadow-black/40 flex flex-col gap-4">
+        {/* === FORMULAIRE FORMSPREE === */}
+        <form
+          id="contact-form"
+          action="https://formspree.io/f/mgvezdao"
+          method="POST"
+          className="bg-white p-6 rounded-xl shadow-md dark:shadow-black/40 flex flex-col gap-4"
+        >
+          <input type="hidden" name="contact_number" value="697483" />
+
           <label className="flex flex-col text-sm md:text-base">
             Nom
             <input
               type="text"
+              name="name"
+              required
               placeholder="Votre nom"
               className="mt-1 p-2 rounded border focus:outline-none focus:ring-2 focus:ring-gold"
             />
@@ -20,6 +30,8 @@ export default function ContactPage() {
             Email
             <input
               type="email"
+              name="email"
+              required
               placeholder="Votre email"
               className="mt-1 p-2 rounded border focus:outline-none focus:ring-2 focus:ring-gold"
             />
@@ -28,8 +40,10 @@ export default function ContactPage() {
           <label className="flex flex-col text-sm md:text-base">
             Message
             <textarea
-              placeholder="Votre message"
+              name="message"
               rows={5}
+              required
+              placeholder="Votre message"
               className="mt-1 p-2 rounded border focus:outline-none focus:ring-2 focus:ring-gold"
             ></textarea>
           </label>
@@ -40,8 +54,11 @@ export default function ContactPage() {
           >
             Envoyer
           </button>
+
+          <div id="status"></div>
         </form>
 
+        {/* === INFOS DE CONTACT === */}
         <div className="flex flex-col md:gap-6 p-1">
           <h2 className="font-bold">Where to find us !</h2>
           <div>
@@ -61,6 +78,7 @@ export default function ContactPage() {
         </div>
       </div>
 
+      {/* === SECTION IMAGE + TEXTE === */}
       <div className="mt-16 flex flex-col md:flex-row items-center gap-8 p-8 rounded-xl shadow-md">
         <div className="md:w-1/2 shadow-md dark:shadow-black">
           <img
@@ -85,6 +103,7 @@ export default function ContactPage() {
         </div>
       </div>
 
+      {/* === GOOGLE MAP === */}
       <div className="mt-16 flex flex-col md:flex-row gap-8 p-8 rounded-xl shadow-md">
         <div className="md:w-1/2 h-64 md:h-auto">
           <iframe
