@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { useParams, useRouter } from "next/navigation";
-import { EventsFormSchema } from "@/features/SignUpEvents/events.schema";
+import { EventsFormSchema } from "../events.schema";
 import { EventsSafeAction } from "../events.action";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -39,12 +39,12 @@ export default function SignUpEvents() {
     });
 
     // 2. Define a submit handler.
-        async function onSubmit(values: z.infer<typeof EventsFormSchema>) {
-            // Do something with the form values.
-            // ✅ This will be type-safe and validated.
-            // console.log(values);
-            await executeAsync(values);
-        }
+    async function onSubmit(values: z.infer<typeof EventsFormSchema>) {
+        // Do something with the form values.
+        // ✅ This will be type-safe and validated.
+        // console.log(values);
+        await executeAsync(values);
+    }
 
     return (
         <div className="bg-blue-50 dark:bg-gray-800 py-12">
@@ -104,17 +104,17 @@ export default function SignUpEvents() {
                                 )}
                             />
                             <FormField
-                            control={form.control}
-                            name="eventId"
-                            render={({ field }) => (
-                                <FormItem className="hidden">
-                                <FormLabel>Event ID</FormLabel>
-                                <FormControl>
-                                    <Input type="hidden" {...field} value={eventId}/>
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
+                                control={form.control}
+                                name="eventId"
+                                render={({ field }) => (
+                                    <FormItem className="hidden">
+                                        <FormLabel>Event ID</FormLabel>
+                                        <FormControl>
+                                            <Input type="hidden" {...field} value={eventId} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
 
                             <Button type="submit">S'inscrire à l'évènement</Button>

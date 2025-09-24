@@ -1,5 +1,5 @@
 import EventCard from "./EventCard";
-import { GetEvents } from "./events.action";
+import { GetEvents } from "../events.action";
 
 export default async function EventList() {
   const events = await GetEvents();

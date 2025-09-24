@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import EventCarousel from "@/features/Events/components/EventCarousel";
+import EventCarousel from "@/features/Events/GetEvents/components/EventCarousel";
 import Link from "next/link";
 
 export default function Home() {
