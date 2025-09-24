@@ -1,9 +1,9 @@
-import EventList from "@/features/Events/components/EventList.tsx";
+import EventList from "@/features/Events/components/EventList";
 
 export default function page() {
   return (
     <div className="w-[90%] m-auto">
-      <EventList />;
+      <EventList />
     </div>
   );
 }
