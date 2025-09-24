@@ -25,8 +25,8 @@ export default function SignIn() {
   const [rememberMe, setRememberMe] = useState(false);
 
   return (
-    <div className="container flex justify-center p-15 pt-40">
-      <Card className="w-[50vw]">
+    <div className="container flex justify-center p-15">
+      <Card>
         <CardHeader>
           <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
           <CardDescription className="text-xs md:text-sm">

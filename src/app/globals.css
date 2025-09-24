@@ -115,10 +115,12 @@
   }
 
   h2 {
-    @apply font-zalando text-[1.6rem] mt-10 mb-5 font-bold text-center;
+    @apply font-zalando text-[1.6rem] mt-10 mb-5 font-bold;
   }
 
-  h3,
+  h3 {
+    @apply font-zalando text-[1rem] mt-10 mb-5 font-semibold;
+  }
   h4,
   h5,
   h6 {
@@ -361,7 +363,10 @@
   }
 
   p {
-    @apply text-black dark:text-white prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem];
+    @apply text-black dark:text-white prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem] text-[.9rem];
+  }
+  li {
+    @apply text-black dark:text-white prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem] text-[.9rem];
   }
 }
 

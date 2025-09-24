@@ -2,7 +2,7 @@ import React from "react";
 
 export default function ContactPage() {
   return (
-    <section className="p-8 lg:px-24 pt-40">
+    <section className="p-8 lg:px-24">
       <h1 className="mb-8 text-center">Contactez-nous</h1>
 
       <div className="grid md:grid-cols-2 gap-12 rounded-xl p-8 shadow-md">
@@ -42,20 +42,20 @@ export default function ContactPage() {
           </button>
         </form>
 
-        <div className="flex flex-col gap-6 p-1">
+        <div className="flex flex-col md:gap-6 p-1">
           <h2 className="font-bold">Where to find us !</h2>
           <div>
-            <h3 className="mb-2">Adresse</h3>
+            <h3 className="md:mb-2">Adresse</h3>
             <p>3 Rue Turbil, 69003 Lyon, France</p>
           </div>
 
           <div>
-            <h3 className="mb-2">Téléphone</h3>
+            <h3 className="md:mb-2">Téléphone</h3>
             <p>+33 6 12 34 56 78</p>
           </div>
 
           <div>
-            <h3 className="mb-2">Horaires</h3>
+            <h3 className="md:mb-2">Horaires</h3>
             <p>Lundi - Vendredi : 10h - 18h</p>
           </div>
         </div>

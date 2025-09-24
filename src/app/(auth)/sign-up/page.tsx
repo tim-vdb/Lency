@@ -44,7 +44,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="container flex justify-center pt-40">
+    <div className="container flex justify-center pt-10">
       <Card className="z-50 rounded-md rounded-t-none max-w-md">
         <CardHeader>
           <CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
