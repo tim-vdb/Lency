@@ -121,7 +121,6 @@ export default function SignUpEvents() {
                         </form>
                     </Form>
                     {hasErrored && <p className="text-red-500">{result?.serverError}</p>}
-                    {hasSucceeded && <p className="text-green-500">Vous êtes inscrit à la newsletter {result?.data?.name}</p>}
                 </div>
             </div>
         </div>
