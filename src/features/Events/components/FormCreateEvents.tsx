@@ -18,12 +18,16 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { EventsSafeAction } from '../events.action'
 import z from 'zod'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { DatePicker } from '@/components/ui/DatePicker'
+import { DatePickerRange } from '@/components/ui/DatePickerRange'
 
 export default function FormCreateEvents() {
     const router = useRouter()
     // 1. Define your form.
     const form = useForm<z.infer<typeof EventsSchema>>({
-        resolver: zodResolver(EventsSchema),
+        resolver: zodResolver(EventsSchema) as any,
         defaultValues: {
             name: "",
             description: "",
@@ -33,19 +37,28 @@ export default function FormCreateEvents() {
             dateEnd: new Date(),
             openAt: new Date(),
             closeAt: new Date(),
-            visibleToGuests: true,
+            visibleToGuests: false,
             maxParticipants: 15,
         },
     })
 
+    // Fonction pour gérer les changements de date range
+    const handleDateRangeChange = (dateStart: Date | undefined, dateEnd: Date | undefined) => {
+        if (dateStart && dateEnd) {
+            form.setValue('dateStart', dateStart)
+            form.setValue('dateEnd', dateEnd)
+        }
+    }
+
     const { executeAsync, hasErrored, result, hasSucceeded } = useAction(EventsSafeAction, {
         onSuccess: (data) => {
-            toast.success("Vous êtes inscrit à la newsletter");
+            toast.success("Événement créé avec succès !");
             form.reset();
             router.refresh();
         },
         onError: (error) => {
-            toast.error(error.error.serverError || "Une erreur est survenue");
+            console.error('Erreur lors de la création de l\'événement:', error);
+            toast.error(error.error.serverError || "Une erreur est survenue lors de la création de l'événement");
         }
     });
 
@@ -58,42 +71,177 @@ export default function FormCreateEvents() {
     }
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Nom</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Nom" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                Votre nom complet.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Description" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                Votre description.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button type="submit">S'inscrire à la newsletter</Button>
-            </form>
-        </Form>
+        <div className='container flex justify-center items-center'>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Créer un événement</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Nom</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Nom" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Nom de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Description</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Description" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Description de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="image"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Image</FormLabel>
+                                        <FormControl>
+                                            <Input type="file" placeholder="Image" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Image de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="location"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Lieu</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Lieu" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Lieu de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="openAt"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Ouverture inscription</FormLabel>
+                                        <FormControl>
+                                            <DatePicker
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                placeholder="Sélectionnez une date"
+                                                label=""
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Date d'ouverture des inscriptions.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="closeAt"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Fermeture inscription</FormLabel>
+                                        <FormControl>
+                                            <DatePicker
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                placeholder="Sélectionnez une date"
+                                                label=""
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Date de fermeture des inscriptions.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="dateStart"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Durée de l'événement</FormLabel>
+                                        <FormControl>
+                                            <DatePickerRange
+                                                dateStart={form.getValues('dateStart')}
+                                                dateEnd={form.getValues('dateEnd')}
+                                                onChange={handleDateRangeChange}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="maxParticipants"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Max participants</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Max participants" type="number" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="visibleToGuests"
+                                render={({ field }) => (
+                                    <FormItem className='flex items-center gap-2'>
+                                        <FormControl>
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                        <FormLabel>Rendre public.</FormLabel>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+
+                            <Button type="submit">Créer l'événement</Button>
+                        </form>
+                    </Form>
+                </CardContent>
+            </Card>
+        </div>
     )
 }

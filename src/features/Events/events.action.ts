@@ -1,15 +1,22 @@
 "use server"
 
 import { prisma } from '@/lib/prisma'
-import { actionClient } from '@/lib/safe-action-client'
+import { actionClient, SafeError } from '@/lib/safe-action-client'
 import { EventsSchema } from './events.schema'
 import { getUser } from '@/lib/auth-session'
+import { redirect } from 'next/navigation'
 
 export const EventsSafeAction = actionClient
     .inputSchema(EventsSchema)
     .action(async ({ parsedInput: input }) => {
 
         const user = await getUser();
+
+        if (!user) {
+            // throw new SafeError("Vous devez être connecté pour créer un événement");
+            redirect('/login')
+        }
+
         const event = await prisma.event.create({
             data: {
                 name: input.name,
@@ -22,7 +29,7 @@ export const EventsSafeAction = actionClient
                 closeAt: input.closeAt,
                 visibleToGuests: input.visibleToGuests,
                 maxParticipants: input.maxParticipants,
-                creatorId: user?.id,
+                creatorId: user.id,
             }
         })
 
