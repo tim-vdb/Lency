@@ -18,8 +18,13 @@ import {
   NavigationMenuContent,
   NavigationMenuTrigger,
 } from "@radix-ui/react-navigation-menu";
+import { getUser } from "@/lib/auth-session";
+import LogOut from "@/features/Logout/components/logout";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const user = await getUser();
+  console.log(user);
+
   return (
     <nav className=" bg-gray-100 w-[100vw] h-[15vh] flex justify-between pt-4 pl-4 pr-4 shadow-md">
       <Link href="/" className="rounded-full">
@@ -48,12 +53,16 @@ export default function Navbar() {
             <DropdownMenuItem>
               <Link href="/events">Événements</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href="/login">Connexion</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href="/sign-up">Inscription</Link>
-            </DropdownMenuItem>
+            {!user && (
+              <DropdownMenuItem>
+                <Link href="/login">Connexion</Link>
+              </DropdownMenuItem>
+            )}
+            {!user && (
+              <DropdownMenuItem>
+                <Link href="/sign-up">Inscription</Link>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -77,27 +86,47 @@ export default function Navbar() {
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-            <NavigationMenuTrigger>Se connecter</NavigationMenuTrigger>
-            <NavigationMenuContent className="w-35 p-3">
-              <ul className="grid w-[150px] gap-4">
-                <li>
-                  <NavigationMenuLink asChild>
-                    <Link href="/login" className="text-[0.7em]">
-                      Connexion
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
-                <li>
-                  <NavigationMenuLink asChild>
-                    <Link href="/sign-up" className="text-[0.7em]">
-                      Inscription
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
+          {!user && (
+            <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+              <NavigationMenuTrigger>Se connecter</NavigationMenuTrigger>
+              <NavigationMenuContent className="w-35 p-3">
+                <ul className="grid w-[150px] gap-4">
+                  <li>
+                    <NavigationMenuLink asChild>
+                      <Link href="/login" className="text-[0.7em]">
+                        Connexion
+                      </Link>
+                    </NavigationMenuLink>
+                  </li>
+                  <li>
+                    <NavigationMenuLink asChild>
+                      <Link href="/sign-up" className="text-[0.7em]">
+                        Inscription
+                      </Link>
+                    </NavigationMenuLink>
+                  </li>
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          )}
+          {user && (
+            <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+              <DropdownMenuTrigger className="cursor-pointer">
+                <img
+                  src="/images/user.svg"
+                  alt="Profile Account"
+                  className="w-10"
+                />
+                Mon Compte
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Mon Profil</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <LogOut />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </NavigationMenuItem>
+          )}
         </NavigationMenuList>
       </NavigationMenu>
     </nav>
