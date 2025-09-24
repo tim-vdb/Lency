@@ -4,6 +4,9 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import Navbar from "@/components/ux/Navbar";
 
+// 👉 import du Footer
+import Footer from "@/components/ui/footer";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -25,13 +28,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+       <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
         <main>{children}</main>
-        <footer>Made with love</footer>
+
+        <Footer />
+
         <Toaster />
       </body>
     </html>
