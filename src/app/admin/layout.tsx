@@ -11,6 +11,7 @@ export default function AdminLayout({
       <nav className={styles.sidebar}>
         <Link href="/admin">Dashboard</Link>
         <Link href="/admin/events">Events</Link>
+        <Link href="/admin/gallery">Gallery</Link>
         <Link href="/admin/users">Users</Link>
       </nav>
       <main className={styles.main}>{children}</main>

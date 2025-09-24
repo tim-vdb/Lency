@@ -43,7 +43,6 @@ model Event {
   id              String   @id @default(cuid())
   name            String
   description     String?
-  image           String?
   location        String
   dateStart       DateTime @default(now())
   dateEnd         DateTime @default(now())
@@ -68,7 +67,7 @@ model Event {
 model Registration {
   id           String   @id @default(cuid())
   name         String
-  email        String
+  email        String   @unique
   phone        String?
   participants Int      @default(1) // nombre de participants à l'événement
   createdAt    DateTime @default(now())
@@ -128,4 +127,18 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model Gallery {
+  id         Int         @id @default(autoincrement())
+  key        String      @unique
+  url        String
+  type       GalleryType
+  uploadedBy String
+  createdAt  DateTime    @default(now())
+}
+
+enum GalleryType {
+  EVENT
+  GALLERY
 }
