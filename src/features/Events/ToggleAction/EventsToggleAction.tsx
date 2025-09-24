@@ -5,11 +5,11 @@ import { Button } from '@/components/ui/button'
 import FormCreateEvents from '@/features/Events/CreateEvents/components/FormCreateEvents'
 import EventsTable from '@/features/Events/GetEvents/components/EventsTable'
 
-interface EventsPageProps {
+interface EventsToggleActionProps {
     events: any[]
 }
 
-export default function EventsPage({ events }: EventsPageProps) {
+export default function EventsToggleAction({ events }: EventsToggleActionProps) {
     const [showForm, setShowForm] = useState(false)
 
     return (
