@@ -206,7 +206,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Projet\\Next.js - React\\crazy_dev\\src\\generated\\prisma_client",
+      "value": "/Users/sica/Documents/mds/w1-crazy_dev/crazy_dev/src/generated/prisma_client",
       "fromEnvVar": null
     },
     "config": {
@@ -215,7 +215,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       },
       {
@@ -225,10 +225,14 @@ const config = {
       {
         "fromEnvVar": null,
         "value": "linux-musl-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "darwin-arm64"
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Projet\\Next.js - React\\crazy_dev\\src\\prisma\\schema.prisma",
+    "sourceFilePath": "/Users/sica/Documents/mds/w1-crazy_dev/crazy_dev/src/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -242,6 +246,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -250,8 +255,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "datasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  binaryTargets = [\"native\", \"windows\", \"linux-musl-openssl-3.0.x\"]\n  output        = \"../generated/prisma_client\"\n}\n\n/**\n * ---------------- USERS & ROLES ----------------\n */\nmodel User {\n  id            String   @id @default(cuid())\n  name          String\n  email         String   @unique\n  emailVerified Boolean  @default(false)\n  image         String?\n  role          Role     @default(MEMBER) // visiteur = pas de compte, membre par défaut\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @default(now()) @updatedAt\n\n  sessions      Session[]\n  accounts      Account[]\n  events        Event[]        @relation(\"CreatedEvents\") // si contributeur\n  registrations Registration[]\n\n  @@map(\"user\")\n}\n\nenum Role {\n  MEMBER // utilisateur inscrit normal\n  CONTRIBUTOR // membre qui peut créer des événements et voir inscrits\n  ADMIN // admin\n}\n\n/**\n * ---------------- EVENTS ----------------\n */\nmodel Event {\n  id              String   @id @default(cuid())\n  name            String\n  description     String?\n  image           String?\n  location        String\n  dateStart       DateTime\n  dateEnd         DateTime\n  openAt          DateTime\n  closeAt         DateTime\n  visibleToGuests Boolean  @default(false) // accessible aux visiteurs ou non\n  maxParticipants Int // nombre max de personnes autorisées à s’inscrire\n  createdAt       DateTime @default(now())\n  updatedAt       DateTime @default(now()) @updatedAt\n\n  creatorId String\n  creator   User   @relation(\"CreatedEvents\", fields: [creatorId], references: [id])\n\n  registrations Registration[]\n\n  @@map(\"event\")\n}\n\n/**\n * ---------------- REGISTRATIONS ----------------\n */\nmodel Registration {\n  id           String   @id @default(cuid())\n  name         String\n  email        String\n  phone        String?\n  participants Int      @default(1) // nombre de participants à l'événement\n  createdAt    DateTime @default(now())\n\n  eventId String\n  event   Event  @relation(fields: [eventId], references: [id])\n\n  userId String? // facultatif : un visiteur peut s’inscrire sans compte\n  user   User?   @relation(fields: [userId], references: [id])\n\n  @@map(\"registration\")\n}\n\n/**\n * ---------------- SESSIONS & ACCOUNTS ----------------\n */\nmodel Session {\n  id        String   @id @default(cuid())\n  expiresAt DateTime\n  token     String   @unique\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n\n  userId String\n  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id @default(cuid())\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @default(now()) @updatedAt\n\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String   @id @default(cuid())\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @default(now()) @updatedAt\n\n  @@map(\"verification\")\n}\n",
-  "inlineSchemaHash": "a5cdd2d706f5c205a051619a6f8cd635ee1cf628504b4a255d16baacda321674",
+  "inlineSchema": "datasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  binaryTargets = [\"native\", \"windows\", \"linux-musl-openssl-3.0.x\", \"darwin-arm64\"]\n  output        = \"../generated/prisma_client\"\n}\n\n/**\n * ---------------- USERS & ROLES ----------------\n */\nmodel User {\n  id            String   @id @default(cuid())\n  name          String\n  email         String   @unique\n  emailVerified Boolean  @default(false)\n  image         String?\n  role          Role     @default(MEMBER) // visiteur = pas de compte, membre par défaut\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @default(now()) @updatedAt\n\n  sessions      Session[]\n  accounts      Account[]\n  events        Event[]        @relation(\"CreatedEvents\") // si contributeur\n  registrations Registration[]\n\n  @@map(\"user\")\n}\n\nenum Role {\n  MEMBER // utilisateur inscrit normal\n  CONTRIBUTOR // membre qui peut créer des événements et voir inscrits\n  ADMIN // admin\n}\n\n/**\n * ---------------- EVENTS ----------------\n */\nmodel Event {\n  id              String   @id @default(cuid())\n  name            String\n  description     String?\n  image           String?\n  location        String\n  dateStart       DateTime @default(now())\n  dateEnd         DateTime @default(now())\n  openAt          DateTime @default(now())\n  closeAt         DateTime @default(now())\n  visibleToGuests Boolean  @default(false) // accessible aux visiteurs ou non\n  maxParticipants Int // nombre max de personnes autorisées à s’inscrire\n  createdAt       DateTime @default(now())\n  updatedAt       DateTime @default(now()) @updatedAt\n\n  creatorId String\n  creator   User   @relation(\"CreatedEvents\", fields: [creatorId], references: [id])\n\n  registrations Registration[]\n\n  @@map(\"event\")\n}\n\n/**\n * ---------------- REGISTRATIONS ----------------\n */\nmodel Registration {\n  id           String   @id @default(cuid())\n  name         String\n  email        String\n  phone        String?\n  participants Int      @default(1) // nombre de participants à l'événement\n  createdAt    DateTime @default(now())\n\n  eventId String\n  event   Event  @relation(fields: [eventId], references: [id])\n\n  userId String? // facultatif : un visiteur peut s’inscrire sans compte\n  user   User?   @relation(fields: [userId], references: [id])\n\n  @@map(\"registration\")\n}\n\n/**\n * ---------------- SESSIONS & ACCOUNTS ----------------\n */\nmodel Session {\n  id        String   @id @default(cuid())\n  expiresAt DateTime\n  token     String   @unique\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n\n  userId String\n  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id @default(cuid())\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @default(now()) @updatedAt\n\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String   @id @default(cuid())\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @default(now()) @updatedAt\n\n  @@map(\"verification\")\n}\n",
+  "inlineSchemaHash": "06f63da8e3105494588e6e5da3c0b29fa4f7e61c2e2f15e4092328842f5b12ac",
   "copyEngine": true
 }
 config.dirname = '/'

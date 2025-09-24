@@ -21,7 +21,7 @@ import {
 
 export default function Navbar() {
   return (
-    <nav className="w-[100vw] h-[15vh] flex justify-between pt-4 pl-4 pr-4 shadow-md">
+    <nav className=" bg-gray-100 w-[100vw] h-[15vh] flex justify-between pt-4 pl-4 pr-4 shadow-md">
       <Link href="/" className="rounded-full">
         <Image
           src="/logo_crhom.jpg"
@@ -34,73 +34,65 @@ export default function Navbar() {
       <div className="md:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">Open</Button>
+            <Button variant="outline" className="bg-gray-100">
+              Open
+            </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="start">
-            <DropdownMenuItem>
-              <Link href="/">Home</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href="/about">About us</Link>
+          <DropdownMenuContent className=" bg-gray-100" align="start">
+            <DropdownMenuItem className="bg-gray-100">
+              <Link href="/about">A propos</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link href="/Contact">Contact</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/events">Events</Link>
+              <Link href="/events">Événements</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/login">Login</Link>
+              <Link href="/login">Connexion</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/sign-up">Sign Up</Link>
+              <Link href="/sign-up">Inscription</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
       <NavigationMenu className="hidden md:flex">
-        <NavigationMenuList className="w-[90vw] flex flex-row justify-around pl-[35vw] pr-[10vw]">
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
-              <Link href="/about">About</Link>
+        <NavigationMenuList className="w-[80vw] flex flex-row justify-around pl-[35vw] pr-[1vw]">
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink asChild>
+              <Link href="/about">A propos</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
-              <Link href="/events">Events</Link>
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink asChild>
+              <Link href="/events">Événements</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink asChild>
               <Link href="/Contact">Contact</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuTrigger className={navigationMenuTriggerStyle()}>
-              SignIn
-            </NavigationMenuTrigger>
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            <NavigationMenuTrigger>Se connecter</NavigationMenuTrigger>
             <NavigationMenuContent className="w-35 p-3">
               <ul className="grid w-[150px] gap-4">
                 <li>
                   <NavigationMenuLink asChild>
-                    <Link href="/login">Login</Link>
+                    <Link href="/login" className="text-[0.7em]">
+                      Connexion
+                    </Link>
                   </NavigationMenuLink>
                 </li>
                 <li>
                   <NavigationMenuLink asChild>
-                    <Link href="/sign-up">Sign Up</Link>
+                    <Link href="/sign-up" className="text-[0.7em]">
+                      Inscription
+                    </Link>
                   </NavigationMenuLink>
                 </li>
               </ul>

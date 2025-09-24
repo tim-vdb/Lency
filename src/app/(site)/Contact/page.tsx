@@ -64,7 +64,7 @@ export default function ContactPage() {
       <div className="mt-16 flex flex-col md:flex-row items-center gap-8 p-8 rounded-xl shadow-md">
         <div className="md:w-1/2 shadow-md dark:shadow-black">
           <img
-            src="/molkky_contact.jpeg"
+            src="/images/molkky_contact.jpeg"
             alt="Molkky"
             className="rounded-xl shadow-md w-full object-cover"
           />
