@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { EventsFormSchema } from "@/features/SignUpEvents/events.schema";
 import { EventsSafeAction } from "../events.action";
 import { useAction } from "next-safe-action/hooks";
@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 
 export default function SignUpEvents() {
     const router = useRouter()
+    const params = useParams();
+    const eventId = params.id as string; // récupère l'id de l'event depuis l'URL
     // 1. Define your form.
     const form = useForm<z.infer<typeof EventsFormSchema>>({
         resolver: zodResolver(EventsFormSchema),
@@ -21,7 +23,7 @@ export default function SignUpEvents() {
             name: "",
             email: "",
             phone: "",
-            eventId: "", // on initialise eventId qui sera caché dans le formulaire
+            eventId: eventId, // on initialise eventId qui sera caché dans le formulaire
         },
     });
 
@@ -102,23 +104,23 @@ export default function SignUpEvents() {
                                 )}
                             />
                             <FormField
-                                control={form.control}
-                                name="eventId"
-                                render={({ field }) => (
-                                    <FormItem className="hidden"> {/* 👈 champ invisible */}
-                                    <FormControl>
-                                        <Input type="hidden" {...field} /> {/* 👈 on injecte l'id */}
-                                    </FormControl>
-                                    </FormItem>
-                                )}
-                                
-                                />
+                            control={form.control}
+                            name="eventId"
+                            render={({ field }) => (
+                                <FormItem className="hidden">
+                                <FormLabel>Event ID</FormLabel>
+                                <FormControl>
+                                    <Input type="hidden" {...field} value={eventId}/>
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
 
                             <Button type="submit">S'inscrire à l'évènement</Button>
                         </form>
                     </Form>
                     {hasErrored && <p className="text-red-500">{result?.serverError}</p>}
-                    {hasSucceeded && <p className="text-green-500">Vous êtes inscrit à la newsletter {result?.data?.name}</p>}
                 </div>
             </div>
         </div>
