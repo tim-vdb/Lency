@@ -170,8 +170,8 @@ export default function SignUpForm() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full py-2 rounded-xl hover:bg-orange-500 transition-colors" >
-              S'inscrire
+            <Button type="submit" className="w-full py-2 rounded-xl hover:bg-orange-500 transition-colors" disabled={loading}>
+              {loading ? <Loader2 size={16} className="animate-spin" /> : "S'inscrire"}
             </Button>
 
           </form>
