@@ -1,5 +1,4 @@
-import SignUpEvents from "@/features/SignUpEvents/components/SignUpEvents";
-
+import SignUpEvents from "@/features/Events/SignUpEvents/components/SignUpEvents";
 
 export default function page() {
   return (
