@@ -21,14 +21,16 @@ import {
 
 export default function Navbar() {
   return (
-    <nav className="w-[100vw] absolute flex justify-between pt-4 pl-4 pr-4">
-      <Image
-        src="/logo_crhom.jpg"
-        alt="Home"
-        width={100}
-        height={100}
-        className="rounded-full"
-      />
+    <nav className="w-[100vw] h-[15vh] flex justify-between pt-4 pl-4 pr-4 shadow-md">
+      <Link href="/" className="rounded-full">
+        <Image
+          src="/logo_crhom.jpg"
+          alt="Home"
+          width={100}
+          height={100}
+          className="rounded-full"
+        />
+      </Link>
       <div className="md:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -42,7 +44,7 @@ export default function Navbar() {
               <Link href="/about">About us</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/contact">Contact</Link>
+              <Link href="/Contact">Contact</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link href="/events">Events</Link>
@@ -81,7 +83,7 @@ export default function Navbar() {
               asChild
               className={navigationMenuTriggerStyle()}
             >
-              <Link href="/contact">Contact</Link>
+              <Link href="/Contact">Contact</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
