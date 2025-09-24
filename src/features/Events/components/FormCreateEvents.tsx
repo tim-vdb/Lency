@@ -18,6 +18,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { EventsSafeAction } from '../events.action'
 import z from 'zod'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { DatePicker } from '@/components/ui/DatePicker'
+import { DatePickerRange } from '@/components/ui/DatePickerRange'
 
 export default function FormCreateEvents() {
     const router = useRouter()
@@ -33,7 +37,7 @@ export default function FormCreateEvents() {
             dateEnd: new Date(),
             openAt: new Date(),
             closeAt: new Date(),
-            visibleToGuests: true,
+            visibleToGuests: false,
             maxParticipants: 15,
         },
     })
@@ -58,42 +62,140 @@ export default function FormCreateEvents() {
     }
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Nom</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Nom" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                Votre nom complet.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Description" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                Votre description.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button type="submit">S'inscrire à la newsletter</Button>
-            </form>
-        </Form>
+        <div className='container h-screen flex justify-center items-center'>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Créer un événement</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Nom</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Nom" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Nom de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Description</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Description" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Description de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="image"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Image</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Image" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Image de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="location"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Lieu</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Lieu" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Lieu de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="openAt"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Ouverture inscription</FormLabel>
+                                        <FormControl>
+                                            <DatePicker
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                placeholder="Sélectionnez une date"
+                                                label=""
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Date de début de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="dateStart"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Fermeture inscription</FormLabel>
+                                        <FormControl>
+                                            <DatePickerRange setDateFrom={field.onChange} setDateTo={field.onChange} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Date de fin de l'événement.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="visibleToGuests"
+                                render={({ field }) => (
+                                    <FormItem className='flex items-center gap-2'>
+                                        <FormControl>
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                        <FormLabel>Rendre public.</FormLabel>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+
+                            <Button type="submit">Créer l'événement</Button>
+                        </form>
+                    </Form>
+                </CardContent>
+            </Card>
+        </div>
     )
 }
