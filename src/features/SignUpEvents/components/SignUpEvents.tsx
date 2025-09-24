@@ -21,6 +21,7 @@ export default function SignUpEvents() {
             name: "",
             email: "",
             phone: "",
+            eventId: "", // on initialise eventId qui sera caché dans le formulaire
         },
     });
 
@@ -89,17 +90,30 @@ export default function SignUpEvents() {
                                 name="phone"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Nom</FormLabel>
+                                        <FormLabel>Phone</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Nom" {...field} />
+                                            <Input placeholder="Phone" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            Votre nom complet.
+                                            Votre phone complet.
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
+                            <FormField
+                                control={form.control}
+                                name="eventId"
+                                render={({ field }) => (
+                                    <FormItem className="hidden"> {/* 👈 champ invisible */}
+                                    <FormControl>
+                                        <Input type="hidden" {...field} /> {/* 👈 on injecte l'id */}
+                                    </FormControl>
+                                    </FormItem>
+                                )}
+                                
+                                />
+
                             <Button type="submit">S'inscrire à l'évènement</Button>
                         </form>
                     </Form>

@@ -8,8 +8,8 @@ export const EventsSafeAction = actionClient
     .inputSchema(EventsFormSchema)
     .action(async ({ parsedInput: input }) => {
 
-        if (input.name == "Timothée") {
-            throw new SafeError("Timothée, tu es trop fort !")
+        if (!input.eventId) {
+            throw new SafeError("eventId is required");
         }
 
         const addToEvent = await prisma.registration.create({
@@ -17,7 +17,7 @@ export const EventsSafeAction = actionClient
                 name: input.name,
                 email: input.email,
                 phone: input.phone || null,
-                eventId: input.eventId || null,
+                eventId: input.eventId,
 
             }
         })
