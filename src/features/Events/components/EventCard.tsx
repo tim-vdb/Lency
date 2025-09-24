@@ -7,7 +7,6 @@ import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
-import no_image from "../../../../public/images/no-image.jpg";
 
 interface EventCardProps {
   event: {
@@ -26,39 +25,38 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event }: EventCardProps) {
-  console.log(event.id);
-  console.log(event.image);
-
   const pathname = usePathname();
 
   return (
     event.visibleToGuests && (
       <Card className="overflow-hidden rounded-2xl shadow-md hover:cursor-pointer transition mb-10">
-        {pathname !== "/" ? (
-          event.image &&
-          typeof event.image === "string" &&
-          event.image.length > 0 && (
-            <div className="h-60 w-[90%] rounded-xl m-auto overflow-hidden">
-              <Image
-                width={400}
-                height={400}
-                src={event.image}
-                alt={event.name}
-                className="h-full w-full object-cover"
-              />
-            </div>
-          )
-        ) : (
-          <div className="h-35 w-[90%] rounded-xl m-auto overflow-hidden">
-            <Image
-              width={400}
-              height={400}
-              src={event.image ?? no_image}
-              alt={event.name}
-              className="h-full w-full object-cover"
-            />
-          </div>
-        )}
+        {pathname !== "/"
+          ? event.image &&
+            typeof event.image === "string" &&
+            event.image.length > 0 && (
+              <div className="h-60 w-[90%] rounded-xl m-auto overflow-hidden">
+                <Image
+                  width={400}
+                  height={400}
+                  src={event.image}
+                  alt={event.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )
+          : event.image &&
+            typeof event.image === "string" &&
+            event.image.length > 0 && (
+              <div className="h-35 w-[90%] rounded-xl m-auto overflow-hidden">
+                <Image
+                  width={400}
+                  height={400}
+                  src={event.image}
+                  alt={event.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
 
         <CardHeader>
           <CardTitle className="text-xl font-semibold h-[4vh]">

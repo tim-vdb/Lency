@@ -28,10 +28,9 @@ import {
 
 export default async function Navbar() {
   const user = await getUser();
-  console.log(user);
 
   return (
-    <nav className=" bg-gray-100 w-[100vw] h-[15vh] flex justify-between pt-4 pl-4 pr-4 shadow-md">
+    <nav className=" bg-gray-100 w-[100vw] h-[17vh] flex justify-between pt-4 pl-4 pr-4 shadow-md">
       <Link href="/" className="rounded-full">
         <Image
           src="/logo_crhom.jpg"
@@ -72,7 +71,9 @@ export default async function Navbar() {
               <DropdownMenuGroup>
                 <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Mon Profil</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/Profil">Mon Profil</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <LogOut />
                 </DropdownMenuItem>
@@ -140,9 +141,7 @@ export default async function Navbar() {
                   </li>
                   <li>
                     <NavigationMenuLink asChild>
-                      <Link href="/Profil" className="text-[0.7em]">
-                        <LogOut />
-                      </Link>
+                      <LogOut />
                     </NavigationMenuLink>
                   </li>
                 </ul>
