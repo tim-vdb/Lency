@@ -21,7 +21,7 @@ import {
 
 export default function Navbar() {
   return (
-    <nav className="w-[100vw] h-[15vh] flex justify-between pt-4 pl-4 pr-4 shadow-xl">
+    <nav className="w-[100vw] h-[15vh] flex justify-between pt-4 pl-4 pr-4 shadow-md">
       <Link href="/" className="rounded-full">
         <Image
           src="/logo_crhom.jpg"
