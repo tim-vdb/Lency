@@ -92,6 +92,8 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
+        
+       
         <Button type="submit" className="w-full py-2 rounded-xl hover:bg-orange-500 transition-colors" disabled={loading}>
           Se connecter
         </Button>
