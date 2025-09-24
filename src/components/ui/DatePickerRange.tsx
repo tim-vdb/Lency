@@ -15,59 +15,42 @@ import {
 } from "@/components/ui/popover"
 
 type DatePickerWithRangeProps = {
-    setDateFrom: React.Dispatch<React.SetStateAction<Date>>
-    setDateTo: React.Dispatch<React.SetStateAction<Date>>
+    dateStart?: Date
+    dateEnd?: Date
+    onChange?: (dateStart: Date | undefined, dateEnd: Date | undefined) => void
     className?: string
 }
 
 export function DatePickerRange({
     className,
-    setDateFrom,
-    setDateTo,
+    dateStart,
+    dateEnd,
+    onChange,
 }: DatePickerWithRangeProps) {
-    const [date, setDate] = React.useState<DateRange | undefined>({
-        from: new Date(),
-        to: addDays(new Date(), 30),
-    })
-
-    const handleSaveDates = () => {
-        if (!date?.from || !date?.to) {
-            alert("Sélectionnez une plage de dates complète.")
-            return
+    const handleDateChange = (newDate: DateRange | undefined) => {
+        if (newDate?.from && newDate?.to) {
+            onChange?.(newDate.from, newDate.to)
         }
-        setDateFrom(date.from)
-        setDateTo(date.to)
     }
-
-    React.useEffect(() => {
-        if (date?.from && date?.to) {
-            handleSaveDates()
-        }
-    }, [date])
 
     return (
         <div className={cn("grid gap-2", className)}>
             <Popover>
                 <PopoverTrigger asChild>
                     <Button
-                        onClick={handleSaveDates}
                         id="date"
                         variant={"outline"}
                         className={cn(
                             "w-[300px] justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
+                            !dateStart && !dateEnd && "text-muted-foreground"
                         )}
                     >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date?.from ? (
-                            date.to ? (
-                                <>
-                                    {format(date.from, "LLL dd, y")} -{" "}
-                                    {format(date.to, "LLL dd, y")}
-                                </>
-                            ) : (
-                                format(date.from, "LLL dd, y")
-                            )
+                        {dateStart && dateEnd ? (
+                            <>
+                                {format(dateStart, "LLL dd, y")} -{" "}
+                                {format(dateEnd, "LLL dd, y")}
+                            </>
                         ) : (
                             <span>Pick a date</span>
                         )}
@@ -77,9 +60,9 @@ export function DatePickerRange({
                     <Calendar
                         initialFocus
                         mode="range"
-                        defaultMonth={date?.from}
-                        selected={date}
-                        onSelect={setDate}
+                        defaultMonth={dateStart}
+                        selected={dateStart && dateEnd ? { from: dateStart, to: dateEnd } : undefined}
+                        onSelect={handleDateChange}
                         numberOfMonths={2}
                     />
                 </PopoverContent>

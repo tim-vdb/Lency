@@ -27,7 +27,7 @@ export default function FormCreateEvents() {
     const router = useRouter()
     // 1. Define your form.
     const form = useForm<z.infer<typeof EventsSchema>>({
-        resolver: zodResolver(EventsSchema),
+        resolver: zodResolver(EventsSchema) as any,
         defaultValues: {
             name: "",
             description: "",
@@ -42,14 +42,23 @@ export default function FormCreateEvents() {
         },
     })
 
+    // Fonction pour gérer les changements de date range
+    const handleDateRangeChange = (dateStart: Date | undefined, dateEnd: Date | undefined) => {
+        if (dateStart && dateEnd) {
+            form.setValue('dateStart', dateStart)
+            form.setValue('dateEnd', dateEnd)
+        }
+    }
+
     const { executeAsync, hasErrored, result, hasSucceeded } = useAction(EventsSafeAction, {
         onSuccess: (data) => {
-            toast.success("Vous êtes inscrit à la newsletter");
+            toast.success("Événement créé avec succès !");
             form.reset();
             router.refresh();
         },
         onError: (error) => {
-            toast.error(error.error.serverError || "Une erreur est survenue");
+            console.error('Erreur lors de la création de l\'événement:', error);
+            toast.error(error.error.serverError || "Une erreur est survenue lors de la création de l'événement");
         }
     });
 
@@ -62,7 +71,7 @@ export default function FormCreateEvents() {
     }
 
     return (
-        <div className='container h-screen flex justify-center items-center'>
+        <div className='container flex justify-center items-center'>
             <Card>
                 <CardHeader>
                     <CardTitle>Créer un événement</CardTitle>
@@ -109,7 +118,7 @@ export default function FormCreateEvents() {
                                     <FormItem>
                                         <FormLabel>Image</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Image" {...field} />
+                                            <Input type="file" placeholder="Image" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             Image de l'événement.
@@ -149,7 +158,29 @@ export default function FormCreateEvents() {
                                             />
                                         </FormControl>
                                         <FormDescription>
-                                            Date de début de l'événement.
+                                            Date d'ouverture des inscriptions.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="closeAt"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Fermeture inscription</FormLabel>
+                                        <FormControl>
+                                            <DatePicker
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                placeholder="Sélectionnez une date"
+                                                label=""
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Date de fermeture des inscriptions.
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -161,13 +192,28 @@ export default function FormCreateEvents() {
                                 name="dateStart"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Fermeture inscription</FormLabel>
+                                        <FormLabel>Durée de l'événement</FormLabel>
                                         <FormControl>
-                                            <DatePickerRange setDateFrom={field.onChange} setDateTo={field.onChange} />
+                                            <DatePickerRange
+                                                dateStart={form.getValues('dateStart')}
+                                                dateEnd={form.getValues('dateEnd')}
+                                                onChange={handleDateRangeChange}
+                                            />
                                         </FormControl>
-                                        <FormDescription>
-                                            Date de fin de l'événement.
-                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="maxParticipants"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Max participants</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Max participants" type="number" {...field} />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
