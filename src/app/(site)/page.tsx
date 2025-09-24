@@ -1,8 +1,14 @@
 import { Button } from "@/components/ui/button";
 import EventCarousel from "@/features/Events/GetEvents/components/EventCarousel";
+import Gallery from "@/features/Gallery/components/Gallery";
+import { GetEvents } from "@/features/Events/GetEvents/events.action";
 import Link from "next/link";
+import { GetImages } from "@/features/Gallery/gallery.action";
 
-export default function Home() {
+export default async function Home() {
+  const events = await GetEvents();
+  const images = await GetImages();
+
   return (
     <article>
       <section className="bg-[url(/images/molkky.jpg)] overflow-hidden bg-center bg-cover h-[75vh] flex flex-col items-start pt-15 md:pt-25 px-15">
@@ -19,18 +25,21 @@ export default function Home() {
           <Link href="/login">Rejoins le CRHOM</Link>
         </Button>
       </section>
-      <section className="mx-10 my-5 p-8 shadow-md rounded-xl">
-        <h2>Les Derniers événements</h2>
-        <div className="w-full flex flex-wrap md:flex-nowrap justify-center items-center gap-15">
-          <EventCarousel />
-          <Button className=" bg-[var(--color-gold)] text-black">
-            <Link href="/events">Voir plus d'événements</Link>
-          </Button>
-        </div>
-      </section>
+      {events && events.length > 0 && (
+        <section className="mx-10 my-5 p-8 shadow-md rounded-xl">
+          <h2>Les Derniers événements</h2>
+          <div className="w-full flex flex-wrap md:flex-nowrap justify-center items-center gap-15">
+            <EventCarousel />
+            <Button className=" bg-[var(--color-gold)] text-black">
+              <Link href="/events">Voir plus d'événements</Link>
+            </Button>
+          </div>
+        </section>
+      )}
       <section className="mx-10 my-5 p-8 shadow-md rounded-xl">
         <h2>Galeries d'Images</h2>
+        <Gallery images={images} />
       </section>
-    </article>
+    </article >
   );
 }

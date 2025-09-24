@@ -22,6 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DatePicker } from '@/components/ui/DatePicker'
 import { DatePickerRange } from '@/components/ui/DatePickerRange'
+import { UploadButton } from '@/lib/uploadthing'
 
 export default function FormCreateEvents() {
     const router = useRouter()
@@ -31,7 +32,6 @@ export default function FormCreateEvents() {
         defaultValues: {
             name: "",
             description: "",
-            image: "",
             location: "",
             dateStart: new Date(),
             dateEnd: new Date(),
@@ -111,21 +111,16 @@ export default function FormCreateEvents() {
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="image"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Image</FormLabel>
-                                        <FormControl>
-                                            <Input type="file" placeholder="Image" {...field} />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Image de l'événement.
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
+                            <UploadButton
+                                endpoint="EventUploader"
+                                onClientUploadComplete={(res) => {
+                                    console.log("Files: ", res);
+                                    alert("Upload Completed");
+                                }}
+                                onUploadError={(error: Error) => {
+                                    alert(`ERROR! ${error.message}`);
+                                }}
+                                className="mb-4 bg-blue-600 ut-allowed-content:text-white text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                             />
                             <FormField
                                 control={form.control}

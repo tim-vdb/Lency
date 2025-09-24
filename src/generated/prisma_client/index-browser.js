@@ -135,7 +135,6 @@ exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  image: 'image',
   location: 'location',
   dateStart: 'dateStart',
   dateEnd: 'dateEnd',
@@ -195,6 +194,15 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.GalleryScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  url: 'url',
+  type: 'type',
+  uploadedBy: 'uploadedBy',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -215,13 +223,19 @@ exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN'
 };
 
+exports.GalleryType = exports.$Enums.GalleryType = {
+  EVENT: 'EVENT',
+  GALLERY: 'GALLERY'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Event: 'Event',
   Registration: 'Registration',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Gallery: 'Gallery'
 };
 
 /**

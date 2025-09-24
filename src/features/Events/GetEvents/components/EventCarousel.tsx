@@ -8,9 +8,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { GetImages } from "@/features/Gallery/gallery.action";
 
 type Event = {
-  image: string | null;
   id: string;
   name: string;
   createdAt: Date;
@@ -28,16 +28,12 @@ type Event = {
 
 export default async function EventCarousel() {
   const events = await GetEvents();
-
+  const images = await GetImages();
   let lastOfEvents: Event[] = [];
 
   const findLatestEvents = () => {
-    if (events) {
-      lastOfEvents = [
-        events[events.length - 1],
-        events[events.length - 2],
-        events[events.length - 3],
-      ];
+    if (events && Array.isArray(events)) {
+      lastOfEvents = events.slice(-3);
     }
   };
 
@@ -56,7 +52,7 @@ export default async function EventCarousel() {
             <div className="p-1">
               <Card>
                 <CardContent className="flex aspect-square items-center p-6">
-                  <EventCard event={event} />
+                  <EventCard event={event} images={images} />
                 </CardContent>
               </Card>
             </div>
