@@ -33,7 +33,7 @@ export default function EventCard({ event }: EventCardProps) {
 
   return (
     event.visibleToGuests && (
-      <Card className="overflow-hidden rounded-2xl shadow-md hover:cursor-pointer transition">
+      <Card className="overflow-hidden rounded-2xl shadow-md hover:cursor-pointer transition mb-10">
         {pathname !== "/" ? (
           event.image &&
           typeof event.image === "string" &&
@@ -68,7 +68,7 @@ export default function EventCard({ event }: EventCardProps) {
 
         <CardContent className="space-y-3">
           {pathname !== "/" && event.description && (
-            <p className="text-sm text-muted-foreground line-clamp-3">
+            <p className="text-sm text-muted-foreground line-clamp-3 h-25">
               {event.description}
             </p>
           )}
@@ -79,7 +79,7 @@ export default function EventCard({ event }: EventCardProps) {
             </Link>
           )}
 
-          <div className="flex items-center text-sm text-muted-foreground">
+          <div className="flex items-center text-sm text-muted-foreground mt-4">
             <Calendar className="mr-2 h-4 w-4" />
             {formatDate(event.dateStart)} → {formatDate(event.dateEnd)}{" "}
           </div>

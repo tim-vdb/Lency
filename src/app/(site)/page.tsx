@@ -23,7 +23,7 @@ export default function Home() {
         <h2>Les Derniers événements</h2>
         <div className="w-full flex flex-wrap md:flex-nowrap justify-center items-center gap-15">
           <EventCarousel />
-          <Button className=" border bg-[var(--color-gold)] text-black">
+          <Button className=" bg-[var(--color-gold)] text-black">
             <Link href="/events">Voir plus d'événements</Link>
           </Button>
         </div>

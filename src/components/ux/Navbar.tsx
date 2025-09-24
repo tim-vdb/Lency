@@ -59,47 +59,40 @@ export default function Navbar() {
       </div>
       <NavigationMenu className="hidden md:flex">
         <NavigationMenuList className="w-[80vw] flex flex-row justify-around pl-[35vw] pr-[1vw]">
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink asChild>
               <Link href="/about">A propos</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink asChild>
               <Link href="/events">Événements</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink asChild>
               <Link href="/Contact">Contact</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuTrigger className={navigationMenuTriggerStyle()}>
-              Se connecter
-            </NavigationMenuTrigger>
+          <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+            <NavigationMenuTrigger>Se connecter</NavigationMenuTrigger>
             <NavigationMenuContent className="w-35 p-3">
               <ul className="grid w-[150px] gap-4">
                 <li>
                   <NavigationMenuLink asChild>
-                    <Link href="/login">Connexion</Link>
+                    <Link href="/login" className="text-[0.7em]">
+                      Connexion
+                    </Link>
                   </NavigationMenuLink>
                 </li>
                 <li>
                   <NavigationMenuLink asChild>
-                    <Link href="/sign-up">Inscription</Link>
+                    <Link href="/sign-up" className="text-[0.7em]">
+                      Inscription
+                    </Link>
                   </NavigationMenuLink>
                 </li>
               </ul>
