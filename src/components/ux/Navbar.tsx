@@ -20,6 +20,11 @@ import {
 } from "@radix-ui/react-navigation-menu";
 import { getUser } from "@/lib/auth-session";
 import LogOut from "@/features/Logout/components/logout";
+import {
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@radix-ui/react-dropdown-menu";
 
 export default async function Navbar() {
   const user = await getUser();
@@ -43,7 +48,7 @@ export default async function Navbar() {
               Open
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className=" bg-gray-100" align="start">
+          <DropdownMenuContent className=" bg-gray-100 mr-4" align="start">
             <DropdownMenuItem className="bg-gray-100">
               <Link href="/about">A propos</Link>
             </DropdownMenuItem>
@@ -62,6 +67,16 @@ export default async function Navbar() {
               <DropdownMenuItem>
                 <Link href="/sign-up">Inscription</Link>
               </DropdownMenuItem>
+            )}
+            {user && (
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Mon Profil</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <LogOut />
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
             )}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -111,20 +126,27 @@ export default async function Navbar() {
           )}
           {user && (
             <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-              <DropdownMenuTrigger className="cursor-pointer">
-                <img
-                  src="/images/user.svg"
-                  alt="Profile Account"
-                  className="w-10"
-                />
+              <NavigationMenuTrigger className="cursor-pointer">
                 Mon Compte
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Mon Profil</DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LogOut />
-                </DropdownMenuItem>
-              </DropdownMenuContent>
+              </NavigationMenuTrigger>
+              <NavigationMenuContent className="w-35 p-3">
+                <ul className="grid w-[150px] gap-4">
+                  <li>
+                    <NavigationMenuLink asChild>
+                      <Link href="/Profil" className="text-[0.7em]">
+                        Mon Profil
+                      </Link>
+                    </NavigationMenuLink>
+                  </li>
+                  <li>
+                    <NavigationMenuLink asChild>
+                      <Link href="/Profil" className="text-[0.7em]">
+                        <LogOut />
+                      </Link>
+                    </NavigationMenuLink>
+                  </li>
+                </ul>
+              </NavigationMenuContent>
             </NavigationMenuItem>
           )}
         </NavigationMenuList>
