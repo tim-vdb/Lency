@@ -16,6 +16,7 @@ import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { useUser } from '@/context/UserContext'
+import { formatDate } from '@/lib/utils'
 
 export default function ProfileAccount() {
     const user = useUser();
@@ -46,6 +47,7 @@ export default function ProfileAccount() {
                                 )}
                             </div>
                             <p className='mt-2 text-xs text-neutral-500'>{user?.email}</p>
+                            <p className='mt-2 text-xs text-neutral-500'>{formatDate(user.createdAt)}</p>
                             {/* <p className='mt-2 text-xs text-neutral-500'>
                                 {user?.createdAt ? user.createdAt.toLocaleString() : null}
                             </p> */}
