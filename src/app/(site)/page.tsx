@@ -29,7 +29,7 @@ export default async function Home() {
       </section>
       <article className="container">
         {events && events.length > 0 && (
-          <section className="mx-10 my-5 px-20 shadow-md rounded-xl">
+          <section className="mx-10 my-5 px-20 py-8 shadow-md rounded-xl">
             <h2>Les Derniers événements</h2>
             <div className="w-full flex flex-col flex-wrap md:flex-nowrap justify-center items-center gap-15">
               <EventCarousel />
