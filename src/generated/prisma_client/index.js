@@ -221,7 +221,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "E:\\Projet\\projet-react\\crazy_dev\\src\\generated\\prisma_client",
+      "value": "C:\\Projet\\Next.js - React\\crazy_dev\\src\\generated\\prisma_client",
       "fromEnvVar": null
     },
     "config": {
@@ -247,7 +247,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "E:\\Projet\\projet-react\\crazy_dev\\src\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Projet\\Next.js - React\\crazy_dev\\src\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -261,7 +261,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

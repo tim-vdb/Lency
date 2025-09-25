@@ -51,6 +51,7 @@ export default function ProfileAccount() {
                             </p> */}
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
+
                         {user?.role === "ADMIN" && (
                             <DropdownMenuItem className='cursor-pointer'>
                                 <Link href={"/admin"}>Dashboard</Link>
@@ -62,17 +63,18 @@ export default function ProfileAccount() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-                (pathname !== "/login") && (
-                    <Button variant={"default"} asChild>
-                        <Link href="/login" className="truncate">Login</Link>
-                    </Button>
-                )
-                ||
-                (pathname === "/login") && (
-                    <Button variant={"default"} className='' asChild>
-                        <Link href="/sign-up" className="truncate">Sign Up</Link>
-                    </Button>
-                )
+                <>
+                    {pathname !== "/login" && (
+                        <Button variant={"default"} asChild>
+                            <Link href="/login" className="truncate">Login</Link>
+                        </Button>
+                    )}
+                    {pathname === "/login" && (
+                        <Button variant={"default"} className='' asChild>
+                            <Link href="/sign-up" className="truncate">Sign Up</Link>
+                        </Button>
+                    )}
+                </>
             )}
         </>
     )

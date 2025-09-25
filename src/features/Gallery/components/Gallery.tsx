@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { UploadButton } from '@/lib/uploadthing';
 import { usePathname, useRouter } from 'next/navigation';
 import { X } from 'lucide-react';
+import ButtonDeleteImage from './ButtonDeleteImage';
 
 interface GalleryImage {
     src: string;
@@ -55,7 +56,7 @@ export default function Gallery({ images }: GalerieProps) {
                             onUploadError={(error: Error) => {
                                 alert(`ERROR! ${error.message}`);
                             }}
-                            className="mb-4 bg-blue-600 ut-allowed-content:text-white text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                            className="mb-4 bg-blue-600 ut-allowed-content:text-white text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors [&_label]:w-full [&_label]:hover:bg-blue-500"
                         />
                     )}
                 </div>
@@ -69,8 +70,7 @@ export default function Gallery({ images }: GalerieProps) {
                         {images.map((image) => (
                             <div
                                 key={image.id}
-                                className={`group cursor-pointer overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300`}
-                                onClick={() => openFullscreen({ src: image.url, alt: image.key })}
+                                className={`group cursor-pointer overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative`}
                             >
                                 <Image
                                     src={image.type === "EVENT" ? image.url : image.url}
@@ -79,7 +79,9 @@ export default function Gallery({ images }: GalerieProps) {
                                     height={300}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     loading="lazy"
+                                    onClick={() => openFullscreen({ src: image.url, alt: image.key })}
                                 />
+                                <ButtonDeleteImage id={image.id} />
                             </div>
                         ))}
                     </div>
