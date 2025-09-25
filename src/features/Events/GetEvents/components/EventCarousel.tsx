@@ -47,17 +47,23 @@ export default async function EventCarousel() {
       className="w-full h-full"
     >
       <CarouselContent>
-        {lastOfEvents.map((event, index) => (
-          <CarouselItem key={index} className="md:basis-1/2">
-            <div className="p-1">
-              <Card>
+        {lastOfEvents.map((event, index) => {
+          // Pour chaque événement, on prend une image différente basée sur l'index
+          const eventImages = images.filter(img => img.type === "EVENT");
+          const eventImage = eventImages[index % eventImages.length] || null;
+
+          return (
+            <CarouselItem key={event.id} className="md:basis-1/2">
+              <div className="p-1">
+
                 <CardContent className="flex aspect-square items-center p-6">
-                  <EventCard event={event} images={images} />
+                  <EventCard event={event} images={eventImage ? [eventImage] : []} />
                 </CardContent>
-              </Card>
-            </div>
-          </CarouselItem>
-        ))}
+
+              </div>
+            </CarouselItem>
+          );
+        })}
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />

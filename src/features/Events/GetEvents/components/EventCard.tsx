@@ -7,6 +7,7 @@ import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
+import { useUser } from "@/context/UserContext";
 
 interface EventCardProps {
   event: {
@@ -33,6 +34,7 @@ interface EventCardProps {
 
 export default function EventCard({ event, images }: EventCardProps) {
   const pathname = usePathname();
+  const user = useUser();
 
   // Vérification que event existe
   if (!event) {
@@ -44,11 +46,16 @@ export default function EventCard({ event, images }: EventCardProps) {
     return null;
   }
 
-  const eventImage = images.find((image) => image.type === "EVENT");
+  // Vérification que l'utilisateur est connecté (membre ou admin)
+  if (!user) {
+    return null;
+  }
+
+  const eventImage = images.length > 0 ? images[0] : null;
 
   return (
     <>
-      {event.visibleToGuests && (
+      {(event.visibleToGuests === true || (user.role === "MEMBER" || user.role === "ADMIN")) ? (
         <Card className="overflow-hidden rounded-2xl shadow-md hover:cursor-pointer transition mb-10">
           {eventImage?.url && (
             <div className="h-60 w-[90%] rounded-xl m-auto overflow-hidden">
@@ -101,6 +108,10 @@ export default function EventCard({ event, images }: EventCardProps) {
             )}
           </CardContent>
         </Card>
+      ) : (
+        <div className="text-center text-gray-500 p-4">
+          Cet événement est réservé aux membres
+        </div>
       )}
     </>
   );
