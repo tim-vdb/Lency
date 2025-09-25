@@ -52,7 +52,7 @@ export default async function Navbar() {
               <Link href="/about">A propos</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/Contact">Contact</Link>
+              <Link href="/contact">Contact</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link href="/events">Événements</Link>

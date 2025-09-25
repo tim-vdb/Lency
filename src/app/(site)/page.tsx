@@ -25,21 +25,23 @@ export default async function Home() {
           <Link href="/login">Rejoins le CRHOM</Link>
         </Button>
       </section>
-      {events && events.length > 0 && (
+      <div className="container">
+        {events && events.length > 0 && (
+          <section className="mx-10 my-5 p-8 shadow-md rounded-xl">
+            <h2>Les Derniers événements</h2>
+            <div className="w-full flex flex-col flex-wrap md:flex-nowrap justify-center items-center gap-15">
+              <EventCarousel />
+              <Button className=" bg-[var(--color-gold)] text-black">
+                <Link href="/events">Voir plus d'événements</Link>
+              </Button>
+            </div>
+          </section>
+        )}
         <section className="mx-10 my-5 p-8 shadow-md rounded-xl">
-          <h2>Les Derniers événements</h2>
-          <div className="w-full flex flex-wrap md:flex-nowrap justify-center items-center gap-15">
-            <EventCarousel />
-            <Button className=" bg-[var(--color-gold)] text-black">
-              <Link href="/events">Voir plus d'événements</Link>
-            </Button>
-          </div>
+          <h2>Galeries d'Images</h2>
+          <Gallery images={images} />
         </section>
-      )}
-      <section className="mx-10 my-5 p-8 shadow-md rounded-xl">
-        <h2>Galeries d'Images</h2>
-        <Gallery images={images} />
-      </section>
+      </div>
     </article >
   );
 }
