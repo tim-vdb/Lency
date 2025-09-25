@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from '@/lib/utils';
-import { Folder, Newspaper, UserCog } from 'lucide-react';
+import { Folder, LogOut, Newspaper, UserCog } from 'lucide-react';
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
 import React from 'react'
@@ -14,14 +14,14 @@ export default function DashboardNavbar() {
     };
 
     const linksClasses = {
-        base: "flex items-center gap-2 px-3 py-2 w-fit md:w-full rounded-md text-sm font-medium transition-colors font-cooper",
-        isActive: "underline decoration-2 decoration-blue-500 dark:decoration-yellow-600 text-black dark:text-white bg-neutral-200 dark:bg-neutral-800",
-        notActive: "text-black dark:text-gray-300"
+       base: "flex items-center gap-2 px-3 py-2 w-fit md:w-full rounded-lg text-sm font-medium transition-all duration-200 font-cooper",
+    isActive:"bg-blue-100 dark:bg-neutral-800 text-blue-600 dark:text-yellow-400 underline decoration-2 decoration-blue-500 dark:decoration-yellow-600",
+    notActive:"text-gray-700 dark:text-gray-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-blue-500 dark:hover:text-yellow-400",
     }
 
     return (
         <nav className="md:max-w-xs">
-            <div className="flex justify-center md:items-start md:justify-start md:flex-col gap-8 w-full h-full pt-4 md:pt-20">
+            <div className="flex justify-center md:items-start md:justify-start md:flex-col gap-4 w-full h-full pt-4 md:pt-20 rounded-2xl shadow-md p-4 bg-neutral-50 dark:bg-neutral-900">
                 <Link
                     href="/admin/gallery"
                     className={cn(linksClasses.base, isActive("/dashboard/gallery")
@@ -52,7 +52,21 @@ export default function DashboardNavbar() {
                     <UserCog className='text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834))]' />
                     <p className='hidden md:block'>Gérer mon compte</p>
                 </Link>
+                  <Link
+                    href="/"
+                    className={cn(linksClasses.base, isActive("/")
+                        ? linksClasses.isActive
+                        : linksClasses.notActive
+                    )}
+                >
+                  
+
+                <LogOut className="text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834)]" />
+
+                    <p className='hidden md:block'>Quitter</p>
+                </Link>
             </div>
+           
         </nav >
     )
 }
