@@ -8,7 +8,7 @@ export default function DashboardLayout({
   return (
     <div className="flex flex-col md:flex-row md:justify-between md:container font-inter antialiased">
       <DashboardNavbar />
-      <div className="container flex-1">{children}</div>
+      <div className="flex-1">{children}</div>
     </div>
   );
 }

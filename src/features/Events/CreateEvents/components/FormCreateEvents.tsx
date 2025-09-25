@@ -115,12 +115,11 @@ export default function FormCreateEvents() {
                                 endpoint="EventUploader"
                                 onClientUploadComplete={(res) => {
                                     console.log("Files: ", res);
-                                    alert("Upload Completed");
                                 }}
                                 onUploadError={(error: Error) => {
                                     alert(`ERROR! ${error.message}`);
                                 }}
-                                className="mb-4 bg-blue-600 ut-allowed-content:text-white text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                                className="mb-4 bg-blue-600 ut-allowed-content:text-white text-white px-4 py-2 rounded-lg transition-colors [&_label]:w-full [&_label]:hover:bg-blue-500 "
                             />
                             <FormField
                                 control={form.control}
