@@ -49,7 +49,7 @@ export default function LoginForm() {
         password: values.password,
       });
       toast.success("Utilisateur connecté");
-      router.push("/admin");
+      router.push("/");
     } catch (error: any) {
       toast.error(error?.message || "Une erreur est survenue");
     } finally {
@@ -133,7 +133,7 @@ export default function LoginForm() {
                   await signIn.social(
                     {
                       provider: "google",
-                      callbackURL: "/admin",
+                      callbackURL: "/",
                     },
                     {
                       onRequest: (ctx) => {
@@ -179,7 +179,7 @@ export default function LoginForm() {
                   await signIn.social(
                     {
                       provider: "facebook",
-                      callbackURL: "/admin",
+                      callbackURL: "/",
                     },
                     {
                       onRequest: (ctx) => {

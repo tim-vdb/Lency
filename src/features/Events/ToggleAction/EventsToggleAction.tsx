@@ -33,7 +33,7 @@ export default function EventsToggleAction({ events }: EventsToggleActionProps) 
                     <Button
                         variant='outline'
                         onClick={() => setShowForm(true)}
-                        className="mt-4"
+                        className="mt-4 mb-4"
                     >
                         Créer un événement
                     </Button>

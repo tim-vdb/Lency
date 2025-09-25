@@ -69,10 +69,10 @@ export default function SignUpForm() {
         password: values.password,
         name: `${values.firstName} ${values.lastName}`,
         image: image ? await convertImageToBase64(image) : "",
-        callbackURL: "/admin",
+        callbackURL: "/",
       });
       toast.success("Utilisateur inscrit avec succès");
-      router.push("/admin");
+      router.push("/");
     } catch (error: any) {
       toast.error(error?.message || "Une erreur est survenue");
     } finally {
