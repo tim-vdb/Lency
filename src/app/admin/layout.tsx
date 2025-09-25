@@ -13,7 +13,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex flex-col md:flex-row md:justify-between md:container font-inter antialiased">
+    <div className="flex flex-col md:justify-between md:container font-inter antialiased">
       <DashboardNavbar />
       <div className="flex-1">{children}</div>
     </div>
