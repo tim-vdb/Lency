@@ -20,11 +20,11 @@ export default function DashboardNavbar() {
     }
 
     return (
-        <nav className="md:max-w-xs">
-            <div className="flex justify-center md:items-start md:justify-start md:flex-col gap-4 w-full h-full pt-4 md:pt-20 rounded-2xl shadow-md p-4 bg-neutral-50 dark:bg-neutral-900">
+        <nav className="">
+            <div className="flex justify-center md:items-start md:justify-start gap-8 w-full h-full pt-4 md:pt-20">
                 <Link
                     href="/admin/gallery"
-                    className={cn(linksClasses.base, isActive("/dashboard/gallery")
+                    className={cn(linksClasses.base, isActive("/admin/gallery")
                         ? linksClasses.isActive
                         : linksClasses.notActive
                     )}
@@ -43,27 +43,14 @@ export default function DashboardNavbar() {
                     <p className='hidden md:block'>Gérer les événements</p>
                 </Link>
                 <Link
-                    href="/admin/events"
-                    className={cn(linksClasses.base, isActive("/admin/events")
+                    href="/admin/users"
+                    className={cn(linksClasses.base, isActive("/admin/users")
                         ? linksClasses.isActive
                         : linksClasses.notActive
                     )}
                 >
                     <UserCog className='text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834))]' />
-                    <p className='hidden md:block'>Gérer mon compte</p>
-                </Link>
-                  <Link
-                    href="/"
-                    className={cn(linksClasses.base, isActive("/")
-                        ? linksClasses.isActive
-                        : linksClasses.notActive
-                    )}
-                >
-                  
-
-                <LogOut className="text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834)]" />
-
-                    <p className='hidden md:block'>Quitter</p>
+                    <p className='hidden md:block'>Gérer les utilisateurs</p>
                 </Link>
             </div>
            
