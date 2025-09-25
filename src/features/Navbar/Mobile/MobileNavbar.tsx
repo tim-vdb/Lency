@@ -61,11 +61,11 @@ export default function MobileNavbar({
           Événements
         </Link>
         <Link
-          href="/Contact"
+          href="/contact"
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/Contact")
+            isActive("/contact")
               ? linksClasses.isActive
               : linksClasses.notActive
           )}
