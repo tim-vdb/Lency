@@ -22,7 +22,6 @@ export const EventsSafeAction = actionClient
             data: {
                 name: input.name,
                 description: input.description,
-                image: input.image,
                 location: input.location,
                 dateStart: input.dateStart,
                 dateEnd: input.dateEnd,

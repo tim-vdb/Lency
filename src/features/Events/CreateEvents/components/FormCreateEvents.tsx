@@ -80,38 +80,41 @@ export default function FormCreateEvents() {
                 <CardContent>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Nom</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Nom" {...field} />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Nom de l'événement.
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="description"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Description</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Description" {...field} />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Description de l'événement.
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <div className='flex items-center flex-col md:flex-row gap-4'>
+
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Nom</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Nom" {...field} />
+                                            </FormControl>
+                                            <FormDescription>
+                                                Nom de l'événement.
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Description</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Description" {...field} />
+                                            </FormControl>
+                                            <FormDescription>
+                                                Description de l'événement.
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             <UploadButton
                                 endpoint="EventUploader"
                                 onClientUploadComplete={(res) => {
@@ -138,49 +141,52 @@ export default function FormCreateEvents() {
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="openAt"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Ouverture inscription</FormLabel>
-                                        <FormControl>
-                                            <DatePicker
-                                                value={field.value}
-                                                onChange={field.onChange}
-                                                placeholder="Sélectionnez une date"
-                                                label=""
-                                            />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Date d'ouverture des inscriptions.
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <div className='flex items-center flex-col md:flex-row gap-4'>
 
-                            <FormField
-                                control={form.control}
-                                name="closeAt"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Fermeture inscription</FormLabel>
-                                        <FormControl>
-                                            <DatePicker
-                                                value={field.value}
-                                                onChange={field.onChange}
-                                                placeholder="Sélectionnez une date"
-                                                label=""
-                                            />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Date de fermeture des inscriptions.
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                                <FormField
+                                    control={form.control}
+                                    name="openAt"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Ouverture inscription</FormLabel>
+                                            <FormControl>
+                                                <DatePicker
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    placeholder="Sélectionnez une date"
+                                                    label=""
+                                                />
+                                            </FormControl>
+                                            <FormDescription>
+                                                Date d'ouverture des inscriptions.
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="closeAt"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Fermeture inscription</FormLabel>
+                                            <FormControl>
+                                                <DatePicker
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    placeholder="Sélectionnez une date"
+                                                    label=""
+                                                />
+                                            </FormControl>
+                                            <FormDescription>
+                                                Date de fermeture des inscriptions.
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
 
                             <FormField
                                 control={form.control}

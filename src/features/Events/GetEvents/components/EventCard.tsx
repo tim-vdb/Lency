@@ -46,16 +46,13 @@ export default function EventCard({ event, images }: EventCardProps) {
     return null;
   }
 
-  // Vérification que l'utilisateur est connecté (membre ou admin)
-  if (!user) {
-    return null;
-  }
+  // L'utilisateur peut être connecté ou non, on gère les deux cas dans la condition d'affichage
 
   const eventImage = images.length > 0 ? images[0] : null;
 
   return (
     <>
-      {(event.visibleToGuests === true || (user.role === "MEMBER" || user.role === "ADMIN")) ? (
+      {(event.visibleToGuests === true || (user && (user.role === "MEMBER" || user.role === "ADMIN"))) ? (
         <Card className="overflow-hidden rounded-2xl shadow-md hover:cursor-pointer transition mb-10">
           {eventImage?.url && (
             <div className="h-60 w-[90%] rounded-xl m-auto overflow-hidden">
