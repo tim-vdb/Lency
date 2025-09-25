@@ -60,7 +60,7 @@ export default function ContactPage() {
 
         {/* === INFOS DE CONTACT === */}
         <div className="flex flex-col md:gap-6 p-1">
-          <h2 className="font-bold">Where to find us !</h2>
+          <h2 className="font-bold">Nous contacter</h2>
           <div>
             <h3 className="md:mb-2">Adresse</h3>
             <p>3 Rue Turbil, 69003 Lyon, France</p>
