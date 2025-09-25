@@ -58,10 +58,10 @@ export default function SignUpForm() {
         password: values.password,
         name: `${values.firstName} ${values.lastName}`,
         image: image ? await convertImageToBase64(image) : "",
-        callbackURL: "/dashboard",
+        callbackURL: "/admin",
       })
       toast.success("Utilisateur inscrit avec succès")
-      router.push("/dashboard")
+      router.push("/admin")
     } catch (error: any) {
       toast.error(error?.message || "Une erreur est survenue")
     } finally {

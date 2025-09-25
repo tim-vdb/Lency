@@ -1,20 +1,14 @@
-import Link from "next/link";
-import styles from "./layout.module.css";
+import DashboardNavbar from "@/features/Navbar/DashboardNavbar";
 
-export default function AdminLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className={styles.container}>
-      <nav className={styles.sidebar}>
-        <Link href="/admin">Dashboard</Link>
-        <Link href="/admin/events">Events</Link>
-        <Link href="/admin/gallery">Gallery</Link>
-        <Link href="/admin/users">Users</Link>
-      </nav>
-      <main className={styles.main}>{children}</main>
+    <div className="flex flex-col md:flex-row md:justify-between md:container font-inter antialiased">
+      <DashboardNavbar />
+      <div className="container flex-1">{children}</div>
     </div>
   );
 }
