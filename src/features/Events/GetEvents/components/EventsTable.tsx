@@ -9,12 +9,40 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Button } from '@/components/ui/button'
+import { Trash2, Pencil } from 'lucide-react'
+import { DeleteEventAction } from '../events.action'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 interface EventsTableProps {
     events: any[]
 }
 
 export default function EventsTable({ events }: EventsTableProps) {
+    const router = useRouter();
+
+    const handleDelete = async (id: string, name: string) => {
+        if (confirm(`Êtes-vous sûr de vouloir supprimer l'événement "${name}" ?`)) {
+            try {
+                const result = await DeleteEventAction(id);
+                if (result.success) {
+                    toast.success("Événement supprimé avec succès !");
+                    router.refresh();
+                } else {
+                    toast.error("Erreur lors de la suppression");
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                toast.error("Erreur lors de la suppression");
+            }
+        }
+    };
+
+    const handleEdit = (event: any) => {
+        // Navigate to edit page with event data
+        router.push(`/admin/events/edit/${event.id}`);
+    };
 
     return (
         <Table className='shadow-md border-2 border-gray-800 rounded-md'>
@@ -30,6 +58,7 @@ export default function EventsTable({ events }: EventsTableProps) {
                     <TableHead className="min-w-56">Nombre de participants</TableHead>
                     <TableHead className="min-w-56">Visible aux visiteurs</TableHead>
                     <TableHead className="min-w-56">Créateur</TableHead>
+                    <TableHead className="min-w-32">Actions</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -45,12 +74,32 @@ export default function EventsTable({ events }: EventsTableProps) {
                         <TableCell>{event.maxParticipants}</TableCell>
                         <TableCell>{event.visibleToGuests ? "Oui" : "Non"}</TableCell>
                         <TableCell>{event.creator || "Non défini"}</TableCell>
+                        <TableCell>
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleEdit(event)}
+                                    className="p-2"
+                                >
+                                    <Pencil className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() => handleDelete(event.id, event.name)}
+                                    className="p-2"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </Button>
+                            </div>
+                        </TableCell>
                     </TableRow>
                 ))}
             </TableBody>
             <TableFooter>
                 <TableRow>
-                    <TableCell colSpan={10}>Total d'évènements {events.length}</TableCell>
+                    <TableCell colSpan={11}>Total d'évènements {events.length}</TableCell>
                 </TableRow>
             </TableFooter>
         </Table>

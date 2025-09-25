@@ -13,7 +13,7 @@ export default function EventsToggleAction({ events }: EventsToggleActionProps) 
     const [showForm, setShowForm] = useState(false)
 
     return (
-        <div className='container w-full pt-20 flex-1'>
+        <div className='w-full pt-20 flex-1'>
             <h1 className='text-2xl font-bold'>Liste des événements</h1>
 
             {showForm ? (
