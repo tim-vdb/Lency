@@ -54,7 +54,8 @@ export default function FormCreateEvents() {
         onSuccess: (data) => {
             toast.success("Événement créé avec succès !");
             form.reset();
-            router.refresh();
+            // Forcer le rafraîchissement de la page
+            window.location.reload();
         },
         onError: (error) => {
             console.error('Erreur lors de la création de l\'événement:', error);
