@@ -363,10 +363,13 @@
   }
 
   p {
-    @apply text-black dark:text-white prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem] text-[.9rem];
+    @apply text-black dark:text-white prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem] text-sm;
   }
   li {
-    @apply text-black dark:text-white prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem] text-[.9rem];
+    @apply text-black dark:text-white prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem] text-sm;
+  }
+  a {
+    @apply text-black dark:text-white prose-sm md:prose-lg lg:prose-xl leading-6 tracking-[0.011rem] text-sm;
   }
 }
 

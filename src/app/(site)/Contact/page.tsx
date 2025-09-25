@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 export default function ContactPage() {
@@ -15,25 +16,25 @@ export default function ContactPage() {
         >
           <input type="hidden" name="contact_number" value="697483" />
 
-          <label className="flex flex-col text-sm md:text-base">
+          <label className="flex flex-col text-sm md:text-base text-black">
             Nom
             <input
               type="text"
               name="name"
               required
               placeholder="Votre nom"
-              className="mt-1 p-2 rounded border focus:outline-none focus:ring-2 focus:ring-gold"
+              className="mt-1 p-2 rounded border focus:outline-none focus:ring-2 focus:ring-gold text-black"
             />
           </label>
 
-          <label className="flex flex-col text-sm md:text-base">
+          <label className="flex flex-col text-sm md:text-base text-black">
             Email
             <input
               type="email"
               name="email"
               required
               placeholder="Votre email"
-              className="mt-1 p-2 rounded border focus:outline-none focus:ring-2 focus:ring-gold"
+              className="mt-1 p-2 rounded border focus:outline-none focus:ring-2 focus:ring-gold text-black"
             />
           </label>
 
@@ -44,13 +45,13 @@ export default function ContactPage() {
               rows={5}
               required
               placeholder="Votre message"
-              className="mt-1 p-2 rounded border focus:outline-none focus:ring-2 focus:ring-gold"
+              className="mt-1 p-2 rounded border focus:outline-none focus:ring-2 focus:ring-gold text-black"
             ></textarea>
           </label>
 
           <button
             type="submit"
-            className="mt-4 bg-gold text-gray-900 font-bold py-2 px-4 rounded hover:bg-yellow-600 transition"
+            className="mt-4 bg-gold text-gray-900 dark:text-white text-sm font-bold py-2 px-4 rounded hover:bg-yellow-600 transition"
           >
             Envoyer
           </button>
@@ -59,7 +60,7 @@ export default function ContactPage() {
         </form>
 
         {/* === INFOS DE CONTACT === */}
-        <div className="flex flex-col md:gap-6 p-1">
+        <div className="flex flex-col md:gap-6 dark:bg-card rounded-xl p-8">
           <h2 className="font-bold">Nous contacter</h2>
           <div>
             <h3 className="md:mb-2">Adresse</h3>
@@ -80,16 +81,16 @@ export default function ContactPage() {
 
       {/* === SECTION IMAGE + TEXTE === */}
       <div className="mt-16 flex flex-col md:flex-row items-center gap-8 p-8 rounded-xl shadow-md">
-        <div className="md:w-1/2 shadow-md dark:shadow-black">
+        <div className="md:w-1/2 shadow-md">
           <img
             src="/images/molkky_contact.jpeg"
             alt="Molkky"
             className="rounded-xl shadow-md w-full object-cover"
           />
         </div>
-        <div className="md:w-1/2">
+        <div className="md:w-1/2 dark:bg-card rounded-xl p-8">
           <h1 className="mb-4">Notre mission</h1>
-          <p className="text-sm md:text-base">
+          <p className="text-sm">
             Chez MOLKKY, nous nous efforçons de promouvoir la convivialité et le
             sport à travers le Mölkky. Rejoignez-nous pour partager des moments
             uniques avec notre communauté !
@@ -98,7 +99,7 @@ export default function ContactPage() {
             type="button"
             className="mt-4 bg-gold text-gray-900 font-bold py-2 px-4 rounded hover:bg-yellow-600 transition"
           >
-            S'inscrire
+            <Link href="/sign-up">S'inscrire</Link>
           </button>
         </div>
       </div>
@@ -108,12 +109,12 @@ export default function ContactPage() {
         <div className="md:w-1/2 h-64 md:h-auto">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2781.123456!2d4.8357!3d45.7566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDXCsDQ1JzQ1LjgiTiA0wrA1MCc0MC42IkU!5e0!3m2!1sfr!2sfr!4v1695480000000!5m2!1sfr!2sfr"
-            className="border-0 w-full h-full"
+            className="border-0 w-full h-full rounded-xl"
             allowFullScreen
           ></iframe>
         </div>
 
-        <div className="md:w-1/2 flex flex-col justify-center gap-4">
+        <div className="md:w-1/2 flex flex-col justify-center gap-4 dark:bg-card rounded-xl p-8">
           <h2 className="font-bold">Venez nous rencontrer !</h2>
           <p className="text-sm">
             Retrouvez-nous au parc de Lyon pour découvrir le Mölkky en vrai !
@@ -123,7 +124,7 @@ export default function ContactPage() {
             type="button"
             className="mt-2 bg-gold text-gray-900 font-bold py-2 px-4 rounded hover:bg-yellow-600 transition w-fit"
           >
-            Voir les événements
+            <Link href="/events">Voir les événements</Link>
           </button>
         </div>
       </div>

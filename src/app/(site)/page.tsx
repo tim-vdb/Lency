@@ -22,10 +22,12 @@ export default async function Home() {
           simplicité.
         </p>
         <Button className=" mt-20 bg-[#ffffff] text-black">
-          <Link href="/login">Rejoins le CRHOM</Link>
+          <Link href="/login" className=" text-black text-base">
+            Rejoins le CRHOM
+          </Link>
         </Button>
       </section>
-      <div className="container">
+      <article className="container">
         {events && events.length > 0 && (
           <section className="mx-10 my-5 p-8 shadow-md rounded-xl">
             <h2>Les Derniers événements</h2>
@@ -41,7 +43,7 @@ export default async function Home() {
           <h2>Galeries d'Images</h2>
           <Gallery images={images} />
         </section>
-      </div>
-    </article >
+      </article>
+    </article>
   );
 }
