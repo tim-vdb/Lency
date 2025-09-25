@@ -45,10 +45,10 @@ export default function DesktopNavbar() {
             Événements
           </Link>
           <Link
-            href="/contact"
+            href="/Contact"
             className={cn(
               linksClasses.base,
-              isActive("/contact")
+              isActive("/Contact")
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
