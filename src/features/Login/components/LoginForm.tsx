@@ -59,8 +59,8 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="bg-blue-50 dark:bg-gray-800 py-12">
-        <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="dark:bg-card bg-blue-50 rounded-xl py-12 min-h-screen flex items-center">
+        <div className="max-w-md mx-auto w-full  px-6 sm:px-8 lg:px-10">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
               Connectez-vous à Mölkky !

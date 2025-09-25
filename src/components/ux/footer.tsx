@@ -28,37 +28,34 @@ export default function Footer() {
         <div className="w-full md:w-1/3 flex justify-center mb-10 md:mb-0">
           <div className="flex flex-col">
             <h3 className="text-lg font-bold mb-4 text-gold">Liens rapides</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-xs hover:text-gold transition">
+            <ul className="space-y-2 ">
+              <li className="text-black">
+                <a href="/" className="text-xs hover:text-gold transition">
                   Accueil
-                </Link>
+                </a>
               </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="text-xs hover:text-gold transition"
-                >
+              <li className="text-black">
+                <a href="/about" className="text-xs hover:text-gold transition">
                   À propos
-                </Link>
+                </a>
               </li>
-              <li>
-                <Link
-                  href="/events"
+              <li className="text-black">
+                <a
+                  href="/evenements"
                   className="text-xs hover:text-gold transition"
                 >
                   Évènements
-                </Link>
+                </a>
               </li>
-              <li>
-                <Link
-                  href="/Contact"
+              <li className="text-black">
+                <a
+                  href="/contact"
                   className="text-xs hover:text-gold transition"
                 >
                   Contact
-                </Link>
+                </a>
               </li>
-              <li>
+              <li className="text-black">
                 <a
                   href="/mentions-legales"
                   className="text-xs hover:text-gold transition"

@@ -31,7 +31,6 @@ export default async function SiteLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const user = await getUser();
   return (
     <>
@@ -52,9 +51,7 @@ export default async function SiteLayout({
       >
         <UserProvider user={user}>
           <Header />
-          <main className="min-h-screen">
-            {children}
-          </main>
+          <main className="min-h-screen w-[100vw]">{children}</main>
           <Footer />
           <Toaster />
         </UserProvider>
