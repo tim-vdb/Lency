@@ -52,6 +52,19 @@ export default function DashboardNavbar() {
                     <UserCog className='text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834))]' />
                     <p className='hidden md:block'>Gérer les utilisateurs</p>
                 </Link>
+                <Link
+                    href="/"
+                    className={cn(linksClasses.base, isActive("/")
+                        ? linksClasses.isActive
+                        : linksClasses.notActive
+                    )}
+                >
+                  
+
+                <LogOut className="text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834)]" />
+
+                    <p className='hidden md:block'>Quitter</p>
+                </Link>
             </div>
            
         </nav >
