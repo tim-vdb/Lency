@@ -9,12 +9,9 @@ export default function SignIn() {
   return (
     <div className=" flex justify-center p-15">
       <Card>
-       
         <CardContent>
           <LoginForm />
         </CardContent>
-        
-        
       </Card>
     </div>
   );

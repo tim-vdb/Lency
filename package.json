@@ -7,11 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "lint:eslint": "npx @next/codemod@canary next-lint-to-eslint-cli .",
     "db:deploy": "npx prisma migrate deploy --schema=src/prisma/schema.prisma",
     "migrate": "prisma migrate deploy --schema=src/prisma/schema.prisma",
     "generate": "prisma generate --schema=src/prisma/schema.prisma",
     "studio": "prisma studio --schema=src/prisma/schema.prisma",
-    "all": "concurrently \"npx prisma migrate deploy --schema=src/prisma/schema.prisma\" \"npm run dev\" \"npm run studio\""
+    "all": "concurrently \"doppler run -- npx prisma migrate deploy --schema=src/prisma/schema.prisma\" \"doppler run -- npm run dev\" \"doppler run -- npm run studio\"",
+    "all:local": "concurrently \"npx prisma migrate deploy --schema=src/prisma/schema.prisma\" \"npm run dev\" \"npm run studio\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -31,6 +34,7 @@
     "concurrently": "^9.2.1",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
+    "eslint-plugin-boundaries": "^5.0.2",
     "lucide-react": "^0.544.0",
     "next": "15.5.3",
     "next-safe-action": "^8.0.11",
@@ -54,6 +58,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-boundaries": "^5.0.2",
+    "eslint-plugin-import": "^2.32.0",
     "prisma": "^6.16.2",
     "tailwindcss": "^4",
     "tsx": "^4.20.5",

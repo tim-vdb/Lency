@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 export default function ContactPage() {
   return (
@@ -82,7 +83,9 @@ export default function ContactPage() {
       {/* === SECTION IMAGE + TEXTE === */}
       <div className="mt-16 flex flex-col md:flex-row items-center gap-8 p-8 rounded-xl shadow-md">
         <div className="md:w-1/2 shadow-md">
-          <img
+          <Image
+            width={500}
+            height={500}
             src="/images/molkky_contact.jpeg"
             alt="Molkky"
             className="rounded-xl shadow-md w-full object-cover"
