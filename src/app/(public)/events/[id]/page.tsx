@@ -5,12 +5,9 @@ export default function page() {
   return (
     <div className=" flex justify-center p-15">
       <Card>
-       
         <CardContent>
-      <SignUpEvents />
-    </CardContent>
-        
-        
+          <SignUpEvents />
+        </CardContent>
       </Card>
     </div>
   );

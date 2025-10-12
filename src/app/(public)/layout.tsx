@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../../app/globals.css";
 import { Toaster } from "sonner";
-import Footer from "@/components/ux/footer";
 import { getUser } from "@/lib/auth-session";
-import Header from "@/components/ux/Header";
 import { extractRouterConfig } from "uploadthing/server";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { ThemeProvider } from "next-themes";
 import { UserProvider } from "@/context/UserContext";
+import PublicHeaderShell from "@/app/shells/PublicHeaderShell";
+import Footer from "@/widgets/Public/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +32,7 @@ export default async function SiteLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUser();
+
   return (
     <>
       <NextSSRPlugin
@@ -50,7 +51,7 @@ export default async function SiteLayout({
         disableTransitionOnChange
       >
         <UserProvider user={user}>
-          <Header />
+          <PublicHeaderShell />
           <main className="min-h-screen w-[100vw]">{children}</main>
           <Footer />
           <Toaster />

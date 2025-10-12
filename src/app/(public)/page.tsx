@@ -3,7 +3,7 @@ import EventCarousel from "@/features/Events/GetEvents/components/EventCarousel"
 import Gallery from "@/features/Gallery/components/Gallery";
 import { GetEvents } from "@/features/Events/GetEvents/events.action";
 import Link from "next/link";
-import { GetImages } from "@/features/Gallery/gallery.action";
+import { GetImages } from "@/features/Gallery/server/gallery.action";
 
 export default async function Home() {
   const events = await GetEvents();

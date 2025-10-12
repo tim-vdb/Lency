@@ -14,9 +14,9 @@ export default function DashboardNavbar() {
     };
 
     const linksClasses = {
-       base: "flex items-center gap-2 px-3 py-2 w-fit md:w-full rounded-lg text-sm font-medium transition-all duration-200 font-cooper",
-    isActive:"bg-blue-100 dark:bg-neutral-800 text-blue-600 dark:text-yellow-400 underline decoration-2 decoration-blue-500 dark:decoration-yellow-600",
-    notActive:"text-gray-700 dark:text-gray-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-blue-500 dark:hover:text-yellow-400",
+        base: "flex items-center gap-2 px-3 py-2 w-fit md:w-full rounded-lg text-sm font-medium transition-all duration-200 font-cooper",
+        isActive: "bg-blue-100 dark:bg-neutral-800 text-blue-600 dark:text-yellow-400 underline decoration-2 decoration-blue-500 dark:decoration-yellow-600",
+        notActive: "text-gray-700 dark:text-gray-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-blue-500 dark:hover:text-yellow-400",
     }
 
     return (
@@ -59,14 +59,14 @@ export default function DashboardNavbar() {
                         : linksClasses.notActive
                     )}
                 >
-                  
 
-                <LogOut className="text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834)]" />
+
+                    <LogOut className="text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834)]" />
 
                     <p className='hidden md:block'>Quitter</p>
                 </Link>
             </div>
-           
+
         </nav >
     )
 }

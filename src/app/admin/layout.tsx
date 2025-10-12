@@ -1,4 +1,4 @@
-import DashboardNavbar from "@/features/Navbar/DashboardNavbar";
+import DashboardNavbar from "@/features/Navbar/Admin/Desktop/DashboardNavbar";
 import { getUser } from "@/lib/auth-session";
 
 export default async function DashboardLayout({

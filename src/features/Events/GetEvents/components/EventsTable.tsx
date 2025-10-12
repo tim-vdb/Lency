@@ -14,9 +14,10 @@ import { Trash2, Pencil } from 'lucide-react'
 import { DeleteEventAction } from '../events.action'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { EventWithCreator } from '../event.types'
 
 interface EventsTableProps {
-    events: any[]
+    events: EventWithCreator[]
 }
 
 export default function EventsTable({ events }: EventsTableProps) {
@@ -39,7 +40,7 @@ export default function EventsTable({ events }: EventsTableProps) {
         }
     };
 
-    const handleEdit = (event: any) => {
+    const handleEdit = (event: EventWithCreator) => {
         // Navigate to edit page with event data
         router.push(`/admin/events/edit/${event.id}`);
     };
@@ -62,7 +63,7 @@ export default function EventsTable({ events }: EventsTableProps) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {events.map((event: any) => (
+                {events.map((event: EventWithCreator) => (
                     <TableRow key={event.id}>
                         <TableCell className="font-medium">{event.name}</TableCell>
                         <TableCell>{event.description}</TableCell>
@@ -73,7 +74,7 @@ export default function EventsTable({ events }: EventsTableProps) {
                         <TableCell>{event.closeAt.toLocaleString()}</TableCell>
                         <TableCell>{event.maxParticipants}</TableCell>
                         <TableCell>{event.visibleToGuests ? "Oui" : "Non"}</TableCell>
-                        <TableCell>{event.creator || "Non défini"}</TableCell>
+                        <TableCell>{event.creator?.name || "Non défini"}</TableCell>
                         <TableCell>
                             <div className="flex gap-2">
                                 <Button

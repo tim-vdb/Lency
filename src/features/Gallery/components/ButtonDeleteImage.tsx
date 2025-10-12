@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import { Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { GalleryDeleteAction } from '../gallery.action'
+import { GalleryDeleteAction } from '../server/gallery.action'
 
 export default function ButtonDeleteImage({ id }: { id: number }) {
     const router = useRouter();

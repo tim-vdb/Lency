@@ -4,9 +4,10 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import FormCreateEvents from '@/features/Events/CreateEvents/components/FormCreateEvents'
 import EventsTable from '@/features/Events/GetEvents/components/EventsTable'
+import { EventWithCreator } from '../GetEvents/event.types'
 
 interface EventsToggleActionProps {
-    events: any[]
+    events: EventWithCreator[]
 }
 
 export default function EventsToggleAction({ events }: EventsToggleActionProps) {

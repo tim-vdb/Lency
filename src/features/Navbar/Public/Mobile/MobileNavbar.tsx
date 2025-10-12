@@ -15,6 +15,7 @@ export default function MobileNavbar({
   menuOpen,
   setMenuOpen,
 }: MobileNavbarProps) {
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);

@@ -3,7 +3,16 @@
 import { prisma } from "@/lib/prisma";
 
 export const GetEvents = async () => {
-  return await prisma.event.findMany();
+  return await prisma.event.findMany({
+    include: {
+      creator: {
+        select: {
+          name: true,
+          email: true
+        }
+      }
+    }
+  });
 };
 
 export const DeleteEventAction = async (id: string) => {

@@ -1,6 +1,6 @@
 import EventCard from "./EventCard";
 import { GetEvents } from "../events.action";
-import { GetImages } from "@/features/Gallery/gallery.action";
+import { GetImages } from "@/features/Gallery/server/gallery.action";
 
 export default async function EventList() {
   const events = await GetEvents();

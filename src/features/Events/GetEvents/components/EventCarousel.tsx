@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { GetImages } from "@/features/Gallery/gallery.action";
+import { GetImages } from "@/features/Gallery/server/gallery.action";
 
 type Event = {
   id: string;

@@ -30,9 +30,9 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4 text-gold">Liens rapides</h3>
             <ul className="space-y-2 ">
               <li className="text-black">
-                <a href="/" className="text-xs hover:text-gold transition">
+                <Link href="/" className="text-xs hover:text-gold transition">
                   Accueil
-                </a>
+                </Link>
               </li>
               <li className="text-black">
                 <a href="/about" className="text-xs hover:text-gold transition">

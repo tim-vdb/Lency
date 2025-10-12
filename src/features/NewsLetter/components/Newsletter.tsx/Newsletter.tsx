@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { NewsletterFormSchema } from "../../newsletter.schema";
+import { NewsletterFormSchema } from "../../server/newsletter.schema";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAction } from "next-safe-action/hooks";
-import { NewsletterSafeAction } from "../../newsletter.action";
+import { NewsletterSafeAction } from "../../server/newsletter.action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
