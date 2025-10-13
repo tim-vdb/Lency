@@ -20,6 +20,7 @@ const eslintConfig = [{
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "src/generated/**",
   ],
 }, {
   files: ["src/**/*.{js,jsx,ts,tsx}"],
@@ -42,7 +43,7 @@ const eslintConfig = [{
           "src/lib/**/*",
           "src/context/**/*",
           "src/prisma/**/*",
-          "src/generated/**",
+          "src/generated/**/*",
         ],
       },
       {
@@ -88,7 +89,7 @@ const eslintConfig = [{
     "react/no-unescaped-entities": "off",
 
     // Next.js rules
-    "@next/next/no-html-link-for-pages": "error",
+    "@next/next/no-html-link-for-pages": ["error", "src/app"],
     "@next/next/no-img-element": "error",
 
     // Boundaries rules
@@ -101,7 +102,11 @@ const eslintConfig = [{
         rules: [
           {
             from: ["shared"],
-            allow: ["shared"],
+            allow: [
+              "shared",
+              // Exception pour uploadthing types
+              ["app", { _: "api/uploadthing", fileName: "core.ts" }],
+            ],
           },
           {
             from: ["feature"],

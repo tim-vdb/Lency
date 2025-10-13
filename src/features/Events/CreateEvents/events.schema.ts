@@ -9,6 +9,5 @@ export const EventsSchema = z.object({
     openAt: z.date(),
     closeAt: z.date(),
     visibleToGuests: z.boolean().optional(),
-    maxParticipants: z.coerce.number().min(1),
-
+    maxParticipants: z.number().min(1),
 })

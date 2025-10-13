@@ -8,7 +8,6 @@ import { FormControl } from '@/components/ui/form'
 import { FormDescription } from '@/components/ui/form'
 import { FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { NewsletterFormSchema } from '@/features/NewsLetter/server/newsletter.schema'
 import { useAction } from 'next-safe-action/hooks'
 import React from 'react'
 import { toast } from 'sonner'
@@ -25,10 +24,9 @@ import { DatePickerRange } from '@/components/ui/DatePickerRange'
 import { UploadButton } from '@/lib/uploadthing'
 
 export default function FormCreateEvents() {
-    const router = useRouter()
     // 1. Define your form.
     const form = useForm<z.infer<typeof EventsSchema>>({
-        resolver: zodResolver(EventsSchema) as any,
+        resolver: zodResolver(EventsSchema),
         defaultValues: {
             name: "",
             description: "",

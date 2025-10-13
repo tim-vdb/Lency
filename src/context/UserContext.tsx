@@ -1,10 +1,11 @@
 'use client'
 
 import { createContext, useContext } from 'react'
+import type { User } from '@/generated/prisma_client'
 
-const UserContext = createContext<any>(null)
+const UserContext = createContext<User | null>(null)
 
-export function UserProvider({ user, children }: { user: any, children: React.ReactNode }) {
+export function UserProvider({ user, children }: { user: User | null, children: React.ReactNode }) {
     return <UserContext.Provider value={user}>{children}</UserContext.Provider>
 }
 

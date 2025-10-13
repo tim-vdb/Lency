@@ -50,8 +50,9 @@ export default function LoginForm() {
       });
       toast.success("Utilisateur connecté");
       router.push("/");
-    } catch (error: any) {
-      toast.error(error?.message || "Une erreur est survenue");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Une erreur est survenue";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

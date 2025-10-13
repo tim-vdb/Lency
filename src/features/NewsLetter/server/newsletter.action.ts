@@ -1,7 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import { actionClient, SafeError } from "@/lib/safe-action-client";
+import { actionClient } from "@/lib/safe-action-client";
 import { NewsletterFormSchema } from "./newsletter.schema";
 
 export const NewsletterSafeAction = actionClient

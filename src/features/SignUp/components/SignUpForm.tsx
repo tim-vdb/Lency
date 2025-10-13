@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, X } from "lucide-react";
+import Image from "next/image";
 
 const SignUpFormSchema = z
   .object({
@@ -73,8 +74,9 @@ export default function SignUpForm() {
       });
       toast.success("Utilisateur inscrit avec succès");
       router.push("/");
-    } catch (error: any) {
-      toast.error(error?.message || "Une erreur est survenue");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Une erreur est survenue";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -198,10 +200,12 @@ export default function SignUpForm() {
               <div className="flex items-end gap-4">
                 {imagePreview && (
                   <div className="relative w-16 h-16 rounded-sm overflow-hidden">
-                    <img
+                    <Image
                       src={imagePreview}
                       alt="Prévisualisation"
                       className="w-full h-full object-cover"
+                      width={64}
+                      height={64}
                     />
                   </div>
                 )}

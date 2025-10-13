@@ -1,7 +1,7 @@
 "use server"
 
 import { prisma } from '@/lib/prisma'
-import { actionClient, SafeError } from '@/lib/safe-action-client'
+import { actionClient } from '@/lib/safe-action-client'
 import { EventsSchema } from './events.schema'
 import { getUser } from '@/lib/auth-session'
 import { redirect } from 'next/navigation'

@@ -1,6 +1,6 @@
 import EventCard from "./EventCard";
 import { GetEvents } from "../events.action";
-import { Card, CardContent } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,

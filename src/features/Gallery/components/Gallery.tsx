@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { UploadButton } from '@/lib/uploadthing';
 import { usePathname, useRouter } from 'next/navigation';

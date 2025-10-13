@@ -43,7 +43,7 @@ export default function FormEditEvents({ event }: FormEditEventsProps) {
 
     // 1. Define your form with pre-filled values
     const form = useForm<z.infer<typeof EventsSchema>>({
-        resolver: zodResolver(EventsSchema) as any,
+        resolver: zodResolver(EventsSchema),
         defaultValues: {
             name: event.name,
             description: event.description || "",

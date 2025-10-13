@@ -18,7 +18,7 @@ export default function Footer() {
               className="w-25 h-25 mb-4 rounded shadow-md mx-auto md:mx-0"
             />
             <p className="text-sm leading-6 max-w-xs">
-              Club de Mölkky Lyon – Convivialité, partage et bonne humeur. Venez
+              Club de Mölkky Lyon - Convivialité, partage et bonne humeur. Venez
               découvrir et participer à nos événements !
             </p>
           </div>
@@ -35,17 +35,17 @@ export default function Footer() {
                 </Link>
               </li>
               <li className="text-black">
-                <a href="/about" className="text-xs hover:text-gold transition">
+                <Link href="/about" className="text-xs hover:text-gold transition">
                   À propos
-                </a>
+                </Link>
               </li>
               <li className="text-black">
-                <a
-                  href="/evenements"
+                <Link
+                  href="/events"
                   className="text-xs hover:text-gold transition"
                 >
                   Évènements
-                </a>
+                </Link>
               </li>
               <li className="text-black">
                 <a
@@ -56,12 +56,12 @@ export default function Footer() {
                 </a>
               </li>
               <li className="text-black">
-                <a
+                <Link
                   href="/mentions-legales"
                   className="text-xs hover:text-gold transition"
                 >
                   Mentions légales
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -72,7 +72,7 @@ export default function Footer() {
           <div className="flex flex-col">
             <h3 className="text-lg font-bold mb-4 text-gold">Nous suivre</h3>
             <div className="flex space-x-4 justify-center md:justify-start">
-              <a
+              <Link
                 href="https://www.facebook.com/CRHOM69/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -84,7 +84,7 @@ export default function Footer() {
                   alt="Facebook"
                   className="w-8 h-8 hover:opacity-75 transition"
                 />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
