@@ -4,24 +4,19 @@ import Link from "next/link";
 import { FaBars, FaTimes } from "react-icons/fa";
 // import ThemeSelector from './ThemeSelector';
 import Image from "next/image";
+import React, { useState } from "react";
+import { ModeToggle } from "@/features/DarkMode/ModeToggle";
+import DesktopNavbar from "@/features/Navbar/Public/Desktop/DesktopNavbar";
+import MobileNavbar from "@/features/Navbar/Public/Mobile/MobileNavbar";
+import ProfileAccount from "@/widgets/ProfileAccount";
 
-interface HeaderProps {
-    menuOpen: boolean;
-    toggleMenu: () => void;
-    desktopNavbar: React.ReactNode;
-    mobileNavbar: React.ReactNode;
-    profileAccount: React.ReactNode;
-    modeToggle: React.ReactNode;
-}
+export default function Header() {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
-export default function Header({
-    menuOpen,
-    toggleMenu,
-    desktopNavbar,
-    mobileNavbar,
-    profileAccount,
-    modeToggle,
-}: HeaderProps) {
+    const toggleMenu = () => {
+        setMenuOpen(prev => !prev);
+    };
 
     return (
         <header className={`relative h-20`}>
@@ -39,8 +34,8 @@ export default function Header({
                         />
                     </Link>
 
-                    {desktopNavbar}
-                    {mobileNavbar}
+                    <DesktopNavbar />
+                    <MobileNavbar setIsScrolled={setIsScrolled} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
 
                     <div className="flex items-center gap-4">
                         <button
@@ -50,8 +45,8 @@ export default function Header({
                         >
                             {menuOpen ? <FaTimes className="h-6 w-6" /> : <FaBars className="h-6 w-6" />}
                         </button>
-                        {profileAccount}
-                        {modeToggle}
+                        <ProfileAccount />
+                        <ModeToggle />
                     </div>
                 </div>
             </div>

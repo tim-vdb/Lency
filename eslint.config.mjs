@@ -56,13 +56,7 @@ const eslintConfig = [{
         mode: "full",
         type: "widget",
         capture: ["widgetName"],
-        pattern: ["src/widgets/*/**/*"],
-      },
-      {
-        mode: "full",
-        type: "shell",
-        capture: ["shellName"],
-        pattern: ["src/app/shells/*/**/*"],
+        pattern: ["src/widgets/**/*"],
       },
       {
         mode: "full",
@@ -121,10 +115,6 @@ const eslintConfig = [{
             ],
           },
           {
-            from: ["feature"],
-            allow: ["shared", "feature"],
-          },
-          {
             from: ["app", "neverImport"],
             allow: ["shared", "feature", "widget"],
           },
@@ -133,16 +123,11 @@ const eslintConfig = [{
             allow: ["shared", "feature", "widget"],
           },
           {
-            from: ["shell"],
-            allow: ["shared", "feature", "widget"],
-          },
-          {
             from: ["app"],
             allow: [
               "shared",
               "feature",
               "widget",
-              "shell",
               // Fichiers Next.js spéciaux + css
               ["app", { fileName: "unauthorized.tsx" }],
               ["app", { fileName: "not-found.tsx" }],
@@ -154,10 +139,8 @@ const eslintConfig = [{
               ["app", { fileName: "page.tsx" }],
               ["app", { fileName: "layout.tsx" }],
               ["app", { fileName: "*.css" }],
-              // Dossier API - autoriser tous les fichiers dans api/
-              ["app", { _: "api/**" }],
-              // Dossier Shells - autoriser tous les fichiers dans shells/
-              ["app", { _: "shells/**" }],
+              // Exception pour uploadthing types
+              ["app", { _: "api/uploadthing", fileName: "core.ts" }],
             ],
           },
         ],

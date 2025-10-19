@@ -8,7 +8,7 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { ThemeProvider } from "next-themes";
 import { UserProvider } from "@/context/UserContext";
-import PublicHeaderShell from "@/app/shells/PublicHeaderShell";
+import Header from "@/widgets/Public/Header";
 import Footer from "@/widgets/Public/Footer";
 
 const geistSans = Geist({
@@ -51,7 +51,7 @@ export default async function SiteLayout({
         disableTransitionOnChange
       >
         <UserProvider user={user}>
-          <PublicHeaderShell />
+          <Header />
           <main className="min-h-screen w-[100vw]">{children}</main>
           <Footer />
           <Toaster />
