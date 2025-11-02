@@ -49,17 +49,17 @@ export default function MobileNavbar({
             isActive("/") ? linksClasses.isActive : linksClasses.notActive
           )}
         >
-          Accueil
+          Home
         </Link>
         <Link
-          href="/events"
+          href="/blog"
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/events") ? linksClasses.isActive : linksClasses.notActive
+            isActive("/blog") ? linksClasses.isActive : linksClasses.notActive
           )}
         >
-          Événements
+          Blog
         </Link>
         <Link
           href="/contact"
@@ -71,7 +71,7 @@ export default function MobileNavbar({
               : linksClasses.notActive
           )}
         >
-          Contact
+          Contact Us
         </Link>
         <Link
           href="/about"
@@ -81,7 +81,17 @@ export default function MobileNavbar({
             isActive("/about") ? linksClasses.isActive : linksClasses.notActive
           )}
         >
-          À propos
+          About
+        </Link>
+        <Link
+          href="/docs"
+          onClick={() => setMenuOpen(false)}
+          className={cn(
+            linksClasses.base,
+            isActive("/docs") ? linksClasses.isActive : linksClasses.notActive
+          )}
+        >
+          Docs
         </Link>
       </div>
     </nav>

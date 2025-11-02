@@ -31,29 +31,29 @@ export default function DesktopNavbar() {
               isActive("/") ? linksClasses.isActive : linksClasses.notActive
             )}
           >
-            Accueil
+            Home
           </Link>
           <Link
-            href="/events"
+            href="/blog"
             className={cn(
               linksClasses.base,
-              isActive("/events")
+              isActive("/blog")
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
           >
-            Événements
+            Blog
           </Link>
           <Link
-            href="/Contact"
+            href="/contact"
             className={cn(
               linksClasses.base,
-              isActive("/Contact")
+              isActive("/contact")
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
           >
-            Contact
+            Contact Us
           </Link>
           <Link
             href="/about"
@@ -64,7 +64,18 @@ export default function DesktopNavbar() {
                 : linksClasses.notActive
             )}
           >
-            À propos
+            About
+          </Link>
+          <Link
+            href="/Docs"
+            className={cn(
+              linksClasses.base,
+              isActive("/Docs")
+                ? linksClasses.isActive
+                : linksClasses.notActive
+            )}
+          >
+            Docs
           </Link>
         </div>
       </div>
