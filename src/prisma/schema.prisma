@@ -22,6 +22,7 @@ model User {
   role          Role           @default(MEMBER)
   accounts      Account[]
   events        Event[]        @relation("CreatedEvents")
+  blogs         Blog[]         @relation("BlogAuthor")
   registrations Registration[]
   sessions      Session[]
 
@@ -117,9 +118,34 @@ model Gallery {
   id         Int         @id @default(autoincrement())
   key        String      @unique
   url        String
-  type       GalleryType
+  type       GalleryType @default(GALLERY)
   uploadedBy String
   createdAt  DateTime    @default(now())
+}
+
+model Blog {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  content   String?
+  excerpt   String?
+  image     String?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  authorId  String
+  author    User     @relation("BlogAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("blog")
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("newsletter")
 }
 
 enum Role {

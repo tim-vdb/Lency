@@ -6,8 +6,8 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import React, { useState } from "react";
 import { ModeToggle } from "@/features/DarkMode/ModeToggle";
-import DesktopNavbar from "@/features/Navbar/Public/Desktop/DesktopNavbar";
-import MobileNavbar from "@/features/Navbar/Public/Mobile/MobileNavbar";
+import DesktopNavbar from "@/features/Navbar/Public/Desktop/HeaderNavbar";
+import MobileNavbar from "@/features/Navbar/Public/Mobile/HeaderNavbar";
 import ProfileAccount from "@/widgets/ProfileAccount";
 
 export default function Header() {
@@ -24,7 +24,7 @@ export default function Header() {
                 className="left-0 right-0 shadow-sm top-0 z-50 bg-white dark:bg-neutral-900 fixed transition-all duration-200 ease-in-out h-20"
             >
                 <div className="mx-8 flex justify-between items-center h-full">
-                    <Link href="/" className="flex-shrink-0">
+                    <Link href="/" className="shrink-0">
                         <Image
                             src="/images/cassetete.jpg"
                             alt="CHROM Logo"

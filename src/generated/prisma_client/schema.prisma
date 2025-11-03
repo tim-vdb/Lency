@@ -1,89 +1,75 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../generated/prisma_client"
+  binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x", "darwin-arm64"]
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x", "darwin-arm64"]
-  output        = "../generated/prisma_client"
-}
-
-/**
- * ---------------- USERS & ROLES ----------------
- */
+/// *
+///  * ---------------- USERS & ROLES ----------------
 model User {
-  id            String   @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String
-  email         String   @unique
-  emailVerified Boolean  @default(false)
+  email         String         @unique
+  emailVerified Boolean        @default(false)
   image         String?
-  role          Role     @default(MEMBER) // visiteur = pas de compte, membre par défaut
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now()) @updatedAt
-
-  sessions      Session[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  role          Role           @default(MEMBER)
   accounts      Account[]
-  events        Event[]        @relation("CreatedEvents") // si contributeur
+  events        Event[]        @relation("CreatedEvents")
+  blogs         Blog[]         @relation("BlogAuthor")
   registrations Registration[]
+  sessions      Session[]
 
   @@map("user")
 }
 
-enum Role {
-  MEMBER // utilisateur inscrit normal
-  CONTRIBUTOR // membre qui peut créer des événements et voir inscrits
-  ADMIN // admin
-}
-
-/**
- * ---------------- EVENTS ----------------
- */
+/// *
+///  * ---------------- EVENTS ----------------
 model Event {
-  id              String   @id @default(cuid())
+  id              String         @id @default(cuid())
   name            String
   description     String?
   location        String
-  dateStart       DateTime @default(now())
-  dateEnd         DateTime @default(now())
-  openAt          DateTime @default(now())
-  closeAt         DateTime @default(now())
-  visibleToGuests Boolean  @default(false) // accessible aux visiteurs ou non
-  maxParticipants Int // nombre max de personnes autorisées à s’inscrire
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now()) @updatedAt
-
-  creatorId String
-  creator   User   @relation("CreatedEvents", fields: [creatorId], references: [id])
-
-  registrations Registration[]
+  dateStart       DateTime       @default(now())
+  dateEnd         DateTime       @default(now())
+  openAt          DateTime       @default(now())
+  closeAt         DateTime       @default(now())
+  visibleToGuests Boolean        @default(false)
+  maxParticipants Int
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @default(now()) @updatedAt
+  creatorId       String
+  creator         User           @relation("CreatedEvents", fields: [creatorId], references: [id])
+  registrations   Registration[]
 
   @@map("event")
 }
 
-/**
- * ---------------- REGISTRATIONS ----------------
- */
+/// *
+///  * ---------------- REGISTRATIONS ----------------
 model Registration {
   id           String   @id @default(cuid())
   name         String
   email        String   @unique
   phone        String?
-  participants Int      @default(1) // nombre de participants à l'événement
+  participants Int      @default(1)
   createdAt    DateTime @default(now())
-
-  eventId String
-  event   Event  @relation(fields: [eventId], references: [id])
-
-  userId String? // facultatif : un visiteur peut s’inscrire sans compte
-  user   User?   @relation(fields: [userId], references: [id])
+  eventId      String
+  userId       String?
+  event        Event    @relation(fields: [eventId], references: [id])
+  user         User?    @relation(fields: [userId], references: [id])
 
   @@map("registration")
 }
 
-/**
- * ---------------- SESSIONS & ACCOUNTS ----------------
- */
+/// *
+///  * ---------------- SESSIONS & ACCOUNTS ----------------
 model Session {
   id        String   @id @default(cuid())
   expiresAt DateTime
@@ -92,9 +78,8 @@ model Session {
   updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("session")
 }
@@ -104,7 +89,6 @@ model Account {
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -114,6 +98,7 @@ model Account {
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @default(now()) @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("account")
 }
@@ -133,9 +118,40 @@ model Gallery {
   id         Int         @id @default(autoincrement())
   key        String      @unique
   url        String
-  type       GalleryType
+  type       GalleryType @default(GALLERY)
   uploadedBy String
   createdAt  DateTime    @default(now())
+}
+
+model Blog {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  content   String?
+  excerpt   String?
+  image     String?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  authorId  String
+  author    User     @relation("BlogAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("blog")
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("newsletter")
+}
+
+enum Role {
+  MEMBER
+  CONTRIBUTOR
+  ADMIN
 }
 
 enum GalleryType {

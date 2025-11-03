@@ -126,9 +126,9 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
-  role: 'role',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  role: 'role'
 };
 
 exports.Prisma.EventScalarFieldEnum = {
@@ -203,6 +203,26 @@ exports.Prisma.GalleryScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.BlogScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  content: 'content',
+  excerpt: 'excerpt',
+  image: 'image',
+  published: 'published',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  authorId: 'authorId'
+};
+
+exports.Prisma.NewsletterScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -235,7 +255,9 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  Gallery: 'Gallery'
+  Gallery: 'Gallery',
+  Blog: 'Blog',
+  Newsletter: 'Newsletter'
 };
 
 /**
