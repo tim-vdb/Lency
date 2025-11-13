@@ -1,5 +1,6 @@
 import { getUser } from '@/lib/auth-session';
 import { prisma } from '@/lib/prisma';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 
@@ -31,7 +32,7 @@ export default async function page() {
                     <h2>{blog.title}</h2>
                     <p>{blog.content}</p>
                     <p>{blog.excerpt}</p>
-                    <p>{blog.image}</p>
+                    <Image src={blog.image || ""} alt={blog.title} width={100} height={100} />
                     <p>{blog.published}</p>
                     <p>author : {blog.author.name}</p>
                 </div>

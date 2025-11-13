@@ -10,13 +10,15 @@
     "lint:fix": "eslint --fix .",
     "lint:eslint": "npx @next/codemod@canary next-lint-to-eslint-cli .",
     "db:deploy": "npx prisma migrate deploy --schema=src/prisma/schema.prisma",
-    "migrate": "npx prisma migrate dev --schema=src/prisma/schema.prisma",
+    "reset": "doppler run -- npx prisma migrate reset --schema=src/prisma/schema.prisma",
+    "validate": "doppler run -- npx prisma validate --schema=src/prisma/schema.prisma",
+    "migrate": "doppler run -- npx prisma migrate dev --schema=src/prisma/schema.prisma",
     "migrate:prod": "doppler run -- prisma migrate deploy --schema=src/prisma/schema.prisma",
     "generate": "doppler run -- prisma generate --schema=src/prisma/schema.prisma",
     "push": "doppler run -- prisma db push --schema=src/prisma/schema.prisma",
     "studio": "doppler run -- prisma studio --schema=src/prisma/schema.prisma",
-    "all": "concurrently \"doppler run -- npx prisma db push --schema=src/prisma/schema.prisma\" \"doppler run -- npm run dev\" \"doppler run -- npm run studio\"",
-    "all:local": "concurrently \"npx prisma db push --schema=src/prisma/schema.prisma\" \"npm run dev\" \"npm run studio\""
+    "all": "doppler run -- npx prisma migrate dev --schema=src/prisma/schema.prisma && concurrently \"doppler run -- npm run dev\" \"doppler run -- npm run studio\"",
+    "all:local": "npx prisma generate --schema=src/prisma/schema.prisma && npx prisma db push --schema=src/prisma/schema.prisma && concurrently \"npm run dev\" \"npm run studio\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
