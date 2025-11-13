@@ -34,7 +34,6 @@ export const ArticlesSafeAction = actionClient
 
         // Revalider les pages qui affichent les événements
         revalidatePath('/blog')
-        revalidatePath('/')
 
         return blog
     })

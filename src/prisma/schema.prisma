@@ -29,6 +29,12 @@ model User {
   @@map("user")
 }
 
+enum Role {
+  MEMBER
+  CONTRIBUTOR
+  ADMIN
+}
+
 /// *
 ///  * ---------------- EVENTS ----------------
 model Event {
@@ -123,6 +129,11 @@ model Gallery {
   createdAt  DateTime    @default(now())
 }
 
+enum GalleryType {
+  EVENT
+  GALLERY
+}
+
 model Blog {
   id        String   @id @default(cuid())
   title     String
@@ -146,15 +157,4 @@ model Newsletter {
   createdAt DateTime @default(now())
 
   @@map("newsletter")
-}
-
-enum Role {
-  MEMBER
-  CONTRIBUTOR
-  ADMIN
-}
-
-enum GalleryType {
-  EVENT
-  GALLERY
 }

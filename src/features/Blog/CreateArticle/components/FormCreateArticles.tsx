@@ -160,40 +160,40 @@ export default function FormCreateArticles() {
                                         </FormItem>
                                     )}
                                 />
-                                <div className="flex flex-col gap-2">
-                                    <UploadButton
-                                        endpoint="ArticleUploader"
-                                        onClientUploadComplete={(res) => {
-                                            console.log("Files: ", res);
-                                            if (res && res[0]) {
-                                                const uploadedUrl = res[0].ufsUrl;
-                                                setImageUrl(uploadedUrl);
-                                                // Met à jour le champ image dans le formulaire
-                                                form.setValue("image", uploadedUrl);
-                                                toast.success("Image uploadée avec succès !");
-                                            }
-                                        }}
-                                        onUploadError={(error: Error) => {
-                                            toast.error(`Erreur d'upload: ${error.message}`);
-                                        }}
-                                        className="mb-4 bg-blue-600 ut-allowed-content:text-white text-white px-4 py-2 rounded-lg transition-colors [&_label]:w-full [&_label]:hover:bg-blue-500 "
-                                    />
-                                    {imageUrl && (
-                                        <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
-                                            <span>✓ Image uploadée</span>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setImageUrl("");
-                                                    form.setValue("image", "");
-                                                }}
-                                                className="text-red-500 hover:underline"
-                                            >
-                                                Supprimer
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <UploadButton
+                                    endpoint="ArticleUploader"
+                                    onClientUploadComplete={(res) => {
+                                        console.log("Files: ", res);
+                                        if (res && res[0]) {
+                                            const uploadedUrl = res[0].ufsUrl;
+                                            setImageUrl(uploadedUrl);
+                                            // Met à jour le champ image dans le formulaire
+                                            form.setValue("image", uploadedUrl);
+                                            toast.success("Image uploadée avec succès !");
+                                        }
+                                    }}
+                                    onUploadError={(error: Error) => {
+                                        toast.error(`Erreur d'upload: ${error.message}`);
+                                    }}
+                                    className="mb-4 bg-blue-600 ut-allowed-content:text-white text-white px-4 py-2 rounded-lg transition-colors [&_label]:w-full [&_label]:hover:bg-blue-500 "
+                                />
+                                {imageUrl && (
+                                    <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                                        <span>✓ Image uploadée</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setImageUrl("");
+                                                form.setValue("image", "");
+                                            }}
+                                            className="text-red-500 hover:underline"
+                                        >
+                                            Supprimer
+                                        </button>
+                                    </div>
+                                )}
                             </div>
 
                             <Button type="submit">Créer l'article</Button>
