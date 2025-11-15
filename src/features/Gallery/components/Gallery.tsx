@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { UploadButton } from '@/lib/uploadthing';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { X } from 'lucide-react';
 import ButtonDeleteImage from './ButtonDeleteImage';
+import { UploadButton } from '@/lib/uploadthing';
+import { useRouter } from 'next/navigation';
 
 interface GalleryImage {
     src: string;
@@ -25,8 +26,8 @@ type GalerieProps = {
 
 export default function Gallery({ images }: GalerieProps) {
     const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
-    const router = useRouter();
     const pathname = usePathname();
+    const router = useRouter();
 
     // Fonction pour ouvrir l'image
     const openFullscreen = (image: GalleryImage) => {

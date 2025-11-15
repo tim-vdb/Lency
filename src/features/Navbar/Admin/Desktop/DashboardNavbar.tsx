@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from '@/lib/utils';
-import { Folder, LogOut, Newspaper, UserCog } from 'lucide-react';
+import { FilePenLine, Folder, LogOut, Newspaper, UserCog } from 'lucide-react';
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
 import React from 'react'
@@ -29,7 +29,7 @@ export default function DashboardNavbar() {
                         : linksClasses.notActive
                     )}
                 >
-                    <Folder className="text-[oklch(54.6%_.245_262.881)] fill-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834))] dark:fill-[oklch(68.1%_0.162_75.834))]" />
+                    <Folder className="text-blue-600 dark:text-blue-600" />
                     <p className='hidden md:block'>Galerie</p>
                 </Link>
                 <Link
@@ -39,7 +39,7 @@ export default function DashboardNavbar() {
                         : linksClasses.notActive
                     )}
                 >
-                    <Newspaper className='text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834))]' />
+                    <Newspaper className='text-blue-600 dark:text-blue-600' />
                     <p className='hidden md:block'>Gérer les événements</p>
                 </Link>
                 <Link
@@ -49,8 +49,18 @@ export default function DashboardNavbar() {
                         : linksClasses.notActive
                     )}
                 >
-                    <UserCog className='text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834))]' />
+                    <UserCog className='text-blue-600 dark:text-blue-600' />
                     <p className='hidden md:block'>Gérer les utilisateurs</p>
+                </Link>
+                <Link
+                    href="/admin/blog/create"
+                    className={cn(linksClasses.base, isActive("/admin/blog/create")
+                        ? linksClasses.isActive
+                        : linksClasses.notActive
+                    )}
+                >
+                    <FilePenLine className='text-blue-600 dark:text-blue-600' />
+                    <p className='hidden md:block'>Créer un article</p>
                 </Link>
                 <Link
                     href="/"
@@ -61,7 +71,7 @@ export default function DashboardNavbar() {
                 >
 
 
-                    <LogOut className="text-[oklch(54.6%_.245_262.881)] dark:text-[oklch(68.1%_0.162_75.834)]" />
+                    <LogOut className="text-blue-600 dark:text-blue-600" />
 
                     <p className='hidden md:block'>Quitter</p>
                 </Link>

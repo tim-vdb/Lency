@@ -24,6 +24,7 @@ import { DatePickerRange } from '@/components/ui/DatePickerRange'
 import { UploadButton } from '@/lib/uploadthing'
 
 export default function FormCreateEvents() {
+    const router = useRouter()
     // 1. Define your form.
     const form = useForm<z.infer<typeof EventsSchema>>({
         resolver: zodResolver(EventsSchema),
@@ -53,7 +54,7 @@ export default function FormCreateEvents() {
             toast.success("Événement créé avec succès !");
             form.reset();
             // Forcer le rafraîchissement de la page
-            window.location.reload();
+            router.refresh();
         },
         onError: (error) => {
             console.error('Erreur lors de la création de l\'événement:', error);

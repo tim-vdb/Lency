@@ -25,35 +25,37 @@ export default function DesktopNavbar() {
       <div className="hidden md:block">
         <div className="ml-10 flex items-baseline space-x-4">
           <Link
-            href="/"
+            href="/features"
             className={cn(
               linksClasses.base,
-              isActive("/") ? linksClasses.isActive : linksClasses.notActive
-            )}
-          >
-            Home
-          </Link>
-          <Link
-            href="/blog"
-            className={cn(
-              linksClasses.base,
-              isActive("/blog")
+              isActive("/features")
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
           >
-            Blog
+            Features
           </Link>
           <Link
-            href="/contact"
+            href="/solution"
             className={cn(
               linksClasses.base,
-              isActive("/contact")
+              isActive("/solution")
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
           >
-            Contact Us
+            Solution
+          </Link>
+          <Link
+            href="/pricing"
+            className={cn(
+              linksClasses.base,
+              isActive("/pricing")
+                ? linksClasses.isActive
+                : linksClasses.notActive
+            )}
+          >
+            Pricing
           </Link>
           <Link
             href="/about"
@@ -67,6 +69,28 @@ export default function DesktopNavbar() {
             About
           </Link>
           <Link
+            href="/contact"
+            className={cn(
+              linksClasses.base,
+              isActive("/contact")
+                ? linksClasses.isActive
+                : linksClasses.notActive
+            )}
+          >
+            Contact Us
+          </Link>
+          <Link
+            href="/team"
+            className={cn(
+              linksClasses.base,
+              isActive("/team")
+                ? linksClasses.isActive
+                : linksClasses.notActive
+            )}
+          >
+            Our Team
+          </Link>
+          <Link
             href="/Docs"
             className={cn(
               linksClasses.base,
@@ -76,6 +100,17 @@ export default function DesktopNavbar() {
             )}
           >
             Docs
+          </Link>
+          <Link
+            href="/blog"
+            className={cn(
+              linksClasses.base,
+              isActive("/blog")
+                ? linksClasses.isActive
+                : linksClasses.notActive
+            )}
+          >
+            Blog
           </Link>
         </div>
       </div>

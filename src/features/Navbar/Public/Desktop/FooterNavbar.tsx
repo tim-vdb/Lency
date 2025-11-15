@@ -7,13 +7,23 @@ export default function FooterNavbar() {
                 <h3 className="text-lg">Company</h3>
                 <ul className="space-y-4 ">
                     <li>
-                        <Link href="/about" className="transition">
-                            About
+                        <Link href="/features" className="transition">
+                            Features
                         </Link>
                     </li>
                     <li>
-                        <Link href="/blog" className="transition">
-                            Blog
+                        <Link href="/solution" className="transition">
+                            Solution
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/pricing" className="transition">
+                            Pricing
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/about" className="transition">
+                            About
                         </Link>
                     </li>
                     <li>
@@ -24,6 +34,11 @@ export default function FooterNavbar() {
                     <li>
                         <Link href="/team" className="transition">
                             Our Team
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/blog" className="transition">
+                            Blog
                         </Link>
                     </li>
                 </ul>
