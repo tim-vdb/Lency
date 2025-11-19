@@ -52,7 +52,7 @@ export default async function SiteLayout({
       >
         <UserProvider user={user}>
           <Header />
-          <main className="min-h-screen w-[100vw]">{children}</main>
+          <main className="min-h-screen">{children}</main>
           <Footer />
           <Toaster />
         </UserProvider>
