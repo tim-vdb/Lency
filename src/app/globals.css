@@ -11,7 +11,6 @@
 } */
 
 @import "tailwindcss";
-/* @import "tw-animate-css"; */
 @plugin "@tailwindcss/typography";
 @plugin "@midudev/tailwind-animations";
 @import "uploadthing/tw/v4";
@@ -27,6 +26,14 @@
   /* --color-gold: #927700; */
   /* --color-gold: #e0b700; */
   /* --color-gold: #c99c00; */
+  --color-neutral-150: oklch(95% 0 0);
+  --color-neutral-250: oklch(89% 0 0);
+  --color-neutral-350: oklch(78% 0 0);
+  --color-neutral-450: oklch(70.8% 0 0);
+  --color-neutral-550: oklch(55.6% 0 0);
+  --color-neutral-650: oklch(43.9% 0 0);
+  --color-neutral-750: oklch(37.1% 0 0);
+  --color-neutral-850: oklch(20.5% 0 0);
   --color-yellow-550: oklch(0.74 0.173 80);
   --color-gold: #d4a800;
   --color-gray-extra-dark: #121212;
@@ -37,9 +44,15 @@
   --text-normal: 0.95rem;
   --text-small: 0.8rem;
 
-  /* BOX SHADOW */
-  --shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.2);
-  --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.05);
+  /* SHADOWS */
+  --shadow-sm: inset 0 1px 2px #ffffff30, 0 1px 2px #00000030,
+    0 2px 4px #00000015;
+  --shadow-md: inset 0 1px 2px #ffffff50, 0 2px 4px #00000030,
+    0 4px 8px #00000015;
+  --shadow-lg: inset 0 1px 2px #ffffff70, 0 4px 6px #00000030,
+    0 6px 10px #00000015;
+  --shadow-xl: inset 0 1px 2px #ffffff70, 0 6px 8px #00000030,
+    0 8px 12px #00000015;
 }
 
 @layer components {

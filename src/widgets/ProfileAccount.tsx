@@ -58,7 +58,10 @@ export default function ProfileAccount() {
                                 <Link href={"/admin"}>Dashboard</Link>
                             </DropdownMenuItem>
                         )}
-                        <DropdownMenuItem className="cursor-pointer">
+                        <DropdownMenuItem
+                            className="cursor-pointer p-0"
+                            onSelect={(e) => e.preventDefault()}
+                        >
                             <LogOut />
                         </DropdownMenuItem>
                     </DropdownMenuContent>
