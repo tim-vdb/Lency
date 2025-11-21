@@ -1,24 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Blog, User } from '@/generated/prisma_client';
 import { ArrowRightIcon, FileCheck, FileX, SeparatorVertical, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 interface BlogCardProps {
-    blog: {
-        id: string;
-        title: string;
-        slug: string;
-        content: string | null;
-        excerpt: string | null;
-        image: string | null;
-        published: boolean;
-        views: number;
-        updatedAt: Date;
-        author: {
-            name: string;
-        };
-    };
+    blog: Blog & { author: User };
     isAdmin: boolean;
 }
 
