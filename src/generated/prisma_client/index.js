@@ -244,7 +244,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "E:\\Projet\\Next.js - React\\Boilerplate\\src\\generated\\prisma_client",
+      "value": "C:\\Projet\\Next.js - React\\Boilerplate\\src\\generated\\prisma_client",
       "fromEnvVar": null
     },
     "config": {
@@ -270,7 +270,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "E:\\Projet\\Next.js - React\\Boilerplate\\src\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Projet\\Next.js - React\\Boilerplate\\src\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

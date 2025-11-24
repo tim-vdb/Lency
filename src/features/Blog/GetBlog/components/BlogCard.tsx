@@ -25,10 +25,10 @@ export function BlogCard({ blog, isAdmin }: BlogCardProps) {
                     alt={blog.title}
                     width={400}
                     height={256}
-                    className='max-h-64 w-full h-full object-cover scale-115 group-hover:scale-100 transition-transform duration-800 delay-300 group-hover:delay-0 group-hover:duration-500'
+                    className='max-h-64 w-full h-full object-cover scale-115 group-hover:multi-["scale-100;duration-500;delay-0"] transition-transform duration-800 delay-300'
                 />
                 {isAdmin ? (
-                    <div className='flex items-center justify-between gap-2 opacity-0 text-white absolute bottom-0 right-0 text-xs text-white-500 font-bold w-full bg-neutral-900/75 px-2 py-1 transition-opacity duration-1000 delay-300 group-hover:opacity-100 group-hover:duration-200 group-hover:delay-0 group-hover:animate-slide-in-bottom group-hover:animate-duration-slow'>
+                    <div className="flex items-center justify-between gap-2 opacity-0 text-white absolute bottom-0 right-0 text-xs text-white-500 font-bold w-full bg-neutral-900/75 px-2 py-1 transition-opacity duration-1000 delay-300 group-hover:multi-['opacity-100;duration-200;delay-0;animate-slide-in-bottom;animate-duration-slow']">
                         <p>
                             Mis à jour le {" "} {blog.updatedAt.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
                         </p>
@@ -37,7 +37,7 @@ export function BlogCard({ blog, isAdmin }: BlogCardProps) {
                         </p>
                     </div>
                 ) : (
-                    <div className='flex items-center justify-between gap-2 opacity-0 text-white absolute bottom-0 right-0 text-xs text-white-500 font-bold w-full bg-neutral-900/75 px-2 py-1 transition-opacity duration-1000 delay-300 group-hover:opacity-100 group-hover:duration-200 group-hover:delay-0 group-hover:animate-slide-in-bottom group-hover:animate-duration-slow'>
+                    <div className='flex items-center justify-between gap-2 opacity-0 text-white absolute bottom-0 right-0 text-xs text-white-500 font-bold w-full bg-neutral-900/75 px-2 py-1 transition-opacity duration-1000 delay-300 group-hover:multi-["opacity-100;duration-200;delay-0;animate-slide-in-bottom;animate-duration-slow"]'>
                         <p>
                             Mis à jour le {" "} {blog.updatedAt.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
                         </p>
@@ -49,11 +49,11 @@ export function BlogCard({ blog, isAdmin }: BlogCardProps) {
                 )}
                 {isAdmin && (
                     <>
-                        <div title="Modifier l'article" className='opacity-0 absolute top-0 right-0 transition-opacity duration-500 delay-300 group-hover:opacity-100 group-hover:duration-200 group-hover:delay-0 group-hover:animate-slide-in-right'>
+                        <div title="Modifier l'article" className='opacity-0 absolute top-0 right-0 transition-opacity duration-500 delay-300 group-hover:multi-["opacity-100;duration-200;delay-0;animate-slide-in-right"]'>
                             <SquarePen className='cursor-pointer text-white size-9 text-white-500 rounded-tr-xl backdrop-blur-xs bg-neutral-900/75 rounded-bl-sm p-1.5 outline outline-neutral-900 hover:[&_path]:animate-rotational-wave' />
                         </div>
 
-                        <div title="Article publié" className='absolute top-0 left-0 transition-opacity duration-500 delay-300 group-hover:opacity-100 group-hover:duration-200 group-hover:delay-0'>
+                        <div title="Article publié" className='absolute top-0 left-0 transition-opacity duration-500 delay-300 group-hover:multi-["opacity-100;duration-200;delay-0"]'>
                             {blog.published ? (
                                 <FileCheck className='cursor-pointer text-white size-9 text-white-500 rounded-tl-xl backdrop-blur-xs bg-green-900/75 rounded-br-sm p-1.5 outline outline-neutral-900' />
                             ) : (
