@@ -9640,8 +9640,18 @@ export namespace Prisma {
 
   export type AggregateBlog = {
     _count: BlogCountAggregateOutputType | null
+    _avg: BlogAvgAggregateOutputType | null
+    _sum: BlogSumAggregateOutputType | null
     _min: BlogMinAggregateOutputType | null
     _max: BlogMaxAggregateOutputType | null
+  }
+
+  export type BlogAvgAggregateOutputType = {
+    views: number | null
+  }
+
+  export type BlogSumAggregateOutputType = {
+    views: number | null
   }
 
   export type BlogMinAggregateOutputType = {
@@ -9652,6 +9662,7 @@ export namespace Prisma {
     excerpt: string | null
     image: string | null
     published: boolean | null
+    views: number | null
     createdAt: Date | null
     updatedAt: Date | null
     authorId: string | null
@@ -9665,6 +9676,7 @@ export namespace Prisma {
     excerpt: string | null
     image: string | null
     published: boolean | null
+    views: number | null
     createdAt: Date | null
     updatedAt: Date | null
     authorId: string | null
@@ -9678,12 +9690,21 @@ export namespace Prisma {
     excerpt: number
     image: number
     published: number
+    views: number
     createdAt: number
     updatedAt: number
     authorId: number
     _all: number
   }
 
+
+  export type BlogAvgAggregateInputType = {
+    views?: true
+  }
+
+  export type BlogSumAggregateInputType = {
+    views?: true
+  }
 
   export type BlogMinAggregateInputType = {
     id?: true
@@ -9693,6 +9714,7 @@ export namespace Prisma {
     excerpt?: true
     image?: true
     published?: true
+    views?: true
     createdAt?: true
     updatedAt?: true
     authorId?: true
@@ -9706,6 +9728,7 @@ export namespace Prisma {
     excerpt?: true
     image?: true
     published?: true
+    views?: true
     createdAt?: true
     updatedAt?: true
     authorId?: true
@@ -9719,6 +9742,7 @@ export namespace Prisma {
     excerpt?: true
     image?: true
     published?: true
+    views?: true
     createdAt?: true
     updatedAt?: true
     authorId?: true
@@ -9763,6 +9787,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: BlogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BlogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: BlogMinAggregateInputType
@@ -9793,6 +9829,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: BlogCountAggregateInputType | true
+    _avg?: BlogAvgAggregateInputType
+    _sum?: BlogSumAggregateInputType
     _min?: BlogMinAggregateInputType
     _max?: BlogMaxAggregateInputType
   }
@@ -9805,10 +9843,13 @@ export namespace Prisma {
     excerpt: string | null
     image: string | null
     published: boolean
+    views: number
     createdAt: Date
     updatedAt: Date
     authorId: string
     _count: BlogCountAggregateOutputType | null
+    _avg: BlogAvgAggregateOutputType | null
+    _sum: BlogSumAggregateOutputType | null
     _min: BlogMinAggregateOutputType | null
     _max: BlogMaxAggregateOutputType | null
   }
@@ -9835,6 +9876,7 @@ export namespace Prisma {
     excerpt?: boolean
     image?: boolean
     published?: boolean
+    views?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
@@ -9849,6 +9891,7 @@ export namespace Prisma {
     excerpt?: boolean
     image?: boolean
     published?: boolean
+    views?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
@@ -9863,6 +9906,7 @@ export namespace Prisma {
     excerpt?: boolean
     image?: boolean
     published?: boolean
+    views?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
@@ -9877,12 +9921,13 @@ export namespace Prisma {
     excerpt?: boolean
     image?: boolean
     published?: boolean
+    views?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
   }
 
-  export type BlogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "content" | "excerpt" | "image" | "published" | "createdAt" | "updatedAt" | "authorId", ExtArgs["result"]["blog"]>
+  export type BlogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "content" | "excerpt" | "image" | "published" | "views" | "createdAt" | "updatedAt" | "authorId", ExtArgs["result"]["blog"]>
   export type BlogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -9906,6 +9951,7 @@ export namespace Prisma {
       excerpt: string | null
       image: string | null
       published: boolean
+      views: number
       createdAt: Date
       updatedAt: Date
       authorId: string
@@ -10340,6 +10386,7 @@ export namespace Prisma {
     readonly excerpt: FieldRef<"Blog", 'String'>
     readonly image: FieldRef<"Blog", 'String'>
     readonly published: FieldRef<"Blog", 'Boolean'>
+    readonly views: FieldRef<"Blog", 'Int'>
     readonly createdAt: FieldRef<"Blog", 'DateTime'>
     readonly updatedAt: FieldRef<"Blog", 'DateTime'>
     readonly authorId: FieldRef<"Blog", 'String'>
@@ -11865,6 +11912,7 @@ export namespace Prisma {
     excerpt: 'excerpt',
     image: 'image',
     published: 'published',
+    views: 'views',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     authorId: 'authorId'
@@ -12555,6 +12603,7 @@ export namespace Prisma {
     excerpt?: StringNullableFilter<"Blog"> | string | null
     image?: StringNullableFilter<"Blog"> | string | null
     published?: BoolFilter<"Blog"> | boolean
+    views?: IntFilter<"Blog"> | number
     createdAt?: DateTimeFilter<"Blog"> | Date | string
     updatedAt?: DateTimeFilter<"Blog"> | Date | string
     authorId?: StringFilter<"Blog"> | string
@@ -12569,6 +12618,7 @@ export namespace Prisma {
     excerpt?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     published?: SortOrder
+    views?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -12586,6 +12636,7 @@ export namespace Prisma {
     excerpt?: StringNullableFilter<"Blog"> | string | null
     image?: StringNullableFilter<"Blog"> | string | null
     published?: BoolFilter<"Blog"> | boolean
+    views?: IntFilter<"Blog"> | number
     createdAt?: DateTimeFilter<"Blog"> | Date | string
     updatedAt?: DateTimeFilter<"Blog"> | Date | string
     authorId?: StringFilter<"Blog"> | string
@@ -12600,12 +12651,15 @@ export namespace Prisma {
     excerpt?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     published?: SortOrder
+    views?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
     _count?: BlogCountOrderByAggregateInput
+    _avg?: BlogAvgOrderByAggregateInput
     _max?: BlogMaxOrderByAggregateInput
     _min?: BlogMinOrderByAggregateInput
+    _sum?: BlogSumOrderByAggregateInput
   }
 
   export type BlogScalarWhereWithAggregatesInput = {
@@ -12619,6 +12673,7 @@ export namespace Prisma {
     excerpt?: StringNullableWithAggregatesFilter<"Blog"> | string | null
     image?: StringNullableWithAggregatesFilter<"Blog"> | string | null
     published?: BoolWithAggregatesFilter<"Blog"> | boolean
+    views?: IntWithAggregatesFilter<"Blog"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Blog"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Blog"> | Date | string
     authorId?: StringWithAggregatesFilter<"Blog"> | string
@@ -13276,6 +13331,7 @@ export namespace Prisma {
     excerpt?: string | null
     image?: string | null
     published?: boolean
+    views?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutBlogsInput
@@ -13289,6 +13345,7 @@ export namespace Prisma {
     excerpt?: string | null
     image?: string | null
     published?: boolean
+    views?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -13302,6 +13359,7 @@ export namespace Prisma {
     excerpt?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutBlogsNestedInput
@@ -13315,6 +13373,7 @@ export namespace Prisma {
     excerpt?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
@@ -13328,6 +13387,7 @@ export namespace Prisma {
     excerpt?: string | null
     image?: string | null
     published?: boolean
+    views?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -13341,6 +13401,7 @@ export namespace Prisma {
     excerpt?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13353,6 +13414,7 @@ export namespace Prisma {
     excerpt?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
@@ -13948,9 +14010,14 @@ export namespace Prisma {
     excerpt?: SortOrder
     image?: SortOrder
     published?: SortOrder
+    views?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
+  }
+
+  export type BlogAvgOrderByAggregateInput = {
+    views?: SortOrder
   }
 
   export type BlogMaxOrderByAggregateInput = {
@@ -13961,6 +14028,7 @@ export namespace Prisma {
     excerpt?: SortOrder
     image?: SortOrder
     published?: SortOrder
+    views?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -13974,9 +14042,14 @@ export namespace Prisma {
     excerpt?: SortOrder
     image?: SortOrder
     published?: SortOrder
+    views?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
+  }
+
+  export type BlogSumOrderByAggregateInput = {
+    views?: SortOrder
   }
 
   export type NewsletterCountOrderByAggregateInput = {
@@ -14672,6 +14745,7 @@ export namespace Prisma {
     excerpt?: string | null
     image?: string | null
     published?: boolean
+    views?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14684,6 +14758,7 @@ export namespace Prisma {
     excerpt?: string | null
     image?: string | null
     published?: boolean
+    views?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14855,6 +14930,7 @@ export namespace Prisma {
     excerpt?: StringNullableFilter<"Blog"> | string | null
     image?: StringNullableFilter<"Blog"> | string | null
     published?: BoolFilter<"Blog"> | boolean
+    views?: IntFilter<"Blog"> | number
     createdAt?: DateTimeFilter<"Blog"> | Date | string
     updatedAt?: DateTimeFilter<"Blog"> | Date | string
     authorId?: StringFilter<"Blog"> | string
@@ -15464,6 +15540,7 @@ export namespace Prisma {
     excerpt?: string | null
     image?: string | null
     published?: boolean
+    views?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15588,6 +15665,7 @@ export namespace Prisma {
     excerpt?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15600,6 +15678,7 @@ export namespace Prisma {
     excerpt?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15612,6 +15691,7 @@ export namespace Prisma {
     excerpt?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

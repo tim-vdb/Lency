@@ -11,10 +11,13 @@
 } */
 
 @import "tailwindcss";
-@import "tw-animate-css";
 @plugin "@tailwindcss/typography";
+@plugin "@midudev/tailwind-animations";
+@plugin "tailwindcss-multi";
+@plugin "tailwindcss-mixins";
 @import "uploadthing/tw/v4";
-@source "../node_modules/@uploadthing/react/dist"; /* <-- depends on your project structure */
+@source "../node_modules/@uploadthing/react/dist";
+/* <-- depends on your project structure */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -26,6 +29,14 @@
   /* --color-gold: #927700; */
   /* --color-gold: #e0b700; */
   /* --color-gold: #c99c00; */
+  --color-neutral-150: oklch(95% 0 0);
+  --color-neutral-250: oklch(89% 0 0);
+  --color-neutral-350: oklch(78% 0 0);
+  --color-neutral-450: oklch(70.8% 0 0);
+  --color-neutral-550: oklch(55.6% 0 0);
+  --color-neutral-650: oklch(43.9% 0 0);
+  --color-neutral-750: oklch(37.1% 0 0);
+  --color-neutral-850: oklch(20.5% 0 0);
   --color-yellow-550: oklch(0.74 0.173 80);
   --color-gold: #d4a800;
   --color-gray-extra-dark: #121212;
@@ -36,18 +47,26 @@
   --text-normal: 0.95rem;
   --text-small: 0.8rem;
 
-  /* BOX SHADOW */
-  --shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.2);
-  --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.05);
+  /* SHADOWS */
+  --shadow-sm: inset 0 1px 2px #ffffff30, 0 1px 2px #00000030,
+    0 2px 4px #00000015;
+  --shadow-md: inset 0 1px 2px #ffffff50, 0 2px 4px #00000030,
+    0 4px 8px #00000015;
+  --shadow-lg: inset 0 1px 2px #ffffff70, 0 4px 6px #00000030,
+    0 6px 10px #00000015;
+  --shadow-xl: inset 0 1px 2px #ffffff70, 0 6px 8px #00000030,
+    0 8px 12px #00000015;
 }
 
 @layer components {
+
   /* Header.tsx */
   @keyframes slideDown {
     from {
       opacity: 0;
       transform: translateY(-10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -60,6 +79,7 @@
 }
 
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -76,16 +96,15 @@
     line-height: unset;
     -webkit-text-size-adjust: 100%;
     tab-size: 4;
-    font-family: var(
-      --default-font-family,
-      ui-sans-serif,
-      system-ui,
-      sans-serif,
-      "Apple Color Emoji",
-      "Segoe UI Emoji",
-      "Segoe UI Symbol",
-      "Noto Color Emoji"
-    );
+    font-family: var(--default-font-family,
+        ui-sans-serif,
+        system-ui,
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji"
+      );
     font-feature-settings: var(--default-font-feature-settings, normal);
     font-variation-settings: var(--default-font-variation-settings, normal);
     -webkit-tap-highlight-color: transparent;
@@ -121,6 +140,7 @@
   h3 {
     @apply font-zalando text-[1rem] mt-10 mb-5 font-semibold;
   }
+
   h4,
   h5,
   h6 {
@@ -140,22 +160,18 @@
   kbd,
   samp,
   pre {
-    font-family: var(
-      --default-mono-font-family,
-      ui-monospace,
-      SFMono-Regular,
-      Menlo,
-      Monaco,
-      Consolas,
-      "Liberation Mono",
-      "Courier New",
-      monospace
-    );
+    font-family: var(--default-mono-font-family,
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        "Liberation Mono",
+        "Courier New",
+        monospace);
     font-feature-settings: var(--default-mono-font-feature-settings, normal);
-    font-variation-settings: var(
-      --default-mono-font-variation-settings,
-      normal
-    );
+    font-variation-settings: var(--default-mono-font-variation-settings,
+        normal);
     font-size: 1em;
   }
 
@@ -274,8 +290,7 @@
     opacity: 1;
   }
 
-  @supports (not (-webkit-appearance: -apple-pay-button)) or
-    (contain-intrinsic-size: 1px) {
+  @supports (not (-webkit-appearance: -apple-pay-button)) or (contain-intrinsic-size: 1px) {
     ::placeholder {
       color: currentcolor;
 
@@ -478,6 +493,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
