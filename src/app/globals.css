@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Zalando+Sans+SemiExpanded:ital,wght@0,200..900;1,200..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zalando+Sans+SemiExpanded:ital,wght@0,200..900;1,200..900&display=swap');
 
 /* Déclaration des polices Cooper */
 /* @font-face {
@@ -10,20 +10,20 @@
   font-display: swap;
 } */
 
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 @plugin "@midudev/tailwind-animations";
 @plugin "tailwindcss-multi";
 @plugin "tailwindcss-mixins";
-@import "uploadthing/tw/v4";
+@import 'uploadthing/tw/v4';
 @source "../node_modules/@uploadthing/react/dist";
 /* <-- depends on your project structure */
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-inter: "Inter", sans-serif;
-  --font-zalando: "Zalando Sans SemiExpanded", sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-zalando: 'Zalando Sans SemiExpanded', sans-serif;
 
   /* COLORS */
   /* --color-gold: #927700; */
@@ -99,10 +99,10 @@
       ui-sans-serif,
       system-ui,
       sans-serif,
-      "Apple Color Emoji",
-      "Segoe UI Emoji",
-      "Segoe UI Symbol",
-      "Noto Color Emoji"
+      'Apple Color Emoji',
+      'Segoe UI Emoji',
+      'Segoe UI Symbol',
+      'Noto Color Emoji'
     );
     font-feature-settings: var(--default-font-feature-settings, normal);
     font-variation-settings: var(--default-font-variation-settings, normal);
@@ -166,8 +166,8 @@
       Menlo,
       Monaco,
       Consolas,
-      "Liberation Mono",
-      "Courier New",
+      'Liberation Mono',
+      'Courier New',
       monospace
     );
     font-feature-settings: var(--default-mono-font-feature-settings, normal);
@@ -342,7 +342,7 @@
   }
 
   button,
-  input:where([type="button"], [type="reset"], [type="submit"]),
+  input:where([type='button'], [type='reset'], [type='submit']),
   ::file-selector-button {
     appearance: button;
   }
@@ -352,7 +352,7 @@
     height: auto;
   }
 
-  [hidden]:where(:not([hidden="until-found"])) {
+  [hidden]:where(:not([hidden='until-found'])) {
     display: none !important;
   }
 

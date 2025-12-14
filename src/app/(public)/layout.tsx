@@ -8,8 +8,8 @@ import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { ourFileRouter } from '@/app/api/uploadthing/core';
 import { ThemeProvider } from 'next-themes';
 import { UserProvider } from '@/context/UserContext';
-import Header from '@/widgets/Public/Header';
-import Footer from '@/widgets/Public/Footer';
+import Header from '@/components/Public/Header';
+import Footer from '@/components/Public/Footer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

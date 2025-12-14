@@ -64,12 +64,6 @@ const eslintConfig = [
         },
         {
           mode: 'full',
-          type: 'widget',
-          capture: ['widgetName'],
-          pattern: ['src/widgets/**/*'],
-        },
-        {
-          mode: 'full',
           type: 'app',
           capture: ['_', 'fileName'],
           pattern: ['src/app/**/*'],
@@ -126,18 +120,13 @@ const eslintConfig = [
             },
             {
               from: ['app', 'neverImport'],
-              allow: ['shared', 'feature', 'widget'],
-            },
-            {
-              from: ['widget'],
-              allow: ['shared', 'feature', 'widget'],
+              allow: ['shared', 'feature'],
             },
             {
               from: ['app'],
               allow: [
                 'shared',
                 'feature',
-                'widget',
                 // Fichiers Next.js spéciaux + css
                 ['app', { fileName: 'unauthorized.tsx' }],
                 ['app', { fileName: 'not-found.tsx' }],
