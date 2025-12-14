@@ -18,7 +18,10 @@
     "push": "doppler run -- prisma db push --schema=src/prisma/schema.prisma",
     "studio": "doppler run -- prisma studio --schema=src/prisma/schema.prisma",
     "all": "doppler run -- npx prisma migrate dev --schema=src/prisma/schema.prisma && concurrently \"doppler run -- npm run dev\" \"doppler run -- npm run studio\"",
-    "all:local": "npx prisma generate --schema=src/prisma/schema.prisma && npx prisma db push --schema=src/prisma/schema.prisma && concurrently \"npm run dev\" \"npm run studio\""
+    "all:local": "npx prisma generate --schema=src/prisma/schema.prisma && npx prisma db push --schema=src/prisma/schema.prisma && concurrently \"npm run dev\" \"npm run studio\"",
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -48,7 +51,7 @@
     "embla-carousel-react": "^8.6.0",
     "eslint-plugin-boundaries": "^5.1.0",
     "lucide-react": "^0.548.0",
-    "next": "16.0.0",
+    "next": "^16.0.10",
     "next-safe-action": "^8.0.11",
     "next-themes": "^0.4.6",
     "next-zod-route": "^1.0.0",
@@ -65,6 +68,8 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.16",
     "@types/node": "^20",
@@ -75,6 +80,8 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-boundaries": "^5.1.0",
     "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.7.4",
     "prisma": "^6.18.0",
     "tailwindcss": "^4.1.16",
     "tsx": "^4.20.6",
