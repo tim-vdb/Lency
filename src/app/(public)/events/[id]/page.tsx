@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import SignUpEvents from "@/features/Events/SignUpEvents/components/SignUpEvents";
+import { Card, CardContent } from '@/components/ui/card';
+import SignUpEvents from '@/features/Events/SignUpEvents/components/SignUpEvents';
 
 export default function page() {
   return (

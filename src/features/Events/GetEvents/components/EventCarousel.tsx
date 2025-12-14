@@ -1,14 +1,14 @@
-import EventCard from "./EventCard";
-import { GetEvents } from "../events.action";
-import { CardContent } from "@/components/ui/card";
+import EventCard from './EventCard';
+import { GetEvents } from '../events.action';
+import { CardContent } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import { GetImages } from "@/lib/queries/images.action";
+} from '@/components/ui/carousel';
+import { GetImages } from '@/lib/queries/images.action';
 
 type Event = {
   id: string;
@@ -42,24 +42,25 @@ export default async function EventCarousel() {
   return (
     <Carousel
       opts={{
-        align: "start",
+        align: 'start',
       }}
       className="w-full h-full"
     >
       <CarouselContent>
         {lastOfEvents.map((event, index) => {
           // Pour chaque événement, on prend une image différente basée sur l'index
-          const eventImages = images.filter(img => img.type === "EVENT");
+          const eventImages = images.filter((img) => img.type === 'EVENT');
           const eventImage = eventImages[index % eventImages.length] || null;
 
           return (
             <CarouselItem key={event.id} className="md:basis-1/2">
               <div className="p-1">
-
                 <CardContent className="flex aspect-square items-center p-6">
-                  <EventCard event={event} images={eventImage ? [eventImage] : []} />
+                  <EventCard
+                    event={event}
+                    images={eventImage ? [eventImage] : []}
+                  />
                 </CardContent>
-
               </div>
             </CarouselItem>
           );

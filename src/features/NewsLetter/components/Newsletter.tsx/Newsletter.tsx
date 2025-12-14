@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { NewsletterFormSchema } from "../../server/newsletter.schema";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { NewsletterFormSchema } from '../../server/newsletter.schema';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,27 +12,27 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useAction } from "next-safe-action/hooks";
-import { NewsletterSafeAction } from "../../server/newsletter.action";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useAction } from 'next-safe-action/hooks';
+import { NewsletterSafeAction } from '../../server/newsletter.action';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface NewsletterProps {
   title?: string;
 }
 
 export default function Newsletter({
-  title = "Restez informés",
+  title = 'Restez informés',
 }: NewsletterProps) {
   const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof NewsletterFormSchema>>({
     resolver: zodResolver(NewsletterFormSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: '',
+      email: '',
     },
   });
 
@@ -40,12 +40,12 @@ export default function Newsletter({
     NewsletterSafeAction,
     {
       onSuccess: (data) => {
-        toast.success("Vous êtes inscrit à la newsletter");
+        toast.success('Vous êtes inscrit à la newsletter');
         form.reset();
         router.refresh();
       },
       onError: (error) => {
-        toast.error(error.error.serverError || "Une erreur est survenue");
+        toast.error(error.error.serverError || 'Une erreur est survenue');
       },
     }
   );
@@ -77,7 +77,9 @@ export default function Newsletter({
               </FormItem>
             )}
           />
-          <Button className="w-full hover:cursor-pointer" type="submit">S'inscrire</Button>
+          <Button className="w-full hover:cursor-pointer" type="submit">
+            S'inscrire
+          </Button>
         </form>
       </Form>
       {hasErrored && <p className="text-red-500">{result?.serverError}</p>}

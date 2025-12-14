@@ -1,17 +1,17 @@
-"use client"
+'use client';
 
-import React from "react"
+import React from 'react';
 
 interface User {
-  id: string
-  email: string
-  name: string
-  role: string
-  createdAt: string
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  createdAt: string;
 }
 
 interface UsersTableProps {
-  users: User[]
+  users: User[];
 }
 
 export default function UsersTable({ users }: UsersTableProps) {
@@ -35,12 +35,12 @@ export default function UsersTable({ users }: UsersTableProps) {
               <td className="px-4 py-2">{user.email}</td>
               <td className="px-4 py-2">{user.role}</td>
               <td className="px-4 py-2">
-                {new Date(user.createdAt).toLocaleDateString("fr-FR")}
+                {new Date(user.createdAt).toLocaleDateString('fr-FR')}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 }

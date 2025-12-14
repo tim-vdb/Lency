@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { useState } from "react";
-import { signUp } from "@/lib/auth-client";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { useState } from 'react';
+import { signUp } from '@/lib/auth-client';
 import {
   Form,
   FormField,
@@ -14,25 +14,25 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Loader2, X } from "lucide-react";
-import Image from "next/image";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Loader2, X } from 'lucide-react';
+import Image from 'next/image';
 
 const SignUpFormSchema = z
   .object({
-    firstName: z.string().min(1, "Le prénom est obligatoire"),
-    lastName: z.string().min(1, "Le nom est obligatoire"),
-    email: z.string().email("Email invalide"),
+    firstName: z.string().min(1, 'Le prénom est obligatoire'),
+    lastName: z.string().min(1, 'Le nom est obligatoire'),
+    email: z.string().email('Email invalide'),
     password: z
       .string()
-      .min(6, "Le mot de passe doit contenir au moins 6 caractères"),
-    passwordConfirmation: z.string().min(6, "La confirmation est obligatoire"),
+      .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
+    passwordConfirmation: z.string().min(6, 'La confirmation est obligatoire'),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
-    message: "Les mots de passe ne correspondent pas",
-    path: ["passwordConfirmation"],
+    message: 'Les mots de passe ne correspondent pas',
+    path: ['passwordConfirmation'],
   });
 
 export default function SignUpForm() {
@@ -44,11 +44,11 @@ export default function SignUpForm() {
   const form = useForm<z.infer<typeof SignUpFormSchema>>({
     resolver: zodResolver(SignUpFormSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      passwordConfirmation: "",
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      passwordConfirmation: '',
     },
   });
 
@@ -69,13 +69,14 @@ export default function SignUpForm() {
         email: values.email,
         password: values.password,
         name: `${values.firstName} ${values.lastName}`,
-        image: image ? await convertImageToBase64(image) : "",
-        callbackURL: "/",
+        image: image ? await convertImageToBase64(image) : '',
+        callbackURL: '/',
       });
-      toast.success("Utilisateur inscrit avec succès");
-      router.push("/");
+      toast.success('Utilisateur inscrit avec succès');
+      router.push('/');
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Une erreur est survenue";
+      const errorMessage =
+        error instanceof Error ? error.message : 'Une erreur est survenue';
       toast.error(errorMessage);
     } finally {
       setLoading(false);

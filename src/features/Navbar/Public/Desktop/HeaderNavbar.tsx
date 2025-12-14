@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React from 'react';
 
 export default function DesktopNavbar() {
   const pathname = usePathname();
@@ -13,10 +13,10 @@ export default function DesktopNavbar() {
   };
 
   const linksClasses = {
-    base: "px-3 py-2 rounded-md text-sm font-medium transition-colors font-cooper",
+    base: 'px-3 py-2 rounded-md text-sm font-medium transition-colors font-cooper',
     isActive:
-      "underline decoration-2 decoration-blue-500 dark:decoration-yellow-600 text-black dark:text-white",
-    notActive: "text-black dark:text-gray-300",
+      'underline decoration-2 decoration-blue-500 dark:decoration-yellow-600 text-black dark:text-white',
+    notActive: 'text-black dark:text-gray-300',
   };
 
   return (
@@ -28,7 +28,7 @@ export default function DesktopNavbar() {
             href="/features"
             className={cn(
               linksClasses.base,
-              isActive("/features")
+              isActive('/features')
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
@@ -39,7 +39,7 @@ export default function DesktopNavbar() {
             href="/solution"
             className={cn(
               linksClasses.base,
-              isActive("/solution")
+              isActive('/solution')
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
@@ -50,7 +50,7 @@ export default function DesktopNavbar() {
             href="/pricing"
             className={cn(
               linksClasses.base,
-              isActive("/pricing")
+              isActive('/pricing')
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
@@ -61,7 +61,7 @@ export default function DesktopNavbar() {
             href="/about"
             className={cn(
               linksClasses.base,
-              isActive("/about")
+              isActive('/about')
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
@@ -72,7 +72,7 @@ export default function DesktopNavbar() {
             href="/contact"
             className={cn(
               linksClasses.base,
-              isActive("/contact")
+              isActive('/contact')
                 ? linksClasses.isActive
                 : linksClasses.notActive
             )}
@@ -83,9 +83,7 @@ export default function DesktopNavbar() {
             href="/team"
             className={cn(
               linksClasses.base,
-              isActive("/team")
-                ? linksClasses.isActive
-                : linksClasses.notActive
+              isActive('/team') ? linksClasses.isActive : linksClasses.notActive
             )}
           >
             Our Team
@@ -94,9 +92,7 @@ export default function DesktopNavbar() {
             href="/Docs"
             className={cn(
               linksClasses.base,
-              isActive("/Docs")
-                ? linksClasses.isActive
-                : linksClasses.notActive
+              isActive('/Docs') ? linksClasses.isActive : linksClasses.notActive
             )}
           >
             Docs
@@ -105,9 +101,7 @@ export default function DesktopNavbar() {
             href="/blog"
             className={cn(
               linksClasses.base,
-              isActive("/blog")
-                ? linksClasses.isActive
-                : linksClasses.notActive
+              isActive('/blog') ? linksClasses.isActive : linksClasses.notActive
             )}
           >
             Blog

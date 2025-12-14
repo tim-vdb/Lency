@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { actionClient } from "@/lib/safe-action-client";
-import { NewsletterFormSchema } from "./newsletter.schema";
+import { actionClient } from '@/lib/safe-action-client';
+import { NewsletterFormSchema } from './newsletter.schema';
 
 export const NewsletterSafeAction = actionClient
   .inputSchema(NewsletterFormSchema)

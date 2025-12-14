@@ -1,9 +1,9 @@
-import { createSafeActionClient } from "next-safe-action";
+import { createSafeActionClient } from 'next-safe-action';
 
 export class SafeError extends Error {
-    constructor(error: string) {
-        super(error);
-    }
+  constructor(error: string) {
+    super(error);
+  }
 }
 
 // 1 Middleware
@@ -11,10 +11,10 @@ export class SafeError extends Error {
 // 3 Appel côté client
 // 4 Type safe des paramètres
 export const actionClient = createSafeActionClient({
-    handleServerError: (error) => {
-        if (error instanceof SafeError) {
-            return error.message
-        }
-        return "Une erreur est survenue"
+  handleServerError: (error) => {
+    if (error instanceof SafeError) {
+      return error.message;
     }
+    return 'Une erreur est survenue';
+  },
 });

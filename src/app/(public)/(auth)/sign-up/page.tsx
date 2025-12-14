@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Card, CardContent } from "@/components/ui/card";
-import SignUpForm from "@/features/SignUp/components/SignUpForm";
+import { Card, CardContent } from '@/components/ui/card';
+import SignUpForm from '@/features/SignUp/components/SignUpForm';
 
 export default function SignUpPage() {
   return (

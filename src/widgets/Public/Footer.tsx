@@ -1,9 +1,9 @@
 // src/components/ui/footer.tsx
-import FooterNavbar from "@/features/Navbar/Public/Desktop/FooterNavbar";
-import Newsletter from "@/features/NewsLetter/components/Newsletter.tsx/Newsletter";
-import SocialMedia from "@/features/SocialMedia/SocialMedia";
-import Image from "next/image";
-import Link from "next/link";
+import FooterNavbar from '@/features/Navbar/Public/Desktop/FooterNavbar';
+import Newsletter from '@/features/NewsLetter/components/Newsletter.tsx/Newsletter';
+import SocialMedia from '@/features/SocialMedia/SocialMedia';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Footer() {
   const date = new Date();
@@ -26,7 +26,8 @@ export default function Footer() {
               <p className="text-xl font-bold">Boilerplate - Inc.</p>
             </div>
             <p>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem laboriosam quam enim ut ipsa exercitationem? Natus?
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Voluptatem laboriosam quam enim ut ipsa exercitationem? Natus?
             </p>
           </div>
           <SocialMedia />
@@ -38,11 +39,28 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="flex flex-col-reverse justify-between items-center gap-4 px-4 border-t border-neutral-500 mt-10 pt-6 text-center md:px-0 md:gap-0 md:flex-row">
-        <p className="text-xs text-neutral-600 dark:text-neutral-400">© {year} Boilerplate - All rights reserved.</p>
+        <p className="text-xs text-neutral-600 dark:text-neutral-400">
+          © {year} Boilerplate - All rights reserved.
+        </p>
         <div className="flex items-center gap-8">
-          <Link href="/privacy-policy" className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition">Privacy Policy</Link>
-          <Link href="/terms-of-service" className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition">Terms of Service</Link>
-          <Link href="/cookie-policy" className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition">Cookie Policy</Link>
+          <Link
+            href="/privacy-policy"
+            className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            href="/terms-of-service"
+            className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
+          >
+            Terms of Service
+          </Link>
+          <Link
+            href="/cookie-policy"
+            className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
+          >
+            Cookie Policy
+          </Link>
         </div>
       </div>
     </footer>

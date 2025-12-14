@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from '@/lib/prisma';
 
 export const GetEvents = async () => {
   return await prisma.event.findMany({
@@ -8,10 +8,10 @@ export const GetEvents = async () => {
       creator: {
         select: {
           name: true,
-          email: true
-        }
-      }
-    }
+          email: true,
+        },
+      },
+    },
   });
 };
 

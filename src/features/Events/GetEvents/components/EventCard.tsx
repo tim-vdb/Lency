@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { usePathname } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, MapPin } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { formatDate } from "@/lib/utils";
-import { useUser } from "@/context/UserContext";
+import { usePathname } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Calendar, MapPin } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { formatDate } from '@/lib/utils';
+import { useUser } from '@/context/UserContext';
 
 interface EventCardProps {
   event: {
@@ -26,7 +26,7 @@ interface EventCardProps {
     id: number;
     key: string;
     url: string;
-    type: "EVENT" | "GALLERY";
+    type: 'EVENT' | 'GALLERY';
     uploadedBy: string;
     createdAt: Date;
   }[];
@@ -52,7 +52,8 @@ export default function EventCard({ event, images }: EventCardProps) {
 
   return (
     <>
-      {(event.visibleToGuests === true || (user && (user.role === "MEMBER" || user.role === "ADMIN"))) ? (
+      {event.visibleToGuests === true ||
+      (user && (user.role === 'MEMBER' || user.role === 'ADMIN')) ? (
         <Card className="overflow-hidden rounded-2xl shadow-md hover:cursor-pointer transition mb-10">
           {eventImage?.url && (
             <div className="h-60 w-[90%] rounded-xl m-auto overflow-hidden">
@@ -73,13 +74,13 @@ export default function EventCard({ event, images }: EventCardProps) {
           </CardHeader>
 
           <CardContent className="space-y-3">
-            {pathname !== "/" && event.description && (
+            {pathname !== '/' && event.description && (
               <p className="text-sm text-muted-foreground line-clamp-3 h-25">
                 {event.description}
               </p>
             )}
 
-            {pathname !== "/" && (
+            {pathname !== '/' && (
               <Link href={`/events/${event.id}`}>
                 <Button>S&apos;inscrire</Button>
               </Link>
@@ -87,13 +88,13 @@ export default function EventCard({ event, images }: EventCardProps) {
 
             <div className="flex items-center text-sm text-muted-foreground mt-4">
               <Calendar className="mr-2 h-4 w-4" />
-              {formatDate(event.dateStart)} → {formatDate(event.dateEnd)}{" "}
+              {formatDate(event.dateStart)} → {formatDate(event.dateEnd)}{' '}
             </div>
             <div className="flex items-center text-sm text-muted-foreground">
               <MapPin className="mr-2 h-4 w-4" />
               {event.location}
             </div>
-            {pathname !== "/" && (
+            {pathname !== '/' && (
               <div className="flex justify-between items-center pt-2">
                 <span className="text-xs text-muted-foreground">
                   {`Inscriptions : ${formatDate(event.openAt)} → ${formatDate(

@@ -1,9 +1,9 @@
-import TeamSection from '@/components/team'
+import TeamSection from '@/components/team';
 
 export default function Team() {
-    return (
-        <div>
-            <TeamSection />
-        </div>
-    )
+  return (
+    <div>
+      <TeamSection />
+    </div>
+  );
 }
