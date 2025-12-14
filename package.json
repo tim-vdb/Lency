@@ -19,9 +19,7 @@
     "studio": "doppler run -- prisma studio --schema=src/prisma/schema.prisma",
     "all": "doppler run -- npx prisma migrate dev --schema=src/prisma/schema.prisma && concurrently \"doppler run -- npm run dev\" \"doppler run -- npm run studio\"",
     "all:local": "npx prisma generate --schema=src/prisma/schema.prisma && npx prisma db push --schema=src/prisma/schema.prisma && concurrently \"npm run dev\" \"npm run studio\"",
-    "prepare": "husky",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
