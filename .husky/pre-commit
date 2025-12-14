@@ -1,5 +1,5 @@
 # Formate tout automatiquement → plus jamais de débat sur le style
-# npx prettier --write .
+npx prettier --write .
 
 # Puis vérifie (au cas où, mais normalement inutile)
 npx prettier --check . --log-level warn
