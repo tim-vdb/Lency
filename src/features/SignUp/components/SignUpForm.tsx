@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import { useState } from 'react';
-import { signUp } from '@/lib/auth-client';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useState } from "react";
+import { signUp } from "@/lib/auth-client";
 import {
   Form,
   FormField,
@@ -14,25 +14,25 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Loader2, X } from 'lucide-react';
-import Image from 'next/image';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Loader2, X } from "lucide-react";
+import Image from "next/image";
 
 const SignUpFormSchema = z
   .object({
-    firstName: z.string().min(1, 'Le prénom est obligatoire'),
-    lastName: z.string().min(1, 'Le nom est obligatoire'),
-    email: z.string().email('Email invalide'),
+    firstName: z.string().min(1, "The first name is required"),
+    lastName: z.string().min(1, "The last name is required"),
+    email: z.string().email("Email invalide"),
     password: z
       .string()
-      .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
-    passwordConfirmation: z.string().min(6, 'La confirmation est obligatoire'),
+      .min(6, "The password must contain at least 6 characters"),
+    passwordConfirmation: z.string().min(6, "La confirmation est obligatoire"),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
-    message: 'Les mots de passe ne correspondent pas',
-    path: ['passwordConfirmation'],
+    message: "The passwords do not match",
+    path: ["passwordConfirmation"],
   });
 
 export default function SignUpForm() {
@@ -44,11 +44,11 @@ export default function SignUpForm() {
   const form = useForm<z.infer<typeof SignUpFormSchema>>({
     resolver: zodResolver(SignUpFormSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      passwordConfirmation: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
     },
   });
 
@@ -69,14 +69,15 @@ export default function SignUpForm() {
         email: values.email,
         password: values.password,
         name: `${values.firstName} ${values.lastName}`,
-        image: image ? await convertImageToBase64(image) : '',
-        callbackURL: '/',
+        image: image ? await convertImageToBase64(image) : "",
+        callbackURL: "/",
       });
-      toast.success('Utilisateur inscrit avec succès');
-      router.push('/');
+      toast.success("User created successfully");
+      router.push("/");
+      router.refresh();
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : 'Une erreur est survenue';
+        error instanceof Error ? error.message : "An error occurred";
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -84,51 +85,61 @@ export default function SignUpForm() {
   }
 
   return (
-    <div className="dark:bg-card bg-blue-50 rounded-xl py-12 min-h-screen flex items-center">
-      <div className="max-w-md w-full mx-auto px-6 sm:px-8 lg:px-10">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="bg-white border-4 border-blue-400 rounded-3xl p-10 w-full max-w-md shadow-lg mb-24">
+
+        {/* HEADER */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
-            S'inscrire à Mölkky !
+          <p className="text-xs uppercase tracking-[0.25em] text-blue-400 dark:text-black font-inter">
+            Sign up
+          </p>
+
+          <h2 className="text-4xl leading-tight text-black dark:text-black">
+            Create your player account
           </h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-300">
-            Remplissez les informations pour créer votre compte.
+
+          <p className="font-inter text-sm text-black mt-3">
+            Fill in the fields to join Chef’s Blueprint.
           </p>
         </div>
 
+        {/* FORM */}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6"
+            className="flex flex-col gap-6 font-inter"
           >
+            {/* NAME FIELDS */}
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Prénom</FormLabel>
+                    <FormLabel>First name</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Max"
+                        placeholder="Ex: Camille"
                         {...field}
-                        className="bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500"
+                        className="border border-blue-400 rounded-md px-3 py-2 focus:outline-none"
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nom</FormLabel>
+                    <FormLabel>Last name</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Robinson"
+                        placeholder="Ex: Martin"
                         {...field}
-                        className="bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500"
+                        className="border border-blue-400 rounded-md px-3 py-2 focus:outline-none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -137,6 +148,7 @@ export default function SignUpForm() {
               />
             </div>
 
+            {/* EMAIL */}
             <FormField
               control={form.control}
               name="email"
@@ -148,7 +160,7 @@ export default function SignUpForm() {
                       type="email"
                       placeholder="example@mail.com"
                       {...field}
-                      className="bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500"
+                      className="border border-blue-400 rounded-md px-3 py-2 focus:outline-none"
                     />
                   </FormControl>
                   <FormMessage />
@@ -156,18 +168,19 @@ export default function SignUpForm() {
               )}
             />
 
+            {/* PASSWORD */}
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mot de Passe</FormLabel>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="••••••••"
                       {...field}
-                      className="bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500"
+                      className="border border-blue-400 rounded-md px-3 py-2 focus:outline-none"
                     />
                   </FormControl>
                   <FormMessage />
@@ -175,18 +188,19 @@ export default function SignUpForm() {
               )}
             />
 
+            {/* CONFIRM PASSWORD */}
             <FormField
               control={form.control}
               name="passwordConfirmation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirmer le mot de passe</FormLabel>
+                  <FormLabel>Confirm password</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="••••••••"
                       {...field}
-                      className="bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500"
+                      className="border border-blue-400 rounded-md px-3 py-2 focus:outline-none"
                     />
                   </FormControl>
                   <FormMessage />
@@ -194,22 +208,22 @@ export default function SignUpForm() {
               )}
             />
 
+            {/* IMAGE UPLOAD */}
             <div className="grid gap-2">
-              <FormLabel htmlFor="image">
-                Photo de profil (optionnelle)
-              </FormLabel>
+              <FormLabel>Profile picture (optional)</FormLabel>
               <div className="flex items-end gap-4">
                 {imagePreview && (
                   <div className="relative w-16 h-16 rounded-sm overflow-hidden">
                     <Image
                       src={imagePreview}
-                      alt="Prévisualisation"
-                      className="w-full h-full object-cover"
+                      alt="Preview"
                       width={64}
                       height={64}
+                      className="object-cover"
                     />
                   </div>
                 )}
+
                 <div className="flex items-center gap-2 w-full">
                   <Input
                     id="image"
@@ -231,15 +245,16 @@ export default function SignUpForm() {
               </div>
             </div>
 
+            {/* SUBMIT */}
             <Button
               type="submit"
-              className="w-full py-2 rounded-xl hover:bg-orange-500 transition-colors"
+              className="rounded-md bg-blue-400 text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold hover:bg-blue-500 transition"
               disabled={loading}
             >
               {loading ? (
                 <Loader2 size={16} className="animate-spin" />
               ) : (
-                "S'inscrire"
+                "Sign up"
               )}
             </Button>
           </form>

@@ -17,13 +17,24 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { useUser } from '@/context/UserContext';
 import { formatDate } from '@/lib/utils';
+import { useMounted } from '@/hooks/use-mounted';
 
 export default function ProfileAccount() {
+  const mounted = useMounted();
   const user = useUser();
   const pathname = usePathname();
   const userName = user?.name || '';
   const [firstName, ...lastNameParts] = userName.trim().split(' ');
   const lastName = lastNameParts.join(' ');
+
+  // Rendu initial pour éviter l'hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="w-8 h-5">
+        {/* Placeholder pour éviter le layout shift */}
+      </div>
+    );
+  }
 
   return (
     <>

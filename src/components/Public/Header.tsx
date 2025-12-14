@@ -25,7 +25,7 @@ export default function Header() {
           <Link href="/" className="shrink-0">
             <Image
               src="/images/cassetete.jpg"
-              alt="CHROM Logo"
+              alt="Boilerplate Logo"
               width={100}
               height={100}
               className="w-auto transition-all duration-200 h-15"

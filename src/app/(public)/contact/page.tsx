@@ -85,7 +85,7 @@ export default function ContactPage() {
           <Image
             width={500}
             height={500}
-            src="/images/molkky_contact.jpeg"
+            src="/images/cassetete.jpg"
             alt="Molkky"
             className="rounded-xl shadow-md w-full object-cover"
           />

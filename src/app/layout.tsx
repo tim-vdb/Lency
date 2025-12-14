@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'CHROM - Mölkky',
-  description: 'Club Rhodanien de Mölkky',
+  title: 'Boilerplate',
+  description: '',
 };
 
 export default function RootLayout({
