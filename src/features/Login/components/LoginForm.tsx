@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { useState } from "react";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { useState } from 'react';
 import {
   Form,
   FormField,
@@ -13,20 +13,20 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { signIn } from "@/lib/auth-client";
-import { CardFooter } from "@/components/ui/card";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+import { signIn } from '@/lib/auth-client';
+import { CardFooter } from '@/components/ui/card';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const LoginFormSchema = z.object({
-  email: z.string().email("Email invalide"),
+  email: z.string().email('Email invalide'),
   password: z
     .string()
-    .min(6, "Le mot de passe doit contenir au moins 6 caractères"),
+    .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
 });
 
 export default function LoginForm() {
@@ -36,8 +36,8 @@ export default function LoginForm() {
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -48,10 +48,11 @@ export default function LoginForm() {
         email: values.email,
         password: values.password,
       });
-      toast.success("Utilisateur connecté");
-      router.push("/");
+      toast.success('Utilisateur connecté');
+      router.push('/');
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Une erreur est survenue";
+      const errorMessage =
+        error instanceof Error ? error.message : 'Une erreur est survenue';
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -122,19 +123,19 @@ export default function LoginForm() {
                 {loading ? (
                   <Loader2 size={16} className="animate-spin" />
                 ) : (
-                  "Se connecter"
+                  'Se connecter'
                 )}
               </Button>
 
               <Button
                 variant="outline"
-                className={cn("w-full gap-2")}
+                className={cn('w-full gap-2')}
                 disabled={loading}
                 onClick={async () => {
                   await signIn.social(
                     {
-                      provider: "google",
-                      callbackURL: "/",
+                      provider: 'google',
+                      callbackURL: '/',
                     },
                     {
                       onRequest: (ctx) => {
@@ -174,13 +175,13 @@ export default function LoginForm() {
               </Button>
               <Button
                 variant="outline"
-                className={cn("w-full gap-2")}
+                className={cn('w-full gap-2')}
                 disabled={loading}
                 onClick={async () => {
                   await signIn.social(
                     {
-                      provider: "facebook",
-                      callbackURL: "/",
+                      provider: 'facebook',
+                      callbackURL: '/',
                     },
                     {
                       onRequest: (ctx) => {

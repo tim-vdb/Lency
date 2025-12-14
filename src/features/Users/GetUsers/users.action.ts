@@ -1,6 +1,6 @@
-"use server"
+'use server';
 
-import { prisma } from "@/lib/prisma" // adapte selon ton setup
+import { prisma } from '@/lib/prisma'; // adapte selon ton setup
 
 export async function GetUsers() {
   try {
@@ -12,17 +12,17 @@ export async function GetUsers() {
         role: true,
         createdAt: true,
       },
-    })
+    });
 
     // Formater la date ici (en string ISO ou autre format universel)
-    const usersWithFormattedDate = users.map(user => ({
+    const usersWithFormattedDate = users.map((user) => ({
       ...user,
       createdAt: user.createdAt.toISOString().slice(0, 10), // YYYY-MM-DD
-    }))
+    }));
 
-    return usersWithFormattedDate
+    return usersWithFormattedDate;
   } catch (error) {
-    console.error("Erreur lors de la récupération des utilisateurs :", error)
-    return []
+    console.error('Erreur lors de la récupération des utilisateurs :', error);
+    return [];
   }
 }

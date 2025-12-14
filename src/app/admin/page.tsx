@@ -1,10 +1,10 @@
-import { getUser } from "@/lib/auth-session";
-import unauthorized from "../unauthorized";
+import { getUser } from '@/lib/auth-session';
+import unauthorized from '../unauthorized';
 
 export default async function Page() {
   const user = await getUser();
 
-  if (user?.role !== "ADMIN") {
+  if (user?.role !== 'ADMIN') {
     return unauthorized();
   }
 

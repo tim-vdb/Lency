@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from '@/lib/prisma';
 
 export const getUsers = async () => {
-    return await prisma.user.findMany();
-}
+  return await prisma.user.findMany();
+};

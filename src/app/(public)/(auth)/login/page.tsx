@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Card, CardContent } from "@/components/ui/card";
-import LoginForm from "@/features/Login/components/LoginForm";
+import { Card, CardContent } from '@/components/ui/card';
+import LoginForm from '@/features/Login/components/LoginForm';
 
 export default function SignIn() {
   return (

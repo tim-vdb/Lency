@@ -1,5 +1,5 @@
-import DashboardNavbar from "@/features/Navbar/Admin/Desktop/DashboardNavbar";
-import { getUser } from "@/lib/auth-session";
+import DashboardNavbar from '@/features/Navbar/Admin/Desktop/DashboardNavbar';
+import { getUser } from '@/lib/auth-session';
 
 export default async function DashboardLayout({
   children,
@@ -8,7 +8,7 @@ export default async function DashboardLayout({
 }) {
   const user = await getUser();
 
-  if (user?.role !== "ADMIN") {
+  if (user?.role !== 'ADMIN') {
     return <div>{children}</div>;
   }
 

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import React, { useEffect } from "react";
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import React, { useEffect } from 'react';
 
 interface MobileNavbarProps {
   setIsScrolled: (scrolled: boolean) => void;
@@ -15,27 +15,26 @@ export default function MobileNavbar({
   menuOpen,
   setMenuOpen,
 }: MobileNavbarProps) {
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [setIsScrolled]);
 
   // isActive doit être défini ici, car il dépend du pathname
   const pathname =
-    typeof window !== "undefined" ? window.location.pathname : "";
+    typeof window !== 'undefined' ? window.location.pathname : '';
   const isActive = (path: string) => pathname === path;
 
   if (!menuOpen) return null;
 
   const linksClasses = {
-    base: "block px-3 py-2 rounded-md text-base font-medium transition-colors font-cooper",
-    isActive: "bg-yellow-550 text-white",
+    base: 'block px-3 py-2 rounded-md text-base font-medium transition-colors font-cooper',
+    isActive: 'bg-yellow-550 text-white',
     notActive:
-      "text-neutral-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700",
+      'text-neutral-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700',
   };
 
   return (
@@ -46,7 +45,9 @@ export default function MobileNavbar({
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/features") ? linksClasses.isActive : linksClasses.notActive
+            isActive('/features')
+              ? linksClasses.isActive
+              : linksClasses.notActive
           )}
         >
           Features
@@ -56,7 +57,9 @@ export default function MobileNavbar({
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/solution") ? linksClasses.isActive : linksClasses.notActive
+            isActive('/solution')
+              ? linksClasses.isActive
+              : linksClasses.notActive
           )}
         >
           Solution
@@ -66,7 +69,9 @@ export default function MobileNavbar({
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/pricing") ? linksClasses.isActive : linksClasses.notActive
+            isActive('/pricing')
+              ? linksClasses.isActive
+              : linksClasses.notActive
           )}
         >
           Pricing
@@ -76,7 +81,7 @@ export default function MobileNavbar({
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/about") ? linksClasses.isActive : linksClasses.notActive
+            isActive('/about') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
           About
@@ -86,7 +91,7 @@ export default function MobileNavbar({
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/contact")
+            isActive('/contact')
               ? linksClasses.isActive
               : linksClasses.notActive
           )}
@@ -98,7 +103,7 @@ export default function MobileNavbar({
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/team") ? linksClasses.isActive : linksClasses.notActive
+            isActive('/team') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
           Our Team
@@ -108,7 +113,7 @@ export default function MobileNavbar({
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/docs") ? linksClasses.isActive : linksClasses.notActive
+            isActive('/docs') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
           Docs
@@ -118,7 +123,7 @@ export default function MobileNavbar({
           onClick={() => setMenuOpen(false)}
           className={cn(
             linksClasses.base,
-            isActive("/blog") ? linksClasses.isActive : linksClasses.notActive
+            isActive('/blog') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
           Blog
