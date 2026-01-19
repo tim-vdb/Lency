@@ -4,13 +4,13 @@ import Link from "next/link";
 import { FaBars, FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import React, { useState } from "react";
-import { ModeToggle } from "@/features/DarkMode/ModeToggle";
-import DesktopNavbar from "@/features/Navbar/Public/Desktop/HeaderNavbar";
-import MobileNavbar from "@/features/Navbar/Public/Mobile/HeaderNavbar";
-import ProfileAccount from "@/components/ProfileAccount";
+import { ModeToggle } from "@/components/DarkMode/ModeToggle";
+import DesktopNavbar from "@/components/Navbar/Public/Desktop/HeaderNavbar";
+import MobileNavbar from "@/components/Navbar/Public/Mobile/HeaderNavbar";
+import ProfileAccount from "@/components/Public/Header/components/ProfileAccount";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
-import { useMounted } from "@/hooks/use-mounted";
+import { cn } from "@/utils/utils";
+import { useMounted } from "@/utils/hooks/use-mounted";
 
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);

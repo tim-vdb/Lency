@@ -1,7 +1,7 @@
 import { getUser } from '@/lib/auth-session';
 import { prisma } from '@/lib/prisma';
-import { BlogCard } from '@/features/Blog/GetBlog/components/BlogCard';
-import Filter from '@/features/Filter/components/Filter';
+import { BlogCard } from '@/components/Blog/BlogCard';
+import Filter from '@/components/Filter/Filter';
 
 export default async function page() {
   const user = await getUser();

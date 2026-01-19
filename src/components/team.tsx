@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 import Link from 'next/link';
 
 const members = [
@@ -77,9 +77,9 @@ export default function TeamSection() {
                     className={cn(
                       'h-96 w-full object-cover object-top grayscale transition-all duration-500 group-hover/image:grayscale-0 group-hover/image:h-90 rounded-md',
                       member.name === 'Timothée VAN DEN BOSCH' &&
-                        'translate-y-16 -translate-x-2 rounded-none',
+                      'translate-y-16 -translate-x-2 rounded-none',
                       member.name === 'Guerric COCHELIN' &&
-                        'translate-y-20 -translate-x-2 rounded-none'
+                      'translate-y-20 -translate-x-2 rounded-none'
                     )}
                     src={member.avatar}
                     alt={member.name}

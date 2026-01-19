@@ -2,14 +2,14 @@ import { ThemeProvider } from '@/components/ux/theme-provider';
 import { getUser } from '@/lib/auth-session';
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { ourFileRouter } from '../api/uploadthing/core';
-import { UserProvider } from '@/context/UserContext';
+import { UserProvider } from '@/utils/context/UserContext';
 import { SidebarProvider, useSidebar } from '@/components/ui/sidebar';
 import { Toaster } from 'sonner';
 import Header from '@/components/Admin/Header';
 import { extractRouterConfig } from 'uploadthing/server';
 import AppSidebar from '@/components/Admin/AppSidebar';
-import Footer from '@/components/Public/Footer';
-import { cn } from '@/lib/utils';
+import Footer from '@/components/Public/Footer/Footer';
+import { cn } from '@/utils/utils';
 
 export default async function DashboardLayout({
   children,

@@ -1,7 +1,7 @@
 import unauthorized from '@/app/unauthorized';
-import Gallery from '@/features/Gallery/components/Gallery';
+import Gallery from '@/components/Gallery/Gallery';
 import { getUser } from '@/lib/auth-session';
-import { GetImages } from '@/lib/queries/images.action';
+import { GetImages } from '@/lib/actions/images.action';
 
 export default async function page() {
   const images = await GetImages();

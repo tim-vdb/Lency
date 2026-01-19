@@ -7,9 +7,9 @@ import { extractRouterConfig } from 'uploadthing/server';
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { ourFileRouter } from '@/app/api/uploadthing/core';
 import { ThemeProvider } from 'next-themes';
-import { UserProvider } from '@/context/UserContext';
-import Header from '@/components/Public/Header';
-import Footer from '@/components/Public/Footer';
+import { UserProvider } from '@/utils/context/UserContext';
+import Header from '@/components/Public/Header/Header';
+import Footer from '@/components/Public/Footer/Footer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

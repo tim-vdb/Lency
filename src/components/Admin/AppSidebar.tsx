@@ -13,7 +13,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/utils"
 
 // Menu items.
 const settingsData = [
