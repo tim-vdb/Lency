@@ -3,10 +3,10 @@ import type { PrismaConfig } from "prisma";
 import { env } from "prisma/config";
 
 export default {
-    schema: "src/prisma/schema.prisma",
+    schema: "src/back/prisma/schema.prisma",
     migrations: {
-        path: "src/prisma/migrations",
-        seed: 'tsx src/prisma/seed.ts',
+        path: "src/back/prisma/migrations",
+        seed: 'tsx src/back/prisma/seed.ts',
     },
     datasource: {
         url: env("DATABASE_URL")

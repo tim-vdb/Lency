@@ -1,4 +1,4 @@
-import TeamSection from '@/components/team';
+import TeamSection from '@/front/components/team';
 
 export default function Team() {
   return (

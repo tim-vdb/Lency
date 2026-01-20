@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import '../../app/globals.css';
 import { Toaster } from 'sonner';
-import { getUser } from '@/lib/auth-session';
+import { getUser } from '@/back/lib/auth-session';
 import { extractRouterConfig } from 'uploadthing/server';
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { ourFileRouter } from '@/app/api/uploadthing/core';
 import { ThemeProvider } from 'next-themes';
-import { UserProvider } from '@/utils/context/UserContext';
-import Header from '@/components/Public/Header/Header';
-import Footer from '@/components/Public/Footer/Footer';
+import { UserProvider } from '@/front/context/UserContext';
+import Header from '@/front/components/Public/Header/Header';
+import Footer from '@/front/components/Public/Footer/Footer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

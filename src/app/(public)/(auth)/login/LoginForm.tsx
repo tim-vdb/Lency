@@ -13,14 +13,14 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "@/front/components/ui/form";
+import { Input } from "@/front/components/ui/input";
+import { Button } from "@/front/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { signIn } from "@/lib/auth-client";
-import { CardFooter } from "@/components/ui/card";
+import { signIn } from "@/back/lib/auth-client";
+import { CardFooter } from "@/front/components/ui/card";
 import Link from "next/link";
-import { cn } from "@/utils/utils";
+import { cn } from "@/front/lib/utils";
 
 const LoginFormSchema = z.object({
   email: z.string().email("Email invalide"),

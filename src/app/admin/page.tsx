@@ -1,4 +1,4 @@
-import { getUser } from '@/lib/auth-session';
+import { getUser } from '@/back/lib/auth-session';
 import unauthorized from '../unauthorized';
 
 export default async function Page() {

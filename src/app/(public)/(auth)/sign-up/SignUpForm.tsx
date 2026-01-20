@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
-import { signUp } from "@/lib/auth-client";
+import { signUp } from "@/back/lib/auth-client";
 import {
   Form,
   FormField,
@@ -14,9 +14,9 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "@/front/components/ui/form";
+import { Input } from "@/front/components/ui/input";
+import { Button } from "@/front/components/ui/button";
 import { Loader2, X } from "lucide-react";
 import Image from "next/image";
 

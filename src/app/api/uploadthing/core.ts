@@ -1,5 +1,5 @@
-import { getUser } from '@/lib/auth-session';
-import { prisma } from '@/lib/prisma';
+import { getUser } from '@/back/lib/auth-session';
+import { prisma } from '@/back/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { createUploadthing, type FileRouter } from 'uploadthing/next';
 import { UploadThingError } from 'uploadthing/server';

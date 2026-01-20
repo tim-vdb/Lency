@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button } from '../components/ui/button'
+import { Button } from '@/front/components/ui/button'
 import { ArrowLeftIcon, ShieldXIcon } from 'lucide-react'
 
 export default function unauthorized() {

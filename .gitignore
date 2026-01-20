@@ -34,9 +34,9 @@ yarn-error.log*
 .env*
 
 # Prisma generated files
-src/generated/
-**/generated/
-*.generated.*
+src/back/generated/
+src/back/**/generated/
+src/back/**/*.generated.*
 
 
 
