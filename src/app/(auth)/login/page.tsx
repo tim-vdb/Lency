@@ -1,6 +1,6 @@
 'use client';
 
-import LoginForm from '@/app/(public)/(auth)/login/LoginForm';
+import LoginForm from '@/app/(auth)/login/LoginForm';
 
 export default function SignIn() {
   return (
