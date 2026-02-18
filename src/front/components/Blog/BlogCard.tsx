@@ -11,7 +11,6 @@ import {
   ArrowRightIcon,
   FileCheck,
   FileX,
-  SeparatorVertical,
   SquarePen,
 } from 'lucide-react';
 import Image from 'next/image';

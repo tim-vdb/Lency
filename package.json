@@ -1,10 +1,11 @@
 {
-  "name": "crazy_dev",
+  "name": "lency",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "vercel-build": "npx prisma generate --schema=src/prisma/schema.prisma && next build && npx prisma migrate deploy",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -16,11 +17,10 @@
     "migrate:prod": "doppler run -- prisma migrate deploy",
     "generate": "doppler run -- prisma generate",
     "push": "doppler run -- prisma db push",
-    "studio": "doppler run -- prisma studio",
-    "all": "doppler run -- npx prisma migrate dev  && concurrently \"doppler run -- npm run dev\" \"doppler run -- npm run studio\"",
+    "studio": "doppler run -- prisma studio -p 5555",
+    "all": "doppler run -- concurrently \"npm run dev\" \"npm run studio\"",
     "all:env": "npx prisma migrate dev  && concurrently \"npm run dev\" \"npm run studio\"",
-    "all:local": "npx prisma generate  && npx prisma db push  && concurrently \"npm run dev\" \"npm run studio\"",
-    "prepare": "husky"
+    "all:local": "npx prisma generate  && npx prisma db push  && concurrently \"npm run dev\" \"npm run studio\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -72,20 +72,17 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.2.0",
-    "@commitlint/config-conventional": "^20.2.0",
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.16",
     "@types/node": "^20",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/ws": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.56.0",
+    "@typescript-eslint/parser": "^8.56.0",
+    "baseline-browser-mapping": "^2.9.19",
     "eslint": "^9.38.0",
     "eslint-config-next": "16.0.0",
-    "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-boundaries": "^5.1.0",
-    "eslint-plugin-import": "^2.32.0",
-    "husky": "^9.1.7",
     "prettier": "^3.7.4",
     "prisma": "^7.1.0",
     "tailwindcss": "^4.1.16",

@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight, Book, BookOpen, BookText, Calendar, FileText, Folder, Gamepad, Home, Inbox, LogOut, Play, Search, Settings, Tally1, Users } from "lucide-react"
+import { BookText, Calendar, FileText, Folder, Gamepad, Home, LogOut, Settings, Tally1, Users } from "lucide-react"
 
 import {
     Sidebar,
@@ -12,8 +12,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/front/components/ui/sidebar"
-import { usePathname } from "next/navigation"
 import { cn } from "@/front/lib/utils"
+import { usePathname } from "next/navigation"
 
 // Menu items.
 const settingsData = [

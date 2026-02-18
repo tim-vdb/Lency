@@ -1,20 +1,9 @@
 'use client';
-import { Logo } from '@/front/components/logo';
-import Link from 'next/link';
-import { useState } from 'react';
 import { Button } from '@/front/components/ui/button';
-import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
-
-const menuItems = [
-  { name: 'Features', href: '#' },
-  { name: 'Solution', href: '#' },
-  { name: 'Pricing', href: '#' },
-  { name: 'About', href: '#' },
-];
+import Link from 'next/link';
 
 export default function HeroSection() {
-  const [menuState, setMenuState] = useState(false);
   return (
     <>
       <main>

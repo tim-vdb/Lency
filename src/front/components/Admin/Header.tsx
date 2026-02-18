@@ -14,7 +14,6 @@ import { useMounted } from "@/front/hooks/use-mounted";
 
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
     const mounted = useMounted();
     const { state } = useSidebar();
 
@@ -47,7 +46,7 @@ export default function Header() {
                     </Link>
 
                     <DesktopNavbar />
-                    <MobileNavbar setIsScrolled={setIsScrolled} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+                    <MobileNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
 
                     <div className="flex items-center gap-4">
                         <button

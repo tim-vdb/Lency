@@ -2,27 +2,16 @@
 
 import { cn } from '@/front/lib/utils';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
 
 interface MobileNavbarProps {
-  setIsScrolled: (scrolled: boolean) => void;
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
 }
 
 export default function MobileNavbar({
-  setIsScrolled,
   menuOpen,
   setMenuOpen,
 }: MobileNavbarProps) {
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [setIsScrolled]);
-
   // isActive doit être défini ici, car il dépend du pathname
   const pathname =
     typeof window !== 'undefined' ? window.location.pathname : '';
