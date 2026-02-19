@@ -1,10 +1,13 @@
 import { Button } from '@/front/components/ui/button'
-import { Card, CardHeader, CardTitle } from '@/front/components/ui/card'
-import React from 'react'
+import {
+    Card,
+    CardHeader,
+    CardTitle
+} from '@/front/components/ui/card'
 
 export default function Dashboard() {
     return (
-        <div className='grid grid-cols-5 grid-rows-8 gap-5 p-6 h-screen'>
+        <div className='grid grid-cols-5 grid-rows-8 gap-5 p-6 h-screen bg-neutral-150'>
             <Card className="col-[1/5] row-[1/5]">
                 <CardHeader>
                     <CardTitle className='flex flex-wrap'>Posts</CardTitle>
@@ -16,9 +19,9 @@ export default function Dashboard() {
                     <Button className="ml-auto">Add Post</Button>
                 </CardHeader>
             </Card>
-            <Card className="col-[1/3] row-[5/9]"></Card>
-            <Card className="col-[3/5] row-[5/9]"></Card>
-            <Card className="col-[5/6] row-[1/2]"></Card>
+            <Card className="col-[1/3] row-[5/9] py-0"></Card>
+            <Card className="col-[3/5] row-[5/9] shadow-lg-inset bg-neutral-200"></Card>
+            <Card className="col-[5/6] row-[1/2] shadow-lg-base"></Card>
             <Card className="col-[5/6] row-[2/7]"></Card>
             <Card className="col-[5/6] row-[7/9]"></Card>
         </div>
