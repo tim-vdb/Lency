@@ -1,152 +1,102 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
-import importPlugin from 'eslint-plugin-import';
-import boundariesPlugin from 'eslint-plugin-boundaries';
+import js from '@eslint/js';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
+export default [
+  // Fichiers à ignorerp
   {
     ignores: [
       'node_modules/**',
       '.next/**',
       'out/**',
       'build/**',
-      'next-env.d.ts',
-    ],
-  },
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
-  {
-    ignores: [
-      'node_modules/**',
-      '.next/**',
-      'out/**',
-      'build/**',
+      'dist/**',
       'next-env.d.ts',
       'src/generated/**',
+      'src/back/generated/**',
+      '**/*.config.js',
+      '**/*.config.mjs',
+      '**/*.config.ts',
+      '**/*.d.ts',
     ],
   },
+
+  // Configuration pour tous les fichiers JS/TS
   {
-    files: ['src/**/*.{js,jsx,ts,tsx}'],
-    plugins: {
-      import: importPlugin,
-      boundaries: boundariesPlugin,
-    },
-    settings: {
-      'import/resolver': {
-        typescript: true,
-        node: true,
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
-      'boundaries/include': ['src/**/*'],
-      'boundaries/elements': [
-        {
-          mode: 'full',
-          type: 'shared',
-          pattern: [
-            'src/components/**/*',
-            'src/lib/**/*',
-            'src/context/**/*',
-            'src/prisma/**/*',
-            'src/generated/**/*',
-          ],
-        },
-        {
-          mode: 'full',
-          type: 'feature',
-          capture: ['featureName'],
-          pattern: ['src/features/*/**/*'],
-        },
-        {
-          mode: 'full',
-          type: 'app',
-          capture: ['_', 'fileName'],
-          pattern: ['src/app/**/*'],
-        },
-        {
-          mode: 'full',
-          type: 'neverImport',
-          pattern: ['src/*', 'src/tasks/**/*'],
-        },
-      ],
+      globals: {
+        // Browser globals
+        window: 'readonly',
+        document: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        fetch: 'readonly',
+        alert: 'readonly',
+        confirm: 'readonly',
+        // Web APIs
+        File: 'readonly',
+        FileReader: 'readonly',
+        URL: 'readonly',
+        FormData: 'readonly',
+        Event: 'readonly',
+        // DOM Types - Events
+        KeyboardEvent: 'readonly',
+        MouseEvent: 'readonly',
+        // DOM Types - Elements
+        HTMLElement: 'readonly',
+        HTMLDivElement: 'readonly',
+        HTMLButtonElement: 'readonly',
+        HTMLInputElement: 'readonly',
+        HTMLFormElement: 'readonly',
+        HTMLParagraphElement: 'readonly',
+        HTMLHeadingElement: 'readonly',
+        HTMLSpanElement: 'readonly',
+        HTMLUListElement: 'readonly',
+        HTMLLIElement: 'readonly',
+        HTMLAnchorElement: 'readonly',
+        HTMLTableElement: 'readonly',
+        HTMLTableSectionElement: 'readonly',
+        HTMLTableRowElement: 'readonly',
+        HTMLTableCellElement: 'readonly',
+        HTMLTableCaptionElement: 'readonly',
+        // Node.js globals
+        process: 'readonly',
+        Buffer: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+        exports: 'readonly',
+        // React
+        React: 'readonly',
+        JSX: 'readonly',
+      },
     },
     rules: {
-      // Import rules
-      'import/order': 'off', // Désactivé pour éviter les conflits de sauvegarde
-      'import/no-unresolved': 'error',
-      'import/named': 'error',
-      'import/default': 'error',
-      'import/namespace': 'error',
-
-      // React rules
-      'react/no-unescaped-entities': 'off',
-
-      // Next.js rules
-      '@next/next/no-html-link-for-pages': ['error', 'src/app'],
-      '@next/next/no-img-element': 'error',
-
-      // Boundaries rules
-      'boundaries/no-unknown': 'error',
-      'boundaries/no-unknown-files': 'error',
-      'boundaries/element-types': [
-        'error',
-        {
-          default: 'disallow',
-          rules: [
-            {
-              from: ['shared'],
-              allow: [
-                'shared',
-                // Exception pour uploadthing types
-                ['app', { _: 'api/uploadthing', fileName: 'core.ts' }],
-              ],
-            },
-            {
-              from: ['feature'],
-              allow: [
-                'shared',
-                [
-                  'feature',
-                  {
-                    featureName: '${from.featureName}',
-                  },
-                ],
-              ],
-            },
-            {
-              from: ['app', 'neverImport'],
-              allow: ['shared', 'feature'],
-            },
-            {
-              from: ['app'],
-              allow: [
-                'shared',
-                'feature',
-                // Fichiers Next.js spéciaux + css
-                ['app', { fileName: 'unauthorized.tsx' }],
-                ['app', { fileName: 'not-found.tsx' }],
-                ['app', { fileName: 'loading.tsx' }],
-                ['app', { fileName: 'error.tsx' }],
-                ['app', { fileName: 'global-error.tsx' }],
-                ['app', { fileName: 'template.tsx' }],
-                ['app', { fileName: 'default.tsx' }],
-                ['app', { fileName: 'page.tsx' }],
-                ['app', { fileName: 'layout.tsx' }],
-                ['app', { fileName: '*.css' }],
-                // Exception pour uploadthing types
-                ['app', { _: 'api/uploadthing', fileName: 'core.ts' }],
-              ],
-            },
-          ],
-        },
-      ],
+      // Règles JS de base (non-strictes)
+      ...js.configs.recommended.rules,
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-var': 'warn',
+      'prefer-const': 'warn',
+      'default-case': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error',
+      'no-unused-vars': 'off',
+      "@typescript-eslint/no-unused-vars": 'error',
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin,
     },
   },
 ];
-
-export default eslintConfig;

@@ -12,7 +12,6 @@ import ProfileAccount from '@/front/components/Public/Header/components/ProfileA
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -34,7 +33,6 @@ export default function Header() {
 
           <DesktopNavbar />
           <MobileNavbar
-            setIsScrolled={setIsScrolled}
             menuOpen={menuOpen}
             setMenuOpen={setMenuOpen}
           />

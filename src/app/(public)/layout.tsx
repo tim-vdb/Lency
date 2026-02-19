@@ -1,25 +1,24 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import '../../app/globals.css';
-import { Toaster } from 'sonner';
-import { getUser } from '@/back/lib/auth-session';
-import { extractRouterConfig } from 'uploadthing/server';
-import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { ourFileRouter } from '@/app/api/uploadthing/core';
-import { ThemeProvider } from 'next-themes';
-import { UserProvider } from '@/front/context/UserContext';
-import Header from '@/front/components/Public/Header/Header';
+import { getUser } from '@/back/lib/auth-session';
 import Footer from '@/front/components/Public/Footer/Footer';
+import Header from '@/front/components/Public/Header/Header';
+import { UserProvider } from '@/front/context/UserContext';
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
+import type { Metadata } from 'next';
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from 'sonner';
+import { extractRouterConfig } from 'uploadthing/server';
+import '../../app/globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
+// const geistSans = Geist({
+//   variable: '--font-geist-sans',
+//   subsets: ['latin'],
+// });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+// const geistMono = Geist_Mono({
+//   variable: '--font-geist-mono',
+//   subsets: ['latin'],
+// });
 
 export const metadata: Metadata = {
   title: 'Boilerplate',

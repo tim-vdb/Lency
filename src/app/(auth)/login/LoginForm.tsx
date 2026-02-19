@@ -32,7 +32,6 @@ const LoginFormSchema = z.object({
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
-  console.log(callbackUrl);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -151,10 +150,10 @@ export default function LoginForm() {
                       callbackURL: "/",
                     },
                     {
-                      onRequest: (ctx) => {
+                      onRequest: () => {
                         setLoading(true);
                       },
-                      onResponse: (ctx) => {
+                      onResponse: () => {
                         setLoading(false);
                       },
                     }

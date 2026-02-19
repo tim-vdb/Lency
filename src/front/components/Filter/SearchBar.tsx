@@ -3,6 +3,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/front/components/ui/input-group';
+import { Blog, User } from '@/back/generated/prisma_client';
 import { Search } from 'lucide-react';
 import React from 'react';
 
@@ -13,7 +14,7 @@ export default function SearchBar({
 }: {
   search: string;
   setSearch: (value: string) => void;
-  filteredData: any[];
+  filteredData: (Blog & { author: User })[];
 }) {
   return (
     <>

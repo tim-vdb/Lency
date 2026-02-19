@@ -1,26 +1,18 @@
 'use client';
 
-import { Card } from '@/front/components/ui/card';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/front/components/ui/input-group';
+import { Blog, User } from '@/back/generated/prisma_client';
+import { BlogCard } from '@/front/components/Blog/BlogCard';
 import { Item, ItemContent } from '@/front/components/ui/item';
 import { Label } from '@/front/components/ui/label';
-import { RadioGroupItem } from '@/front/components/ui/radio-group';
-import { RadioGroup } from '@/front/components/ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '@/front/components/ui/radio-group';
 import {
   Select,
-  SelectItem,
   SelectContent,
-  SelectValue,
+  SelectItem,
   SelectTrigger,
+  SelectValue,
 } from '@/front/components/ui/select';
-import { BlogCard } from '@/front/components/Blog/BlogCard';
-import { Blog, User } from '@/back/generated/prisma_client';
-import { Search } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import SearchBar from './SearchBar';
 
 interface FilterProps {
