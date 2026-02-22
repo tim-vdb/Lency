@@ -94,18 +94,18 @@ const spots = [
 
 export default function ExploreBlock() {
     return (
-        <Card className="flex flex-col h-full shadow-lg-inset col-[5/7] row-[5/9] overflow-hidden">
-            <CardHeader className="flex items-center justify-between gap-2 px-4 shrink-0">
+        <Card className="flex flex-col gap-2 h-full border border-neutral-400 col-[5/7] row-[5/9] overflow-hidden">
+            <CardHeader className="flex items-center justify-between gap-2 px-5 shrink-0">
                 <CardTitle>Explore</CardTitle>
                 <Button variant="outline" size="sm" className="border bg-neutral-300 cursor-pointer text-xs">
                     View All
                 </Button>
             </CardHeader>
-            <CardContent className="flex justify-center gap-5 px-4 w-full flex-1 overflow-hidden">
+            <CardContent className="flex justify-center gap-5 px-0 w-full flex-1 overflow-hidden">
                 <Card className="border-none shadow-none gap-1 text-neutral-400 py-0 w-full h-full">
-                    <CardContent className="flex flex-col gap-4 px-0 h-full">
+                    <CardContent className="flex flex-col px-0 h-full">
                         <Tabs defaultValue="projects" className="flex flex-col items-center gap-4 h-full">
-                            <TabsList className="p-2 h-10 shrink-0">
+                            <TabsList className="p-2 shrink-0">
                                 <TabsTrigger value="projects" className="flex items-center gap-2 cursor-pointer ">
                                     Projets
                                     <Clapperboard className="w-5 h-5" />
@@ -115,9 +115,9 @@ export default function ExploreBlock() {
                                     <LandPlot className="w-5 h-5" />
                                 </TabsTrigger>
                             </TabsList>
-                            <TabsContent value="projects" className="flex flex-col gap-4 w-full overflow-y-auto flex-1 pr-2 pb-1">
+                            <TabsContent value="projects" className="flex flex-col gap-4 w-full overflow-y-auto flex-1 px-5 pb-1">
                                 {projects.map((project) => (
-                                    <Card key={project.id} className="border border-neutral-300 py-4 shadow-md-base">
+                                    <Card key={project.id} className="border border-neutral-400 py-4 shadow-md-base">
                                         <CardContent className="flex items-center justify-between gap-2 px-3">
                                             <div className="flex flex-col gap-0.5">
                                                 <div className="flex items-start gap-2">
@@ -136,9 +136,9 @@ export default function ExploreBlock() {
                                     </Card>
                                 ))}
                             </TabsContent>
-                            <TabsContent value="spots" className="flex flex-col gap-4 w-full overflow-y-auto flex-1 pr-2 pb-1">
+                            <TabsContent value="spots" className="flex flex-col gap-4 w-full overflow-y-auto flex-1 px-5 pb-1">
                                 {spots.map((spot) => (
-                                    <Card key={spot.id} className="border border-neutral-300 py-4 ">
+                                    <Card key={spot.id} className="border border-neutral-400 py-4 shadow-md-base">
                                         <CardContent className="flex items-center justify-between gap-2 px-3">
                                             <div className="flex flex-col gap-0.5">
                                                 <div className="flex items-start gap-2">

@@ -1,6 +1,7 @@
 import ExploreBlock from '@/front/components/Public/Dashboard/Explore/ExploreBlock'
 import MarketplaceBlock from '@/front/components/Public/Dashboard/Marketplace/MarketplaceBlock'
 import PostsBlock from '@/front/components/Public/Dashboard/Posts/PostsBlock'
+import ProfileBlock from '@/front/components/Public/Dashboard/Profile/ProfileBlock'
 import {
     Card
 } from '@/front/components/ui/card'
@@ -12,7 +13,7 @@ export default function Dashboard() {
             <PostsBlock />
             <MarketplaceBlock />
             <ExploreBlock />
-            <Card className="col-[7/9] row-[1/2] shadow-lg-base"></Card>
+            <ProfileBlock />
             <Card className="col-[7/9] row-[2/7]"></Card>
             <Card className="col-[7/9] row-[7/9]"></Card>
         </div>

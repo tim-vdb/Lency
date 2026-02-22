@@ -34,12 +34,6 @@
   --color-neutral-750: oklch(37.1% 0 0);
   --color-neutral-850: oklch(20.5% 0 0);
   --color-yellow-550: oklch(0.74 0.173 80);
-
-  /* TEXT SIZES */
-  --text-large: 1.2rem;
-  --text-medium: 1rem;
-  --text-normal: 0.95rem;
-  --text-small: 0.8rem;
 }
 
 @layer components {
