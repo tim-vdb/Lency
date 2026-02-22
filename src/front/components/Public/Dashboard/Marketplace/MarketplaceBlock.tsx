@@ -62,7 +62,7 @@ export default function MarketplaceBlock() {
                         </CardHeader>
                         <CardContent className="flex flex-col gap-4 px-0">
                             {section.items.map((item, itemIndex) => (
-                                <Card key={itemIndex} className="py-3 gap-2 border bg-neutral-150 shadow-lg-base">
+                                <Card key={itemIndex} className="py-3 gap-2 border border-neutral-400 shadow-lg-base">
                                     <CardHeader>
                                         <CardTitle className="text-sm">{item.title}</CardTitle>
                                     </CardHeader>
@@ -77,7 +77,7 @@ export default function MarketplaceBlock() {
                                                 key={buttonIndex}
                                                 variant="outline"
                                                 size="sm"
-                                                className="border p-1 bg-neutral-300 cursor-pointer text-xs"
+                                                className="border p-1 bg-neutral-200 cursor-pointer text-xs"
                                             >
                                                 {button.label}
                                             </Button>

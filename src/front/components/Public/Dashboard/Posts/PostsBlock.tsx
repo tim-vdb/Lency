@@ -3,7 +3,7 @@
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import { Button } from "../../../ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../../ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../ui/card";
 
 import 'swiper/css';
 import CategoriesBar from "./CategoriesBar";
@@ -15,7 +15,7 @@ export default function PostsBlock() {
             <CardHeader className="flex items-center flex-col px-0">
                 <div className="flex items-center justify-between w-full">
                     <CardTitle className='flex flex-wrap'>Posts</CardTitle>
-                    <Button variant={"outline"} className="ml-auto shadow-lg-base cursor-pointer">
+                    <Button variant={"outline"} className="ml-auto shadow-lg-base cursor-pointer border-neutral-300">
                         <Plus className="w-4 h-4" />
                     </Button>
                 </div>
@@ -23,13 +23,16 @@ export default function PostsBlock() {
                 <CategoriesBar />
             </CardHeader>
             <CardContent className="grid grid-cols-5 gap-20 h-full rounded-sm px-0">
-                <Card className="justify-end col-start-1 col-end-4 gap-4 shadow-none py-0">
-                    <CardHeader className="flex items-center justify-between px-0">
-                        <CardTitle className="text-md">Communautés</CardTitle>
+                <Card className="justify-between col-start-1 col-end-4 shadow-none py-0">
+                    <CardHeader className="flex items-start justify-between px-0">
+                        <div className="flex flex-col gap-1">
+                            <CardTitle className="text-md">Communautés</CardTitle>
+                            <CardDescription className="max-w-sm line-clamp-3">Découvrez les derniers posts de vos communautés que vous suivez</CardDescription>
+                        </div>
                         <Button variant="outline" size="sm" className="border bg-neutral-300 cursor-pointer">Voir plus</Button>
                     </CardHeader>
                     <CardContent className="px-0 mb-2">
-                        <Card className="border p-3 gap-4 shadow-lg-base">
+                        <Card className="border border-neutral-350 p-3 gap-4 shadow-lg-base">
                             <CardHeader className="flex items-center gap-1 px-0">
                                 <Image src="/images/team/avatar/Photo_Pro_avecOutline.png" alt="Avatar" width={50} height={50} className="w-8 h-8 rounded-full mr-2" />
                                 <CardTitle className="text-sm">John Doe</CardTitle>
@@ -49,13 +52,16 @@ export default function PostsBlock() {
                         </Card>
                     </CardContent>
                 </Card>
-                <Card className="justify-end col-start-4 col-end-6 gap-4 shadow-none py-0">
-                    <CardHeader className="flex items-center justify-between px-0">
-                        <CardTitle className="text-md">Populaire</CardTitle>
+                <Card className="justify-between col-start-4 col-end-6 gap-4 shadow-none py-0">
+                    <CardHeader className="flex items-start justify-between px-0">
+                        <div className="flex flex-col gap-1">
+                            <CardTitle className="text-md">Populaire</CardTitle>
+                            <CardDescription className="line-clamp-3">Découvrez les dernières tendances et les contenus populaires</CardDescription>
+                        </div>
                         <Button variant="outline" size="sm" className="border bg-neutral-300 cursor-pointer">View All</Button>
                     </CardHeader>
                     <CardContent className="px-0 mb-2">
-                        <Card className="border p-3 gap-4 shadow-lg-base">
+                        <Card className="border border-neutral-350 p-3 gap-4 shadow-lg-base">
                             <CardHeader className="flex items-center gap-1 px-0">
                                 <Image src="/images/team/avatar/Photo_Pro_avecOutline.png" alt="Avatar" width={50} height={50} className="w-8 h-8 rounded-full mr-2" />
                                 <CardTitle className="text-sm">John Doe</CardTitle>
