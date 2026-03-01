@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
+import { extractRouterConfig } from 'uploadthing/server';
+import { ourFileRouter } from '@/app/api/uploadthing/core';
 import './globals.css';
 import { Toaster } from 'sonner';
 
@@ -26,10 +30,22 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-inter antialiased min-h-screen bg-white dark:bg-gray-extra-dark`}
+        className={`${geistSans.variable} ${geistMono.variable} font-inter antialiased min-h-screen dark:bg-gray-extra-dark`}
+        suppressHydrationWarning
       >
-        {children}
-        <Toaster />
+        <NextSSRPlugin
+          /**
+           * The `extractRouterConfig` will extract **only** the routNextSSRPl
+           * from the router to prevent additional information from being
+           * leaked to the client. The data passed to the client is the same
+           * as if you were to fetch `/api/uploadthing` directly.
+           */
+          routerConfig={extractRouterConfig(ourFileRouter)}
+        />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
