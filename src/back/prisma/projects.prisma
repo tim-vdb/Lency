@@ -1,0 +1,30 @@
+/// *
+/// PROJETS & ÉVÉNEMENTS
+model Project {
+    id          String        @id @default(cuid())
+    title       String
+    description String
+    status      ProjectStatus @default(PUBLISHED)
+    ownerId     String
+    owner       User          @relation(fields: [ownerId], references: [id])
+
+    participants User[] @relation("Participants")
+
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @updatedAt
+    mapLocation   MapLocation? @relation(fields: [mapLocationId], references: [id])
+    mapLocationId String?
+}
+
+model Event {
+    id           String   @id @default(cuid())
+    title        String
+    description  String
+    location     String?
+    participants Int      @default(1)
+    startDate    DateTime
+    endDate      DateTime
+    createdAt    DateTime @default(now())
+    users        User[]   @relation("UserEvent")
+    userId       String?
+}

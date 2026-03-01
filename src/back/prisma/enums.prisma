@@ -1,0 +1,35 @@
+enum Role {
+    ADMIN
+    USER
+    MEMBER
+    PREMIUM
+}
+
+enum ResourceType {
+    ASSET
+    TUTORIAL
+    LINK
+}
+
+enum ProjectStatus {
+    DRAFT
+    PUBLISHED
+    ARCHIVED
+}
+
+enum SubscriptionStatus {
+    ACTIVE
+    CANCELED
+    EXPIRED
+}
+
+enum Visibility {
+    PUBLIC // Tout le monde voit
+    PRIVATE // Seulement membres approuvés
+    MEMBERS_ONLY // membres de la communauté uniquement
+}
+
+enum GalleryType {
+    EVENT
+    GALLERY
+}
