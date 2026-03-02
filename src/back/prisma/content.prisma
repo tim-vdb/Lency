@@ -56,11 +56,11 @@ model Category {
 }
 
 model Post {
-    id       String  @id @default(cuid())
-    title    String // Titre du thread (ex: "Comment flouter un fond dans Photoshop ?")
-    content  String // Corps du post (markdown, avec embeds pour images/vidéos audio-visuelles)
-    isPinned Boolean @default(false) // Épinglé en haut
-    isLocked Boolean @default(false) // Verrouillé (plus de commentaires)
+    id          String  @id @default(cuid())
+    title       String // Titre du thread (ex: "Comment flouter un fond dans Photoshop ?")
+    content     String // Corps du post (markdown, avec embeds pour images/vidéos audio-visuelles)
+    isPublished Boolean @default(false) // Épinglé en haut
+    isLocked    Boolean @default(false) // Verrouillé (plus de commentaires)
 
     // Relations
     categoryId String

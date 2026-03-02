@@ -16,16 +16,6 @@ export const getUser = async () => {
   // Récupérer les données complètes de l'utilisateur depuis la base de données
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      emailVerified: true,
-      image: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
-    },
   });
 
   return user;
