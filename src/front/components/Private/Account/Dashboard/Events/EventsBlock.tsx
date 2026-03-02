@@ -63,7 +63,7 @@ export default function EventsBlock({ className }: { className?: string }) {
     return (
         <Card className={cn("flex flex-col gap-2 h-full border border-neutral-400 overflow-hidden", className)}>
             <CardHeader className="flex items-center justify-between gap-2 px-5 shrink-0">
-                <CardTitle>Les Évènements</CardTitle>
+                <CardTitle className="text-xl">Les Évènements</CardTitle>
                 <Button variant="outline" size="sm" className="border bg-neutral-300 cursor-pointer text-xs">
                     View All
                 </Button>

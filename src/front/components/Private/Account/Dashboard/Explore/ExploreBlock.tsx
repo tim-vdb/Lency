@@ -99,7 +99,7 @@ export default function ExploreBlock({ className }: { className?: string }) {
     return (
         <Card className={cn("flex flex-col gap-2 h-full border border-neutral-400 overflow-hidden", className)}>
             <CardHeader className="flex items-center justify-between gap-2 px-5 shrink-0">
-                <CardTitle>Explorer la communauté</CardTitle>
+                <CardTitle className="text-xl">Explorer</CardTitle>
                 <Button variant="outline" size="sm" className="border bg-neutral-300 cursor-pointer text-xs">
                     View All
                 </Button>
@@ -109,7 +109,7 @@ export default function ExploreBlock({ className }: { className?: string }) {
                     <CardContent className="flex flex-col px-0 h-full">
                         <Tabs defaultValue="projects" className="flex flex-col items-center gap-4 h-full">
                             <div className="px-5 w-full">
-                                <TabsList className="shrink-0 grid w-full grid-cols-2 gap-4 p-0">
+                                <TabsList className="shrink-0 grid w-full grid-cols-2 gap-4 p-0 px-2">
                                     <TabsTrigger value="projects" className="flex items-center gap-2 cursor-pointer">
                                         Projets
                                         <Clapperboard className="w-5 h-5" />

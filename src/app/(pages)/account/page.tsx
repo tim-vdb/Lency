@@ -5,11 +5,11 @@ import PostsBlock from "@/front/components/Private/Account/Dashboard/Posts/Posts
 
 export default function DashboardAccount() {
     return (
-        <div className='grid grid-cols-7 grid-rows-2 gap-6 p-4 h-[calc(100vh-4rem)] bg-[#FCF5EA]'>
-            <PostsBlock className="col-span-5" />
-            <MarketplaceBlock className="col-span-5 row-start-2" />
-            <ExploreBlock className="col-span-2" />
-            <EventsBlock className="col-span-2" />
+        <div className='grid grid-cols-7 grid-rows-2 gap-6 p-4 h-[calc(100vh-4rem)] bg-[#FCF5EA] shadow-lg-base'>
+            <PostsBlock className="col-span-5 px-3 gap-0 py-3 2xl:px-6 2xl:gap-6" />
+            <MarketplaceBlock className="col-span-5 row-start-2 px-3 gap-2 py-3 2xl:py-6 2xl:px-6 2xl:gap-6" />
+            <ExploreBlock className="col-span-2 gap-4 py-3 2xl:gap-6" />
+            <EventsBlock className="col-span-2 gap-4 py-3 2xl:gap-6" />
         </div>
     )
 }
