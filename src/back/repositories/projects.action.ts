@@ -29,7 +29,7 @@ export const ProjectsAction = {
             mapLocationId?: string | null;
         }
     ) => {
-        const updateData: any = {
+        const updateData: Record<string, unknown> = {
             ...(data.title !== undefined && { title: data.title }),
             ...(data.description !== undefined && { description: data.description }),
             ...(data.status !== undefined && { status: data.status }),

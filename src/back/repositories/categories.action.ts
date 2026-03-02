@@ -24,7 +24,7 @@ export const CategoriesAction = {
         })
     },
     update: async (id: string, data: { name?: string, slug?: string, description?: string, iconUrl?: string, bannerUrl?: string, rules?: string, lastPostAt?: Date, createdBy: string }) => {
-        const updateData: any = {
+        const updateData: Record<string, unknown> = {
             ...(data.name !== undefined && { name: data.name }),
             ...(data.slug !== undefined && { slug: data.slug }),
             ...(data.description !== undefined && { description: data.description }),

@@ -34,7 +34,7 @@ export const PostsAction = {
             commentCount?: number,
         }
     ) => {
-        const updateData: any = {
+        const updateData: Record<string, unknown> = {
             ...(data.title !== undefined && { title: data.title }),
             ...(data.content !== undefined && { content: data.content }),
             ...(data.isPublished !== undefined && { isPublished: data.isPublished }),
