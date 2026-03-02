@@ -50,12 +50,13 @@ const communityPosts = [
 export default function PostsBlock({ className }: { className?: string }) {
 
     return (
-        <Card className={cn("border border-neutral-400 px-6 gap-6", className)}>
+        <Card className={cn("border border-neutral-400", className)}>
             <CardHeader className="flex items-center flex-col px-0">
                 <div className="flex items-center justify-between w-full">
-                    <CardTitle className='flex flex-wrap'>Les Publications</CardTitle>
+                    <CardTitle className='flex flex-wrap text-xl'>Les Publications</CardTitle>
                     <Button variant={"outline"} className="ml-auto shadow-lg-base cursor-pointer border-neutral-300">
                         <Plus className="w-4 h-4" />
+                        <span>New Post</span>
                     </Button>
                 </div>
             </CardHeader>
@@ -71,7 +72,7 @@ export default function PostsBlock({ className }: { className?: string }) {
                         </Button>
                     </CardFooter>
                 </Card>
-                <Card className=" col-span-2 col-start-2 flex flex-col shadow-none p-2 gap-4 overflow-hidden">
+                <Card className="col-span-2 col-start-2 flex flex-col shadow-none pt-2 pb-0 gap-2 2xl:gap-4 overflow-hidden bg-transparent">
                     <CardHeader className="px-1">
                         <div className="flex flex-col gap-1">
                             <CardTitle className="text-md">Communautés suivies</CardTitle>

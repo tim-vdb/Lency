@@ -63,13 +63,13 @@ const marketplaceData = [
 export default function MarketplaceBlock({ className }: { className?: string }) {
     return (
         <Card className={cn("flex flex-col overflow-hidden shadow-xl-inset", className)}>
-            <CardHeader className="px-6">
-                <CardTitle className="text-lg">Nos Marketplaces</CardTitle>
+            <CardHeader className="px-0">
+                <CardTitle className="text-xl">Nos Marketplaces</CardTitle>
                 <CardDescription className="text-sm">Connectez-vous aux projets et aux créateurs</CardDescription>
             </CardHeader>
 
-            <Tabs defaultValue="projects" className="flex-1 flex flex-col px-6">
-                <TabsList className="grid w-full grid-cols-2 gap-4 mb-4">
+            <Tabs defaultValue="projects" className="flex-1 flex flex-col">
+                <TabsList className="grid w-full grid-cols-2 gap-4 mb-4 px-0 2xl:px-1">
                     {marketplaceData.map((section) => {
                         const Icon = section.icon;
                         return (
@@ -96,9 +96,9 @@ export default function MarketplaceBlock({ className }: { className?: string }) 
                             return (
                                 <Card
                                     key={itemIndex}
-                                    className="group hover:shadow-lg transition-all duration-300 border border-neutral-300 hover:border-neutral-400 justify-between"
+                                    className="group hover:shadow-lg transition-all duration-300 border border-neutral-300 hover:border-neutral-400 justify-between py-3 2xl:py-6 gap-2 2xl:gap-6"
                                 >
-                                    <CardHeader className="pb-3">
+                                    <CardHeader className="2xl:pb-3">
                                         <div className="flex items-start gap-3">
                                             <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                                 <ItemIcon className="w-5 h-5" />
