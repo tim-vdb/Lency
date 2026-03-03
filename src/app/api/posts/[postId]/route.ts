@@ -1,7 +1,7 @@
 import { PostsService } from "@/back/services/posts.service";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { postId: string } }) {
+export async function GET(req: NextRequest, params: { postId: string }) {
     const { postId } = params;
     const post = await PostsService.findByIdPost(postId);
     if (!post) {

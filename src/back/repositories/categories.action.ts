@@ -12,14 +12,8 @@ export const CategoriesAction = {
     create: async (userId: string, data: { name: string, slug: string, description?: string, iconUrl?: string, bannerUrl?: string, rules?: string, lastPostAt?: Date }) => {
         return prisma.category.create({
             data: {
-                name: data.name,
-                slug: data.slug,
-                description: data.description || undefined,
+                ...data,
                 createdBy: userId,
-                iconUrl: data.iconUrl || undefined,
-                bannerUrl: data.bannerUrl || undefined,
-                rules: data.rules || undefined,
-                lastPostAt: data.lastPostAt || undefined,
             },
         })
     },
