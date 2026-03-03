@@ -3,7 +3,7 @@ import { CategoriesService } from "@/back/services/categories.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-    const data = CategoriesService.findAllCategories();
+    const data = await CategoriesService.findAllCategories();
 
     return NextResponse.json({ categories: data });
 }
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const { name, slug, description, iconUrl, bannerUrl, rules, lastPostAt } = await req.json();
 
-    const newCategory = CategoriesService.createCategory(user.id, { name, slug, description, iconUrl, bannerUrl, rules, lastPostAt });
+    const newCategory = await CategoriesService.createCategory(user.id, { name, slug, description, iconUrl, bannerUrl, rules, lastPostAt });
 
     return NextResponse.json({ category: newCategory }, { status: 201 });
 }
