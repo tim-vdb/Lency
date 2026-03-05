@@ -17,7 +17,7 @@
     "migrate:prod": "doppler run -- prisma migrate deploy",
     "generate": "doppler run -- prisma generate",
     "push": "doppler run -- prisma db push",
-    "studio": "doppler run -- prisma studio -p 5555",
+    "studio": "doppler run -- prisma studio -p 5555 --browser none",
     "all": "doppler run -- concurrently \"npm run dev\" \"npm run studio\"",
     "all:env": "npx prisma migrate dev  && concurrently \"npm run dev\" \"npm run studio\"",
     "all:local": "npx prisma generate  && npx prisma db push  && concurrently \"npm run dev\" \"npm run studio\""

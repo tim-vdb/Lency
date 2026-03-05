@@ -49,6 +49,20 @@ export async function fetchCategories(): Promise<Category[]> {
     return data.categories
 }
 
+export async function fetchCategoryById(categoryId: string): Promise<Category> {
+    const response = await fetch(`/api/categories/${categoryId}`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération de la catégorie')
+    }
+
+    const data = await response.json()
+    return data.category
+}
+
 /**
  * Crée une nouvelle catégorie
  * Utilisé avec useMutation
