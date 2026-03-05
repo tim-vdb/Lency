@@ -10,9 +10,7 @@ export const ProjectsAction = {
     create: async (userId: string, data: { title: string, description: string, mapLocationId: string | null }) => {
         return prisma.project.create({
             data: {
-                title: data.title,
-                description: data.description,
-                mapLocationId: data.mapLocationId,
+                ...data,
                 ownerId: userId,
             },
         });
@@ -24,7 +22,7 @@ export const ProjectsAction = {
             title?: string;
             description?: string;
             updatedAt?: Date;
-            status?: string;
+            status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
             ownerId?: string;
             mapLocationId?: string | null;
         }

@@ -1,24 +1,39 @@
-import { PostsAction } from "../repositories/posts.action";
+import { ProjectsAction } from '../repositories/projects.action';
 
-
-export const PostsService = {
-    findById: async (id: string) => {
-        return PostsAction.findById(id);
+export const ProjectsService = {
+    findByIdProject: async (id: string) => {
+        return ProjectsAction.findById(id);
     },
 
-    findAll: async () => {
-        return PostsAction.findAll();
+    findAllProjects: async () => {
+        return ProjectsAction.findAll();
     },
 
-    create: async (userId: string, data: { title: string, content: string, categoryId: string }) => {
-        return PostsAction.create(userId, data);
+    createProject: async (
+        userId: string,
+        data: {
+            title: string;
+            description: string;
+            mapLocationId: string | null;
+        }
+    ) => {
+        return ProjectsAction.create(userId, data);
     },
 
-    update: async (id: string, data: { title?: string, content?: string, categoryId?: string }) => {
-        return PostsAction.update(id, data);
+    updateProject: async (
+        id: string,
+        data: {
+            title?: string;
+            description?: string;
+            status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
+            ownerId?: string;
+            mapLocationId?: string | null;
+        }
+    ) => {
+        return ProjectsAction.update(id, data);
     },
 
-    delete: async (id: string) => {
-        return PostsAction.delete(id);
+    deleteProject: async (id: string) => {
+        return ProjectsAction.delete(id);
     },
-}
+};

@@ -3,7 +3,7 @@ import { PostsService } from "@/back/services/posts.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-    const data = PostsService.findAllPosts();
+    const data = await PostsService.findAllPosts();
 
     return NextResponse.json({ posts: data });
 }
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const { title, content, categoryId } = await req.json();
 
-    const newPost = PostsService.createPost(user.id, { title, content, categoryId });
+    const newPost = await PostsService.createPost(user.id, { title, content, categoryId });
 
     return NextResponse.json({ post: newPost }, { status: 201 });
 }
