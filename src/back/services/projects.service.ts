@@ -25,7 +25,7 @@ export const ProjectsService = {
         data: {
             title?: string;
             description?: string;
-            status?: string;
+            status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
             ownerId?: string;
             mapLocationId?: string | null;
         }

@@ -22,7 +22,7 @@ export const ProjectsAction = {
             title?: string;
             description?: string;
             updatedAt?: Date;
-            status?: string;
+            status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
             ownerId?: string;
             mapLocationId?: string | null;
         }
