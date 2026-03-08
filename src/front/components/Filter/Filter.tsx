@@ -1,7 +1,7 @@
 'use client';
 
 import { Blog, User } from '@/back/generated/prisma_client';
-import { BlogCard } from '@/front/components/Blog/BlogCard';
+import { BlogCard } from '@/front/components/Public/Blog/BlogCard';
 import { Item, ItemContent } from '@/front/components/ui/item';
 import { Label } from '@/front/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/front/components/ui/radio-group';

@@ -1,0 +1,25 @@
+/// *
+/// CONFIGURATION & RESSOURCES
+model UserConfig {
+    id      String @id @default(cuid())
+    title   String
+    content Json
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    createdAt DateTime @default(now())
+}
+
+model Resource {
+    id          String       @id @default(cuid())
+    title       String
+    description String?
+    type        ResourceType
+    url         String
+
+    category   Category? @relation(fields: [categoryId], references: [id])
+    categoryId String
+
+    createdAt DateTime @default(now())
+}
