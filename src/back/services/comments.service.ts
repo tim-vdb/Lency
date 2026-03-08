@@ -1,4 +1,3 @@
-import { create } from "domain";
 import { CommentsAction } from "../repositories/comments.action";
 
 export const CommentsService = {
