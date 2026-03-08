@@ -4,7 +4,7 @@ import { Button } from '@/front/components/ui/button';
 import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { GalleryDeleteAction } from '@/back/repositories/gallery.action';
+// import { GalleryDeleteAction } from '@/back/repositories/gallery.action';
 
 export default function ButtonDeleteImage({ id }: { id: number }) {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function ButtonDeleteImage({ id }: { id: number }) {
         const formData = new FormData();
         formData.append('id', id.toString());
 
-        await GalleryDeleteAction(formData);
+        // await GalleryDeleteAction(formData);
         router.refresh();
       } catch (error) {
         console.error('Erreur:', error);

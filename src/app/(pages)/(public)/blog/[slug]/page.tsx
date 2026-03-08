@@ -1,4 +1,4 @@
-import { prisma } from '@/back/lib/prisma';
+// import { prisma } from '@/back/lib/prisma';
 import React from 'react';
 
 export default async function BlogPage({
@@ -8,22 +8,22 @@ export default async function BlogPage({
 }) {
   const { slug } = await params;
 
-  const blog = await prisma.blog.findUnique({
-    where: { slug },
-  });
+  // const blog = await prisma.blog.findUnique({
+  //   where: { slug },
+  // });
 
   return (
     <div>
       <p>Blog :</p>
       <p>{slug}</p>
-      {blog ? (
+      {/* {blog ? (
         <div>
           <p>Article Présent !</p>
           <p>{blog.content}</p>
         </div>
       ) : (
         <p>Article Absent !</p>
-      )}
+      )} */}
     </div>
   );
 }
