@@ -6,7 +6,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 
 export const auth = betterAuth({
-  baseURL: process.env.BASE_URL || "http://localhost:3000",
+  baseURL: process.env.BASE_URL,
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
@@ -22,7 +22,6 @@ export const auth = betterAuth({
   },
   trustedOrigins: [
     process.env.BASE_URL ?? 'http://localhost:3000',
-    'http://localhost:3000',
   ],
   plugins: [nextCookies()],
   user: {
