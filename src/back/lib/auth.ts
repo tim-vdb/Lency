@@ -6,6 +6,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 
 export const auth = betterAuth({
+  baseURL: process.env.BASE_URL,
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
@@ -16,8 +17,12 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      prompt: 'select_account',
     },
   },
+  trustedOrigins: [
+    process.env.BASE_URL ?? 'http://localhost:3000',
+  ],
   plugins: [nextCookies()],
   user: {
     additionalFields: {

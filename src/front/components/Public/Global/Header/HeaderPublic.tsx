@@ -7,13 +7,21 @@ import DesktopNavbar from '@/front/components/Public/Global/Navbar/DesktopNavbar
 import MobileNavbar from '@/front/components/Public/Global/Navbar/MobileNavbar';
 import Image from 'next/image';
 import { useState } from 'react';
+import { NavUser } from '@/front/components/Private/Global/Sidebar/nav-user';
+import { useUser } from '@/front/context/UserContext';
+import { Button } from '@/front/components/ui/button';
+import { usePathname } from 'next/navigation';
 
 export default function HeaderPublic() {
+  const pathname = usePathname();
+  const isDashboard = pathname === '/account';
   const [menuOpen, setMenuOpen] = useState(false);
-
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
   };
+
+  const user = useUser();
+
 
   return (
     <header className={`relative h-20`}>
@@ -47,8 +55,30 @@ export default function HeaderPublic() {
                 <FaBars className="h-6 w-6" />
               )}
             </button>
-
           </div>
+          {!isDashboard && (
+            <Button variant="default" size="sm" className="ml-4">
+              <Link href="/account">
+                Dashboard
+              </Link>
+            </Button>
+          )}
+          {user && <NavUser />}
+          {!user && (
+            <>
+              <Button variant="default" size="sm" className="ml-4">
+                <Link href="/login">
+                  Login
+                </Link>
+              </Button>
+
+              <Button variant="default" size="sm" className="ml-4">
+                <Link href="/sign-up">
+                  Sign Up
+                </Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>
