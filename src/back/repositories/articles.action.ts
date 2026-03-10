@@ -7,7 +7,7 @@ export const ArticlesAction = {
     findAll: async () => {
         return prisma.article.findMany();
     },
-    create: async (userId: string, data: { title: string, slug: string, excerpt: string, content: string, image: string, authorId: string }) => {
+    create: async (userId: string, data: { title: string, slug: string, excerpt: string, content: string, image: string }) => {
         return prisma.article.create({
             data: {
                 ...data,
