@@ -29,6 +29,20 @@ const LoginFormSchema = z.object({
     .min(6, "The password must contain at least 6 characters."),
 });
 
+// const handleSendEmail = async () => {
+//   try {
+//     const response = await fetch('/api/emails/welcome', {
+//       method: 'POST',
+//     });
+//     const data = await response.json();
+//     console.warn('Email sent:', data);
+//     alert('Email de bienvenue envoyé !');
+//   } catch (error) {
+//     console.error('Error:', error);
+//     alert('Erreur lors de l\'envoi de l\'email de bienvenue.');
+//   }
+// }
+
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
@@ -46,40 +60,51 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
     setLoading(true);
     try {
-      await signIn.email({
-        email: values.email,
-        password: values.password,
+      const res = await fetch('/api/auth/sign-in/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: values.email, password: values.password, callbackURL: callbackUrl ?? '/' }),
+        credentials: 'include',
       });
-      toast.success("Utilisateur connecté");
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const message = data?.message || data?.error || 'Une erreur est survenue';
+        toast.error(message);
+        return;
+      }
+
+      toast.success('Utilisateur connecté');
       if (callbackUrl) {
         router.push(callbackUrl);
       } else {
-        router.push("/");
+        router.push('/');
       }
       router.refresh();
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Une erreur est survenue";
+      const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue';
       toast.error(errorMessage);
     } finally {
       setLoading(false);
+      // handleSendEmail();
     }
   }
 
   return (
     <>
-
       <div className="min-h-screen flex items-center justify-center px-4 py-12">
-        <div className="bg-white border-4 border-blue-400 rounded-3xl p-10 w-full max-w-md shadow-lg mb-24">
+        <div className="bg-white border-4 rounded-3xl p-10 w-full max-w-md shadow-lg mb-24">
           <div className="text-center mb-8">
 
-            <p className="text-xs uppercase tracking-[0.25em] text-blue-400 dark:text-black font-inter">
+            <p className="text-xs uppercase tracking-[0.25em] dark:text-black font-inter">
               Login
             </p>
             <h2 className="text-4xl leading-tight dark:text-black">
-              Welcome back to Chef's Blueprint
+              Welcome back to Lency
             </h2>
             <p className="font-inter text-sm dark:text-black mt-3">
-              Log in to access your player area.
+              Log in to access your account.
             </p>
 
           </div>
@@ -100,7 +125,7 @@ export default function LoginForm() {
                         type="email"
                         placeholder="example@mail.com"
                         {...field}
-                        className="border border-blue-400 rounded-md px-3 py-2 focus:outline-none"
+                        className=" rounded-md px-3 py-2 focus:outline-none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -119,7 +144,7 @@ export default function LoginForm() {
                         type="password"
                         placeholder="••••••••"
                         {...field}
-                        className="border border-blue-400 rounded-md px-3 py-2 focus:outline-none"
+                        className=" rounded-md px-3 py-2 focus:outline-none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -129,7 +154,7 @@ export default function LoginForm() {
 
               <Button
                 type="submit"
-                className="rounded-md bg-blue-400 text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold hover:bg-blue-500 transition"
+                className="rounded-md text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition"
                 disabled={loading}
               >
                 {loading ? (
@@ -155,6 +180,7 @@ export default function LoginForm() {
                       },
                       onResponse: () => {
                         setLoading(false);
+                        // handleSendEmail();
                       },
                     }
                   );

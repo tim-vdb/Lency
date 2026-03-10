@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/front/components/ui/dropdown-menu"
 import LogOut from "../../Auth/LogOut"
+import { usePathname } from "next/navigation"
 
 export function NavUser() {
   const user = useUser()
@@ -34,6 +35,9 @@ export function NavUser() {
   const initials = user?.name
     ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
     : "??"
+
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   return (
     <DropdownMenu>
@@ -88,12 +92,14 @@ export function NavUser() {
               Badges
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/">
-              <House className="size-4" />
-              Homepage
-            </Link>
-          </DropdownMenuItem>
+          {!isHomePage && (
+            <DropdownMenuItem asChild>
+              <Link href="/">
+                <House className="size-4" />
+                Homepage
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild>
             <Link href="/account/notifications">
               <Bell className="size-4" />
