@@ -19,6 +19,7 @@ import { Button } from "@/front/components/ui/button";
 import { Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import useSendEmail from "@/front/hooks/sendEmails";
 
 const SignUpFormSchema = z
     .object({
@@ -40,6 +41,7 @@ export default function SignUpForm() {
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const { sendEmail, isSending, sendError } = useSendEmail();
 
     const form = useForm<z.infer<typeof SignUpFormSchema>>({
         resolver: zodResolver(SignUpFormSchema),
@@ -104,6 +106,11 @@ export default function SignUpForm() {
             toast.error(errorMessage);
         } finally {
             setLoading(false);
+
+            const emailResult = await sendEmail();
+            if (!emailResult) {
+                toast.error(sendError ?? "Erreur lors de l'envoi de l'email de bienvenue.");
+            }
         }
     }
 
@@ -272,7 +279,7 @@ export default function SignUpForm() {
                         <Button
                             type="submit"
                             className="rounded-md  text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold  transition"
-                            disabled={loading}
+                            disabled={loading || isSending}
                         >
                             {loading ? (
                                 <Loader2 size={16} className="animate-spin" />
