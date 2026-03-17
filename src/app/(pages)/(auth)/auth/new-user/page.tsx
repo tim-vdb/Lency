@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import useSendEmail from "@/front/hooks/sendEmails";
+import useSendEmail from "@/front/hooks/use-send-email";
 
 export default function OAuthNewUserPage() {
     const router = useRouter();

@@ -135,6 +135,12 @@ export default function LoginForm() {
                 )}
               />
 
+              <div className="flex justify-end">
+                <Link href="/forgot-password" className="text-xs text-neutral-600 underline">
+                  Forgot your password?
+                </Link>
+              </div>
+
               <Button
                 type="submit"
                 className="rounded-md text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition"

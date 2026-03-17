@@ -19,7 +19,8 @@ import { Button } from "@/front/components/ui/button";
 import { Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import useSendEmail from "@/front/hooks/sendEmails";
+import useSendEmail from "@/front/hooks/use-send-email";
+import useEmailOtp from "@/front/hooks/use-email-otp";
 
 const SignUpFormSchema = z
     .object({
@@ -41,7 +42,8 @@ export default function SignUpForm() {
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const { sendEmail, isSending, sendError } = useSendEmail();
+    const { sendEmail } = useSendEmail('/api/emails/welcome');
+    const { sendVerificationOtp } = useEmailOtp();
 
     const form = useForm<z.infer<typeof SignUpFormSchema>>({
         resolver: zodResolver(SignUpFormSchema),
@@ -98,19 +100,29 @@ export default function SignUpForm() {
                 return;
             }
 
-            toast.success('User created successfully');
-            router.push('/');
+            const otpResult = await sendVerificationOtp(values.email, 'email-verification');
+            if (!otpResult) {
+                toast.error("Account created but OTP email was not sent.");
+                return;
+            }
+
+            const welcomeResult = await sendEmail({
+                email: values.email,
+                firstName: values.firstName,
+            });
+
+            if (!welcomeResult) {
+                toast.error("Account created but welcome email was not sent.");
+            }
+
+            toast.success('Account created. Verify your email with the OTP code.');
+            router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
             router.refresh();
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An error occurred';
             toast.error(errorMessage);
         } finally {
             setLoading(false);
-
-            const emailResult = await sendEmail();
-            if (!emailResult) {
-                toast.error(sendError ?? "Erreur lors de l'envoi de l'email de bienvenue.");
-            }
         }
     }
 
@@ -279,7 +291,7 @@ export default function SignUpForm() {
                         <Button
                             type="submit"
                             className="rounded-md  text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold  transition"
-                            disabled={loading || isSending}
+                            disabled={loading}
                         >
                             {loading ? (
                                 <Loader2 size={16} className="animate-spin" />
