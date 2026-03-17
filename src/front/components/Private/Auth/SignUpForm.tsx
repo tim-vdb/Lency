@@ -19,7 +19,6 @@ import { Button } from "@/front/components/ui/button";
 import { Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import useSendEmail from "@/front/hooks/use-send-email";
 import useEmailOtp from "@/front/hooks/use-email-otp";
 
 const SignUpFormSchema = z
@@ -42,7 +41,6 @@ export default function SignUpForm() {
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const { sendEmail } = useSendEmail('/api/emails/welcome');
     const { sendVerificationOtp } = useEmailOtp();
 
     const form = useForm<z.infer<typeof SignUpFormSchema>>({
@@ -104,15 +102,6 @@ export default function SignUpForm() {
             if (!otpResult) {
                 toast.error("Account created but OTP email was not sent.");
                 return;
-            }
-
-            const welcomeResult = await sendEmail({
-                email: values.email,
-                firstName: values.firstName,
-            });
-
-            if (!welcomeResult) {
-                toast.error("Account created but welcome email was not sent.");
             }
 
             toast.success('Account created. Verify your email with the OTP code.');

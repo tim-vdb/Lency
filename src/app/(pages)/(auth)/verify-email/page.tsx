@@ -3,6 +3,7 @@
 import { Button } from '@/front/components/ui/button';
 import { Input } from '@/front/components/ui/input';
 import useEmailOtp from '@/front/hooks/use-email-otp';
+import useSendEmail from '@/front/hooks/use-send-email';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -19,6 +20,7 @@ export default function VerifyEmailPage() {
     const [isSending, setIsSending] = useState(false);
     const [isVerifying, setIsVerifying] = useState(false);
     const { sendVerificationOtp, verifyEmailOtp } = useEmailOtp();
+    const { sendEmail } = useSendEmail('/api/emails/welcome');
 
     async function resendOtp() {
         if (!email) {
@@ -59,7 +61,15 @@ export default function VerifyEmailPage() {
             }
 
             toast.success('Email verified successfully.');
-            router.push('/login');
+
+            const welcomeResult = await sendEmail({
+                email: email,
+            });
+
+            if (!welcomeResult) {
+                toast.error("Account created but welcome email was not sent.");
+            }
+            router.push('/');
             router.refresh();
         } finally {
             setIsVerifying(false);
