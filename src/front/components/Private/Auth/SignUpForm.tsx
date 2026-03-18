@@ -19,6 +19,7 @@ import { Button } from "@/front/components/ui/button";
 import { Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import useEmailOtp from "@/front/hooks/use-email-otp";
 
 const SignUpFormSchema = z
     .object({
@@ -40,6 +41,7 @@ export default function SignUpForm() {
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const { sendVerificationOtp } = useEmailOtp();
 
     const form = useForm<z.infer<typeof SignUpFormSchema>>({
         resolver: zodResolver(SignUpFormSchema),
@@ -96,8 +98,14 @@ export default function SignUpForm() {
                 return;
             }
 
-            toast.success('User created successfully');
-            router.push('/');
+            const otpResult = await sendVerificationOtp(values.email, 'email-verification');
+            if (!otpResult) {
+                toast.error("Account created but OTP email was not sent.");
+                return;
+            }
+
+            toast.success('Account created. Verify your email with the OTP code.');
+            router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
             router.refresh();
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An error occurred';

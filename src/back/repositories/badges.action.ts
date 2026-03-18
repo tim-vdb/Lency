@@ -18,29 +18,29 @@ export const BadgesAction = {
     },
 
     update: async (
-    id: string,
-    data: {
-      name?: string;
-      description?: string;
-      iconUrl?: string | null;
-      active?: boolean;
-    }
-  ) => {
-    const updateData: Record<string, unknown> = {
-      ...(data.name !== undefined && { name: data.name }),
-      ...(data.description !== undefined && { description: data.description }),
-      ...(data.active !== undefined && { active: data.active }),
-    };
+        id: string,
+        data: {
+            name?: string;
+            description?: string;
+            iconUrl?: string | null;
+            active?: boolean;
+        }
+    ) => {
+        const updateData: Record<string, unknown> = {
+            ...(data.name !== undefined && { name: data.name }),
+            ...(data.description !== undefined && { description: data.description }),
+            ...(data.active !== undefined && { active: data.active }),
+        };
 
-    if (data.iconUrl !== undefined) {
-      updateData.iconUrl = data.iconUrl; // peut être string ou null
-    }
+        if (data.iconUrl !== undefined) {
+            updateData.iconUrl = data.iconUrl; // peut être string ou null
+        }
 
-    return prisma.badge.update({
-      where: { id },
-      data: updateData,
-    });
-  },
+        return prisma.badge.update({
+            where: { id },
+            data: updateData,
+        });
+    },
 
     // Add a user to a badge
     addUser: async (badgeId: string, userId: string) => {

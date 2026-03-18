@@ -29,20 +29,6 @@ const LoginFormSchema = z.object({
     .min(6, "The password must contain at least 6 characters."),
 });
 
-// const handleSendEmail = async () => {
-//   try {
-//     const response = await fetch('/api/emails/welcome', {
-//       method: 'POST',
-//     });
-//     const data = await response.json();
-//     console.warn('Email sent:', data);
-//     alert('Email de bienvenue envoyé !');
-//   } catch (error) {
-//     console.error('Error:', error);
-//     alert('Erreur lors de l\'envoi de l\'email de bienvenue.');
-//   }
-// }
-
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
@@ -87,7 +73,6 @@ export default function LoginForm() {
       toast.error(errorMessage);
     } finally {
       setLoading(false);
-      // handleSendEmail();
     }
   }
 
@@ -96,7 +81,6 @@ export default function LoginForm() {
       <div className="min-h-screen flex items-center justify-center px-4 py-12">
         <div className="bg-white border-4 rounded-3xl p-10 w-full max-w-md shadow-lg mb-24">
           <div className="text-center mb-8">
-
             <p className="text-xs uppercase tracking-[0.25em] dark:text-black font-inter">
               Login
             </p>
@@ -106,7 +90,6 @@ export default function LoginForm() {
             <p className="font-inter text-sm dark:text-black mt-3">
               Log in to access your account.
             </p>
-
           </div>
 
           <Form {...form}>
@@ -152,6 +135,12 @@ export default function LoginForm() {
                 )}
               />
 
+              <div className="flex justify-end">
+                <Link href="/forgot-password" className="text-xs text-neutral-600 underline">
+                  Forgot your password?
+                </Link>
+              </div>
+
               <Button
                 type="submit"
                 className="rounded-md text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition"
@@ -172,7 +161,8 @@ export default function LoginForm() {
                   await signIn.social(
                     {
                       provider: "google",
-                      callbackURL: "/",
+                      callbackURL: callbackUrl ?? "/",
+                      newUserCallbackURL: `/auth/new-user${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`,
                     },
                     {
                       onRequest: () => {
@@ -180,7 +170,6 @@ export default function LoginForm() {
                       },
                       onResponse: () => {
                         setLoading(false);
-                        // handleSendEmail();
                       },
                     }
                   );
