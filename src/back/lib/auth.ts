@@ -4,6 +4,10 @@ import { prisma } from '@/back/lib/prisma';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
+import { emailOTP } from 'better-auth/plugins';
+import { sendAuthOtpEmail } from './send-auth-otp-email';
+
+const otpExpiresIn = Number(process.env.AUTH_EMAIL_OTP_EXPIRES_IN ?? 300);
 
 export const auth = betterAuth({
   baseURL: process.env.BASE_URL,
@@ -12,6 +16,7 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    autoSignIn: true,
   },
   socialProviders: {
     google: {
@@ -23,7 +28,19 @@ export const auth = betterAuth({
   trustedOrigins: [
     process.env.BASE_URL ?? 'http://localhost:3000',
   ],
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    emailOTP({
+      overrideDefaultEmailVerification: true,
+      sendVerificationOnSignUp: false,
+      otpLength: 6,
+      expiresIn: Number.isFinite(otpExpiresIn) ? otpExpiresIn : 300,
+      allowedAttempts: 3,
+      async sendVerificationOTP({ email, otp, type }) {
+        await sendAuthOtpEmail({ email, otp, type });
+      },
+    }),
+  ],
   user: {
     additionalFields: {
       role: {
