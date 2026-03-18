@@ -1,15 +1,15 @@
 'use client';
 
+import { Suspense, FormEvent, useMemo, useState } from 'react';
 import { Button } from '@/front/components/ui/button';
 import { Input } from '@/front/components/ui/input';
 import useEmailOtp from '@/front/hooks/use-email-otp';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FormEvent, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { resetPasswordWithOtp } = useEmailOtp();
@@ -100,5 +100,13 @@ export default function ResetPasswordPage() {
                 </form>
             </div>
         </div>
+    );
+}
+
+export default function ResetPasswordPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ResetPasswordContent />
+        </Suspense>
     );
 }

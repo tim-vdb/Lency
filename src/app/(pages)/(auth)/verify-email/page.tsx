@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense, FormEvent, useMemo, useState } from 'react';
 import { Button } from '@/front/components/ui/button';
 import { Input } from '@/front/components/ui/input';
 import useEmailOtp from '@/front/hooks/use-email-otp';
@@ -7,10 +8,9 @@ import useSendEmail from '@/front/hooks/use-send-email';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FormEvent, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -114,5 +114,13 @@ export default function VerifyEmailPage() {
                 </form>
             </div>
         </div>
+    );
+}
+
+export default function VerifyEmailPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <VerifyEmailContent />
+        </Suspense>
     );
 }

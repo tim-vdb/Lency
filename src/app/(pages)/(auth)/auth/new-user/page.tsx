@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import useSendEmail from "@/front/hooks/use-send-email";
 
-export default function OAuthNewUserPage() {
+function OAuthNewUserContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get("callbackUrl") ?? "/";
@@ -34,4 +34,12 @@ export default function OAuthNewUserPage() {
     }, [callbackUrl, router, sendEmail]);
 
     return null;
+}
+
+export default function OAuthNewUserPage() {
+    return (
+        <Suspense fallback={null}>
+            <OAuthNewUserContent />
+        </Suspense>
+    );
 }
