@@ -15,16 +15,19 @@ export function AccountShell({ user, children }: { user: User | null; children: 
 
     return (
         <UserProvider user={user}>
-            <SidebarProvider className="isolate">
-                <Sheet>
-                    <AppSidebar />
-                    <SidebarInset>
-                        <Header />
-                        <main className="h-[calc(100vh-64px)]">{children}</main>
-                        {!isDashboard && <Footer />}
-                    </SidebarInset>
-                </Sheet>
-            </SidebarProvider>
+            <div className="bg-[url('/images/bg.jpg')]">
+
+                <SidebarProvider className="isolate mx-4">
+                    <Sheet>
+                        <AppSidebar className="mx-4" />
+                        <SidebarInset>
+                            <Header />
+                            <main className="h-[calc(100vh-64px)]">{children}</main>
+                            {!isDashboard && <Footer />}
+                        </SidebarInset>
+                    </Sheet>
+                </SidebarProvider>
+            </div>
         </UserProvider>
     )
 }
