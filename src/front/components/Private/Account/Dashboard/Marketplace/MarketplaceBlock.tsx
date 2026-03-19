@@ -62,7 +62,7 @@ const marketplaceData = [
 
 export default function MarketplaceBlock({ className }: { className?: string }) {
     return (
-        <Card className={cn("flex flex-col overflow-hidden shadow-xl-inset", className)}>
+        <Card className={cn("flex flex-col overflow-hidden", className)}>
             <CardHeader className="px-0">
                 <CardTitle className="text-xl">Nos Marketplaces</CardTitle>
                 <CardDescription className="text-sm">Connectez-vous aux projets et aux créateurs</CardDescription>

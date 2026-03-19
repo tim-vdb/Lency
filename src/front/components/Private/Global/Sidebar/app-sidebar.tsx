@@ -18,7 +18,8 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader
+  SidebarHeader,
+  SidebarTrigger
 } from "@/front/components/ui/sidebar"
 import { NavMain } from "./nav-main"
 import { NavProjects } from "./nav-projects"
@@ -152,7 +153,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" variant="inset" {...props}>
+    <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
@@ -162,6 +163,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <AgendaSheet />
+        <SidebarTrigger className="" />
       </SidebarFooter>
     </Sidebar>
   )

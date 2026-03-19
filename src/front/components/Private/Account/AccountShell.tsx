@@ -17,10 +17,10 @@ export function AccountShell({ user, children }: { user: User | null; children: 
         <UserProvider user={user}>
             <div className="bg-[url('/images/bg.jpg')]">
 
-                <SidebarProvider className="isolate mx-4">
+                <SidebarProvider className="isolate p-4">
                     <Sheet>
-                        <AppSidebar className="mx-4" />
-                        <SidebarInset>
+                        <AppSidebar />
+                        <SidebarInset className="bg-transparent!">
                             <Header />
                             <main className="h-[calc(100vh-64px)]">{children}</main>
                             {!isDashboard && <Footer />}
