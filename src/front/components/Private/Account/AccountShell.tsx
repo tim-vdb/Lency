@@ -22,7 +22,7 @@ export function AccountShell({ user, children }: { user: User | null; children: 
                         <AppSidebar />
                         <SidebarInset className="bg-transparent!">
                             <Header />
-                            <main className="h-[calc(100vh-64px)]">{children}</main>
+                            <main className="h-[calc(100vh-5rem)]">{children}</main>
                             {!isDashboard && <Footer />}
                         </SidebarInset>
                     </Sheet>

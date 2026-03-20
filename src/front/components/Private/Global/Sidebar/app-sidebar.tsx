@@ -163,7 +163,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <AgendaSheet />
-        <SidebarTrigger className="" />
+        <SidebarTrigger />
       </SidebarFooter>
     </Sidebar>
   )
