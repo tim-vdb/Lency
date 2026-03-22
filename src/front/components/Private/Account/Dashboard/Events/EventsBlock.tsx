@@ -2,7 +2,6 @@
 
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/front/components/ui/card";
-import { cn } from "@/front/lib/utils";
 import Image from "next/image";
 
 // Tableaux de données
@@ -12,7 +11,7 @@ const events = [
         title: "Évènement 1",
         description: "Description du Évènement 1",
         date: new Date(),
-        image: "/images/team/avatar/Photo_Pro_avecOutline.png"
+        image: "/images/blog/img1.jpg"
     },
     {
         id: 2,
@@ -59,31 +58,34 @@ const events = [
     },
 ];
 
-export default function EventsBlock({ className }: { className?: string }) {
+export default function EventsBlock() {
     return (
-        <Card className={cn("flex flex-col gap-2 h-full border border-neutral-400 overflow-hidden", className)}>
-            <CardHeader className="flex items-center justify-between gap-2 px-5 shrink-0">
-                <CardTitle className="text-xl">Les Évènements</CardTitle>
-                <Button variant="outline" size="sm" className="border bg-neutral-300 cursor-pointer text-xs">
-                    View All
-                </Button>
+        <Card className="flex flex-col shadow-none pt-2 pb-0 w-full pr-0 gap-2 2xl:gap-4 overflow-hidden bg-transparent rounded-none">
+            <CardHeader className="p-0">
+                <div className="flex justify-between gap-1">
+                    <div className='flex flex-col gap-2'>
+                        <CardTitle className="text-xl">Les Challenges et Concours</CardTitle>
+                        <CardDescription className="max-w-xs line-clamp-2">Reste à jour sur les prochains challenges et concours de la communauté</CardDescription>
+                    </div>
+                    <Button variant="outline" size="sm" className="border bg-neutral-300 cursor-pointer text-xs">
+                        View All
+                    </Button>
+                </div>
             </CardHeader>
-            <CardContent className="flex justify-center gap-5 px-0 w-full flex-1 overflow-hidden">
+            <CardContent className="flex justify-center gap-5 px-0 w-full flex-1 overflow-hidden rounded-none">
                 <Card className="border-none shadow-none gap-1 text-neutral-400 py-0 w-full h-full">
-                    <CardContent className="flex flex-col gap-4 px-5 h-full overflow-y-scroll">
+                    <CardContent className="flex flex-col overflow-y-auto gap-4 pl-1 pr-4">
                         {events.map((event) => (
-                            <Card key={event.id} className="border border-neutral-400 py-4 shadow-md-base">
-                                <CardContent className="flex items-center justify-between gap-2 px-3">
-                                    <div className="flex flex-col gap-0.5">
-                                        <div className="flex items-start gap-2">
-                                            <span className="text-xs mb-2 text-neutral-500">{event.date.toLocaleDateString()}</span>
-                                        </div>
-                                        <div>
+                            <Card key={event.id} className="border border-neutral-400 p-3 shadow-md-base">
+                                <CardContent className="flex items-center justify-between gap-2 px-0">
+                                    <div className="flex flex-col gap-2 h-full">
+                                        <div className="flex flex-col items-start gap-2">
+                                            <span className="text-[10px] text-neutral-500">{event.date.toLocaleDateString()}</span>
                                             <CardTitle>{event.title}</CardTitle>
-                                            <CardDescription>{event.description}</CardDescription>
                                         </div>
+                                        <CardDescription>{event.description}</CardDescription>
                                     </div>
-                                    <Image width={50} height={50} src={event.image} alt={event.title} />
+                                    <Image width={100} height={100} src={event.image} alt={event.title} className="w-20 h-20 bg-contain rounded-md" />
                                 </CardContent>
                             </Card>
                         ))}

@@ -76,7 +76,7 @@ export default function MarketplaceBlock({ className }: { className?: string }) 
                             <TabsTrigger
                                 key={section.value}
                                 value={section.value}
-                                className="gap-2"
+                                className="gap-2 cursor-pointer"
                             >
                                 <Icon className="w-4 h-4" />
                                 {section.category}
@@ -117,7 +117,7 @@ export default function MarketplaceBlock({ className }: { className?: string }) 
                                                 key={buttonIndex}
                                                 variant={button.variant}
                                                 size="sm"
-                                                className="flex-1 transition-all"
+                                                className="flex-1 transition-all cursor-pointer"
                                             >
                                                 {button.label}
                                             </Button>

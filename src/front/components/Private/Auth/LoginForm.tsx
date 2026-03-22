@@ -78,16 +78,16 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center px-4 py-12">
-        <div className="bg-white border-4 rounded-3xl p-10 w-full max-w-md shadow-lg mb-24">
+      <div className="min-h-screen flex items-center justify-center px-4 py-12 text-foreground">
+        <div className="bg-white dark:bg-white border-4 border-zinc-200 dark:border-zinc-300 rounded-3xl p-10 w-full max-w-md shadow-lg mb-24">
           <div className="text-center mb-8">
-            <p className="text-xs uppercase tracking-[0.25em] dark:text-black font-inter">
+            <p className="text-xs uppercase tracking-[0.25em] text-zinc-700 dark:text-zinc-700 font-inter">
               Login
             </p>
-            <h2 className="text-4xl leading-tight dark:text-black">
+            <h2 className="text-4xl leading-tight text-zinc-950 dark:text-zinc-900">
               Welcome back to Lency
             </h2>
-            <p className="font-inter text-sm dark:text-black mt-3">
+            <p className="font-inter text-sm text-zinc-600 dark:text-zinc-600 mt-3">
               Log in to access your account.
             </p>
           </div>
@@ -102,13 +102,13 @@ export default function LoginForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="dark:text-black">Email</FormLabel>
+                    <FormLabel className="text-zinc-800 dark:text-zinc-900">Email</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
                         placeholder="example@mail.com"
                         {...field}
-                        className=" rounded-md px-3 py-2 focus:outline-none"
+                        className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -121,13 +121,13 @@ export default function LoginForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="dark:text-black">Password</FormLabel>
+                    <FormLabel className="text-zinc-800 dark:text-zinc-900">Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         placeholder="••••••••"
                         {...field}
-                        className=" rounded-md px-3 py-2 focus:outline-none"
+                        className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -136,14 +136,14 @@ export default function LoginForm() {
               />
 
               <div className="flex justify-end">
-                <Link href="/forgot-password" className="text-xs text-neutral-600 underline">
+                <Link href="/forgot-password" className="text-xs text-zinc-600 dark:text-zinc-700 underline">
                   Forgot your password?
                 </Link>
               </div>
 
               <Button
                 type="submit"
-                className="rounded-md text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition"
+                className="rounded-md dark:bg-background text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition"
                 disabled={loading}
               >
                 {loading ? (
@@ -155,7 +155,7 @@ export default function LoginForm() {
 
               <Button
                 variant="outline"
-                className={cn("w-full gap-2 dark:text-black")}
+                className={cn("w-full gap-2 border-zinc-300 dark:border-zinc-300 text-zinc-800 dark:text-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-100")}
                 disabled={loading}
                 onClick={async () => {
                   await signIn.social(
@@ -202,7 +202,7 @@ export default function LoginForm() {
               </Button>
               <CardFooter>
                 <div className="flex justify-center w-full py-4">
-                  <p className="text-center text-xs text-neutral-500">
+                  <p className="text-center text-xs text-zinc-500 dark:text-zinc-600">
                     <Link href="/sign-up" className="underline">
                       <span>
                         Need an account?
