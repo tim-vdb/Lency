@@ -64,8 +64,8 @@ export default function EventsBlock() {
             <CardHeader className="p-0">
                 <div className="flex justify-between gap-1">
                     <div className='flex flex-col gap-2'>
-                        <CardTitle className="text-xl">Les Challenges et Concours</CardTitle>
-                        <CardDescription className="max-w-xs line-clamp-2">Reste à jour sur les prochains challenges et concours de la communauté</CardDescription>
+                        <CardTitle className="2xl:text-xl">Les Challenges et Concours</CardTitle>
+                        <CardDescription className="max-w-xs text-xs 2xl:text-base line-clamp-2">Reste à jour sur les prochains challenges et concours de la communauté</CardDescription>
                     </div>
                     <Button variant="outline" size="sm" className="border bg-neutral-300 cursor-pointer text-xs">
                         View All
@@ -76,16 +76,16 @@ export default function EventsBlock() {
                 <Card className="border-none shadow-none gap-1 text-neutral-400 py-0 w-full h-full">
                     <CardContent className="flex flex-col overflow-y-auto gap-4 pl-1 pr-4">
                         {events.map((event) => (
-                            <Card key={event.id} className="border border-neutral-400 p-3 shadow-md-base">
-                                <CardContent className="flex items-center justify-between gap-2 px-0">
+                            <Card key={event.id} className="border border-neutral-400 p-3 shadow-lg-base">
+                                <CardContent className="flex items-center justify-between gap-2 px-0  h-18 2xl:h-20">
                                     <div className="flex flex-col gap-2 h-full">
                                         <div className="flex flex-col items-start gap-2">
                                             <span className="text-[10px] text-neutral-500">{event.date.toLocaleDateString()}</span>
                                             <CardTitle>{event.title}</CardTitle>
                                         </div>
-                                        <CardDescription>{event.description}</CardDescription>
+                                        <CardDescription className="text-xs 2xl:text-sm">{event.description}</CardDescription>
                                     </div>
-                                    <Image width={100} height={100} src={event.image} alt={event.title} className="w-20 h-20 bg-contain rounded-md" />
+                                    <Image width={100} height={100} src={event.image} alt={event.title} className="w-18 2xl:w-20 h-full 2xl:h-20 bg-contain rounded-md" />
                                 </CardContent>
                             </Card>
                         ))}

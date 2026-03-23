@@ -52,8 +52,8 @@ export default function PostsBlock() {
             <CardHeader className="px-1">
                 <div className="flex justify-between gap-1">
                     <div className='flex flex-col gap-2'>
-                        <CardTitle className="text-xl">Communautés suivies</CardTitle>
-                        <CardDescription className="max-w-xs line-clamp-2">
+                        <CardTitle className="2xl:text-xl">Communautés suivies</CardTitle>
+                        <CardDescription className="text-xs 2xl:text-base max-w-xs line-clamp-2">
                             Découvrez les derniers posts de vos communautés que vous suivez
                         </CardDescription>
                     </div>
@@ -65,8 +65,8 @@ export default function PostsBlock() {
             <CardContent className="pl-1 overflow-y-auto flex flex-col gap-4 pr-4">
                 {communityPosts.map((post) => (
                     <Card key={post.id} className="border border-neutral-350 p-3 gap-1 shadow-lg-base">
-                        <CardHeader className="flex justify-between gap-1 px-0 h-20">
-                            <div className="flex flex-col gap-2 px-0">
+                        <CardHeader className="flex justify-between gap-1 px-0 h-18 2xl:h-20">
+                            <div className="flex flex-col gap-1 2xl:gap-2 px-0">
                                 <div>
                                     {post.tags.map((tag, index) => (
                                         <span key={index} className="text-[10px] text-neutral-500 mr-2 border px-0.5 py-1 rounded-sm hover:bg-neutral-100 cursor-pointer">{tag}</span>
@@ -79,9 +79,9 @@ export default function PostsBlock() {
                                         <CardDescription className="text-[10px] text-neutral-500">{post.author}</CardDescription>
                                     </div>
                                 </div>
-                                <p className="text-sm text-neutral-500 line-clamp-1 max-w-md">{post.content}</p>
+                                <p className="text-xs 2xl:text-sm text-neutral-500 line-clamp-1 max-w-md">{post.content}</p>
                             </div>
-                            <Image src={post?.image} alt={post.author} width={100} height={100} className="w-20 h-20 bg-contain rounded-md" />
+                            <Image src={post?.image} alt={post.author} width={100} height={100} className="w-18 2xl:w-20 h-full 2xl:h-20 bg-contain rounded-md" />
                         </CardHeader>
                     </Card>
                 ))}
