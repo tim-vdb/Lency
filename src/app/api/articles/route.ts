@@ -23,7 +23,6 @@ export async function POST(req: NextRequest) {
         excerpt,
         content,
         image,
-        authorId: user.id,
     });
 
     return NextResponse.json({ article: newArticle }, { status: 201 });

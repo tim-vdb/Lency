@@ -1,8 +1,12 @@
+import { NextResponse } from "next/server";
 import { BadgesAction } from "../repositories/badges.action";
+import { getUser } from "../lib/auth-session";
 
-export const BadgeService = {
+export const BadgesService = {
     findByIdBadge: async (id: string) => {
-        return BadgesAction.findById(id);
+        const badge = await BadgesAction.findById(id);
+        if (!badge) throw new Error("Badge not found");
+        return badge;
     },
 
     findAllBadges: async () => {
@@ -27,6 +31,17 @@ export const BadgeService = {
             active?: boolean;
         }
     ) => {
+
+        const user = await getUser();
+
+        if (!user) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+        const badge = await BadgesService.findByIdBadge(id);
+
+        if (!badge) {
+            return NextResponse.json({ error: "Badge not existing" }, { status: 404 });
+        }
         return BadgesAction.update(id, data);
     },
 
@@ -39,6 +54,16 @@ export const BadgeService = {
     },
 
     deleteBadge: async (id: string) => {
+        const badge = await BadgesService.findByIdBadge(id);
+
+        if (!badge) {
+            return NextResponse.json({ error: "Badge not found" }, { status: 404 });
+        }
+        const user = await getUser();
+
+        if (!user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
         return BadgesAction.delete(id);
     },
 };
