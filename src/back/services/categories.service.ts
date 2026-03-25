@@ -10,7 +10,7 @@ export const CategoriesService = {
     createCategory: async (userId: string, data: { name: string, slug: string, description?: string, iconUrl?: string, bannerUrl?: string, rules?: string, lastPostAt?: Date }) => {
         return CategoriesAction.create(userId, data);
     },
-    updateCategory: async (id: string, data: { name?: string, slug?: string, description?: string, iconUrl?: string, bannerUrl?: string, rules?: string, lastPostAt?: Date, createdBy: string }) => {
+    updateCategory: async (id: string, data: { name?: string, slug?: string, description?: string, iconUrl?: string, bannerUrl?: string, rules?: string, lastPostAt?: Date }) => {
         return CategoriesAction.update(id, data);
     },
     deleteCategory: async (id: string) => {

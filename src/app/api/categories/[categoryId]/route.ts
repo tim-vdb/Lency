@@ -1,10 +1,10 @@
-import { CategoriesAction } from "@/back/repositories/categories.action";
+import { CategoriesService } from "@/back/services/categories.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ categoryId: string }> }) {
     const { categoryId } = await params;
 
-    const data = await CategoriesAction.findById(categoryId);
+    const data = await CategoriesService.findByIdCategory(categoryId);
 
     return NextResponse.json({ category: data });
 }
@@ -13,14 +13,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ ca
     const { categoryId } = await params;
     const data = await req.json();
 
-    const updatedCategory = await CategoriesAction.update(categoryId, data);
+    const updatedCategory = await CategoriesService.updateCategory(categoryId, data);
     return NextResponse.json({ category: updatedCategory });
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ categoryId: string }> }) {
     const { categoryId } = await params;
 
-    await CategoriesAction.delete(categoryId);
+    await CategoriesService.deleteCategory(categoryId);
 
     return NextResponse.json({ message: `Category ${categoryId} deleted` });
 }
