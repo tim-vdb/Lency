@@ -1,41 +1,46 @@
 "use client";
 
-import { Calendar } from "lucide-react";
-import { ModeToggle } from "../../DarkMode/ModeToggle";
+import { Bell, Plus } from "lucide-react";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../../ui/breadcrumb";
 import { Separator } from "../../ui/separator";
 import { SheetTrigger } from "../../ui/sheet";
-import { SidebarTrigger } from "../../ui/sidebar";
 import { NavUser } from "./Sidebar/nav-user";
+import { useState } from "react";
+import { Button } from "../../ui/button";
 
 export default function Header() {
+    const [isNotifs,] = useState(true)
+
     return (
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 shadow-lg-base">
+        <header className="flex h-14 shrink-0 items-center gap-2 backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-black/40 rounded-xl transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-14">
             <div className="flex items-center justify-between gap-2 px-4 w-full">
-                <div className="flex items-center gap-2 px-4">
-                    <SidebarTrigger className="-ml-1" />
-                    <Separator
-                        orientation="vertical"
-                        className="mr-2 data-[orientation=vertical]:h-4"
-                    />
-                    <Breadcrumb>
-                        <BreadcrumbList>
-                            <BreadcrumbItem className="hidden md:block">
-                                <BreadcrumbLink href="#">
-                                    Build Your Application
-                                </BreadcrumbLink>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator className="hidden md:block" />
-                            <BreadcrumbItem>
-                                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                            </BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
-                </div>
+                <Breadcrumb className="flex items-center gap-2">
+                    <BreadcrumbList>
+                        <BreadcrumbItem className="hidden md:block">
+                            <BreadcrumbLink href="#" className="text-black dark:text-white">
+                                Build Your Application
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator className="hidden md:block text-black dark:text-white" />
+                        <BreadcrumbItem>
+                            <BreadcrumbPage className="text-black dark:text-white">Data Fetching</BreadcrumbPage>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
                 <div className="flex items-center gap-4">
-                    <SheetTrigger className="cursor-pointer"><Calendar className="w-5 h-5" /></SheetTrigger>
-                    <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500" />
-                    <ModeToggle />
+                    <Button variant={"outline"} className="ml-auto shadow-lg-base cursor-pointer border-neutral-300 animate-spin">
+                        <span>Créer</span>
+                        <Plus className="w-4 h-4" />
+                    </Button>
+                    <SheetTrigger className="cursor-pointer relative flex">
+                        <Bell className="w-6 h-6 fill-black text-black dark:fill-white dark:text-white" />
+                        {isNotifs &&
+                            (<span className="flex w-4 h-4">
+                                <span className="absolute inline-flex -top-1 left-3 h-4 w-4 rounded-full bg-red-500 opacity-75 "></span>
+                                <span className="relative inline-flex justify-center items-center -top-1 -left-3 h-4 w-4 rounded-full text-xs text-white bg-red-600">2</span>
+                            </span>)
+                        }
+                    </SheetTrigger>
                     <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500" />
                     <NavUser />
                 </div>

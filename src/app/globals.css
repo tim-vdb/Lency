@@ -37,7 +37,6 @@
 }
 
 @layer components {
-
   /* Header.tsx */
   @keyframes slideDown {
     from {
@@ -126,6 +125,10 @@
     inset 0 10px 14px #00000015;
 }
 
+@utility items_sidebar {
+  @apply transition-[opacity,transform,max-width] text-sm duration-900 ease-in-out group-data-[collapsible=icon]:max-w-0 group-data-[collapsible=icon]:translate-x-2 group-data-[collapsible=icon]:opacity-0;
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -136,7 +139,6 @@
 }
 
 @layer base {
-
   *,
   ::after,
   ::before,
@@ -153,15 +155,16 @@
     line-height: unset;
     -webkit-text-size-adjust: 100%;
     tab-size: 4;
-    font-family: var(--default-font-family,
-        ui-sans-serif,
-        system-ui,
-        sans-serif,
-        'Apple Color Emoji',
-        'Segoe UI Emoji',
-        'Segoe UI Symbol',
-        'Noto Color Emoji'
-      );
+    font-family: var(
+      --default-font-family,
+      ui-sans-serif,
+      system-ui,
+      sans-serif,
+      'Apple Color Emoji',
+      'Segoe UI Emoji',
+      'Segoe UI Symbol',
+      'Noto Color Emoji'
+    );
     font-feature-settings: var(--default-font-feature-settings, normal);
     font-variation-settings: var(--default-font-variation-settings, normal);
     -webkit-tap-highlight-color: transparent;
@@ -217,18 +220,22 @@
   kbd,
   samp,
   pre {
-    font-family: var(--default-mono-font-family,
-        ui-monospace,
-        SFMono-Regular,
-        Menlo,
-        Monaco,
-        Consolas,
-        'Liberation Mono',
-        'Courier New',
-        monospace);
+    font-family: var(
+      --default-mono-font-family,
+      ui-monospace,
+      SFMono-Regular,
+      Menlo,
+      Monaco,
+      Consolas,
+      'Liberation Mono',
+      'Courier New',
+      monospace
+    );
     font-feature-settings: var(--default-mono-font-feature-settings, normal);
-    font-variation-settings: var(--default-mono-font-variation-settings,
-        normal);
+    font-variation-settings: var(
+      --default-mono-font-variation-settings,
+      normal
+    );
     font-size: 1em;
   }
 
@@ -315,7 +322,8 @@
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
+  input:-webkit-autofill:active,
+  input {
     transition: background-color 5000s linear 0s;
     -webkit-text-fill-color: rgb(0, 0, 0);
   }
@@ -323,7 +331,8 @@
   .dark input:-webkit-autofill,
   .dark input:-webkit-autofill:hover,
   .dark input:-webkit-autofill:focus,
-  .dark input:-webkit-autofill:active {
+  .dark input:-webkit-autofill:active,
+  input {
     -webkit-text-fill-color: black;
   }
 
@@ -347,7 +356,8 @@
     opacity: 1;
   }
 
-  @supports (not (-webkit-appearance: -apple-pay-button)) or (contain-intrinsic-size: 1px) {
+  @supports (not (-webkit-appearance: -apple-pay-button)) or
+    (contain-intrinsic-size: 1px) {
     ::placeholder {
       color: currentcolor;
 
@@ -418,6 +428,21 @@
   ::-webkit-scrollbar-track {
     background-color: transparent;
     margin: 4px 4px;
+  }
+
+  .dark {
+    ::-webkit-scrollbar-thumb {
+      background-color: #ffffff;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 0px solid #ffffff;
+      background-clip: padding-box;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #ffffff;
+    }
   }
 
   /* Handle */

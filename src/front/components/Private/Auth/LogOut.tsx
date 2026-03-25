@@ -1,10 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { toast } from 'sonner';
 
 export default function LogOut() {
+  const pathname = usePathname()
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -23,6 +24,9 @@ export default function LogOut() {
           toast.error(data?.message || 'Erreur lors de la déconnexion');
           return;
         }
+
+        pathname.startsWith("/account") ? router.push("/login") : router.push("/")
+
         router.refresh();
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erreur lors de la déconnexion';

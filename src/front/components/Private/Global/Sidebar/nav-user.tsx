@@ -2,7 +2,6 @@
 
 import { useUser } from "@/front/context/UserContext"
 import {
-  Bell,
   ChevronsUpDown,
   House,
   LayoutTemplate,
@@ -45,11 +44,11 @@ export function NavUser() {
         <button className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm outline-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
           <Avatar className="h-8 w-8 rounded-full">
             <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
-            <AvatarFallback className="rounded-full text-xs">{initials}</AvatarFallback>
+            <AvatarFallback className="rounded-full text-xs bg-black dark:bg-white text-white dark:text-black">{initials}</AvatarFallback>
           </Avatar>
           <div className="hidden md:grid text-left text-sm leading-tight">
-            <span className="truncate font-semibold">{user?.name ?? "Utilisateur"}</span>
-            <span className="truncate text-xs text-muted-foreground">{user?.email ?? ""}</span>
+            <span className="truncate font-semibold text-black dark:text-white">{user?.name ?? "Utilisateur"}</span>
+            <span className="truncate text-xs text-muted-foreground dark:text-white">{user?.email ?? ""}</span>
           </div>
           <ChevronsUpDown className="ml-1 size-4 text-muted-foreground" />
         </button>
@@ -100,12 +99,6 @@ export function NavUser() {
               </Link>
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem asChild>
-            <Link href="/account/notifications">
-              <Bell className="size-4" />
-              Notifications
-            </Link>
-          </DropdownMenuItem>
         </DropdownMenuGroup>
         {user?.role === "ADMIN" && (
           <>

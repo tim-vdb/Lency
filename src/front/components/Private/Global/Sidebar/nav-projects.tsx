@@ -3,7 +3,10 @@
 import {
   Folder,
   Forward,
+  Frame,
+  Map,
   MoreHorizontal,
+  PieChart,
   Trash2,
   type LucideIcon,
 } from "lucide-react"
@@ -24,20 +27,32 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/front/components/ui/sidebar"
+import { cn } from "@/front/lib/utils"
 
-export function NavProjects({
-  projects,
-}: {
-  projects: {
-    name: string
-    url: string
-    icon: LucideIcon
-  }[]
-}) {
+const projects: { name: string; url: string; icon: LucideIcon }[] = [
+  {
+    name: "Design Engineering",
+    url: "#",
+    icon: Frame,
+  },
+  {
+    name: "Sales & Marketing",
+    url: "#",
+    icon: PieChart,
+  },
+  {
+    name: "Travel",
+    url: "#",
+    icon: Map,
+  },
+]
+
+export function NavProjects() {
   const { isMobile } = useSidebar()
+  const isAvailable = false
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup className={cn("max-h-96 transition-[max-height,opacity,padding] duration-800 ease-in-out", isAvailable ? "group-data-[collapsible=icon]:max-h-0 group-data-[collapsible=icon]:overflow-hidden group-data-[collapsible=icon]:py-0 group-data-[collapsible=icon]:opacity-0" : "")}>
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (

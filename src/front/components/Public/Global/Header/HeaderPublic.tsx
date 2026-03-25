@@ -11,8 +11,10 @@ import { NavUser } from '@/front/components/Private/Global/Sidebar/nav-user';
 import { useUser } from '@/front/context/UserContext';
 import { Button } from '@/front/components/ui/button';
 import { usePathname } from 'next/navigation';
+import { ToggleDarkMode } from '@/front/components/DarkMode/ToggleDarkMode';
 
 export default function HeaderPublic() {
+  const user = useUser();
   const pathname = usePathname();
   const isDashboard = pathname === '/account';
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,7 +22,6 @@ export default function HeaderPublic() {
     setMenuOpen((prev) => !prev);
   };
 
-  const user = useUser();
 
 
   return (
@@ -56,13 +57,14 @@ export default function HeaderPublic() {
               )}
             </button>
           </div>
-          {!isDashboard && (
+          {!isDashboard && user && (
             <Button variant="default" size="sm" className="ml-4">
               <Link href="/account">
                 Dashboard
               </Link>
             </Button>
           )}
+          <ToggleDarkMode className='w-fit' />
           {user && <NavUser />}
           {!user && (
             <>

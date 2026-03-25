@@ -62,21 +62,21 @@ const marketplaceData = [
 
 export default function MarketplaceBlock({ className }: { className?: string }) {
     return (
-        <Card className={cn("flex flex-col overflow-hidden shadow-xl-inset", className)}>
+        <Card className={cn("flex flex-col overflow-hidden gap-4! py-4! 2xl:py-6 2xl:gap-6", className)}>
             <CardHeader className="px-0">
-                <CardTitle className="text-xl">Nos Marketplaces</CardTitle>
-                <CardDescription className="text-sm">Connectez-vous aux projets et aux créateurs</CardDescription>
+                <CardTitle className="2xl:text-xl">Nos Marketplaces</CardTitle>
+                <CardDescription className="text-xs 2xl:text-sm">Connectez-vous aux projets et aux créateurs</CardDescription>
             </CardHeader>
 
-            <Tabs defaultValue="projects" className="flex-1 flex flex-col">
-                <TabsList className="grid w-full grid-cols-2 gap-4 mb-4 px-0 2xl:px-1">
+            <Tabs defaultValue="projects" className="flex-1 flex flex-col gap-2 2xl:gap-4!">
+                <TabsList className="grid w-full grid-cols-2 gap-4 px-0 2xl:px-1">
                     {marketplaceData.map((section) => {
                         const Icon = section.icon;
                         return (
                             <TabsTrigger
                                 key={section.value}
                                 value={section.value}
-                                className="gap-2"
+                                className="gap-2 cursor-pointer"
                             >
                                 <Icon className="w-4 h-4" />
                                 {section.category}
@@ -89,14 +89,14 @@ export default function MarketplaceBlock({ className }: { className?: string }) 
                     <TabsContent
                         key={section.value}
                         value={section.value}
-                        className="grid grid-cols-2 gap-4 mt-0"
+                        className="grid grid-cols-2 gap-4 mt-0 h-full"
                     >
                         {section.items.map((item, itemIndex) => {
                             const ItemIcon = item.icon;
                             return (
                                 <Card
                                     key={itemIndex}
-                                    className="group hover:shadow-lg transition-all duration-300 border border-neutral-300 hover:border-neutral-400 justify-between py-3 2xl:py-6 gap-2 2xl:gap-6"
+                                    className="group hover:shadow-lg transition-all duration-300 border border-neutral-300 hover:border-neutral-400 justify-between py-3 2xl:py-6 gap-6"
                                 >
                                     <CardHeader className="2xl:pb-3">
                                         <div className="flex items-start gap-3">
@@ -105,7 +105,7 @@ export default function MarketplaceBlock({ className }: { className?: string }) 
                                             </div>
                                             <div className="flex-1">
                                                 <CardTitle className="text-base mb-1">{item.title}</CardTitle>
-                                                <CardDescription className="text-sm leading-relaxed">
+                                                <CardDescription className="text-xs 2xl:text-sm leading-relaxed">
                                                     {item.description}
                                                 </CardDescription>
                                             </div>
@@ -117,7 +117,7 @@ export default function MarketplaceBlock({ className }: { className?: string }) 
                                                 key={buttonIndex}
                                                 variant={button.variant}
                                                 size="sm"
-                                                className="flex-1 transition-all"
+                                                className="flex-1 transition-all cursor-pointer"
                                             >
                                                 {button.label}
                                             </Button>
