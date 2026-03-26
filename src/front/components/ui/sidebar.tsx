@@ -248,7 +248,7 @@ const Sidebar = React.forwardRef<
         />
         <div
           className={cn(
-            "h-[calc(100svh-1rem)] 2xl:h-[calc(100svh-2rem)] z-10 mr-2 2xl:mr-4 hidden w-[--sidebar-width] overflow-hidden p-0! transition-[left,right,width] duration-800 ease-in-out md:flex",
+            "h-[calc(100svh-1rem)] 2xl:h-[calc(100svh-2rem)] z-10 2xl:mr-4 hidden w-[--sidebar-width] overflow-hidden p-0! transition-[left,right,width] duration-800 ease-in-out md:flex",
             side === "left"
               ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
               : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
