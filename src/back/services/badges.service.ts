@@ -50,6 +50,8 @@ export const BadgesService = {
 
         await BadgesService.findByIdBadge(id);
 
+        await BadgesService.findByIdBadge(id);
+
         return BadgesAction.update(id, data);
     },
 
