@@ -19,6 +19,14 @@ export const BadgesService = {
         iconUrl?: string | null;
         active?: boolean;
     }) => {
+        
+        const user = await getUser();
+        if (!user || user.role !== "ADMIN") {
+            throw new Error("Unauthorized");
+        }
+        if (!data.name) throw new Error("Name is required");
+        if (!data.description) throw new Error("Description is required");
+
         return BadgesAction.create(data);
     },
 
@@ -32,26 +40,46 @@ export const BadgesService = {
         }
     ) => {
 
+        if (!data || Object.keys(data).length === 0) {
+        throw new Error("No data to update");
+        }
+
         const user = await getUser();
 
-        if (!user) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        if (!user || user.role !== "ADMIN") {
+            throw new Error("Unauthorized");
         }
-        const badge = await BadgesService.findByIdBadge(id);
 
-        if (!badge) {
-            return NextResponse.json({ error: "Badge not existing" }, { status: 404 });
-        }
+        await BadgesService.findByIdBadge(id);
+
         return BadgesAction.update(id, data);
     },
 
-    addUserToBadge: async (badgeId: string, userId: string) => {
-        return BadgesAction.addUser(badgeId, userId);
-    },
+   addUserToBadge: async (badgeId: string, userId: string) => {
+    const user = await getUser();
+    if (!user || user.role !== "ADMIN") {
+        throw new Error("Unauthorized");
+    }
 
-    removeUserFromBadge: async (badgeId: string, userId: string) => {
-        return BadgesAction.removeUser(badgeId, userId);
-    },
+    await BadgesService.findByIdBadge(badgeId);
+
+    await BadgesService.findByIdBadge(userId);
+
+    return BadgesAction.addUser(badgeId, userId);
+},
+
+removeUserFromBadge: async (badgeId: string, userId: string) => {
+    const user = await getUser();
+    if (!user || user.role !== "ADMIN") {
+        throw new Error("Unauthorized");
+    }
+
+    await BadgesService.findByIdBadge(badgeId);
+
+    await BadgesService.findByIdBadge(userId);
+
+    return BadgesAction.removeUser(badgeId, userId);
+},
 
     deleteBadge: async (id: string) => {
         const badge = await BadgesService.findByIdBadge(id);
