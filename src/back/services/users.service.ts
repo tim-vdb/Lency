@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import { UsersAction } from '../repositories/users.action';
-
-export const UsersService = {
-  findByEmail: async (email: string) => {
-    return UsersAction.findByEmail(email);
-  },
-};
-=======
 import { UsersAction } from "../repositories/users.action";
 import { getUser } from "../lib/auth-session";
 
@@ -96,4 +87,3 @@ export const UsersService = {
         return UsersAction.delete(id);
     },
 };
->>>>>>> 69e933f (feat(core): users route, action and service)

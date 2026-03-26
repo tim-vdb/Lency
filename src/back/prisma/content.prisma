@@ -9,7 +9,7 @@ model Article {
     published Boolean @default(false)
     image     String?
     views     Int     @default(0)
-    author    User    @relation(fields: [authorId], references: [id])
+    author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
     authorId  String
 
     createdAt DateTime @default(now())
@@ -66,7 +66,7 @@ model Post {
     categoryId String
     category   Category @relation(fields: [categoryId], references: [id])
     authorId   String
-    author     User     @relation(fields: [authorId], references: [id])
+    author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
     // Stats
     viewCount    Int @default(0)
@@ -92,7 +92,7 @@ model Comment {
     postId   String
     post     Post      @relation(fields: [postId], references: [id])
     authorId String
-    author   User      @relation(fields: [authorId], references: [id])
+    author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
     parentId String? // Pour replies nested (commentaires sur commentaires)
     parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
     children Comment[] @relation("CommentReplies")

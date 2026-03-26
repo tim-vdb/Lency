@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-import prisma from '../lib/prisma';
-
-export const UsersAction = {
-  findByEmail: async (email: string) => {
-    return prisma.user.findUnique({
-      where: { email },
-      select: { firstname: true },
-    });
-  },
-};
-=======
 import { prisma } from "../lib/prisma";
 
 export const UsersAction = {
@@ -60,4 +48,3 @@ export const UsersAction = {
         return prisma.user.delete({ where: { id } });
     },
 };
->>>>>>> 69e933f (feat(core): users route, action and service)
