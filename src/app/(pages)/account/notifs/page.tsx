@@ -6,7 +6,7 @@ import NotifsPush from "@/front/components/Private/Account/Notifs/NotifsPush"
 
 export default function NotifsSection() {
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             <NotifsEmails />
             <NotifsPush />
             <NotifsPreference />

@@ -16,22 +16,17 @@ export function AccountShell({ user, children }: { user: User | null; children: 
     return (
         <UserProvider user={user}>
             <div className="bg-[url('/images/bg2.jpg')] bg-cover bg-center">
-                <SidebarProvider className="gap-2 isolate pr-0! p-2 2xl:p-4">
+                <SidebarProvider className="gap-2 isolate pr-0! p-2 2xl:p-4 [&>div]:transition-all [&>div]:duration-800">
                     <Sheet>
-                        <AppSidebar className={isFixedLayout ? "fixed left-2 z-50" : ""} />
+                        <AppSidebar />
                         <SidebarInset className="relative bg-transparent!">
                             <Header />
-                            {/* <main className={cn("", isFixedLayout ? "pt-20" : "")}>
-                                <div className="overflow-hidden h-screen">
-                                    {children}
-                                </div>
-                            </main> */}
-                            {/* <main className={cn("flex flex-col flex-1", isFixedLayout ? "pt-20" : "")}>
-                                <div className="overflow-y-auto flex-1">
-                                    {children}
-                                </div>
-                            </main> */}
-                            <main className={cn("overflow-y-auto pr-2 rounded-xl", isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : "")}>
+                            <main
+                                className={cn(
+                                    "overflow-y-auto pr-2 rounded-xl",
+                                    isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : ""
+                                )}
+                            >
                                 {children}
                             </main>
                         </SidebarInset>

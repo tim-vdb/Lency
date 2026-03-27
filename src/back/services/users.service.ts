@@ -11,7 +11,7 @@ export const UsersService = {
     findAllUsers: async () => {
         const currentUser = await getUser();
         if (!currentUser || currentUser.role !== "ADMIN") {
-           throw new Error("Unauthorized");
+            throw new Error("Unauthorized");
         }
 
         return UsersAction.findAll();
@@ -28,7 +28,7 @@ export const UsersService = {
         const currentUser = await getUser();
         if (!currentUser || currentUser.role !== "ADMIN") {
             throw new Error("Unauthorized");
-       }
+        }
 
         if (!data.email) throw new Error("Email is required");
 
@@ -54,10 +54,10 @@ export const UsersService = {
         }
 
         const currentUser = await getUser();
-       if (!currentUser) throw new Error("Unauthorized");
+        if (!currentUser) throw new Error("Unauthorized");
 
         if (currentUser.id !== id && currentUser.role !== "ADMIN") {
-           throw new Error("Forbidden");
+            throw new Error("Forbidden");
         }
 
         await UsersService.findByIdUser(id);
@@ -68,7 +68,7 @@ export const UsersService = {
     updateUserRole: async (id: string, role: "ADMIN" | "MEMBER") => {
         const currentUser = await getUser();
         if (!currentUser || currentUser.role !== "ADMIN") {
-           throw new Error("Unauthorized");
+            throw new Error("Unauthorized");
         }
 
         await UsersService.findByIdUser(id);
@@ -79,7 +79,7 @@ export const UsersService = {
     deleteUser: async (id: string) => {
         const currentUser = await getUser();
         if (!currentUser || currentUser.role !== "ADMIN") {
-           throw new Error("Unauthorized");
+            throw new Error("Unauthorized");
         }
 
         await UsersService.findByIdUser(id);
