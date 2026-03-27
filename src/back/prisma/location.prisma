@@ -18,7 +18,9 @@ model Spot {
     description   String
     address       String
     city          String
-    author        String
+    author    String  // garde le nom
+    userId    String? // ajoute l'id du créateur
+    user      User?   @relation(fields: [userId], references: [id])
     rating        Int          @default(0)
     rating_count  Int          @default(0)
     mapLocation   MapLocation? @relation(fields: [mapLocationId], references: [id])

@@ -14,72 +14,52 @@ export const SpotsAction = {
         });
     },
 
-    create: async (data: {
+    create: async (userId: string | null, data: {
         name: string;
         description: string;
         address: string;
         city: string;
         author: string;
-        rating?: number;
-        rating_count?: number;
         mapLocationId?: string | null;
     }) => {
         return prisma.spot.create({
             data: {
-                name: data.name,
-                description: data.description,
-                address: data.address,
-                city: data.city,
-                author: data.author,
-                rating: data.rating ?? 0,
-                rating_count: data.rating_count ?? 0,
-                ...(data.mapLocationId
-                    ? { mapLocation: { connect: { id: data.mapLocationId } } }
-                    : {}),
+                ...data,
+                userId,
             },
         });
     },
 
-    update: async (
-        id: string,
-        data: {
-            name?: string;
-            description?: string;
-            address?: string;
-            city?: string;
-            author?: string;
-            rating?: number;
-            rating_count?: number;
-            mapLocationId?: string | null;
-        }
-    ) => {
-        const updateData: Record<string, unknown> = {
-            ...(data.name !== undefined && { name: data.name }),
-            ...(data.description !== undefined && { description: data.description }),
-            ...(data.address !== undefined && { address: data.address }),
-            ...(data.city !== undefined && { city: data.city }),
-            ...(data.author !== undefined && { author: data.author }),
-            ...(data.rating !== undefined && { rating: data.rating }),
-            ...(data.rating_count !== undefined && { rating_count: data.rating_count }),
-        };
+    update: async (id: string, data: {
+        name?: string;
+        description?: string;
+        address?: string;
+        city?: string;
+        mapLocationId?: string | null;
+    }) => {
+        return prisma.spot.update({
+            where: { id },
+            data,
+        });
+    },
 
-        if (data.mapLocationId !== undefined) {
-            if (data.mapLocationId === null) {
-                updateData.mapLocation = { disconnect: true };
-            } else {
-                updateData.mapLocation = { connect: { id: data.mapLocationId } };
-            }
-        }
+    rate: async (id: string, rating: number) => {
+        const spot = await prisma.spot.findUnique({ where: { id } });
+        if (!spot) throw new Error("Spot not found");
+
+        const newCount = spot.rating_count + 1;
+        const newRating = Math.round((spot.rating * spot.rating_count + rating) / newCount);
 
         return prisma.spot.update({
             where: { id },
-            data: updateData,
+            data: {
+                rating: newRating,
+                rating_count: newCount,
+            },
         });
     },
 
     delete: async (id: string) => {
-        return prisma.spot.delete({
-            where: { id },
-        });
+        return prisma.spot.delete({ where: { id } });
     },
 };

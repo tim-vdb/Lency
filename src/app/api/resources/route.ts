@@ -1,29 +1,34 @@
-import { getUser } from "@/back/lib/auth-session";
 import { ResourcesService } from "@/back/services/resources.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-    const resources = await ResourcesService.findAllResources();
-
-    return NextResponse.json({ resources });
+    try {
+        const resources = await ResourcesService.findAllResources();
+        return NextResponse.json({ resources });
+    } catch {
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
 }
 
 export async function POST(req: NextRequest) {
-    const user = await getUser();
-
-    if (!user) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    try {
+        const data = await req.json();
+        const newResource = await ResourcesService.createResource(data);
+        return NextResponse.json({ resource: newResource }, { status: 201 });
+    } catch (error) {
+        if (error instanceof Error) {
+            if (error.message === "Unauthorized") {
+                return NextResponse.json({ error: error.message }, { status: 401 });
+            }
+            if ([
+                "Title is required",
+                "URL is required",
+                "Type is required",
+                "Category is required",
+            ].includes(error.message)) {
+                return NextResponse.json({ error: error.message }, { status: 400 });
+            }
+        }
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
-
-    const { title, description, type, url, categoryId } = await req.json();
-
-    const newResource = await ResourcesService.createResource({
-        title,
-        description,
-        type,
-        url,
-        categoryId,
-    });
-
-    return NextResponse.json({ resource: newResource }, { status: 201 });
 }

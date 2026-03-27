@@ -1,55 +1,42 @@
 import prisma from "../lib/prisma";
+import { Prisma } from "../generated/prisma_client";
 
 export const UserConfigAction = {
-  findById: async (id: string) => {
-    return prisma.userConfig.findUnique({
-      where: { id },
-    });
-  },
+    findById: async (id: string) => {
+        return prisma.userConfig.findUnique({ where: { id } });
+    },
 
-  findAll: async () => {
-    return prisma.userConfig.findMany();
-  },
+    findByUserId: async (userId: string) => {
+        return prisma.userConfig.findMany({ where: { userId } });
+    },
 
-  create: async (
-    userId: string,
-    data: { title: string; content: any } // content est de type Json
-  ) => {
-    return prisma.userConfig.create({
-      data: {
-        title: data.title,
-        content: data.content,
-        user: { connect: { id: userId } },
-      },
-    });
-  },
+    findAll: async () => {
+        return prisma.userConfig.findMany();
+    },
 
-  update: async (
-    id: string,
-    data: {
-      title?: string;
-      content?: any;
-      userId?: string;
-    }
-  ) => {
-    const updateData: Record<string, unknown> = {
-      ...(data.title !== undefined && { title: data.title }),
-      ...(data.content !== undefined && { content: data.content }),
-    };
+    create: async (userId: string, data: {
+        title: string;
+        content: Prisma.InputJsonValue;
+    }) => {
+        return prisma.userConfig.create({
+            data: {
+                ...data,
+                userId,
+            },
+        });
+    },
 
-    if (data.userId !== undefined) {
-      updateData.user = { connect: { id: data.userId } };
-    }
+    update: async (id: string, data: {
+        title?: string;
+        content?: Prisma.InputJsonValue;
+    }) => {
+        return prisma.userConfig.update({
+            where: { id },
+            data,
+        });
+    },
 
-    return prisma.userConfig.update({
-      where: { id },
-      data: updateData,
-    });
-  },
-
-  delete: async (id: string) => {
-    return prisma.userConfig.delete({
-      where: { id },
-    });
-  },
+    delete: async (id: string) => {
+        return prisma.userConfig.delete({ where: { id } });
+    },
 };

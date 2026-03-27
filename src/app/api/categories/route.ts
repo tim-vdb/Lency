@@ -1,23 +1,29 @@
-import { getUser } from "@/back/lib/auth-session";
 import { CategoriesService } from "@/back/services/categories.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-    const data = await CategoriesService.findAllCategories();
-
-    return NextResponse.json({ categories: data });
+    try {
+        const data = await CategoriesService.findAllCategories();
+        return NextResponse.json({ categories: data });
+    } catch {
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
 }
 
 export async function POST(req: NextRequest) {
-    const user = await getUser();
-
-    if (!user) {
-       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-   }
-
-    const { name, slug, description, iconUrl, bannerUrl, rules, lastPostAt } = await req.json();
-
-    const newCategory = await CategoriesService.createCategory(user.id, { name, slug, description, iconUrl, bannerUrl, rules, lastPostAt });
-
-    return NextResponse.json({ category: newCategory }, { status: 201 });
+    try {
+        const data = await req.json();
+        const newCategory = await CategoriesService.createCategory(data);
+        return NextResponse.json({ category: newCategory }, { status: 201 });
+    } catch (error) {
+        if (error instanceof Error) {
+            if (error.message === "Unauthorized") {
+                return NextResponse.json({ error: error.message }, { status: 401 });
+            }
+            if (error.message === "Name is required" || error.message === "Slug is required") {
+                return NextResponse.json({ error: error.message }, { status: 400 });
+            }
+        }
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
 }
