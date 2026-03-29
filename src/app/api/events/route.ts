@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
                 "Start date is required",
                 "End date is required",
                 "Start date must be before end date",
+                 "Event type is required",
             ].includes(error.message)) {
                 return NextResponse.json({ error: error.message }, { status: 400 });
             }

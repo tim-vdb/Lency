@@ -24,6 +24,7 @@ model Event {
     participants Int      @default(1)
     startDate    DateTime
     endDate      DateTime
+    typeEvent    TypeEvent
     createdAt    DateTime @default(now())
     users        User[]   @relation("UserEvent")
     userId       String?

@@ -43,6 +43,7 @@ model User {
   creator               Category[]             @relation("CreatedCategories")
   eventId               String?
   events                Event[]                @relation("UserEvent")
+  spots                 Spot[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

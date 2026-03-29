@@ -23,6 +23,10 @@ export async function POST(req: NextRequest) {
                 "Address is required",
                 "City is required",
                 "Author is required",
+                "Map location is required",
+                "Location name is required",
+                "Latitude is required",
+                "Longitude is required",
             ].includes(error.message)) {
                 return NextResponse.json({ error: error.message }, { status: 400 });
             }
