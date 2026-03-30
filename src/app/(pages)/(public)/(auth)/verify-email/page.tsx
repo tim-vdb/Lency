@@ -77,8 +77,8 @@ export default function VerifyEmailPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 py-12">
-            <div className="bg-white border-4 rounded-3xl p-10 w-full max-w-md shadow-lg mb-24">
+        <div className="container flex items-center justify-center h-[calc(100vh-5rem)]">
+            <div className="bg-white border-4 rounded-3xl p-10 w-full max-w-md shadow-lg">
                 <div className="text-center mb-8">
                     <p className="text-xs uppercase tracking-[0.25em] dark:text-black font-inter">Verify email</p>
                     <h2 className="text-4xl leading-tight dark:text-black">Confirm your email address</h2>
@@ -91,6 +91,8 @@ export default function VerifyEmailPage() {
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
                         placeholder="example@mail.com"
+                        disabled
+                        className='disabled:pointer-events-auto'
                     />
 
                     <Input
@@ -98,6 +100,7 @@ export default function VerifyEmailPage() {
                         onChange={(event) => setOtp(event.target.value)}
                         placeholder="123456"
                         maxLength={8}
+                        className='font-light! text-neutral-250!'
                     />
 
                     <Button type="submit" disabled={isVerifying} className="rounded-md text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition">

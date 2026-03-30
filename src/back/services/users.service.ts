@@ -17,6 +17,12 @@ export const UsersService = {
         return UsersAction.findAll();
     },
 
+    findByEmail: async (email: string) => {
+        const user = await UsersAction.findByEmail(email);
+        if (!user) throw new Error("User not found");
+        return user;
+    },
+
     createUser: async (data: {
         email: string;
         name?: string;
@@ -78,8 +84,13 @@ export const UsersService = {
 
     deleteUser: async (id: string) => {
         const currentUser = await getUser();
-        if (!currentUser || currentUser.role !== "ADMIN") {
+        if (!currentUser) {
             throw new Error("Unauthorized");
+        }
+
+        // Allow users to delete their own account, or admins to delete anyone
+        if (currentUser.id !== id && currentUser.role !== "ADMIN") {
+            throw new Error("Forbidden");
         }
 
         await UsersService.findByIdUser(id);

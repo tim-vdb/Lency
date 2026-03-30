@@ -16,7 +16,7 @@ export function AccountShell({ user, children }: { user: User | null; children: 
     return (
         <UserProvider user={user}>
             <div className="bg-[url('/images/bg2.jpg')] bg-cover bg-center">
-                <SidebarProvider className="gap-2 isolate pr-0! p-2 2xl:p-4 [&>div]:transition-all [&>div]:duration-800">
+                <SidebarProvider className="gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
                     <Sheet>
                         <AppSidebar />
                         <SidebarInset className="relative bg-transparent!">

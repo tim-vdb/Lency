@@ -13,6 +13,13 @@ export const UsersAction = {
         });
     },
 
+    findByEmail: async (email: string) => {
+        return prisma.user.findUnique({
+            where: { email },
+            select: { firstname: true }
+        }).catch(() => null);
+    },
+
     create: async (data: {
         email: string;
         name?: string;
