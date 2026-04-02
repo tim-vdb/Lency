@@ -21,6 +21,7 @@ export const EventsAction = {
             data: {
                 ...data,
                 userId,
+                typeEvent: 'VIRTUAL',
             },
         });
     },

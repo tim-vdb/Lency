@@ -27,9 +27,8 @@ export async function GET(req: NextRequest) {
         }
 
         // Revoke all sessions so the next login uses the new email
-        await auth.api.revokeUserSessions({
+        await auth.api.revokeSessions({
             headers: await headers(),
-            body: { userId: user.id },
         }).catch((err) => {
             console.error('Failed to revoke sessions after email change:', err)
         })
