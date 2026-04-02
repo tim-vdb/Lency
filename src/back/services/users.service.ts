@@ -1,5 +1,6 @@
 import { UsersAction } from "../repositories/users.action";
 import { getUser } from "../lib/auth-session";
+import crypto from "crypto";
 
 export const UsersService = {
     findByIdUser: async (id: string) => {
@@ -96,5 +97,40 @@ export const UsersService = {
         await UsersService.findByIdUser(id);
 
         return UsersAction.delete(id);
+    },
+
+    initiateEmailChange: async (userId: string, newEmail: string) => {
+        // Check newEmail not already in use
+        const existing = await UsersAction.findByEmail(newEmail);
+        if (existing) throw new Error("EMAIL_ALREADY_IN_USE");
+
+        const rawToken = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+        await UsersAction.savePendingEmailChange(userId, {
+            pendingEmail: newEmail,
+            emailChangeToken: hashedToken,
+            emailChangeTokenExpiresAt: expiresAt,
+        });
+
+        return rawToken;
+    },
+
+    confirmEmailChange: async (rawToken: string) => {
+        const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+        const user = await UsersAction.findByEmailChangeToken(hashedToken);
+
+        if (!user) throw new Error("TOKEN_INVALID_OR_EXPIRED");
+        if (!user.pendingEmail) throw new Error("NO_PENDING_EMAIL");
+
+        await UsersAction.confirmEmailChange(user.id, user.pendingEmail);
+
+        return user;
+    },
+
+    hasCredentialAccount: async (userId: string) => {
+        const account = await UsersAction.findCredentialAccount(userId);
+        return !!account?.password;
     },
 };

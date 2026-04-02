@@ -101,6 +101,28 @@ export async function updateUser(
     return data.user
 }
 
+export interface ChangePasswordInput {
+    currentPassword: string;
+    newPassword: string;
+}
+
+/**
+ * Change le mot de passe de l'utilisateur connecté
+ * Utilisé avec useMutation
+ */
+export async function changePassword(input: ChangePasswordInput): Promise<void> {
+    const response = await fetch('/api/users/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || 'Erreur lors du changement de mot de passe');
+    }
+}
+
 /**
  * Supprime un utilisateur (ou son propre compte)
  * Utilisé avec useMutation
@@ -113,5 +135,28 @@ export async function deleteUser(userId: string): Promise<void> {
     if (!response.ok) {
         const error = await response.json().catch(() => ({}))
         throw new Error(error.error || 'Erreur lors de la suppression du compte')
+    }
+}
+
+export interface VerifyEmailChangeInput {
+    currentPassword: string;
+    newEmail: string;
+}
+
+/**
+ * Demande un changement d'email
+ * Génère un token, sauvegarde pendingEmail, envoie email de confirmation
+ * Utilisé avec useMutation
+ */
+export async function verifyEmailChange(input: VerifyEmailChangeInput): Promise<void> {
+    const response = await fetch('/api/users/verify-email-change', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+    })
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors de la demande de changement d\'email')
     }
 }

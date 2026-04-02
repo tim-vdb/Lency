@@ -1,38 +1,64 @@
-/**
- * Hooks React Query pour les utilisateurs — pattern queryOptions/factory (TanStack Query v5+)
- *
- * Ces hooks sont intentionnellement fins : toute la logique (queryKey, queryFn,
- * staleTime, invalidation, optimistic update) est centralisée dans
- * src/front/lib/query-options/users.ts
- *
- * Avantages :
- * - Une seule source de vérité pour les clés de cache
- * - prefetchQuery / hydration SSR en 1 ligne depuis n'importe où
- * - Ajout de staleTime / gcTime / select une seule fois dans le factory
- * - Moins de boilerplate, plus cohérent sur un gros projet
- */
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+    changePassword,
+    deleteUser,
+    fetchUserById,
+    fetchUsers,
+    updateUser,
+    verifyEmailChange,
+    type ChangePasswordInput,
+    type UpdateUserInput,
+    type VerifyEmailChangeInput,
+} from "@/front/lib/api/users"
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { userMutations, userQueries } from "@/front/lib/query-options/users"
+const USER_ROOT = ["users"] as const
+
+// ─── Query options (exportés pour le prefetch SSR) ────────────────────────────
+
+export const userQueries = {
+    all: USER_ROOT,
+
+    lists: () =>
+        queryOptions({
+            queryKey: [...USER_ROOT, "list"] as const,
+            queryFn: fetchUsers,
+            staleTime: 1000 * 60 * 5,
+        }),
+
+    detail: (id: string) =>
+        queryOptions({
+            queryKey: [...USER_ROOT, "detail", id] as const,
+            queryFn: () => fetchUserById(id),
+            staleTime: 1000 * 60 * 5,
+        }),
+}
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
-/** Récupère tous les utilisateurs */
 export const useUsers = () => useQuery(userQueries.lists())
 
-/** Récupère un utilisateur par son ID */
 export const useUserById = (id: string) => useQuery(userQueries.detail(id))
 
 // ─── Mutations ────────────────────────────────────────────────────────────────
 
-/** Met à jour un utilisateur existant */
 export const useUpdateUser = () => {
     const queryClient = useQueryClient()
-    return useMutation(userMutations.update(queryClient))
+    return useMutation({
+        mutationFn: ({ id, data }: { id: string; data: UpdateUserInput }) => updateUser(id, data),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: USER_ROOT }),
+    })
 }
 
-/** Supprime un utilisateur */
 export const useDeleteUser = () => {
     const queryClient = useQueryClient()
-    return useMutation(userMutations.delete(queryClient))
+    return useMutation({
+        mutationFn: deleteUser,
+        onSettled: () => queryClient.invalidateQueries({ queryKey: USER_ROOT }),
+    })
 }
+
+export const useChangePassword = () =>
+    useMutation({ mutationFn: (input: ChangePasswordInput) => changePassword(input) })
+
+export const useVerifyEmailChange = () =>
+    useMutation({ mutationFn: (input: VerifyEmailChangeInput) => verifyEmailChange(input) })

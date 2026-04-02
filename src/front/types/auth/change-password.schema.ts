@@ -1,0 +1,14 @@
+import { z } from 'zod';
+
+export const ChangePasswordSchema = z
+    .object({
+        currentPassword: z.string().min(1, 'Le mot de passe actuel est requis'),
+        newPassword: z.string().min(12, 'Le nouveau mot de passe doit contenir au moins 12 caractères'),
+        confirmPassword: z.string().min(1, 'La confirmation est requise'),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: 'Les mots de passe ne correspondent pas',
+        path: ['confirmPassword'],
+    });
+
+export type ChangePasswordFormValues = z.infer<typeof ChangePasswordSchema>;

@@ -1,110 +1,84 @@
 /// *
 /// CONTENU - ARTICLES, POSTS & COMMENTS
 model Article {
-    id        String  @id @default(cuid())
-    title     String
-    slug      String  @unique
-    excerpt   String?
-    content   String
-    published Boolean @default(false)
-    image     String?
-    views     Int     @default(0)
-    author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    authorId  String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  excerpt   String?
+  content   String
+  published Boolean  @default(false)
+  image     String?
+  views     Int      @default(0)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 model Category {
-    id          String  @id @default(cuid())
-    slug        String  @unique // ex: "photoshop-tutoriels"
-    name        String // ex: "Photoshop : Tutoriels et Astuces"
-    description String? // Texte markdown pour règles et intro
+  id              String     @id @default(cuid())
+  slug            String     @unique
+  name            String
+  description     String?
+  visibility      Visibility @default(PUBLIC)
+  createdBy       String
+  iconUrl         String?
+  bannerUrl       String?
+  rules           String?
+  isNSFW          Boolean    @default(false)
+  postCount       Int        @default(0)
+  subscriberCount Int        @default(0)
+  lastPostAt      DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  userId          String?
+  creator         User       @relation("CreatedCategories", fields: [createdBy], references: [id])
+  user            User?      @relation(fields: [userId], references: [id])
+  posts           Post[]
+  ressources      Resource[]
 
-    // Visibilité & accès
-    visibility Visibility @default(PUBLIC) // Public, privé, etc.
-
-    // Création & modération
-    createdBy String
-    creator   User   @relation("CreatedCategories", fields: [createdBy], references: [id])
-
-    // Métadonnées forum-like
-    iconUrl   String? // Icône/emoji pour la catégorie
-    bannerUrl String? // Bannière visuelle
-    rules     String? // Règles spécifiques (markdown)
-    isNSFW    Boolean @default(false) // Pour contenus sensibles (ex: art digital adulte)
-
-    // Stats engagement
-    postCount       Int       @default(0)
-    subscriberCount Int       @default(0) // Abonnés à la catégorie
-    lastPostAt      DateTime?
-
-    // Dates
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    // Relations
-    posts      Post[] // Tous les threads/posts dans cette catégorie
-    user       User?      @relation(fields: [userId], references: [id])
-    userId     String?
-    ressources Resource[]
-
-    @@index([slug])
-    @@index([visibility])
-    @@index([createdBy])
+  @@index([slug])
+  @@index([visibility])
+  @@index([createdBy])
 }
 
 model Post {
-    id          String  @id @default(cuid())
-    title       String // Titre du thread (ex: "Comment flouter un fond dans Photoshop ?")
-    content     String // Corps du post (markdown, avec embeds pour images/vidéos audio-visuelles)
-    isPublished Boolean @default(false) // Épinglé en haut
-    isLocked    Boolean @default(false) // Verrouillé (plus de commentaires)
+  id           String    @id @default(cuid())
+  title        String
+  content      String
+  isLocked     Boolean   @default(false)
+  categoryId   String
+  authorId     String
+  viewCount    Int       @default(0)
+  upvoteCount  Int       @default(0)
+  commentCount Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  isPublished  Boolean   @default(false)
+  comments     Comment[]
+  author       User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category     Category  @relation(fields: [categoryId], references: [id])
 
-    // Relations
-    categoryId String
-    category   Category @relation(fields: [categoryId], references: [id])
-    authorId   String
-    author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-
-    // Stats
-    viewCount    Int @default(0)
-    upvoteCount  Int @default(0) // Votes comme Reddit
-    commentCount Int @default(0)
-
-    // Dates
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    comments Comment[]
-
-    @@index([categoryId])
-    @@index([authorId])
-    @@index([createdAt(sort: Desc)]) // Pour trier par récent
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([createdAt(sort: Desc)])
 }
 
 model Comment {
-    id      String @id @default(cuid())
-    content String // Texte du commentaire (markdown)
+  id          String    @id @default(cuid())
+  content     String
+  postId      String
+  authorId    String
+  parentId    String?
+  upvoteCount Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  children    Comment[] @relation("CommentReplies")
+  post        Post      @relation(fields: [postId], references: [id])
 
-    // Relations
-    postId   String
-    post     Post      @relation(fields: [postId], references: [id])
-    authorId String
-    author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    parentId String? // Pour replies nested (commentaires sur commentaires)
-    parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
-    children Comment[] @relation("CommentReplies")
-
-    // Stats
-    upvoteCount Int @default(0)
-
-    // Dates
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([postId])
-    @@index([authorId])
-    @@index([parentId])
+  @@index([postId])
+  @@index([authorId])
+  @@index([parentId])
 }

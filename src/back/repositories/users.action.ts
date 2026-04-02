@@ -54,4 +54,40 @@ export const UsersAction = {
     delete: async (id: string) => {
         return prisma.user.delete({ where: { id } });
     },
+
+    findByEmailChangeToken: async (hashedToken: string) => {
+        return prisma.user.findFirst({
+            where: {
+                emailChangeToken: hashedToken,
+                emailChangeTokenExpiresAt: { gt: new Date() },
+            },
+        });
+    },
+
+    findCredentialAccount: async (userId: string) => {
+        return prisma.account.findFirst({
+            where: { userId, providerId: 'credential' },
+            select: { password: true },
+        });
+    },
+
+    savePendingEmailChange: async (
+        userId: string,
+        data: { pendingEmail: string; emailChangeToken: string; emailChangeTokenExpiresAt: Date }
+    ) => {
+        return prisma.user.update({ where: { id: userId }, data });
+    },
+
+    confirmEmailChange: async (userId: string, newEmail: string) => {
+        return prisma.user.update({
+            where: { id: userId },
+            data: {
+                email: newEmail,
+                emailVerified: true,
+                pendingEmail: null,
+                emailChangeToken: null,
+                emailChangeTokenExpiresAt: null,
+            },
+        });
+    },
 };
