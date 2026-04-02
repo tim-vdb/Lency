@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: Promise<{ subscriberId: string }> }
+    { params }: { params: Promise<{ newsletterSubscriberId: string }> }
 ) {
     try {
-        const { subscriberId } = await params;
-        const data = await NewsletterSubscribersService.findByIdSubscriber(subscriberId);
+        const { newsletterSubscriberId } = await params;
+        const data = await NewsletterSubscribersService.findByIdSubscriber(newsletterSubscriberId);
         return NextResponse.json({ subscriber: data });
     } catch (error) {
         if (error instanceof Error) {
@@ -21,11 +21,11 @@ export async function GET(
 
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: Promise<{ subscriberId: string }> }
+    { params }: { params: Promise<{ newsletterSubscriberId: string }> }
 ) {
     try {
-        const { subscriberId } = await params;
-        await NewsletterSubscribersService.deleteSubscriber(subscriberId);
+        const { newsletterSubscriberId } = await params;
+        await NewsletterSubscribersService.deleteSubscriber(newsletterSubscriberId);
         return new NextResponse(null, { status: 204 });
     } catch (error) {
         if (error instanceof Error) {
