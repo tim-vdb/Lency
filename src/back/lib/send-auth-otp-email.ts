@@ -19,7 +19,7 @@ export async function sendAuthOtpEmail({ email, otp, type }: SendAuthOtpEmailPar
     const firstName = user?.firstname ?? null;
     const expiresInSeconds = Number(process.env.AUTH_EMAIL_OTP_EXPIRES_IN ?? 300);
     const expiresInMinutes = Math.max(1, Math.ceil((Number.isFinite(expiresInSeconds) ? expiresInSeconds : 300) / 60));
-    const sender = process.env.RESEND_FROM_AUTH_EMAIL ?? 'Lency <auth@infos.lency.net>';
+    const sender = process.env.RESEND_FROM_AUTH_EMAIL ?? 'Lency <no-reply@infos.lency.net>';
 
     const isPasswordReset = type === 'forget-password';
     const subject = isPasswordReset
