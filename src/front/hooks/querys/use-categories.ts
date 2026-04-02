@@ -1,44 +1,82 @@
-/**
- * Hooks React Query pour les catégories — pattern queryOptions/factory (TanStack Query v5+)
- *
- * Ces hooks sont intentionnellement fins : toute la logique (queryKey, queryFn,
- * staleTime, invalidation, optimistic update) est centralisée dans
- * src/front/lib/query-options/categories.ts
- *
- * Avantages :
- * - Une seule source de vérité pour les clés de cache
- * - prefetchQuery / hydration SSR en 1 ligne depuis n'importe où
- * - Ajout de staleTime / gcTime / select une seule fois dans le factory
- * - Moins de boilerplate, plus cohérent sur un gros projet
- */
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+    createCategory,
+    deleteCategory,
+    fetchCategories,
+    fetchCategoryById,
+    updateCategory,
+    type Category,
+    type CreateCategoryInput,
+} from "@/front/lib/api/categories"
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { categoryMutations, categoryQueries } from "@/front/lib/query-options/categories"
+const CATEGORY_ROOT = ["categories"] as const
+
+// ─── Query options (exportés pour le prefetch SSR) ────────────────────────────
+
+export const categoryQueries = {
+    all: CATEGORY_ROOT,
+
+    lists: () =>
+        queryOptions({
+            queryKey: [...CATEGORY_ROOT, "list"] as const,
+            queryFn: fetchCategories,
+            staleTime: 1000 * 60 * 5,
+        }),
+
+    detail: (id: string) =>
+        queryOptions({
+            queryKey: [...CATEGORY_ROOT, "detail", id] as const,
+            queryFn: () => fetchCategoryById(id),
+            staleTime: 1000 * 60 * 5,
+        }),
+}
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
-/** Récupère toutes les catégories */
 export const useCategories = () => useQuery(categoryQueries.lists())
 
-/** Récupère une catégorie par son ID */
 export const useCategoryById = (id: string) => useQuery(categoryQueries.detail(id))
 
 // ─── Mutations ────────────────────────────────────────────────────────────────
 
-/** Crée une nouvelle catégorie */
 export const useCreateCategory = () => {
     const queryClient = useQueryClient()
-    return useMutation(categoryMutations.create(queryClient))
+    return useMutation({
+        mutationFn: createCategory,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "list"] }),
+    })
 }
 
-/** Met à jour une catégorie existante */
 export const useUpdateCategory = () => {
     const queryClient = useQueryClient()
-    return useMutation(categoryMutations.update(queryClient))
+    return useMutation({
+        mutationFn: ({ id, data }: { id: string; data: Partial<CreateCategoryInput> }) => updateCategory(id, data),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: CATEGORY_ROOT }),
+    })
 }
 
-/** Supprime une catégorie (optimistic update inclus) */
 export const useDeleteCategory = () => {
     const queryClient = useQueryClient()
-    return useMutation(categoryMutations.delete(queryClient))
+    return useMutation({
+        mutationFn: deleteCategory,
+        onMutate: async (categoryId: string) => {
+            const listKey = categoryQueries.lists().queryKey
+            await queryClient.cancelQueries({ queryKey: listKey })
+            const previousCategories = queryClient.getQueryData<Category[]>(listKey)
+            queryClient.setQueryData<Category[]>(listKey, (old = []) =>
+                old.filter((cat) => cat.id !== categoryId)
+            )
+            return { previousCategories }
+        },
+        onError: (
+            _err: unknown,
+            _categoryId: string,
+            context: { previousCategories: Category[] | undefined } | undefined
+        ) => {
+            if (context?.previousCategories !== undefined) {
+                queryClient.setQueryData(categoryQueries.lists().queryKey, context.previousCategories)
+            }
+        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "list"] }),
+    })
 }

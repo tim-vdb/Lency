@@ -16,7 +16,7 @@ export async function POST(): Promise<NextResponse> {
         const { data, error } = await resend.emails.send({
             from: 'Lency <welcome@infos.lency.net>',
             to: [userEmail],
-            subject: "Bienvenue chez Lency ! La plateforme communautaire pour les passionnés d'audio/visuel",
+            subject: "Bienvenue chez Lency ! La plateforme communautaire pour les passionnés d'audiovisuel",
             react: WelcomeEmail({ firstName: user?.firstname ?? null }),
         });
 
@@ -53,7 +53,7 @@ export async function POST(): Promise<NextResponse> {
 //         await transporter.sendMail({
 //             from: `Lency <${process.env.SMTP_FROM ?? 'welcome@infos.lency.net'}>`,
 //             to: 'timotheevdbosch@gmail.com',
-//             subject: "Bienvenue chez Lency ! La plateforme communautaire pour les passionnés d'audio/visuel",
+//             subject: "Bienvenue chez Lency ! La plateforme communautaire pour les passionnés d'audiovisuel",
 //             html,
 //         });
 

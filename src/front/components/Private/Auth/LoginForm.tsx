@@ -78,8 +78,8 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center px-4 py-12 text-foreground">
-        <div className="bg-white dark:bg-white border-4 border-zinc-200 dark:border-zinc-300 rounded-3xl p-10 w-full max-w-md shadow-lg mb-24">
+      <div className="flex items-center justify-center text-foreground h-[calc(100svh-5rem)]">
+        <div className="bg-white dark:bg-white border-4 border-zinc-200 dark:border-zinc-300 rounded-3xl p-10 w-full max-w-md shadow-lg">
           <div className="text-center mb-8">
             <p className="text-xs uppercase tracking-[0.25em] text-zinc-700 dark:text-zinc-700 font-inter">
               Login

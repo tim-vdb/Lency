@@ -7,12 +7,12 @@ import { usePathname } from "next/navigation";
 
 export default function PublicShell({ user, children }: { user: User | null; children: React.ReactNode }) {
     const pathname = usePathname();
-    const isAuthPage = pathname.startsWith("/login") || pathname.startsWith("/sign-up");
+    const isAuthPage = pathname.startsWith("/login") || pathname.startsWith("/sign-up") || pathname.startsWith("/verify-email") || pathname.startsWith("/forgot-password") || pathname.startsWith("/reset-password");
 
     return (
         <UserProvider user={user}>
             <HeaderPublic />
-            <main className="min-h-screen">{children}</main>
+            <main>{children}</main>
             {!isAuthPage && <Footer />}
         </UserProvider>
     );

@@ -23,7 +23,7 @@ const marketplaceData = [
             },
             {
                 title: "Lancer votre projet",
-                description: "Créez votre projet audio/visuel, définissez vos besoins et recrutez votre équipe au sein de la communauté.",
+                description: "Créez votre projet audiovisuel, définissez vos besoins et recrutez votre équipe au sein de la communauté.",
                 icon: Rocket,
                 buttons: [
                     { label: "Créer un projet", variant: "default" as const },

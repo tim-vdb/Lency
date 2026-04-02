@@ -4,10 +4,16 @@ export const ProjectsAction = {
     findById: async (id: string) => {
         return prisma.project.findUnique({ where: { id } });
     },
+
     findAll: async () => {
         return prisma.project.findMany();
     },
-    create: async (userId: string, data: { title: string, description: string, mapLocationId: string | null }) => {
+
+    create: async (userId: string, data: {
+        title: string;
+        description: string;
+        mapLocationId?: string | null;
+    }) => {
         return prisma.project.create({
             data: {
                 ...data,
@@ -16,42 +22,19 @@ export const ProjectsAction = {
         });
     },
 
-    update: async (
-        id: string,
-        data: {
-            title?: string;
-            description?: string;
-            updatedAt?: Date;
-            status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
-            ownerId?: string;
-            mapLocationId?: string | null;
-        }
-    ) => {
-        const updateData: Record<string, unknown> = {
-            ...(data.title !== undefined && { title: data.title }),
-            ...(data.description !== undefined && { description: data.description }),
-            ...(data.status !== undefined && { status: data.status }),
-        };
-
-        if (data.ownerId !== undefined) {
-            // map ownerId -> relation update
-            updateData.owner = { connect: { id: data.ownerId } };
-        }
-
-        if (data.mapLocationId !== undefined) {
-            if (data.mapLocationId === null) {
-                updateData.mapLocation = { disconnect: true };
-            } else {
-                updateData.mapLocation = { connect: { id: data.mapLocationId } };
-            }
-        }
-
-        return prisma.project.update({ where: { id }, data: updateData });
+    update: async (id: string, data: {
+        title?: string;
+        description?: string;
+        status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
+        mapLocationId?: string | null;
+    }) => {
+        return prisma.project.update({
+            where: { id },
+            data,
+        });
     },
-
 
     delete: async (id: string) => {
         return prisma.project.delete({ where: { id } });
     },
-}
-
+};

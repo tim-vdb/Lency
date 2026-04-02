@@ -1,31 +1,35 @@
-import { getUser } from "@/back/lib/auth-session";
 import { EventsService } from "@/back/services/events.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-    const events = await EventsService.findAllEvents();
-
-    return NextResponse.json({ events });
+    try {
+        const events = await EventsService.findAllEvents();
+        return NextResponse.json({ events });
+    } catch {
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
 }
 
 export async function POST(req: NextRequest) {
-    const user = await getUser();
-
-    if (!user) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    try {
+        const data = await req.json();
+        const newEvent = await EventsService.createEvent(data);
+        return NextResponse.json({ event: newEvent }, { status: 201 });
+    } catch (error) {
+        if (error instanceof Error) {
+            if (error.message === "Unauthorized") {
+                return NextResponse.json({ error: error.message }, { status: 401 });
+            }
+            if ([
+                "Title is required",
+                "Description is required",
+                "Start date is required",
+                "End date is required",
+                "Start date must be before end date",
+            ].includes(error.message)) {
+                return NextResponse.json({ error: error.message }, { status: 400 });
+            }
+        }
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
-
-    const { title, description, location, startDate, endDate, participants } =
-        await req.json();
-
-    const newEvent = await EventsService.createEvent(user.id, {
-        title,
-        description,
-        location,
-        startDate,
-        endDate,
-        participants,
-    });
-
-    return NextResponse.json({ event: newEvent }, { status: 201 });
 }

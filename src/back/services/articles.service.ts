@@ -1,4 +1,3 @@
-import { get } from "http";
 import { ArticlesAction } from "../repositories/articles.action";
 import { getUser } from "../lib/auth-session";
 
@@ -13,21 +12,21 @@ export const ArticlesService = {
         return ArticlesAction.findAll();
     },
 
-    createArticle: async (
-        userId: string,
-        data: {
-            title: string;
-            slug: string;
-            excerpt: string;
-            content: string;
-            image: string;
-        }) => {
+    createArticle: async (data: {
+        title: string;
+        slug: string;
+        excerpt: string;
+        content: string;
+        image: string;
+    }) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
 
         if (!data.title) throw new Error("Title is required");
         if (!data.slug) throw new Error("Slug is required");
         if (!data.content) throw new Error("Content is required");
 
-        return ArticlesAction.create(userId, data);
+        return ArticlesAction.create(user.id, data);
     },
 
     updateArticle: async (
@@ -40,16 +39,8 @@ export const ArticlesService = {
             image?: string;
         }
     ) => {
-        const article = await ArticlesService.findByIdArticle(id);
-
-        const user = await getUser();
-
-        if (article.authorId !== user?.id) {
-        throw new Error("Forbidden");
-        }
-
         if (!data || Object.keys(data).length === 0) {
-        throw new Error("No data to update");
+            throw new Error("No data to update");
         }
 
         if (data.title && data.title.length < 3) {
@@ -59,17 +50,27 @@ export const ArticlesService = {
         if (data.slug && !/^[a-z0-9-]+$/.test(data.slug)) {
             throw new Error("Invalid slug");
         }
+
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+
+        const article = await ArticlesService.findByIdArticle(id);
+        if (article.authorId !== user.id && user.role !== "ADMIN") {
+            throw new Error("Forbidden");
+        }
+
         return ArticlesAction.update(id, data);
     },
 
     deleteArticle: async (id: string) => {
         const user = await getUser();
-        const article = await ArticlesService.findByIdArticle(id);
+        if (!user) throw new Error("Unauthorized");
 
-        if (article.authorId !== user?.id) {
+        const article = await ArticlesService.findByIdArticle(id);
+        if (article.authorId !== user.id && user.role !== "ADMIN") {
             throw new Error("Forbidden");
         }
 
         return ArticlesAction.delete(id);
-        }
+    },
 };

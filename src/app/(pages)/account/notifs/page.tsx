@@ -1,0 +1,15 @@
+"use client"
+
+import NotifsEmails from "@/front/components/Private/Account/Notifs/NotifsEmails"
+import NotifsPreference from "@/front/components/Private/Account/Notifs/NotifsPreference"
+import NotifsPush from "@/front/components/Private/Account/Notifs/NotifsPush"
+
+export default function NotifsSection() {
+    return (
+        <div className="flex flex-col gap-2">
+            <NotifsEmails />
+            <NotifsPush />
+            <NotifsPreference />
+        </div>
+    )
+}

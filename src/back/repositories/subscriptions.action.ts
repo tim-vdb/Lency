@@ -1,56 +1,43 @@
 import prisma from "../lib/prisma";
 
 export const SubscriptionsAction = {
-  findById: async (id: string) => {
-    return prisma.subscription.findUnique({
-      where: { id }
-    });
-  },
+    findById: async (id: string) => {
+        return prisma.subscription.findUnique({ where: { id } });
+    },
 
-  findAll: async () => {
-    return prisma.subscription.findMany();
-  },
+    findByUserId: async (userId: string) => {
+        return prisma.subscription.findUnique({ where: { userId } });
+    },
 
-  create: async (
-    userId: string,
-    data: { status: "ACTIVE" | "CANCELED" | "EXPIRED"; startedAt: Date; endedAt?: Date | null }
-  ) => {
-    return prisma.subscription.create({
-      data: {
-        user: { connect: { id: userId } },
-        ...data,
-      },
-    });
-  },
+    findAll: async () => {
+        return prisma.subscription.findMany();
+    },
 
-  update: async (
-    id: string,
-    data: {
-      status?: "ACTIVE" | "CANCELED" | "EXPIRED";
-      startedAt?: Date;
-      endedAt?: Date | null;
-      userId?: string;
-    }
-  ) => {
-    const updateData: Record<string, unknown> = {
-      ...(data.status !== undefined && { status: data.status }),
-      ...(data.startedAt !== undefined && { startedAt: data.startedAt }),
-      ...(data.endedAt !== undefined && { endedAt: data.endedAt }),
-    };
+    create: async (userId: string, data: {
+        status: "ACTIVE" | "CANCELED" | "EXPIRED";
+        startedAt: Date;
+        endedAt?: Date | null;
+    }) => {
+        return prisma.subscription.create({
+            data: {
+                ...data,
+                userId,
+            },
+        });
+    },
 
-    if (data.userId !== undefined) {
-      updateData.user = { connect: { id: data.userId } };
-    }
+    update: async (id: string, data: {
+        status?: "ACTIVE" | "CANCELED" | "EXPIRED";
+        startedAt?: Date;
+        endedAt?: Date | null;
+    }) => {
+        return prisma.subscription.update({
+            where: { id },
+            data,
+        });
+    },
 
-    return prisma.subscription.update({
-      where: { id },
-      data: updateData,
-    });
-  },
-
-  delete: async (id: string) => {
-    return prisma.subscription.delete({
-      where: { id },
-    });
-  },
+    delete: async (id: string) => {
+        return prisma.subscription.delete({ where: { id } });
+    },
 };

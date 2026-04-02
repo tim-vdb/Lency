@@ -1,35 +1,40 @@
 enum Role {
-    ADMIN
-    USER
-    MEMBER
-    PREMIUM
+  ADMIN
+  USER
+  MEMBER
+  PREMIUM
 }
 
 enum ResourceType {
-    ASSET
-    TUTORIAL
-    LINK
+  ASSET
+  TUTORIAL
+  LINK
 }
 
 enum ProjectStatus {
-    DRAFT
-    PUBLISHED
-    ARCHIVED
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
 
 enum SubscriptionStatus {
-    ACTIVE
-    CANCELED
-    EXPIRED
+  ACTIVE
+  CANCELED
+  EXPIRED
 }
 
 enum Visibility {
-    PUBLIC // Tout le monde voit
-    PRIVATE // Seulement membres approuvés
-    MEMBERS_ONLY // membres de la communauté uniquement
+  PUBLIC
+  PRIVATE
+  MEMBERS_ONLY
 }
 
 enum GalleryType {
-    EVENT
-    GALLERY
+  EVENT
+  GALLERY
+}
+
+enum TypeEvent {
+  PHYSICAL
+  VIRTUAL
 }

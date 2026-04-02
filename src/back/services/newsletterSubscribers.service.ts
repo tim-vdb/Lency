@@ -1,26 +1,42 @@
 import { NewsletterSubscribersAction } from "../repositories/newsletterSubscribers.action";
+import { getUser } from "../lib/auth-session";
 
 export const NewsletterSubscribersService = {
-  findByIdSubscriber: async (id: string) => {
-    return NewsletterSubscribersAction.findById(id);
-  },
+    findByIdSubscriber: async (id: string) => {
+        const subscriber = await NewsletterSubscribersAction.findById(id);
+        if (!subscriber) throw new Error("Subscriber not found");
+        return subscriber;
+    },
 
-  findAllSubscribers: async () => {
-    return NewsletterSubscribersAction.findAll();
-  },
+    findAllSubscribers: async () => {
+        const user = await getUser();
+        if (!user || user.role !== "ADMIN") {
+            throw new Error("Unauthorized");
+        }
 
-  createSubscriber: async (data: { email: string; userId?: string | null }) => {
-    return NewsletterSubscribersAction.create(data);
-  },
+        return NewsletterSubscribersAction.findAll();
+    },
 
-  updateSubscriber: async (
-    id: string,
-    data: { email?: string; userId?: string | null }
-  ) => {
-    return NewsletterSubscribersAction.update(id, data);
-  },
+    createSubscriber: async (data: {
+        email: string;
+        userId?: string | null;
+    }) => {
+        if (!data.email) throw new Error("Email is required");
 
-  deleteSubscriber: async (id: string) => {
-    return NewsletterSubscribersAction.delete(id);
-  },
+        const existing = await NewsletterSubscribersAction.findByEmail(data.email);
+        if (existing) throw new Error("Email already subscribed");
+
+        return NewsletterSubscribersAction.create(data);
+    },
+
+    deleteSubscriber: async (id: string) => {
+        const user = await getUser();
+        if (!user || user.role !== "ADMIN") {
+            throw new Error("Unauthorized");
+        }
+
+        await NewsletterSubscribersService.findByIdSubscriber(id);
+
+        return NewsletterSubscribersAction.delete(id);
+    },
 };

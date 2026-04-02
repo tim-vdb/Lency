@@ -9,12 +9,13 @@ export const BadgesAction = {
         return prisma.badge.findMany();
     },
 
-    create: async (data: { name: string; description: string; iconUrl?: string | null; active?: boolean }) => {
-        return prisma.badge.create({
-            data: {
-                ...data,
-            },
-        });
+    create: async (data: {
+        name: string;
+        description: string;
+        iconUrl?: string | null;
+        active?: boolean;
+    }) => {
+        return prisma.badge.create({ data });
     },
 
     update: async (
@@ -26,23 +27,12 @@ export const BadgesAction = {
             active?: boolean;
         }
     ) => {
-        const updateData: Record<string, unknown> = {
-            ...(data.name !== undefined && { name: data.name }),
-            ...(data.description !== undefined && { description: data.description }),
-            ...(data.active !== undefined && { active: data.active }),
-        };
-
-        if (data.iconUrl !== undefined) {
-            updateData.iconUrl = data.iconUrl; // peut être string ou null
-        }
-
         return prisma.badge.update({
             where: { id },
-            data: updateData,
+            data,
         });
     },
 
-    // Add a user to a badge
     addUser: async (badgeId: string, userId: string) => {
         return prisma.badge.update({
             where: { id: badgeId },
@@ -52,7 +42,6 @@ export const BadgesAction = {
         });
     },
 
-    // Remove a user from a badge
     removeUser: async (badgeId: string, userId: string) => {
         return prisma.badge.update({
             where: { id: badgeId },

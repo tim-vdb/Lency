@@ -3,7 +3,7 @@ import LoginForm from '@/front/components/Private/Auth/LoginForm';
 
 export default function SignIn() {
   return (
-    <div className=" flex justify-center p-15">
+    <div className="container">
       <Suspense>
         <LoginForm />
       </Suspense>

@@ -5,14 +5,43 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Separator } from "../../ui/separator";
 import { SheetTrigger } from "../../ui/sheet";
 import { NavUser } from "./Sidebar/nav-user";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../../ui/button";
+import { cn } from "@/front/lib/utils";
+import { useSidebar } from "../../ui/sidebar";
+import { usePathname } from "next/navigation";
 
-export default function Header() {
+export default function Header({ className }: { className?: string }) {
     const [isNotifs,] = useState(true)
+    const [isScrolled, setIsScrolled] = useState(false)
+    const { state } = useSidebar()
+    const pathname = usePathname()
+
+    const isFixedLayout = pathname !== "/account" && pathname !== "/admin"
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollElement = document.querySelector('main')
+            if (scrollElement) {
+                setIsScrolled(scrollElement.scrollTop > 0)
+            }
+        }
+
+        const scrollElement = document.querySelector('main')
+        scrollElement?.addEventListener('scroll', handleScroll)
+        return () => scrollElement?.removeEventListener('scroll', handleScroll)
+    }, [])
 
     return (
-        <header className="flex h-14 shrink-0 items-center gap-2 backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-black/40 rounded-xl transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-14">
+        <header className={cn(
+            "flex h-14 shrink-0 items-center gap-2 border dark:border-white backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-black/40 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 mr-1.5",
+            isScrolled && "rounded-t-none bg-white",
+            isFixedLayout && "fixed top-2 z-40",
+            isFixedLayout && state === "expanded"
+                ? "left-[calc(14.3rem)] right-2"
+                : isFixedLayout && "left-16.5 right-2",
+            className
+        )}>
             <div className="flex items-center justify-between gap-2 px-4 w-full">
                 <Breadcrumb className="flex items-center gap-2">
                     <BreadcrumbList>
