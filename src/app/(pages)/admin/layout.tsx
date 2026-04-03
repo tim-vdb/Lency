@@ -1,5 +1,5 @@
 import { getUser } from '@/back/lib/auth-session';
-import { AdminShell } from '@/front/components/Private/Admin/AdminShell';
+import { AdminShell } from '@/app/(pages)/admin/AdminShell';
 
 export default async function AdminLayout({
   children,

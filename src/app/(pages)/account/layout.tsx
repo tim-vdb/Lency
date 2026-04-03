@@ -1,6 +1,6 @@
 import { getUser } from '@/back/lib/auth-session';
-import { AccountShell } from '@/front/components/Private/Account/AccountShell';
 import type { Metadata } from 'next';
+import { AccountShell } from './AccountShell';
 
 // const geistSans = Geist({
 //   variable: '--font-geist-sans',
