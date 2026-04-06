@@ -2,11 +2,17 @@ import prisma from "../lib/prisma"
 
 export const PostsAction = {
     findById: async (id: string) => {
-        return prisma.post.findUnique({ where: { id } });
+        return prisma.post.findUnique({
+            where: { id },
+            include: { author: true, category: true },
+        });
     },
 
     findAll: async () => {
-        return prisma.post.findMany();
+        return prisma.post.findMany({
+            include: { author: true, category: true },
+            orderBy: { createdAt: "desc" },
+        });
     },
 
     create: async (userId: string, data: {

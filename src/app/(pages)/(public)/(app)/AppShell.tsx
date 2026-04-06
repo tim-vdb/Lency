@@ -10,17 +10,19 @@ import Header from "../../../../front/components/Private/Global/Header"
 export function AppShell({ user, children }: { user: User | null; children: React.ReactNode }) {
     return (
         <UserProvider user={user}>
-            <SidebarProvider className="gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
-                <Sheet>
-                    <AppSidebar />
-                    <SidebarInset className="relative">
-                        <Header />
-                        <main className="pt-16 h-[calc(100vh-1rem)] overflow-y-auto pr-2">
-                            {children}
-                        </main>
-                    </SidebarInset>
-                </Sheet>
-            </SidebarProvider>
+            <div className="bg-[url('/images/bg2.jpg')] bg-cover bg-center min-h-screen">
+                <SidebarProvider className="gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
+                    <Sheet>
+                        <AppSidebar />
+                        <SidebarInset className="relative bg-transparent">
+                            <Header />
+                            <main className="pt-16 h-[calc(100vh-1rem)] overflow-y-auto pr-2">
+                                {children}
+                            </main>
+                        </SidebarInset>
+                    </Sheet>
+                </SidebarProvider>
+            </div>
         </UserProvider>
     )
 }
