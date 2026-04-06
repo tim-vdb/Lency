@@ -12,6 +12,7 @@
     "lint:eslint": "npx @next/codemod@canary next-lint-to-eslint-cli .",
     "db:deploy": "npx prisma migrate deploy",
     "reset": "doppler run -- npx prisma migrate reset",
+    "seed": "doppler run -- npx prisma db seed",
     "validate": "doppler run -- npx prisma validate",
     "migrate": "doppler run -- npx prisma migrate dev",
     "migrate:fix": "doppler run -- npx prisma db pull && doppler run -- npx prisma migrate dev",

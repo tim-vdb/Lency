@@ -1,13 +1,15 @@
 "use client"
 
-import { BookOpen, Bot, ChevronRight, Settings2, SquareTerminal, History, Star, Zap, type LucideIcon, CreditCard, Shield, Bell, User2, User } from "lucide-react"
-import React from "react"
-import { usePathname } from "next/navigation"
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/front/components/ui/collapsible"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/front/components/ui/popover"
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -19,12 +21,10 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/front/components/ui/sidebar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/front/components/ui/popover"
+import { Bell, ChevronRight, CreditCard, Settings2, Shield, User2, type LucideIcon } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
+import React from "react"
 
 type NavSubItem = {
   title: string

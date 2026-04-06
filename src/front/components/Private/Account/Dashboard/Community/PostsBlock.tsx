@@ -73,11 +73,7 @@ export default function PostsBlock() {
                                     ))}
                                 </div>
                                 <div className="flex">
-                                    <Image src={post.avatar} alt={post.author} width={50} height={50} className="w-8 h-8 rounded-full mr-2" />
-                                    <div className="flex flex-col">
-                                        <CardTitle className="text-sm">Framework</CardTitle>
-                                        <CardDescription className="text-[10px] text-neutral-500">{post.author}</CardDescription>
-                                    </div>
+
                                 </div>
                                 <p className="text-xs 2xl:text-sm text-neutral-500 line-clamp-1 max-w-md">{post.content}</p>
                             </div>

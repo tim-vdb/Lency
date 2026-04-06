@@ -4,7 +4,7 @@ import LoginForm from '@/front/components/Private/Auth/LoginForm';
 export default function SignIn() {
   return (
     <div className="container">
-      <Suspense>
+      <Suspense fallback={null}>
         <LoginForm />
       </Suspense>
     </div>

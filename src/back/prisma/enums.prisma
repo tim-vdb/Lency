@@ -38,3 +38,10 @@ enum TypeEvent {
   PHYSICAL
   VIRTUAL
 }
+
+enum PostFormat {
+  DESKTOP
+  MOBILE
+  AUDIO
+  TEXT
+}

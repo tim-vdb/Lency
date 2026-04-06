@@ -5,9 +5,9 @@ import { Sheet } from "@/front/components/ui/sheet"
 import { SidebarInset, SidebarProvider } from "@/front/components/ui/sidebar"
 import { UserProvider } from "@/front/context/UserContext"
 import type { User } from "@/back/generated/prisma_client"
-import Header from "../Global/Header"
 import { usePathname } from "next/navigation"
 import { cn } from "@/front/lib/utils"
+import Header from "@/front/components/Private/Global/Header"
 
 export function AccountShell({ user, children }: { user: User | null; children: React.ReactNode }) {
     const pathname = usePathname()
@@ -15,8 +15,8 @@ export function AccountShell({ user, children }: { user: User | null; children: 
 
     return (
         <UserProvider user={user}>
-            <div className="bg-[url('/images/bg2.jpg')] bg-cover bg-center">
-                <SidebarProvider className="gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
+            <div className="min-h-screen bg-[url('/images/bg2.jpg')] bg-cover bg-center">
+                <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
                     <Sheet>
                         <AppSidebar />
                         <SidebarInset className="relative bg-transparent!">
