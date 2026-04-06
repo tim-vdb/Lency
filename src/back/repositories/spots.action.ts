@@ -14,32 +14,68 @@ export const SpotsAction = {
         });
     },
 
-    create: async (userId: string | null, data: {
-        name: string;
-        description: string;
-        address: string;
-        city: string;
-        author: string;
-        mapLocationId?: string | null;
-    }) => {
-        return prisma.spot.create({
-            data: {
-                ...data,
-                userId,
-            },
-        });
+   create: async (
+  userId: string | null,
+  data: {
+    name: string;
+    description: string;
+    address: string;
+    city: string;
+    author: string;
+    mapLocation: {
+      name: string;
+      latitude: number;
+      longitude: number;
+      description?: string;
+    };
+  }
+) => {
+  return prisma.spot.create({
+    data: {
+      name: data.name,
+      description: data.description,
+      address: data.address,
+      city: data.city,
+      author: data.author,
+
+      user: userId
+        ? { connect: { id: userId } }
+        : undefined,
+
+      mapLocation: {
+        create: data.mapLocation,
+      },
     },
+    include: { mapLocation: true },
+  });
+},
 
     update: async (id: string, data: {
         name?: string;
         description?: string;
         address?: string;
         city?: string;
-        mapLocationId?: string | null;
+        mapLocation?: {
+            name?: string;
+            latitude?: number;
+            longitude?: number;
+            description?: string;
+        };
     }) => {
         return prisma.spot.update({
             where: { id },
-            data,
+            data: {
+                name: data.name,
+                description: data.description,
+                address: data.address,
+                city: data.city,
+                ...(data.mapLocation && {
+                    mapLocation: {
+                        update: data.mapLocation,
+                    }
+                }),
+            },
+            include: { mapLocation: true },
         });
     },
 

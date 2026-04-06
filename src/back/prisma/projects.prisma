@@ -15,6 +15,7 @@ model Project {
 }
 
 model Event {
+<<<<<<< HEAD
   id           String    @id @default(cuid())
   title        String
   description  String
@@ -27,3 +28,17 @@ model Event {
   typeEvent    TypeEvent
   users        User[]    @relation("UserEvent")
 }
+=======
+    id           String   @id @default(cuid())
+    title        String
+    description  String
+    location     String?
+    participants Int      @default(1)
+    startDate    DateTime
+    endDate      DateTime
+    typeEvent    TypeEvent
+    createdAt    DateTime @default(now())
+    users        User[]   @relation("UserEvent")
+    userId       String?
+}
+>>>>>>> feature/crud-api-+-forms

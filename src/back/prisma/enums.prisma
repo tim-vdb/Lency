@@ -45,3 +45,8 @@ enum PostFormat {
   AUDIO
   TEXT
 }
+
+enum TypeEvent {
+    PHYSICAL
+    VIRTUAL
+}

@@ -19,17 +19,21 @@ export const EventsService = {
         startDate: Date;
         endDate: Date;
         participants: number;
+        typeEvent: "PHYSICAL" | "VIRTUAL";
     }) => {
+        // 1. Auth
         const user = await getUser();
         if (!user || user.role !== "ADMIN") {
             throw new Error("Unauthorized");
         }
 
+        // 2. Validation
         if (!data.title) throw new Error("Title is required");
         if (!data.description) throw new Error("Description is required");
         if (!data.startDate) throw new Error("Start date is required");
         if (!data.endDate) throw new Error("End date is required");
         if (data.startDate > data.endDate) throw new Error("Start date must be before end date");
+        if (!data.typeEvent) throw new Error("Event type is required");
 
         return EventsAction.create(user.id, data);
     },
@@ -43,8 +47,10 @@ export const EventsService = {
             startDate?: Date;
             endDate?: Date;
             participants?: number;
+            typeEvent?: "PHYSICAL" | "VIRTUAL";
         }
     ) => {
+        // 1. Validation
         if (!data || Object.keys(data).length === 0) {
             throw new Error("No data to update");
         }
@@ -53,22 +59,26 @@ export const EventsService = {
             throw new Error("Start date must be before end date");
         }
 
+        // 2. Auth
         const user = await getUser();
         if (!user || user.role !== "ADMIN") {
             throw new Error("Unauthorized");
         }
 
+        // 3. Existence
         await EventsService.findByIdEvent(id);
 
         return EventsAction.update(id, data);
     },
 
     deleteEvent: async (id: string) => {
+        // 1. Auth
         const user = await getUser();
         if (!user || user.role !== "ADMIN") {
             throw new Error("Unauthorized");
         }
 
+        // 2. Existence
         await EventsService.findByIdEvent(id);
 
         return EventsAction.delete(id);
