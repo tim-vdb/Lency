@@ -47,4 +47,37 @@ const AvatarFallback = React.forwardRef<
 ))
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 
-export { Avatar, AvatarImage, AvatarFallback }
+const AvatarGroup = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center gap-2 -space-x-4", className)}
+    {...props}
+  />
+))
+AvatarGroup.displayName = "AvatarGroup"
+
+const AvatarGroupCount = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
+    count?: number
+  }
+>(({ className, count, ...props }, ref) => (
+  <AvatarPrimitive.Root
+    ref={ref}
+    className={cn(
+      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-background bg-muted",
+      className
+    )}
+    {...props}
+  >
+    <AvatarPrimitive.Fallback className="flex h-full w-full items-center justify-center rounded-full bg-muted text-sm font-medium">
+      +{count}
+    </AvatarPrimitive.Fallback>
+  </AvatarPrimitive.Root>
+))
+AvatarGroupCount.displayName = "AvatarGroupCount"
+
+export { Avatar, AvatarImage, AvatarFallback, AvatarGroup, AvatarGroupCount }

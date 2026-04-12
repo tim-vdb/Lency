@@ -1,25 +1,22 @@
-import { PrismaClient } from '../generated/prisma_client'; // chemin standard après prisma generate
-import { PrismaNeon } from '@prisma/adapter-neon';
-import { neonConfig } from '@neondatabase/serverless';
-import ws from 'ws';
+import { PrismaClient } from '../generated/prisma_client';
+import { PrismaNeonHttp } from '@prisma/adapter-neon';
 
-// Toujours obligatoire pour Neon (WebSockets)
-neonConfig.webSocketConstructor = ws;
-
-// Récupère la connection string (celle avec -pooler)
 const connectionString = process.env.DATABASE_URL ?? '';
 
 if (!connectionString) {
     throw new Error('DATABASE_URL est manquante dans les variables d\'environnement');
 }
 
-// PrismaNeon prend un objet { connectionString }
-const adapter = new PrismaNeon({ connectionString });
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
-const prisma = new PrismaClient({
-    adapter,
-    // log: ['query', 'info', 'warn', 'error'], // décommente pour debug
-});
+const prisma: PrismaClient =
+    globalForPrisma.prisma ??
+    new PrismaClient({
+        adapter: new PrismaNeonHttp(connectionString, {}),
+        // log: ['query', 'info', 'warn', 'error'], // décommente pour debug
+    });
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 export default prisma;
 export { prisma };

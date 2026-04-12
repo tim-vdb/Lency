@@ -26,6 +26,7 @@ model Category {
   bannerUrl       String?
   rules           String?
   isNSFW          Boolean    @default(false)
+  members         Int        @default(0)
   postCount       Int        @default(0)
   subscriberCount Int        @default(0)
   lastPostAt      DateTime?

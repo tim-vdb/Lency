@@ -21,7 +21,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/front/components/ui/sidebar"
-import { Bell, ChevronRight, CreditCard, Settings2, Shield, User2, type LucideIcon } from "lucide-react"
+import { Bell, ChevronRight, CreditCard, Settings2, Shield, User2, Users2Icon, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import React from "react"
@@ -68,11 +68,22 @@ const navMain: NavMainItem[] = [
       },
     ],
   },
+  {
+    title: "Community",
+    url: "/community",
+    icon: User2,
+    items: [
+      {
+        title: "Fil d'actualité",
+        url: "/community",
+        icon: Users2Icon,
+      }
+    ],
+  }
 ]
 
 export function NavMain() {
   const { state } = useSidebar()
-  const pathname = usePathname()
   const [openPopoverId, setOpenPopoverId] = React.useState<string | null>(null)
   const [openCollapsibleId, setOpenCollapsibleId] = React.useState<string | null>(null)
   const [isHydrated, setIsHydrated] = React.useState(false)

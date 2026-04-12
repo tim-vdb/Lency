@@ -1,9 +1,10 @@
 import { CommentsService } from "@/back/services/comments.service";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
     try {
-        const data = await CommentsService.findAllComments();
+        const { postId } = await params;
+        const data = await CommentsService.findAllComments(postId);
         return NextResponse.json({ comments: data });
     } catch {
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });

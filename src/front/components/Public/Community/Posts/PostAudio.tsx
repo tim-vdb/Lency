@@ -2,14 +2,11 @@
 
 import { Card, CardContent } from "@/front/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/front/components/ui/popover";
-import { Prisma } from "@/back/generated/prisma_client";
 import { cn } from "@/front/lib/utils";
 import { Download, Bookmark, EyeOff, Flag, Ellipsis, Heart, MessageCircleMore, Share, Play, Pause } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
-
-type PostWithAuthorAndCategory = Prisma.PostGetPayload<{ include: { author: true; category: true } }>;
-
+import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
 interface PostAudioProps {
     post: PostWithAuthorAndCategory;
     audioUrl?: string;

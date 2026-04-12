@@ -41,8 +41,8 @@ export default function CommunityPage() {
 
                     </TabsContent>
                     <div className="col-start-6 col-span-2">
-                        <Card className="sticky top-0.5 h-[calc(100vh-6rem)]">
-                            <CardHeader className="flex items-center gap-2">
+                        <Card className="sticky top-0.5">
+                            <CardHeader className="flex items-center justify-between gap-2">
                                 <CardTitle>Récemment vu</CardTitle>
                                 <Button variant="outline" size="sm">Nettoyer</Button>
                             </CardHeader>

@@ -1,12 +1,15 @@
+"use client";
+
 import { Card, CardContent, CardFooter } from "@/front/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/front/components/ui/popover";
 import PostAvatar from "./PostAvatar";
-import { Prisma } from "@/back/generated/prisma_client";
 import { cn } from "@/front/lib/utils";
 import { Download, Bookmark, EyeOff, Flag, Ellipsis, Heart, MessageCircleMore, Share } from "lucide-react";
 import Image from "next/image";
-
-type PostWithAuthorAndCategory = Prisma.PostGetPayload<{ include: { author: true; category: true } }>;
+import { usePathname, useRouter } from "next/navigation";
+import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
+import { Item, ItemContent } from "@/front/components/ui/item";
+import Comments from "../Comments/Comments";
 
 interface PostDesktopProps {
     post: PostWithAuthorAndCategory;
@@ -21,14 +24,21 @@ const menuItems = [
 ]
 
 export default function PostDesktop({ post, className }: PostDesktopProps) {
+    const router = useRouter();
+    const pathname = usePathname();
+    const isOnSelfPage = pathname === `/post/${post.id}`;
+
     return (
-        <Card className={cn("gap-4", className)}>
-            <CardContent className="relative">
-                <div className="absolute top-2 w-[calc(100%-5rem)] translate-x-4 rounded-md flex items-center justify-between bg-transparent">
+        <Card className={cn("gap-4 py-4 flex-1", className)}>
+            <CardContent className="relative" onClick={() => !isOnSelfPage && router.push(`/post/${post.id}`)}>
+                <div className="absolute top-2 w-[calc(100%-5rem)] translate-x-4 rounded-md flex items-center justify-between bg-transparent z-10">
                     <PostAvatar post={post} />
                     <Popover>
                         <PopoverTrigger asChild>
-                            <button className="p-1 rounded-md hover:bg-neutral-100 transition-colors">
+                            <button
+                                className="p-1 rounded-md hover:bg-neutral-100 transition-colors"
+                                onClick={(e) => e.stopPropagation()}
+                            >
                                 <Ellipsis className="w-6 h-6 text-neutral-500" />
                             </button>
                         </PopoverTrigger>
@@ -48,7 +58,7 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                         </PopoverContent>
                     </Popover>
                 </div>
-                <Image src={"/images/blog/img1.jpg"} alt={post.title} width={500} height={500} className="w-full h-[450px] object-cover rounded-md" />
+                <Image src={"/images/blog/img1.jpg"} alt={post.title} width={500} height={500} className={cn("w-full h-[450px] object-cover rounded-md", !isOnSelfPage ? "cursor-pointer" : "")} />
             </CardContent>
             <CardFooter className="flex flex-col items-start gap-2">
                 <div className="flex items-center gap-2 pl-6">
@@ -72,7 +82,13 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                 <hr className="border-dashed border border-neutral-400 w-full" />
                 <h3 className="text-lg font-semibold">{post.title}</h3>
                 <p className="text-sm text-neutral-500 line-clamp-2">{post.content}</p>
+                <Item variant={"outline"} className="w-full text-center text-md border-2 p-0">
+                    <ItemContent>
+                        <input placeholder="Rejoindre la conversation" className="p-4" />
+                    </ItemContent>
+                </Item>
+                <Comments postId={post.id} />
             </CardFooter>
-        </Card>
+        </Card >
     );
 }

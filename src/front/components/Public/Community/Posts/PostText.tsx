@@ -1,13 +1,10 @@
 import { Card, CardContent } from "@/front/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/front/components/ui/popover";
-import { Prisma } from "@/back/generated/prisma_client";
 import { cn } from "@/front/lib/utils";
 import { Download, Bookmark, EyeOff, Flag, Ellipsis, Heart, MessageCircleMore, Share } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-
-type PostWithAuthorAndCategory = Prisma.PostGetPayload<{ include: { author: true; category: true } }>;
-
+import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
 interface PostTextProps {
     post: PostWithAuthorAndCategory;
     className?: string;

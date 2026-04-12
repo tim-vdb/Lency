@@ -1,0 +1,28 @@
+"use client";
+
+import { useCommentsByPostId } from "@/front/hooks/querys/use-posts";
+import { CommentItem } from "./CommentItem";
+
+interface CommentsProps {
+    postId: string;
+}
+
+export default function Comments({ postId }: CommentsProps) {
+    const { data: comments, isLoading } = useCommentsByPostId(postId);
+    const count = comments?.reduce((acc, c) => acc + 1 + c.children.length, 0) ?? 0;
+
+    if (isLoading) return <p className="text-xs text-neutral-400">Chargement...</p>;
+
+    return (
+        <div className="w-full flex flex-col gap-4">
+            <p className="text-center text-sm font-semibold">
+                {count} commentaire{count !== 1 ? "s" : ""}
+            </p>
+            <div className="flex flex-col gap-5">
+                {comments?.map((comment) => (
+                    <CommentItem key={comment.id} comment={comment} />
+                ))}
+            </div>
+        </div>
+    );
+}

@@ -1,14 +1,11 @@
-import { Prisma } from "@/back/generated/prisma_client"
-
-export type PostWithAuthor = Prisma.PostGetPayload<{ include: { author: true; category: true } }>
-
+import { CommentWithAuthor, PostWithAuthorAndCategory } from "@/front/types/post.schema";
 export interface CreatePostInput {
     title: string
     content: string
     categoryId: string
 }
 
-export async function fetchPosts(): Promise<PostWithAuthor[]> {
+export async function fetchPosts(): Promise<PostWithAuthorAndCategory[]> {
     const response = await fetch('/api/posts', {
         method: 'GET',
         cache: 'no-store',
@@ -22,7 +19,7 @@ export async function fetchPosts(): Promise<PostWithAuthor[]> {
     return data.posts
 }
 
-export async function fetchPostById(postId: string): Promise<PostWithAuthor> {
+export async function fetchPostById(postId: string): Promise<PostWithAuthorAndCategory> {
     const response = await fetch(`/api/posts/${postId}`, {
         method: 'GET',
         cache: 'no-store',
@@ -36,7 +33,7 @@ export async function fetchPostById(postId: string): Promise<PostWithAuthor> {
     return data.post
 }
 
-export async function createPost(input: CreatePostInput): Promise<PostWithAuthor> {
+export async function createPost(input: CreatePostInput): Promise<PostWithAuthorAndCategory> {
     const response = await fetch('/api/posts', {
         method: 'POST',
         headers: {
@@ -57,7 +54,7 @@ export async function createPost(input: CreatePostInput): Promise<PostWithAuthor
 export async function updatePost(
     postId: string,
     input: Partial<CreatePostInput>
-): Promise<PostWithAuthor> {
+): Promise<PostWithAuthorAndCategory> {
     const response = await fetch(`/api/posts/${postId}`, {
         method: 'PATCH',
         headers: {
@@ -73,6 +70,20 @@ export async function updatePost(
 
     const data = await response.json()
     return data.post
+}
+
+export async function fetchCommentsByPostId(postId: string): Promise<CommentWithAuthor[]> {
+    const response = await fetch(`/api/posts/${postId}/comments`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des commentaires')
+    }
+
+    const data = await response.json()
+    return data.comments
 }
 
 export async function deletePost(postId: string): Promise<void> {

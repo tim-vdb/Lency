@@ -8,8 +8,8 @@ export const CommentsService = {
         return comment;
     },
 
-    findAllComments: async () => {
-        return CommentsAction.findAll();
+    findAllComments: async (postId: string) => {
+        return CommentsAction.findAll(postId);
     },
 
     createComment: async (data: {

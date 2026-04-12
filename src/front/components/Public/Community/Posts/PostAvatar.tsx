@@ -1,10 +1,8 @@
 import { CardDescription, CardTitle } from "@/front/components/ui/card";
 import Image from "next/image";
-import { Prisma } from "@/back/generated/prisma_client";
+import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
 
-type PostWithAuthor = Prisma.PostGetPayload<{ include: { author: true } }>;
-
-export default function PostAvatar({ post }: { post: PostWithAuthor }) {
+export default function PostAvatar({ post }: { post: PostWithAuthorAndCategory }) {
     const { author } = post;
     const displayName = author.firstname && author.lastname
         ? `${author.firstname} ${author.lastname}`

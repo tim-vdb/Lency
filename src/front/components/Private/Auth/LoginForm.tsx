@@ -162,7 +162,7 @@ export default function LoginForm() {
                     {
                       provider: "google",
                       callbackURL: callbackUrl ?? "/",
-                      newUserCallbackURL: `/auth/new-user${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`,
+                      newUserCallbackURL: `/${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`,
                     },
                     {
                       onRequest: () => {

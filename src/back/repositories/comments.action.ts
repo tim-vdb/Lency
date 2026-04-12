@@ -5,8 +5,15 @@ export const CommentsAction = {
         return prisma.comment.findUnique({ where: { id } });
     },
 
-    findAll: async () => {
-        return prisma.comment.findMany();
+    findAll: async (postId: string) => {
+        return prisma.comment.findMany({
+            where: { postId, parentId: null },
+            include: {
+                author: true,
+                children: { include: { author: true }, orderBy: { createdAt: "asc" } },
+            },
+            orderBy: { createdAt: "desc" },
+        });
     },
 
     create: async (userId: string, data: {

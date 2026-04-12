@@ -2,12 +2,13 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/r
 import {
     createPost,
     deletePost,
+    fetchCommentsByPostId,
     fetchPostById,
     fetchPosts,
     updatePost,
-    type PostWithAuthor,
     type CreatePostInput,
 } from "@/front/lib/api/posts"
+import { PostWithAuthorAndCategory } from "@/front/types/post.schema"
 
 const POST_ROOT = ["posts"] as const
 
@@ -29,6 +30,13 @@ export const postQueries = {
             queryFn: () => fetchPostById(id),
             staleTime: 1000 * 60 * 5,
         }),
+
+    comments: (postId: string) =>
+        queryOptions({
+            queryKey: [...POST_ROOT, "comments", postId] as const,
+            queryFn: () => fetchCommentsByPostId(postId),
+            staleTime: 1000 * 60 * 2,
+        }),
 }
 
 // ─── Queries ─────────────────────────────────────────────────────────────────
@@ -36,6 +44,8 @@ export const postQueries = {
 export const usePosts = () => useQuery(postQueries.lists())
 
 export const usePostById = (id: string) => useQuery(postQueries.detail(id))
+
+export const useCommentsByPostId = (postId: string) => useQuery(postQueries.comments(postId))
 
 // ─── Mutations ───────────────────────────────────────────────────────────────
 
@@ -62,8 +72,8 @@ export const useDeletePost = () => {
         onMutate: async (postId: string) => {
             const listKey = postQueries.lists().queryKey
             await queryClient.cancelQueries({ queryKey: listKey })
-            const previousPosts = queryClient.getQueryData<PostWithAuthor[]>(listKey)
-            queryClient.setQueryData<PostWithAuthor[]>(listKey, (old = []) =>
+            const previousPosts = queryClient.getQueryData<PostWithAuthorAndCategory[]>(listKey)
+            queryClient.setQueryData<PostWithAuthorAndCategory[]>(listKey, (old = []) =>
                 old.filter((post) => post.id !== postId)
             )
             return { previousPosts }
@@ -71,7 +81,7 @@ export const useDeletePost = () => {
         onError: (
             _err: unknown,
             _postId: string,
-            context: { previousPosts: PostWithAuthor[] | undefined } | undefined
+            context: { previousPosts: PostWithAuthorAndCategory[] | undefined } | undefined
         ) => {
             if (context?.previousPosts !== undefined) {
                 queryClient.setQueryData(postQueries.lists().queryKey, context.previousPosts)
