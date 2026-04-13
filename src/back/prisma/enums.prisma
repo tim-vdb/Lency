@@ -46,7 +46,17 @@ enum PostFormat {
   TEXT
 }
 
-enum TypeEvent {
-    PHYSICAL
-    VIRTUAL
+enum ContactType {
+  SUPPORT_TECHNIQUE
+  CONTACT_GENERAL
+  FACTURATION
+  PARTENARIAT
+  AUTRE
+}
+
+enum ContactStatus {
+  EN_ATTENTE
+  EN_COURS
+  RESOLU
+  FERME
 }
