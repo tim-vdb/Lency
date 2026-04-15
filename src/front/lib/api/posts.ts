@@ -1,4 +1,5 @@
-import { CommentWithAuthor, PostWithAuthorAndCategory } from "@/front/types/post.schema";
+import { CommentWithChildren, PostWithAuthorAndCategory } from "@/front/types/post.schema";
+
 export interface CreatePostInput {
     title: string
     content: string
@@ -72,7 +73,7 @@ export async function updatePost(
     return data.post
 }
 
-export async function fetchCommentsByPostId(postId: string): Promise<CommentWithAuthor[]> {
+export async function fetchCommentsByPostId(postId: string): Promise<CommentWithChildren[]> {
     const response = await fetch(`/api/posts/${postId}/comments`, {
         method: 'GET',
         cache: 'no-store',
@@ -84,6 +85,50 @@ export async function fetchCommentsByPostId(postId: string): Promise<CommentWith
 
     const data = await response.json()
     return data.comments
+}
+
+export interface CreateCommentInput {
+    content: string;
+    postId: string;
+    parentId?: string;
+}
+
+export async function createComment(input: CreateCommentInput): Promise<CommentWithChildren> {
+    const response = await fetch(`/api/posts/${input.postId}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+    })
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors de la création du commentaire')
+    }
+
+    const data = await response.json()
+    return data.comment
+}
+
+export interface VoteCommentInput {
+    commentId: string;
+    postId: string;
+    prev: "upvote" | "downvote" | null;
+    next: "upvote" | "downvote" | null;
+}
+
+export async function voteComment(input: VoteCommentInput): Promise<void> {
+    const response = await fetch(
+        `/api/posts/${input.postId}/comments/${input.commentId}/vote`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prev: input.prev, next: input.next }),
+        }
+    );
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors du vote");
+    }
 }
 
 export async function deletePost(postId: string): Promise<void> {

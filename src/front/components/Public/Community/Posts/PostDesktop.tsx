@@ -10,6 +10,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
 import { Item, ItemContent } from "@/front/components/ui/item";
 import Comments from "../Comments/Comments";
+import CommentRoot from "../Comments/CommentRoot";
+import { useState } from "react";
 
 interface PostDesktopProps {
     post: PostWithAuthorAndCategory;
@@ -24,9 +26,11 @@ const menuItems = [
 ]
 
 export default function PostDesktop({ post, className }: PostDesktopProps) {
+    const [openComments, setOpenComments] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
     const isOnSelfPage = pathname === `/post/${post.id}`;
+    const comments = post.commentCount
 
     return (
         <Card className={cn("gap-4 py-4 flex-1", className)}>
@@ -67,8 +71,13 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                         <span className="text-xs text-neutral-500">123</span>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <MessageCircleMore className="w-6 h-6" />
-                        <span className="text-xs text-neutral-500">123</span>
+                        <MessageCircleMore className="w-6 h-6 cursor-pointer" onClick={() => {
+                            setOpenComments(!openComments)
+
+                        }} />
+                        <span className="text-xs text-neutral-500">
+                            {comments}
+                        </span>
                     </div>
                     <div className="flex flex-col gap-2">
                         <Bookmark className="w-6 h-6" />
@@ -82,13 +91,13 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                 <hr className="border-dashed border border-neutral-400 w-full" />
                 <h3 className="text-lg font-semibold">{post.title}</h3>
                 <p className="text-sm text-neutral-500 line-clamp-2">{post.content}</p>
-                <Item variant={"outline"} className="w-full text-center text-md border-2 p-0">
-                    <ItemContent>
-                        <input placeholder="Rejoindre la conversation" className="p-4" />
-                    </ItemContent>
-                </Item>
-                <Comments postId={post.id} />
+                {openComments && (
+                    <div className="w-full">
+                        <CommentRoot postId={post.id} />
+                        <Comments postId={post.id} commentCount={post.commentCount} />
+                    </div>
+                )}
             </CardFooter>
-        </Card >
+        </Card>
     );
 }

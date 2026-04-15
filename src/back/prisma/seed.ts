@@ -17,7 +17,7 @@ async function main() {
             username: "admin",
             role: "ADMIN",
             emailVerified: true,
-            avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=admin",
+            avatarUrl: null,
         },
     })
 
@@ -31,7 +31,7 @@ async function main() {
             username: "timvdb",
             role: "MEMBER",
             emailVerified: true,
-            avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=tim",
+            avatarUrl: null,
         },
     })
 
@@ -45,7 +45,7 @@ async function main() {
             username: "guerric",
             role: "MEMBER",
             emailVerified: true,
-            avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=guerric",
+            avatarUrl: null,
         },
     })
 
@@ -59,7 +59,7 @@ async function main() {
             username: "alexdupont",
             role: "USER",
             emailVerified: false,
-            avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=alex",
+            avatarUrl: null,
         },
     })
 
@@ -73,7 +73,7 @@ async function main() {
             username: "sophiemartin",
             role: "PREMIUM",
             emailVerified: true,
-            avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=sophie",
+            avatarUrl: null,
         },
     })
 
@@ -257,6 +257,18 @@ async function main() {
             parentId: comment1.id,
         },
     })
+
+    // Mettre à jour les compteurs de commentaires
+    const postsWithComments = await prisma.post.findMany({
+        include: { _count: { select: { comments: true } } },
+    })
+
+    for (const post of postsWithComments) {
+        await prisma.post.update({
+            where: { id: post.id },
+            data: { commentCount: post._count.comments },
+        })
+    }
 
     console.log("✅ Comments created")
 

@@ -26,6 +26,16 @@ export const CommentsService = {
         return CommentsAction.create(user.id, data);
     },
 
+    voteComment: async (
+        id: string,
+        prev: "upvote" | "downvote" | null,
+        next: "upvote" | "downvote" | null,
+    ) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        return CommentsAction.voteUpdate(id, prev, next);
+    },
+
     updateComment: async (id: string, data: { content: string }) => {
         if (!data.content) throw new Error("Content is required");
 

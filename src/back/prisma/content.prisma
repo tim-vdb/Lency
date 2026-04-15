@@ -67,18 +67,19 @@ model Post {
 }
 
 model Comment {
-  id          String    @id @default(cuid())
-  content     String
-  postId      String
-  authorId    String
-  parentId    String?
-  upvoteCount Int       @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
-  children    Comment[] @relation("CommentReplies")
-  post        Post      @relation(fields: [postId], references: [id])
+  id            String    @id @default(cuid())
+  content       String
+  postId        String
+  authorId      String
+  parentId      String?
+  upvoteCount   Int       @default(0)
+  downvoteCount Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent        Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  children      Comment[] @relation("CommentReplies")
+  post          Post      @relation(fields: [postId], references: [id])
 
   @@index([postId])
   @@index([authorId])

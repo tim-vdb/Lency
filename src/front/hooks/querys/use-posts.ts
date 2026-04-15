@@ -1,14 +1,39 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
+    createComment,
     createPost,
     deletePost,
     fetchCommentsByPostId,
     fetchPostById,
     fetchPosts,
     updatePost,
+    voteComment,
+    type CreateCommentInput,
     type CreatePostInput,
+    type VoteCommentInput,
 } from "@/front/lib/api/posts"
-import { PostWithAuthorAndCategory } from "@/front/types/post.schema"
+import { CommentWithChildren, PostWithAuthorAndCategory } from "@/front/types/post.schema"
+
+// Parcourt l'arbre récursivement et met à jour les compteurs du commentaire ciblé
+function applyVoteInTree(
+    comments: CommentWithChildren[],
+    commentId: string,
+    prev: VoteCommentInput["prev"],
+    next: VoteCommentInput["next"],
+): CommentWithChildren[] {
+    return comments.map((c) => {
+        if (c.id === commentId) {
+            return {
+                ...c,
+                upvoteCount:
+                    c.upvoteCount + (next === "upvote" ? 1 : 0) - (prev === "upvote" ? 1 : 0),
+                downvoteCount:
+                    c.downvoteCount + (next === "downvote" ? 1 : 0) - (prev === "downvote" ? 1 : 0),
+            };
+        }
+        return { ...c, children: applyVoteInTree(c.children, commentId, prev, next) };
+    });
+}
 
 const POST_ROOT = ["posts"] as const
 
@@ -62,6 +87,56 @@ export const useUpdatePost = () => {
     return useMutation({
         mutationFn: ({ id, data }: { id: string; data: Partial<CreatePostInput> }) => updatePost(id, data),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: POST_ROOT }),
+    })
+}
+
+export const useVoteComment = (postId: string) => {
+    const queryClient = useQueryClient()
+    const commentsKey = postQueries.comments(postId).queryKey
+
+    return useMutation({
+        mutationFn: (input: VoteCommentInput) => voteComment(input),
+
+        // Étape 1 : mise à jour immédiate du cache (avant la réponse serveur)
+        onMutate: async ({ commentId, prev, next }) => {
+            await queryClient.cancelQueries({ queryKey: commentsKey })
+            const previous = queryClient.getQueryData<CommentWithChildren[]>(commentsKey)
+            queryClient.setQueryData<CommentWithChildren[]>(commentsKey, (old = []) =>
+                applyVoteInTree(old, commentId, prev, next)
+            )
+            return { previous }
+        },
+
+        // Étape 2 : si le serveur échoue, on restaure l'état d'avant
+        onError: (_err, _input, context) => {
+            if (context?.previous) {
+                queryClient.setQueryData(commentsKey, context.previous)
+            }
+        },
+
+        // Étape 3 : dans tous les cas, on resync avec le serveur
+        onSettled: () => queryClient.invalidateQueries({ queryKey: commentsKey }),
+    })
+}
+
+export const useCreateComment = (postId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (input: CreateCommentInput) => createComment(input),
+        onMutate: () => {
+            // Optimistic update: increment commentCount in the list cache immediately
+            queryClient.setQueryData<PostWithAuthorAndCategory[]>(
+                postQueries.lists().queryKey,
+                (old = []) => old.map((p) =>
+                    p.id === postId ? { ...p, commentCount: p.commentCount + 1 } : p
+                )
+            )
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "comments", postId] })
+            queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "detail", postId] })
+            queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "list"] })
+        },
     })
 }
 

@@ -17,7 +17,7 @@ export default async function PostPage({ params }: PostPageProps) {
     }
 
     return (
-        <div className="flex gap-2 mr-1.5">
+        <div className="flex gap-2">
             <PostDesktop post={post} />
             <PostsInfos post={post} />
         </div>
