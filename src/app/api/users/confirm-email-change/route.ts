@@ -11,9 +11,8 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: 'Token manquant' }, { status: 400 })
         }
 
-        let user: { id: string }
         try {
-            user = await UsersService.confirmEmailChange(rawToken)
+            await UsersService.confirmEmailChange(rawToken)
         } catch (err) {
             if (err instanceof Error) {
                 if (err.message === 'TOKEN_INVALID_OR_EXPIRED') {

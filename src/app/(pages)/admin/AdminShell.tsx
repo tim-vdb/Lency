@@ -7,7 +7,7 @@ import { SidebarInset, SidebarProvider } from "@/front/components/ui/sidebar"
 import { UserProvider } from "@/front/context/UserContext"
 import type { User } from "@/back/generated/prisma_client"
 import { usePathname } from "next/navigation"
-import Header from "../Global/Header"
+import Header from "../../../front/components/Private/Global/Header"
 
 export function AdminShell({ user, children }: { user: User | null; children: React.ReactNode }) {
     const pathname = usePathname()

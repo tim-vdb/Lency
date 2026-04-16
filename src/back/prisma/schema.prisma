@@ -48,6 +48,10 @@ model User {
   participants              Project[]              @relation("Participants")
   badges                    Badge[]                @relation("UserBadge")
   events                    Event[]                @relation("UserEvent")
+  savedPosts                PostSave[]
+  postVotes                 PostVote[]
+  hiddenPosts               PostHide[]
+  reportedPosts             PostReport[]
 }
 
 /// *
@@ -94,4 +98,21 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  prenom    String
+  nom       String
+  email     String
+  sujet     String
+  message   String        @db.Text
+
+  type      ContactType   @default(CONTACT_GENERAL)
+  status    ContactStatus @default(EN_ATTENTE)
+
+  @@map("contact_messages")
 }

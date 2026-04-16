@@ -15,7 +15,12 @@ export const ProjectsService = {
     createProject: async (data: {
         title: string;
         description: string;
-        mapLocationId?: string | null;
+        mapLocation?: {
+            name: string;
+            latitude: number;
+            longitude: number;
+            description?: string;
+        };
     }) => {
         const user = await getUser();
         if (!user) throw new Error("Unauthorized");
@@ -30,7 +35,12 @@ export const ProjectsService = {
         title?: string;
         description?: string;
         status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
-        mapLocationId?: string | null;
+        mapLocation?: {
+            name?: string;
+            latitude?: number;
+            longitude?: number;
+            description?: string;
+        };
     }) => {
         if (!data || Object.keys(data).length === 0) {
             throw new Error("No data to update");

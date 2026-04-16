@@ -38,3 +38,25 @@ enum TypeEvent {
   PHYSICAL
   VIRTUAL
 }
+
+enum PostFormat {
+  DESKTOP
+  MOBILE
+  AUDIO
+  TEXT
+}
+
+enum ContactType {
+  SUPPORT_TECHNIQUE
+  CONTACT_GENERAL
+  FACTURATION
+  PARTENARIAT
+  AUTRE
+}
+
+enum ContactStatus {
+  EN_ATTENTE
+  EN_COURS
+  RESOLU
+  FERME
+}

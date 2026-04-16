@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 export function ToggleDarkMode({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
-  const isConnected = pathname.startsWith('/account');
+  const isConnected = pathname.startsWith('/account') || pathname.startsWith('/admin') || pathname.startsWith('/community');
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');

@@ -1,13 +1,15 @@
 "use client"
 
-import { BookOpen, Bot, ChevronRight, Settings2, SquareTerminal, History, Star, Zap, type LucideIcon, CreditCard, Shield, Bell, User2, User } from "lucide-react"
-import React from "react"
-import { usePathname } from "next/navigation"
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/front/components/ui/collapsible"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/front/components/ui/popover"
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -19,12 +21,9 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/front/components/ui/sidebar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/front/components/ui/popover"
+import { Bell, ChevronRight, CreditCard, Settings2, Shield, User2, Users2Icon, type LucideIcon } from "lucide-react"
 import Link from "next/link"
+import React from "react"
 
 type NavSubItem = {
   title: string
@@ -68,11 +67,22 @@ const navMain: NavMainItem[] = [
       },
     ],
   },
+  {
+    title: "Community",
+    url: "/community",
+    icon: User2,
+    items: [
+      {
+        title: "Fil d'actualité",
+        url: "/community",
+        icon: Users2Icon,
+      }
+    ],
+  }
 ]
 
 export function NavMain() {
   const { state } = useSidebar()
-  const pathname = usePathname()
   const [openPopoverId, setOpenPopoverId] = React.useState<string | null>(null)
   const [openCollapsibleId, setOpenCollapsibleId] = React.useState<string | null>(null)
   const [isHydrated, setIsHydrated] = React.useState(false)
@@ -94,7 +104,7 @@ export function NavMain() {
           setOpenCollapsibleId(activeItem.title)
         }
       }
-    } catch (e) {
+    } catch (_e) {
       // Fallback if sessionStorage is not available
       const activeItem = navMain.find((item) => item.isActive)
       if (activeItem) {
@@ -109,14 +119,14 @@ export function NavMain() {
       setOpenCollapsibleId(itemTitle)
       try {
         sessionStorage.setItem("sidebar_open_collapsible", itemTitle)
-      } catch (e) {
+      } catch (_e) {
         // Ignore if sessionStorage is not available
       }
     } else if (openCollapsibleId === itemTitle) {
       setOpenCollapsibleId(null)
       try {
         sessionStorage.removeItem("sidebar_open_collapsible")
-      } catch (e) {
+      } catch (_e) {
         // Ignore if sessionStorage is not available
       }
     }

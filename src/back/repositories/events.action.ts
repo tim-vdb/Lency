@@ -16,6 +16,7 @@ export const EventsAction = {
         startDate: Date;
         endDate: Date;
         participants: number;
+        typeEvent: "PHYSICAL" | "VIRTUAL";
     }) => {
         return prisma.event.create({
             data: {
@@ -33,6 +34,7 @@ export const EventsAction = {
         startDate?: Date;
         endDate?: Date;
         participants?: number;
+        typeEvent?: "PHYSICAL" | "VIRTUAL";
     }) => {
         return prisma.event.update({
             where: { id },

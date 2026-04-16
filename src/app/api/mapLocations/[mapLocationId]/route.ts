@@ -1,4 +1,3 @@
-import { getUser } from "@/back/lib/auth-session";
 import { MapLocationsService } from "@/back/services/mapLocations.service";
 import { NextRequest, NextResponse } from "next/server";
 
