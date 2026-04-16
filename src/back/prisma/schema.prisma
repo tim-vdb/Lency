@@ -99,3 +99,20 @@ model Verification {
 
   @@map("verification")
 }
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  prenom    String
+  nom       String
+  email     String
+  sujet     String
+  message   String        @db.Text
+
+  type      ContactType   @default(CONTACT_GENERAL)
+  status    ContactStatus @default(EN_ATTENTE)
+
+  @@map("contact_messages")
+}
