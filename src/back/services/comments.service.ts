@@ -8,8 +8,8 @@ export const CommentsService = {
         return comment;
     },
 
-    findAllComments: async () => {
-        return CommentsAction.findAll();
+    findAllComments: async (postId: string) => {
+        return CommentsAction.findAll(postId);
     },
 
     createComment: async (data: {
@@ -24,6 +24,16 @@ export const CommentsService = {
         if (!data.postId) throw new Error("Post is required");
 
         return CommentsAction.create(user.id, data);
+    },
+
+    voteComment: async (
+        id: string,
+        prev: "upvote" | "downvote" | null,
+        next: "upvote" | "downvote" | null,
+    ) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        return CommentsAction.voteUpdate(id, prev, next);
     },
 
     updateComment: async (id: string, data: { content: string }) => {

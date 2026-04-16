@@ -1,67 +1,152 @@
-# DOSSIER DE RENDU
+# DOSSIER DE RENDU — PROJET FINAL
 
-**Projet : Application de gestion des CRA – Lency**  
-**Domaine principal :** https://lency.net  
-**Version de production :** lency.net  
-**Environnement de staging :** staging.lency.net  
+**Projet : Lency — SaaS de gestion communautaire**
+**Auteur : Timothée Van Den Bosch**
+**Date : 14 avril 2026**
 
-**Date :** 27 mars 2026  
-**Auteur :** [Ton Prénom NOM]
+| Domaine | URL |
+|---|---|
+| Production | https://lency.net |
+| Staging | https://staging.lency.net |
 
-## 1. Solution retenue
+---
 
-Afin de structurer les différents déploiements et d’éviter la centralisation sur un seul domaine, l’architecture adoptée est basée sur **plusieurs sous-domaines** hébergés sur Vercel :
+## 1. Application déployée et fonctionnelle (/8 pts)
 
-- **lency.net** → Environnement de **production** (destiné aux clients finaux)
-- **staging.lency.net** → Environnement de **staging / pré-production** (tests et validation)
-- **mail.lency.net** → Sous-domaine dédié exclusivement à l’envoi d’emails via l'application exemple (support@mail.lency.net)
+### Accessibilité
 
-**Objectifs atteints :**
-- Séparation claire entre production et staging.
-- Protection de la réputation du domaine principal (`lency.net`) en cas de problèmes de délivrabilité email.
-- Flexibilité : un client peut arriver directement sur un sous-domaine ou être redirigé depuis le domaine principal.
-- Possibilité de créer facilement d’autres sous-domaines à l’avenir.
+L'application est accessible en production sur **https://lency.net** et en pré-production sur **https://staging.lency.net**.
 
-**Stack technique :**
-- **Hébergement** : Vercel (PaaS optimisé pour Next.js)
-- **Base de données** : Neon.com (PostgreSQL serverless)
-- **Gestion des secrets** : Doppler
-- **Envoi d’emails** : Resend pour les mails de règle métier/newsletter (support@mail.lency.net,...) + Proton Mail (SMTP configuré sur social@lency.net)
-- **Frontend** : Next.js 15 (App Router)
+Le déploiement est effectué via **Vercel** (PaaS), connecté au dépôt GitHub `tim-vdb/Lency` :
 
-## 2. Étapes de déploiement réalisées
+- Branche `main` → déployée automatiquement sur `lency.net` (production)
+- Branche `staging` → déployée automatiquement sur `staging.lency.net` (staging)
 
-1. Ajout du domaine `lency.net` et création des sous-domaines sur Vercel.
-2. Connexion du dépôt GitHub pour déploiements automatiques.
-3. Configuration Doppler (projets séparés pour production et staging).
-4. Connexion de la base de données Neon.com via Prisma.
-5. Configuration DNS et SMTP sur `mail.lency.net` (SPF, DKIM, DMARC).
-6. Mise en place des redirections intelligentes via middleware Next.js.
-7. Déploiement automatique :
-   - Branche `main` → `lency.net` (production)
-   - Branche `develop` / Preview branches → `staging.lency.net`
+Dernier déploiement staging vérifié : commit `790b386`, état **READY**, région `iad1` (Washington DC, East).
 
-## 3. Difficultés rencontrées et solutions
+### Base de données
 
-- Propagation DNS des sous-domaines → résolue avec Cloudflare en proxy.
-- Gestion sécurisée des variables d’environnement → Doppler (projets isolés).
-- Délivrabilité email → combinaison Resend + Proton + configuration SPF/DKIM/DMARC sur sous-domaine dédié.
-- Redirection fluide entre domaine principal et sous-domaines → implémentée avec Next.js Middleware.
+La base de données est un **PostgreSQL serverless** hébergé sur **Neon.com**, connectée via **Prisma ORM**. Elle est opérationnelle sur les deux environnements avec des instances séparées (production / staging).
 
-## 4. Justification des choix (alignée sur les critères d’évaluation)
+### Projet récupéré depuis GitHub
 
-- **Application déployée et fonctionnelle** : Application accessible sur `lency.net` et `staging.lency.net`, base de données opérationnelle, projet récupéré depuis GitHub.
-- **Qualité de l’hébergement / architecture** : Choix cohérent de Vercel (PaaS) + multi-sous-domaines + Neon, architecture claire et scalable.
-- **Sécurité et bonnes pratiques** : HTTPS automatique, secrets gérés via Doppler (jamais exposés), debug désactivé en production.
-- **Exploitabilité / maintenance** : Déploiements GitHub automatiques, logs Vercel + Neon, procédure simple.
-- **Dossier de rendu** : Document complet avec solution, étapes, difficultés et justification.
+Le projet est lié au dépôt privé `github.com/tim-vdb/Lency`. Chaque push sur une branche surveillée déclenche automatiquement un nouveau build et déploiement sur Vercel.
 
-## 5. Conclusion
+### Front correctement servi
 
-L’architecture multi-sous-domaines mise en place répond parfaitement aux besoins de structuration, de sécurité et de maintenabilité du projet Lency. L’application est aujourd’hui pleinement fonctionnelle, sécurisée et facilement évolutive.
+Le frontend est une application **Next.js 15 (App Router)** compilée via **Turbopack**. Vercel sert les assets statiques depuis son CDN et les 33 routes dynamiques sont exposées via des **fonctions serverless Node.js 24.x** :
 
-**Liens :**  
-- Production : https://lency.net  
-- Staging : https://staging.lency.net  
+| Domaine fonctionnel | Routes serverless |
+|---|---|
+| Auth | `/api/auth/[...all]` |
+| Articles | `/api/articles`, `/api/articles/[articleId]` |
+| Badges | `/api/badges`, `/api/badges/[badgeId]` |
+| Categories | `/api/categories`, `/api/categories/[categoryId]` |
+| Emails | `/api/emails/welcome` |
+| Events | `/api/events`, `/api/events/[eventId]` |
+| MapLocations | `/api/mapLocations`, `/api/mapLocations/[mapLocationId]` |
+| Newsletter | `/api/newsletterSubscribers`, `/api/newsletterSubscribers/[newsletterSubscriberId]` |
+| Posts & Comments | `/api/posts`, `/api/posts/[postId]`, `/api/posts/[postId]/comments`, `/api/posts/[postId]/comments/[commentId]` |
+| Projects | `/api/projects`, `/api/projects/[projectId]` |
+| Resources | `/api/resources`, `/api/resources/[resourceId]` |
+| Spots | `/api/spots`, `/api/spots/[spotId]` |
+| Subscriptions | `/api/subscriptions`, `/api/subscriptions/[subscriptionId]` |
+| Upload | `/api/uploadthing` |
+| UserConfig | `/api/userConfig`, `/api/userConfig/[userConfigId]` |
+| Users | `/api/users`, `/api/users/[userId]`, `/api/users/change-password`, `/api/users/confirm-email-change`, `/api/users/verify-email-change` |
 
-**Prêt pour évaluation.**
+---
+
+## 2. Qualité de l'hébergement / architecture (/4 pts)
+
+### Choix d'hébergement : PaaS — Vercel
+
+Vercel a été retenu comme hébergeur **PaaS** pour sa compatibilité native avec Next.js, sa gestion automatique du scaling, du CDN et du SSL, et sa simplicité d'intégration CI/CD avec GitHub.
+
+### Architecture multi-environnements
+
+```
+GitHub (tim-vdb/Lency)
+├── branch main     →  Vercel → lency.net          (Production)
+└── branch staging  →  Vercel → staging.lency.net  (Staging)
+```
+
+Chaque environnement dispose de :
+- Son propre projet Vercel (`lency` / `lency-staging`)
+- Sa propre base de données Neon.com
+- Ses propres variables d'environnement injectées via **Doppler**
+
+### Architecture claire
+
+- **Frontend** : Next.js 15, App Router, Turbopack
+- **Backend** : API Routes Next.js → Fonctions serverless Node.js 24.x (33 routes)
+- **Base de données** : Neon.com (PostgreSQL serverless) + Prisma ORM
+- **Gestion des secrets** : Doppler (projets isolés prod / staging)
+- **Emails** : Resend (transactionnel via `support@mail.lency.net`) + Proton Mail SMTP (`social@lency.net`)
+- **Fichiers** : UploadThing (`/api/uploadthing`)
+- **Sous-domaines** :
+  - `lency.net` — production
+  - `staging.lency.net` — pré-production
+  - `mail.lency.net` — envoi d'emails (SPF / DKIM / DMARC configurés)
+
+---
+
+## 3. Sécurité et bonnes pratiques (/4 pts)
+
+### HTTPS
+
+HTTPS activé automatiquement sur tous les domaines via les certificats SSL gérés par Vercel (Let's Encrypt). Aucune connexion HTTP non chiffrée n'est possible.
+
+### Secrets non exposés
+
+Les variables d'environnement (clés API, chaînes de connexion DB, secrets d'auth) sont **exclusivement gérées via Doppler**. Elles ne sont jamais commitées dans le dépôt GitHub (`.env.local` présent dans `.gitignore`). Doppler injecte les secrets au moment du build Vercel selon l'environnement (production ou staging).
+
+### Debug désactivé en production
+
+Le mode debug Next.js est désactivé en production. Les logs d'erreur sont disponibles uniquement via le dashboard Vercel (runtime logs) et non exposés publiquement.
+
+### Accès sécurisé
+
+L'authentification est gérée via **Better Auth** (`/api/auth/[...all]`), avec sessions sécurisées. L'accès au dashboard Vercel est protégé par compte Vercel (2FA disponible). Aucun accès SSH nécessaire (architecture PaaS — pas de serveur à gérer).
+
+---
+
+## 4. Exploitabilité / maintenance (/2 pts)
+
+### Mise à jour depuis GitHub
+
+Tout déploiement est déclenché automatiquement par un push GitHub sur la branche correspondante. Aucune intervention manuelle requise pour déployer.
+
+### Logs et supervision
+
+- **Build logs** : disponibles dans le dashboard Vercel pour chaque déploiement
+- **Runtime logs** : fonctions serverless loguées en temps réel sur Vercel (filtrage par niveau, source, status code)
+- **Base de données** : supervision via le dashboard Neon.com (connexions, queries, métriques)
+
+### Procédure d'accès serveur
+
+Architecture PaaS — pas de serveur à administrer directement. L'accès se fait via :
+1. Dashboard Vercel : https://vercel.com/dashboard
+2. Dashboard Neon.com pour la base de données
+3. Dashboard Doppler pour les secrets
+4. CLI Vercel (`vercel`) pour les opérations avancées
+
+---
+
+## 5. Dossier de rendu (/2 pts)
+
+### Solution retenue
+
+_(à compléter)_
+
+### Étapes de déploiement
+
+_(à compléter)_
+
+### Difficultés rencontrées
+
+_(à compléter)_
+
+### Justification des choix
+
+_(à compléter)_

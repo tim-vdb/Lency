@@ -26,6 +26,7 @@ model Category {
   bannerUrl       String?
   rules           String?
   isNSFW          Boolean    @default(false)
+  members         Int        @default(0)
   postCount       Int        @default(0)
   subscriberCount Int        @default(0)
   lastPostAt      DateTime?
@@ -56,7 +57,12 @@ model Post {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   isPublished  Boolean    @default(false)
+  saveCount    Int        @default(0)
   comments     Comment[]
+  saves        PostSave[]
+  votes        PostVote[]
+  hides        PostHide[]
+  reports      PostReport[]
   author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   category     Category   @relation(fields: [categoryId], references: [id])
 
@@ -66,20 +72,74 @@ model Post {
 }
 
 model Comment {
-  id          String    @id @default(cuid())
-  content     String
-  postId      String
-  authorId    String
-  parentId    String?
-  upvoteCount Int       @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
-  children    Comment[] @relation("CommentReplies")
-  post        Post      @relation(fields: [postId], references: [id])
+  id            String    @id @default(cuid())
+  content       String
+  postId        String
+  authorId      String
+  parentId      String?
+  upvoteCount   Int       @default(0)
+  downvoteCount Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent        Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  children      Comment[] @relation("CommentReplies")
+  post          Post      @relation(fields: [postId], references: [id])
 
   @@index([postId])
   @@index([authorId])
   @@index([parentId])
+}
+
+model PostSave {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model PostVote {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model PostHide {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model PostReport {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  reason    String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
 }

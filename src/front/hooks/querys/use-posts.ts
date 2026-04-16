@@ -1,13 +1,43 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
+    createComment,
     createPost,
     deletePost,
+    fetchCommentsByPostId,
     fetchPostById,
     fetchPosts,
+    hidePost,
+    reportPost,
+    toggleSavePost,
+    toggleVotePost,
     updatePost,
-    type PostWithAuthor,
+    voteComment,
+    type CreateCommentInput,
     type CreatePostInput,
+    type VoteCommentInput,
 } from "@/front/lib/api/posts"
+import { CommentWithChildren, PostWithUserState } from "@/front/types/post.schema"
+
+// Parcourt l'arbre récursivement et met à jour les compteurs du commentaire ciblé
+function applyVoteInTree(
+    comments: CommentWithChildren[],
+    commentId: string,
+    prev: VoteCommentInput["prev"],
+    next: VoteCommentInput["next"],
+): CommentWithChildren[] {
+    return comments.map((c) => {
+        if (c.id === commentId) {
+            return {
+                ...c,
+                upvoteCount:
+                    c.upvoteCount + (next === "upvote" ? 1 : 0) - (prev === "upvote" ? 1 : 0),
+                downvoteCount:
+                    c.downvoteCount + (next === "downvote" ? 1 : 0) - (prev === "downvote" ? 1 : 0),
+            };
+        }
+        return { ...c, children: applyVoteInTree(c.children, commentId, prev, next) };
+    });
+}
 
 const POST_ROOT = ["posts"] as const
 
@@ -29,6 +59,13 @@ export const postQueries = {
             queryFn: () => fetchPostById(id),
             staleTime: 1000 * 60 * 5,
         }),
+
+    comments: (postId: string) =>
+        queryOptions({
+            queryKey: [...POST_ROOT, "comments", postId] as const,
+            queryFn: () => fetchCommentsByPostId(postId),
+            staleTime: 1000 * 60 * 2,
+        }),
 }
 
 // ─── Queries ─────────────────────────────────────────────────────────────────
@@ -36,6 +73,8 @@ export const postQueries = {
 export const usePosts = () => useQuery(postQueries.lists())
 
 export const usePostById = (id: string) => useQuery(postQueries.detail(id))
+
+export const useCommentsByPostId = (postId: string) => useQuery(postQueries.comments(postId))
 
 // ─── Mutations ───────────────────────────────────────────────────────────────
 
@@ -55,6 +94,56 @@ export const useUpdatePost = () => {
     })
 }
 
+export const useVoteComment = (postId: string) => {
+    const queryClient = useQueryClient()
+    const commentsKey = postQueries.comments(postId).queryKey
+
+    return useMutation({
+        mutationFn: (input: VoteCommentInput) => voteComment(input),
+
+        // Étape 1 : mise à jour immédiate du cache (avant la réponse serveur)
+        onMutate: async ({ commentId, prev, next }) => {
+            await queryClient.cancelQueries({ queryKey: commentsKey })
+            const previous = queryClient.getQueryData<CommentWithChildren[]>(commentsKey)
+            queryClient.setQueryData<CommentWithChildren[]>(commentsKey, (old = []) =>
+                applyVoteInTree(old, commentId, prev, next)
+            )
+            return { previous }
+        },
+
+        // Étape 2 : si le serveur échoue, on restaure l'état d'avant
+        onError: (_err, _input, context) => {
+            if (context?.previous) {
+                queryClient.setQueryData(commentsKey, context.previous)
+            }
+        },
+
+        // Étape 3 : dans tous les cas, on resync avec le serveur
+        onSettled: () => queryClient.invalidateQueries({ queryKey: commentsKey }),
+    })
+}
+
+export const useCreateComment = (postId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (input: CreateCommentInput) => createComment(input),
+        onMutate: () => {
+            // Optimistic update: increment commentCount in the list cache immediately
+            queryClient.setQueryData<PostWithUserState[]>(
+                postQueries.lists().queryKey,
+                (old = []) => old.map((p) =>
+                    p.id === postId ? { ...p, commentCount: p.commentCount + 1 } : p
+                )
+            )
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "comments", postId] })
+            queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "detail", postId] })
+            queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "list"] })
+        },
+    })
+}
+
 export const useDeletePost = () => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -62,8 +151,8 @@ export const useDeletePost = () => {
         onMutate: async (postId: string) => {
             const listKey = postQueries.lists().queryKey
             await queryClient.cancelQueries({ queryKey: listKey })
-            const previousPosts = queryClient.getQueryData<PostWithAuthor[]>(listKey)
-            queryClient.setQueryData<PostWithAuthor[]>(listKey, (old = []) =>
+            const previousPosts = queryClient.getQueryData<PostWithUserState[]>(listKey)
+            queryClient.setQueryData<PostWithUserState[]>(listKey, (old = []) =>
                 old.filter((post) => post.id !== postId)
             )
             return { previousPosts }
@@ -71,12 +160,74 @@ export const useDeletePost = () => {
         onError: (
             _err: unknown,
             _postId: string,
-            context: { previousPosts: PostWithAuthor[] | undefined } | undefined
+            context: { previousPosts: PostWithUserState[] | undefined } | undefined
         ) => {
             if (context?.previousPosts !== undefined) {
                 queryClient.setQueryData(postQueries.lists().queryKey, context.previousPosts)
             }
         },
         onSettled: () => queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "list"] }),
+    })
+}
+
+export const useToggleSavePost = (postId: string) => {
+    const queryClient = useQueryClient()
+    const listKey = postQueries.lists().queryKey
+    return useMutation({
+        mutationFn: () => toggleSavePost(postId),
+        onMutate: async () => {
+            await queryClient.cancelQueries({ queryKey: listKey })
+            const previous = queryClient.getQueryData<PostWithUserState[]>(listKey)
+            queryClient.setQueryData<PostWithUserState[]>(listKey, (old = []) =>
+                old.map((p) =>
+                    p.id === postId
+                        ? { ...p, isSaved: !p.isSaved, saveCount: p.isSaved ? p.saveCount - 1 : p.saveCount + 1 }
+                        : p
+                )
+            )
+            return { previous }
+        },
+        onError: (_err, _vars, context) => {
+            if (context?.previous) queryClient.setQueryData(listKey, context.previous)
+        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey: listKey }),
+    })
+}
+
+export const useToggleVotePost = (postId: string) => {
+    const queryClient = useQueryClient()
+    const listKey = postQueries.lists().queryKey
+    return useMutation({
+        mutationFn: () => toggleVotePost(postId),
+        onMutate: async () => {
+            await queryClient.cancelQueries({ queryKey: listKey })
+            const previous = queryClient.getQueryData<PostWithUserState[]>(listKey)
+            queryClient.setQueryData<PostWithUserState[]>(listKey, (old = []) =>
+                old.map((p) =>
+                    p.id === postId
+                        ? { ...p, isVoted: !p.isVoted, upvoteCount: p.isVoted ? p.upvoteCount - 1 : p.upvoteCount + 1 }
+                        : p
+                )
+            )
+            return { previous }
+        },
+        onError: (_err, _vars, context) => {
+            if (context?.previous) queryClient.setQueryData(listKey, context.previous)
+        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey: listKey }),
+    })
+}
+
+export const useHidePost = (postId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => hidePost(postId),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: postQueries.lists().queryKey }),
+    })
+}
+
+export const useReportPost = (postId: string) => {
+    return useMutation({
+        mutationFn: () => reportPost(postId),
     })
 }

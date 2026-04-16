@@ -1,6 +1,4 @@
-import { Prisma } from "@/back/generated/prisma_client"
-
-export type PostWithAuthor = Prisma.PostGetPayload<{ include: { author: true; category: true } }>
+import { CommentWithChildren, PostWithAuthorAndCategory, PostWithUserState } from "@/front/types/post.schema";
 
 export interface CreatePostInput {
     title: string
@@ -8,7 +6,7 @@ export interface CreatePostInput {
     categoryId: string
 }
 
-export async function fetchPosts(): Promise<PostWithAuthor[]> {
+export async function fetchPosts(): Promise<PostWithUserState[]> {
     const response = await fetch('/api/posts', {
         method: 'GET',
         cache: 'no-store',
@@ -22,7 +20,7 @@ export async function fetchPosts(): Promise<PostWithAuthor[]> {
     return data.posts
 }
 
-export async function fetchPostById(postId: string): Promise<PostWithAuthor> {
+export async function fetchPostById(postId: string): Promise<PostWithAuthorAndCategory> {
     const response = await fetch(`/api/posts/${postId}`, {
         method: 'GET',
         cache: 'no-store',
@@ -36,7 +34,7 @@ export async function fetchPostById(postId: string): Promise<PostWithAuthor> {
     return data.post
 }
 
-export async function createPost(input: CreatePostInput): Promise<PostWithAuthor> {
+export async function createPost(input: CreatePostInput): Promise<PostWithAuthorAndCategory> {
     const response = await fetch('/api/posts', {
         method: 'POST',
         headers: {
@@ -57,7 +55,7 @@ export async function createPost(input: CreatePostInput): Promise<PostWithAuthor
 export async function updatePost(
     postId: string,
     input: Partial<CreatePostInput>
-): Promise<PostWithAuthor> {
+): Promise<PostWithAuthorAndCategory> {
     const response = await fetch(`/api/posts/${postId}`, {
         method: 'PATCH',
         headers: {
@@ -75,6 +73,64 @@ export async function updatePost(
     return data.post
 }
 
+export async function fetchCommentsByPostId(postId: string): Promise<CommentWithChildren[]> {
+    const response = await fetch(`/api/posts/${postId}/comments`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des commentaires')
+    }
+
+    const data = await response.json()
+    return data.comments
+}
+
+export interface CreateCommentInput {
+    content: string;
+    postId: string;
+    parentId?: string;
+}
+
+export async function createComment(input: CreateCommentInput): Promise<CommentWithChildren> {
+    const response = await fetch(`/api/posts/${input.postId}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+    })
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors de la création du commentaire')
+    }
+
+    const data = await response.json()
+    return data.comment
+}
+
+export interface VoteCommentInput {
+    commentId: string;
+    postId: string;
+    prev: "upvote" | "downvote" | null;
+    next: "upvote" | "downvote" | null;
+}
+
+export async function voteComment(input: VoteCommentInput): Promise<void> {
+    const response = await fetch(
+        `/api/posts/${input.postId}/comments/${input.commentId}/vote`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prev: input.prev, next: input.next }),
+        }
+    );
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors du vote");
+    }
+}
+
 export async function deletePost(postId: string): Promise<void> {
     const response = await fetch(`/api/posts/${postId}`, {
         method: 'DELETE',
@@ -83,5 +139,39 @@ export async function deletePost(postId: string): Promise<void> {
     if (!response.ok) {
         const error = await response.json().catch(() => ({}))
         throw new Error(error.error || 'Erreur lors de la suppression du post')
+    }
+}
+
+export async function toggleSavePost(postId: string): Promise<{ saved: boolean }> {
+    const response = await fetch(`/api/posts/${postId}/save`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors de la sauvegarde du post')
+    }
+    return response.json()
+}
+
+export async function toggleVotePost(postId: string): Promise<{ voted: boolean }> {
+    const response = await fetch(`/api/posts/${postId}/vote`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors du vote')
+    }
+    return response.json()
+}
+
+export async function hidePost(postId: string): Promise<void> {
+    const response = await fetch(`/api/posts/${postId}/hide`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors du masquage du post')
+    }
+}
+
+export async function reportPost(postId: string): Promise<void> {
+    const response = await fetch(`/api/posts/${postId}/report`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors du signalement du post')
     }
 }
