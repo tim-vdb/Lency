@@ -1,15 +1,15 @@
 "use client";
 
-import { Bell, Plus } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../../ui/breadcrumb";
 import { Separator } from "../../ui/separator";
 import { SheetTrigger } from "../../ui/sheet";
 import { NavUser } from "./Sidebar/nav-user";
 import { useState, useEffect } from "react";
-import { Button } from "../../ui/button";
 import { cn } from "@/front/lib/utils";
 import { useSidebar } from "../../ui/sidebar";
 import { usePathname } from "next/navigation";
+import { CreateDropdown } from "./CreateDropdown";
 
 export default function Header({ className }: { className?: string }) {
     const [isNotifs,] = useState(true)
@@ -57,10 +57,7 @@ export default function Header({ className }: { className?: string }) {
                     </BreadcrumbList>
                 </Breadcrumb>
                 <div className="flex items-center gap-4">
-                    <Button variant={"outline"} className="ml-auto shadow-lg-base cursor-pointer border-neutral-300 animate-spin">
-                        <span>Créer</span>
-                        <Plus className="w-4 h-4" />
-                    </Button>
+                    <CreateDropdown />
                     <SheetTrigger className="cursor-pointer relative flex">
                         <Bell className="w-6 h-6 fill-black text-black dark:fill-white dark:text-white" />
                         {isNotifs &&
