@@ -23,7 +23,6 @@ import {
 } from "@/front/components/ui/sidebar"
 import { Bell, ChevronRight, CreditCard, Settings2, Shield, User2, Users2Icon, type LucideIcon } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import React from "react"
 
 type NavSubItem = {
@@ -105,7 +104,7 @@ export function NavMain() {
           setOpenCollapsibleId(activeItem.title)
         }
       }
-    } catch (e) {
+    } catch (_e) {
       // Fallback if sessionStorage is not available
       const activeItem = navMain.find((item) => item.isActive)
       if (activeItem) {
@@ -120,14 +119,14 @@ export function NavMain() {
       setOpenCollapsibleId(itemTitle)
       try {
         sessionStorage.setItem("sidebar_open_collapsible", itemTitle)
-      } catch (e) {
+      } catch (_e) {
         // Ignore if sessionStorage is not available
       }
     } else if (openCollapsibleId === itemTitle) {
       setOpenCollapsibleId(null)
       try {
         sessionStorage.removeItem("sidebar_open_collapsible")
-      } catch (e) {
+      } catch (_e) {
         // Ignore if sessionStorage is not available
       }
     }

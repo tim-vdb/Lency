@@ -72,6 +72,12 @@ export default [
         HTMLTableRowElement: 'readonly',
         HTMLTableCellElement: 'readonly',
         HTMLTableCaptionElement: 'readonly',
+        HTMLTextAreaElement: 'readonly',
+        HTMLSelectElement: 'readonly',
+        HTMLAudioElement: 'readonly',
+        // Web Storage
+        sessionStorage: 'readonly',
+        localStorage: 'readonly',
         // Node.js globals
         process: 'readonly',
         Buffer: 'readonly',
@@ -94,7 +100,7 @@ export default [
       'default-case': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
       'no-unused-vars': 'off',
-      "@typescript-eslint/no-unused-vars": 'error',
+      "@typescript-eslint/no-unused-vars": ['error', { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }],
     },
     plugins: {
       '@typescript-eslint': tsPlugin,

@@ -1,11 +1,11 @@
 "use client";
 
-import { timeAgo } from "@/front/lib/utils";
 import { useCreateComment, useVoteComment } from "@/front/hooks/querys/use-posts";
+import { timeAgo } from "@/front/lib/utils";
 import { CreateCommentSchema, type CreateCommentFormValues } from "@/front/types/comment.schema";
 import { CommentBase, CommentWithChildren } from "@/front/types/post.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowUp, Loader2, ThumbsDown, ThumbsUp } from "lucide-react";
+import { Loader2, ThumbsDown, ThumbsUp } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { useForm } from "react-hook-form";

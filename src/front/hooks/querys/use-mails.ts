@@ -6,7 +6,6 @@ import {
     fetchMailById,
     updateMailStatus,
     type Mail,
-    type CreateMailInput,
     ContactStatus,
 } from "@/front/lib/api/mails"
 

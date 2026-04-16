@@ -2,20 +2,19 @@
 
 import { Card, CardContent, CardFooter } from "@/front/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/front/components/ui/popover";
-import PostAvatar from "./PostAvatar";
+import { Tooltip, TooltipContent } from "@/front/components/ui/tooltip";
+import { useHidePost, useReportPost, useToggleSavePost, useToggleVotePost } from "@/front/hooks/querys/use-posts";
 import { cn } from "@/front/lib/utils";
-import { Download, Bookmark, EyeOff, Flag, Ellipsis, Heart, MessageCircleMore, Share } from "lucide-react";
+import { PostWithUserState } from "@/front/types/post.schema";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Bookmark, Ellipsis, EyeOff, Flag, Heart, MessageCircleMore, Share } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { PostWithUserState } from "@/front/types/post.schema";
-import Comments from "../Comments/Comments";
-import CommentRoot from "../Comments/CommentRoot";
-import { useState, useEffect } from "react";
-import { useToggleSavePost, useToggleVotePost, useHidePost, useReportPost } from "@/front/hooks/querys/use-posts";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Tooltip, TooltipContent } from "@/front/components/ui/tooltip";
-import { TooltipTrigger } from "@radix-ui/react-tooltip";
-import { Button } from "@/front/components/ui/button";
+import CommentRoot from "../Comments/CommentRoot";
+import Comments from "../Comments/Comments";
+import PostAvatar from "./PostAvatar";
 
 interface PostDesktopProps {
     post: PostWithUserState;

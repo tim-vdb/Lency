@@ -1,9 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/front/components/ui/card";
-import { Field, FieldDescription, FieldLabel } from "@/front/components/ui/field";
+import { Field, FieldLabel } from "@/front/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/front/components/ui/select";
-import { Separator } from "@/front/components/ui/separator";
-import { Switch } from "@/front/components/ui/switch";
-import { Bell, MessageSquare } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 
 
 export default function NotifsPreference() {
