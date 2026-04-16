@@ -6,9 +6,8 @@ interface SendPasswordChangedEmailParams {
     firstName?: string | null;
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function sendPasswordChangedEmail({ email, firstName }: SendPasswordChangedEmailParams): Promise<void> {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const sender = process.env.RESEND_FROM_AUTH_EMAIL ?? 'Lency <no-reply@infos.lency.net>';
 
     const { error } = await resend.emails.send({
