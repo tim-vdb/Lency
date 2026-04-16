@@ -48,6 +48,10 @@ model User {
   participants              Project[]              @relation("Participants")
   badges                    Badge[]                @relation("UserBadge")
   events                    Event[]                @relation("UserEvent")
+  savedPosts                PostSave[]
+  postVotes                 PostVote[]
+  hiddenPosts               PostHide[]
+  reportedPosts             PostReport[]
 }
 
 /// *

@@ -1,4 +1,4 @@
-import { CommentWithChildren, PostWithAuthorAndCategory } from "@/front/types/post.schema";
+import { CommentWithChildren, PostWithAuthorAndCategory, PostWithUserState } from "@/front/types/post.schema";
 
 export interface CreatePostInput {
     title: string
@@ -6,7 +6,7 @@ export interface CreatePostInput {
     categoryId: string
 }
 
-export async function fetchPosts(): Promise<PostWithAuthorAndCategory[]> {
+export async function fetchPosts(): Promise<PostWithUserState[]> {
     const response = await fetch('/api/posts', {
         method: 'GET',
         cache: 'no-store',
@@ -139,5 +139,39 @@ export async function deletePost(postId: string): Promise<void> {
     if (!response.ok) {
         const error = await response.json().catch(() => ({}))
         throw new Error(error.error || 'Erreur lors de la suppression du post')
+    }
+}
+
+export async function toggleSavePost(postId: string): Promise<{ saved: boolean }> {
+    const response = await fetch(`/api/posts/${postId}/save`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors de la sauvegarde du post')
+    }
+    return response.json()
+}
+
+export async function toggleVotePost(postId: string): Promise<{ voted: boolean }> {
+    const response = await fetch(`/api/posts/${postId}/vote`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors du vote')
+    }
+    return response.json()
+}
+
+export async function hidePost(postId: string): Promise<void> {
+    const response = await fetch(`/api/posts/${postId}/hide`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors du masquage du post')
+    }
+}
+
+export async function reportPost(postId: string): Promise<void> {
+    const response = await fetch(`/api/posts/${postId}/report`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors du signalement du post')
     }
 }

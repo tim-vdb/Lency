@@ -6,13 +6,17 @@ import {
     fetchCommentsByPostId,
     fetchPostById,
     fetchPosts,
+    hidePost,
+    reportPost,
+    toggleSavePost,
+    toggleVotePost,
     updatePost,
     voteComment,
     type CreateCommentInput,
     type CreatePostInput,
     type VoteCommentInput,
 } from "@/front/lib/api/posts"
-import { CommentWithChildren, PostWithAuthorAndCategory } from "@/front/types/post.schema"
+import { CommentWithChildren, PostWithUserState } from "@/front/types/post.schema"
 
 // Parcourt l'arbre récursivement et met à jour les compteurs du commentaire ciblé
 function applyVoteInTree(
@@ -125,7 +129,7 @@ export const useCreateComment = (postId: string) => {
         mutationFn: (input: CreateCommentInput) => createComment(input),
         onMutate: () => {
             // Optimistic update: increment commentCount in the list cache immediately
-            queryClient.setQueryData<PostWithAuthorAndCategory[]>(
+            queryClient.setQueryData<PostWithUserState[]>(
                 postQueries.lists().queryKey,
                 (old = []) => old.map((p) =>
                     p.id === postId ? { ...p, commentCount: p.commentCount + 1 } : p
@@ -147,8 +151,8 @@ export const useDeletePost = () => {
         onMutate: async (postId: string) => {
             const listKey = postQueries.lists().queryKey
             await queryClient.cancelQueries({ queryKey: listKey })
-            const previousPosts = queryClient.getQueryData<PostWithAuthorAndCategory[]>(listKey)
-            queryClient.setQueryData<PostWithAuthorAndCategory[]>(listKey, (old = []) =>
+            const previousPosts = queryClient.getQueryData<PostWithUserState[]>(listKey)
+            queryClient.setQueryData<PostWithUserState[]>(listKey, (old = []) =>
                 old.filter((post) => post.id !== postId)
             )
             return { previousPosts }
@@ -156,12 +160,74 @@ export const useDeletePost = () => {
         onError: (
             _err: unknown,
             _postId: string,
-            context: { previousPosts: PostWithAuthorAndCategory[] | undefined } | undefined
+            context: { previousPosts: PostWithUserState[] | undefined } | undefined
         ) => {
             if (context?.previousPosts !== undefined) {
                 queryClient.setQueryData(postQueries.lists().queryKey, context.previousPosts)
             }
         },
         onSettled: () => queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "list"] }),
+    })
+}
+
+export const useToggleSavePost = (postId: string) => {
+    const queryClient = useQueryClient()
+    const listKey = postQueries.lists().queryKey
+    return useMutation({
+        mutationFn: () => toggleSavePost(postId),
+        onMutate: async () => {
+            await queryClient.cancelQueries({ queryKey: listKey })
+            const previous = queryClient.getQueryData<PostWithUserState[]>(listKey)
+            queryClient.setQueryData<PostWithUserState[]>(listKey, (old = []) =>
+                old.map((p) =>
+                    p.id === postId
+                        ? { ...p, isSaved: !p.isSaved, saveCount: p.isSaved ? p.saveCount - 1 : p.saveCount + 1 }
+                        : p
+                )
+            )
+            return { previous }
+        },
+        onError: (_err, _vars, context) => {
+            if (context?.previous) queryClient.setQueryData(listKey, context.previous)
+        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey: listKey }),
+    })
+}
+
+export const useToggleVotePost = (postId: string) => {
+    const queryClient = useQueryClient()
+    const listKey = postQueries.lists().queryKey
+    return useMutation({
+        mutationFn: () => toggleVotePost(postId),
+        onMutate: async () => {
+            await queryClient.cancelQueries({ queryKey: listKey })
+            const previous = queryClient.getQueryData<PostWithUserState[]>(listKey)
+            queryClient.setQueryData<PostWithUserState[]>(listKey, (old = []) =>
+                old.map((p) =>
+                    p.id === postId
+                        ? { ...p, isVoted: !p.isVoted, upvoteCount: p.isVoted ? p.upvoteCount - 1 : p.upvoteCount + 1 }
+                        : p
+                )
+            )
+            return { previous }
+        },
+        onError: (_err, _vars, context) => {
+            if (context?.previous) queryClient.setQueryData(listKey, context.previous)
+        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey: listKey }),
+    })
+}
+
+export const useHidePost = (postId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => hidePost(postId),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: postQueries.lists().queryKey }),
+    })
+}
+
+export const useReportPost = (postId: string) => {
+    return useMutation({
+        mutationFn: () => reportPost(postId),
     })
 }

@@ -3,13 +3,15 @@ import { getUser } from "../lib/auth-session";
 
 export const PostsService = {
     findByIdPost: async (id: string) => {
-        const post = await PostsAction.findById(id);
+        const user = await getUser();
+        const post = await PostsAction.findById(id, user?.id ?? undefined);
         if (!post) throw new Error("Post not found");
         return post;
     },
 
     findAllPosts: async () => {
-        return PostsAction.findAll();
+        const user = await getUser();
+        return PostsAction.findAll(user?.id ?? undefined);
     },
 
     createPost: async (data: {
@@ -59,5 +61,33 @@ export const PostsService = {
         }
 
         return PostsAction.delete(id);
+    },
+
+    toggleSavePost: async (postId: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        await PostsService.findByIdPost(postId);
+        return PostsAction.toggleSave(user.id, postId);
+    },
+
+    toggleVotePost: async (postId: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        await PostsService.findByIdPost(postId);
+        return PostsAction.toggleVote(user.id, postId);
+    },
+
+    hidePost: async (postId: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        await PostsService.findByIdPost(postId);
+        return PostsAction.hidePost(user.id, postId);
+    },
+
+    reportPost: async (postId: string, reason?: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        await PostsService.findByIdPost(postId);
+        return PostsAction.reportPost(user.id, postId, reason);
     },
 };

@@ -57,7 +57,12 @@ model Post {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   isPublished  Boolean    @default(false)
+  saveCount    Int        @default(0)
   comments     Comment[]
+  saves        PostSave[]
+  votes        PostVote[]
+  hides        PostHide[]
+  reports      PostReport[]
   author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   category     Category   @relation(fields: [categoryId], references: [id])
 
@@ -84,4 +89,57 @@ model Comment {
   @@index([postId])
   @@index([authorId])
   @@index([parentId])
+}
+
+model PostSave {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model PostVote {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model PostHide {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model PostReport {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  reason    String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
 }

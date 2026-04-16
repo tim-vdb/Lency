@@ -1,7 +1,7 @@
 import PostDesktop from "@/front/components/Public/Community/Posts/PostDesktop";
-import { PostsAction } from "@/back/repositories/posts.action";
-import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
+import { PostsService } from "@/back/services/posts.service";
 import PostsInfos from "@/front/components/Public/Community/Sidebar/PostsInfos";
+
 interface PostPageProps {
     params: {
         id: string;
@@ -10,7 +10,7 @@ interface PostPageProps {
 
 export default async function PostPage({ params }: PostPageProps) {
     const { id } = await params;
-    const post: PostWithAuthorAndCategory | null = await PostsAction.findById(id);
+    const post = await PostsService.findByIdPost(id).catch(() => null);
 
     if (!post) {
         return <div>Post non trouvé</div>;

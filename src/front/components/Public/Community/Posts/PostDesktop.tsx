@@ -7,30 +7,90 @@ import { cn } from "@/front/lib/utils";
 import { Download, Bookmark, EyeOff, Flag, Ellipsis, Heart, MessageCircleMore, Share } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
-import { Item, ItemContent } from "@/front/components/ui/item";
+import { PostWithUserState } from "@/front/types/post.schema";
 import Comments from "../Comments/Comments";
 import CommentRoot from "../Comments/CommentRoot";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useToggleSavePost, useToggleVotePost, useHidePost, useReportPost } from "@/front/hooks/querys/use-posts";
+import { toast } from "sonner";
+import { Tooltip, TooltipContent } from "@/front/components/ui/tooltip";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Button } from "@/front/components/ui/button";
 
 interface PostDesktopProps {
-    post: PostWithAuthorAndCategory;
+    post: PostWithUserState;
     className?: string;
 }
 
-const menuItems = [
-    { icon: Download, label: "Télécharger" },
-    { icon: Bookmark, label: "Enregistrer" },
-    { icon: EyeOff, label: "Pas intéressé" },
-    { icon: Flag, label: "Signaler", className: "text-red-500" },
-]
-
 export default function PostDesktop({ post, className }: PostDesktopProps) {
     const [openComments, setOpenComments] = useState(false);
+    const [isVoted, setIsVoted] = useState(post.isVoted ?? false);
+    const [isSaved, setIsSaved] = useState(post.isSaved ?? false);
+    const [upvoteCount, setUpvoteCount] = useState(post.upvoteCount);
     const router = useRouter();
     const pathname = usePathname();
     const isOnSelfPage = pathname === `/post/${post.id}`;
-    const comments = post.commentCount
+
+    // Sync local state when navigating to a different post
+    useEffect(() => {
+        setIsVoted(post.isVoted ?? false);
+        setIsSaved(post.isSaved ?? false);
+        setUpvoteCount(post.upvoteCount);
+    }, [post.id]);
+
+    const { mutate: toggleSavePost } = useToggleSavePost(post.id);
+    const { mutate: toggleVotePost } = useToggleVotePost(post.id);
+    const { mutate: hide } = useHidePost(post.id);
+    const { mutate: report } = useReportPost(post.id);
+
+    function handleVote() {
+        setIsVoted(!isVoted);
+        setUpvoteCount((c) => !isVoted ? c + 1 : c - 1);
+        toggleVotePost(undefined, {
+            onError: () => {
+                setIsVoted(isVoted);
+                setUpvoteCount((c) => !isVoted ? c - 1 : c + 1);
+            },
+        });
+    }
+
+    function handleSave() {
+        const nextSaved = !isSaved;
+        setIsSaved(nextSaved);
+        toggleSavePost(undefined, {
+            onSuccess: () => toast.success(nextSaved ? "Post enregistré." : "Post retiré des enregistrements."),
+            onError: () => setIsSaved(isSaved),
+        });
+    }
+
+    const menuItems = [
+        { icon: Share, label: "Partager", filled: false, onClick: undefined },
+        {
+            icon: Bookmark,
+            label: isSaved ? "Enregistré" : "Enregistrer",
+            filled: isSaved,
+            onClick: (e: React.MouseEvent) => { e.stopPropagation(); handleSave(); },
+        },
+        {
+            icon: EyeOff,
+            label: "Pas intéressé",
+            filled: false,
+            onClick: (e: React.MouseEvent) => {
+                e.stopPropagation();
+                hide(undefined, { onSuccess: () => toast.success("Post masqué.") });
+            },
+        },
+        {
+            icon: Flag,
+            label: "Signaler",
+            className: "text-red-500",
+            filled: false,
+            onClick: (e: React.MouseEvent) => {
+                e.stopPropagation();
+                report(undefined, { onSuccess: () => toast.success("Post signalé.") });
+            },
+        },
+    ]
 
     return (
         <Card className={cn("gap-4 py-4 flex-1", className)}>
@@ -47,15 +107,19 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                             </button>
                         </PopoverTrigger>
                         <PopoverContent className="w-44 p-1" align="end">
-                            {menuItems.map(({ icon: Icon, label, className }) => (
+                            {menuItems.map(({ icon: Icon, label, className, onClick, filled }) => (
+
                                 <button
                                     key={label}
                                     className={cn(
                                         "flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md hover:bg-neutral-100 transition-colors",
                                         className
                                     )}
+                                    onClick={onClick}
                                 >
-                                    <Icon className="w-4 h-4" />
+
+                                    <Icon className={cn("w-4 h-4", filled ? "fill-neutral-900 text-neutral-900" : "")} />
+
                                     {label}
                                 </button>
                             ))}
@@ -65,27 +129,50 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                 <Image src={"/images/blog/img1.jpg"} alt={post.title} width={500} height={500} className={cn("w-full h-[450px] object-cover rounded-md", !isOnSelfPage ? "cursor-pointer" : "")} />
             </CardContent>
             <CardFooter className="flex flex-col items-start gap-2">
-                <div className="flex items-center gap-2 pl-6">
-                    <div className="flex flex-col gap-2">
-                        <Heart className="w-6 h-6" />
-                        <span className="text-xs text-neutral-500">123</span>
+                <div className="flex items-top gap-2 pl-6">
+                    <div className="flex flex-col items-center gap-2">
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Heart className={cn("w-6 h-6 cursor-pointer transition-colors", isVoted ? "fill-red-500 text-red-500" : "")} onClick={(e) => { e.stopPropagation(); handleVote(); }} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Aimer</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <span className="text-xs text-neutral-500">{upvoteCount}</span>
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <MessageCircleMore className="w-6 h-6 cursor-pointer" onClick={() => {
-                            setOpenComments(!openComments)
-
-                        }} />
+                    <div className="flex flex-col items-center gap-2">
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <MessageCircleMore className="w-6 h-6 cursor-pointer" onClick={() => setOpenComments(!openComments)} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Commentaires</p>
+                            </TooltipContent>
+                        </Tooltip>
                         <span className="text-xs text-neutral-500">
-                            {comments}
+                            {post.commentCount}
                         </span>
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <Bookmark className="w-6 h-6" />
-                        <span className="text-xs text-neutral-500">123</span>
+                    <div className="flex flex-col items-center gap-2">
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Bookmark className={cn("w-6 h-6 cursor-pointer transition-colors", isSaved ? "fill-neutral-900 text-neutral-900" : "")} onClick={(e) => { e.stopPropagation(); handleSave(); }} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Enregistrer</p>
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <Share className="w-6 h-6" />
-                        <span className="text-xs text-neutral-500">123</span>
+                    <div className="flex flex-col items-center gap-2">
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Share className="w-6 h-6 cursor-pointer" onClick={(e) => { e.stopPropagation(); }} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Partager</p>
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                 </div>
                 <hr className="border-dashed border border-neutral-400 w-full" />
@@ -98,6 +185,6 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                     </div>
                 )}
             </CardFooter>
-        </Card>
+        </Card >
     );
 }
