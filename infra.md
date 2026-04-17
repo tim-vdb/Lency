@@ -1,8 +1,7 @@
-# DOSSIER DE RENDU — PROJET FINAL
+# DOSSIER DE RENDU — INFRASTRUCTURE
 
-**Projet : Lency — SaaS de gestion communautaire**
-**Auteur : Timothée Van Den Bosch**
-**Date : 14 avril 2026**
+**Projet : Lency — SaaS, plateforme communautaire dans l'audiovisuel**
+**Équipe : Timothée Van Den Bosch - Guerric Cochelin**
 
 | Domaine | URL |
 |---|---|
@@ -11,18 +10,18 @@
 
 ---
 
-## 1. Application déployée et fonctionnelle (/8 pts)
+## 1. Application déployée et fonctionnelle
 
 ### Accessibilité
 
-L'application est accessible en production sur **https://lency.net** et en pré-production sur **https://staging.lency.net**.
+L'application sera accessible en production sur **https://lency.net** et est déjà disponible en pré-production sur **https://staging.lency.net**.
 
 Le déploiement est effectué via **Vercel** (PaaS), connecté au dépôt GitHub `tim-vdb/Lency` :
 
 - Branche `main` → déployée automatiquement sur `lency.net` (production)
 - Branche `staging` → déployée automatiquement sur `staging.lency.net` (staging)
 
-Dernier déploiement staging vérifié : commit `790b386`, état **READY**, région `iad1` (Washington DC, East).
+![Déploiements Vercel — staging.lency.net](public/images/Infra/deployments-staging.lency.net.png)
 
 ### Base de données
 
@@ -30,7 +29,7 @@ La base de données est un **PostgreSQL serverless** hébergé sur **Neon.com**,
 
 ### Projet récupéré depuis GitHub
 
-Le projet est lié au dépôt privé `github.com/tim-vdb/Lency`. Chaque push sur une branche surveillée déclenche automatiquement un nouveau build et déploiement sur Vercel.
+Le projet est lié au dépôt privé `github.com/tim-vdb/Lency`. Chaque push sur une branche surveillée par déclenche automatiquement un nouveau build et déploiement sur Vercel.
 
 ### Front correctement servi
 
@@ -57,7 +56,7 @@ Le frontend est une application **Next.js 15 (App Router)** compilée via **Turb
 
 ---
 
-## 2. Qualité de l'hébergement / architecture (/4 pts)
+## 2. Qualité de l'hébergement / architecture
 
 ### Choix d'hébergement : PaaS — Vercel
 
@@ -79,19 +78,18 @@ Chaque environnement dispose de :
 ### Architecture claire
 
 - **Frontend** : Next.js 15, App Router, Turbopack
-- **Backend** : API Routes Next.js → Fonctions serverless Node.js 24.x (33 routes)
+- **Backend** : API Routes Next.js → Fonctions serverless Node.js 24.x
 - **Base de données** : Neon.com (PostgreSQL serverless) + Prisma ORM
-- **Gestion des secrets** : Doppler (projets isolés prod / staging)
+- **Gestion des secrets** : Doppler (projets isolés prod / staging / development)
 - **Emails** : Resend (transactionnel via `support@mail.lency.net`) + Proton Mail SMTP (`social@lency.net`)
-- **Fichiers** : UploadThing (`/api/uploadthing`)
 - **Sous-domaines** :
   - `lency.net` — production
   - `staging.lency.net` — pré-production
-  - `mail.lency.net` — envoi d'emails (SPF / DKIM / DMARC configurés)
+  - `mail.lency.net` — envoi d'emails (SPF / DKIM / DMARC configurés dans Vercel / Resend) 
 
 ---
 
-## 3. Sécurité et bonnes pratiques (/4 pts)
+## 3. Sécurité et bonnes pratiques
 
 ### HTTPS
 
@@ -99,7 +97,7 @@ HTTPS activé automatiquement sur tous les domaines via les certificats SSL gér
 
 ### Secrets non exposés
 
-Les variables d'environnement (clés API, chaînes de connexion DB, secrets d'auth) sont **exclusivement gérées via Doppler**. Elles ne sont jamais commitées dans le dépôt GitHub (`.env.local` présent dans `.gitignore`). Doppler injecte les secrets au moment du build Vercel selon l'environnement (production ou staging).
+Les variables d'environnement (clés API, chaînes de connexion DB, secrets d'auth) sont **exclusivement gérées via Doppler**. Elles ne sont jamais commitées dans le dépôt GitHub (`.env.local` présent dans `.gitignore`). Doppler injecte les secrets au moment du build Vercel selon l'environnement (production ou staging et en local development lors du développement).
 
 ### Debug désactivé en production
 
@@ -107,11 +105,11 @@ Le mode debug Next.js est désactivé en production. Les logs d'erreur sont disp
 
 ### Accès sécurisé
 
-L'authentification est gérée via **Better Auth** (`/api/auth/[...all]`), avec sessions sécurisées. L'accès au dashboard Vercel est protégé par compte Vercel (2FA disponible). Aucun accès SSH nécessaire (architecture PaaS — pas de serveur à gérer).
+L'authentification est gérée via **Better Auth** (`/api/auth/[...all]`), avec sessions sécurisées. L'accès au dashboard Vercel est protégé par compte Vercel (2FA disponible). Aucun accès SSH nécessaire (architecture PaaS — pas de serveur à gérer) mais la CLI de Vercel est activé sur le projet en local.
 
 ---
 
-## 4. Exploitabilité / maintenance (/2 pts)
+## 4. Exploitabilité / maintenance
 
 ### Mise à jour depuis GitHub
 
@@ -126,10 +124,10 @@ Tout déploiement est déclenché automatiquement par un push GitHub sur la bran
 ### Procédure d'accès serveur
 
 Architecture PaaS — pas de serveur à administrer directement. L'accès se fait via :
-1. Dashboard Vercel : https://vercel.com/dashboard
+1. Dashboard Vercel pour gérer l'hébergement, nom de domaine, SSL, Analytics etc.
 2. Dashboard Neon.com pour la base de données
-3. Dashboard Doppler pour les secrets
-4. CLI Vercel (`vercel`) pour les opérations avancées
+3. Dashboard Doppler pour les secrets d'environnements
+4. CLI Vercel pour les opérations avancées
 
 ---
 

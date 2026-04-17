@@ -2,9 +2,9 @@ import { getUser } from '@/back/lib/auth-session';
 import WelcomeEmail from '@/front/emails/WelcomeEmail';
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(): Promise<NextResponse> {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const user = await getUser();
     const userEmail = user?.email;
 

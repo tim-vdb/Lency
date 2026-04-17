@@ -11,9 +11,8 @@ interface SendAuthOtpEmailParams {
     type: OtpType;
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function sendAuthOtpEmail({ email, otp, type }: SendAuthOtpEmailParams): Promise<void> {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const user = await UsersService.findByEmail(email);
 
     const firstName = user?.firstname ?? null;
