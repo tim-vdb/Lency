@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep:*)",
+      "Bash(npm run:*)"
+    ],
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(rm -rf:*)",
+      "Bash(del:*)",
+      "Bash(rmdir:*)",
+      "Bash(git branch -d:*)",
+      "Bash(git branch -D:*)",
+      "Bash(git push origin --delete:*)",
+      "Bash(DROP TABLE:*)",
+      "Bash(DROP DATABASE:*)",
+      "Bash(TRUNCATE:*)",
+      "Bash(DELETE FROM:*)",
+      "Bash(npx prisma migrate reset:*)",
+      "Bash(prisma migrate reset:*)"
+    ]
+  }
+}

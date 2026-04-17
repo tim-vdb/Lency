@@ -1,5 +1,5 @@
 import { getUser } from '@/back/lib/auth-session';
-import { prisma } from '@/back/lib/prisma';
+// import { prisma } from '@/back/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { createUploadthing, type FileRouter } from 'uploadthing/next';
 import { UploadThingError } from 'uploadthing/server';
@@ -20,7 +20,7 @@ export const ourFileRouter = {
     },
   })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
+    .middleware(async () => {
       // This code runs on your server before upload
       const user = await getUser();
 
@@ -32,14 +32,14 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      await prisma.gallery.create({
-        data: {
-          key: file.key,
-          url: file.ufsUrl,
-          uploadedBy: metadata.userId,
-          type: 'GALLERY',
-        },
-      });
+      // await prisma.gallery.create({
+      //   data: {
+      //     key: file.key,
+      //     url: file.ufsUrl,
+      //     uploadedBy: metadata.userId,
+      //     type: 'GALLERY',
+      //   },
+      // });
       revalidatePath('/');
 
       console.log('Upload complete for userId:', metadata.userId);
@@ -61,7 +61,7 @@ export const ourFileRouter = {
     },
   })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
+    .middleware(async () => {
       // This code runs on your server before upload
       const user = await getUser();
 
@@ -73,14 +73,14 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      await prisma.gallery.create({
-        data: {
-          key: file.key,
-          url: file.ufsUrl,
-          uploadedBy: metadata.userId,
-          type: 'GALLERY',
-        },
-      });
+      // await prisma.gallery.create({
+      //   data: {
+      //     key: file.key,
+      //     url: file.ufsUrl,
+      //     uploadedBy: metadata.userId,
+      //     type: 'GALLERY',
+      //   },
+      // });
       revalidatePath('/');
 
       console.log('Upload complete for userId:', metadata.userId);
@@ -102,7 +102,7 @@ export const ourFileRouter = {
     },
   })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
+    .middleware(async () => {
       // This code runs on your server before upload
       const user = await getUser();
 
@@ -114,14 +114,14 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      await prisma.gallery.create({
-        data: {
-          key: file.key,
-          url: file.ufsUrl,
-          uploadedBy: metadata.userId,
-          type: 'EVENT',
-        },
-      });
+      // await prisma.gallery.create({
+      //   data: {
+      //     key: file.key,
+      //     url: file.ufsUrl,
+      //     uploadedBy: metadata.userId,
+      //     type: 'EVENT',
+      //   },
+      // });
       revalidatePath('/');
 
       console.log('Upload complete for userId:', metadata.userId);

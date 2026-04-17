@@ -1,0 +1,27 @@
+/// *
+/// COMMUNAUTÉ - BADGES, SUBSCRIPTIONS & NEWSLETTER
+model Badge {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  iconUrl     String?
+  active      Boolean @default(false)
+  users       User[]  @relation("UserBadge")
+}
+
+model Subscription {
+  id        String             @id @default(cuid())
+  status    SubscriptionStatus
+  startedAt DateTime
+  endedAt   DateTime?
+  userId    String             @unique
+  user      User               @relation(fields: [userId], references: [id])
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+}

@@ -1,0 +1,62 @@
+enum Role {
+  ADMIN
+  USER
+  MEMBER
+  PREMIUM
+}
+
+enum ResourceType {
+  ASSET
+  TUTORIAL
+  LINK
+}
+
+enum ProjectStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+  MEMBERS_ONLY
+}
+
+enum GalleryType {
+  EVENT
+  GALLERY
+}
+
+enum TypeEvent {
+  PHYSICAL
+  VIRTUAL
+}
+
+enum PostFormat {
+  DESKTOP
+  MOBILE
+  AUDIO
+  TEXT
+}
+
+enum ContactType {
+  SUPPORT_TECHNIQUE
+  CONTACT_GENERAL
+  FACTURATION
+  PARTENARIAT
+  AUTRE
+}
+
+enum ContactStatus {
+  EN_ATTENTE
+  EN_COURS
+  RESOLU
+  FERME
+}

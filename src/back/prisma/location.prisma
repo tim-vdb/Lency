@@ -1,0 +1,27 @@
+/// *
+/// LOCALISATION - LIEUX & SPOTS
+model MapLocation {
+  id          String    @id @default(cuid())
+  name        String
+  latitude    Float
+  longitude   Float
+  description String?
+  createdAt   DateTime  @default(now())
+  Projects    Project[]
+  Spots       Spot[]
+}
+
+model Spot {
+  id            String       @id @default(cuid())
+  name          String
+  description   String
+  address       String
+  city          String
+  author        String
+  rating        Int          @default(0)
+  rating_count  Int          @default(0)
+  mapLocationId String?
+  userId        String?
+  mapLocation   MapLocation? @relation(fields: [mapLocationId], references: [id])
+  user          User?        @relation(fields: [userId], references: [id])
+}
