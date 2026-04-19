@@ -31,7 +31,8 @@ function PostList({ posts }: { posts: PostWithUserState[] }) {
 export default function CommunityPage() {
     const { data: posts, isPending } = usePosts()
     const { data: followedPosts, isPending: followedPending } = useFollowedCategoryPosts()
-    const { entries, clearViewed } = useRecentlyViewed()
+    const entries = useRecentlyViewed((s) => s.entries)
+    const clearViewed = useRecentlyViewed((s) => s.clear)
 
     const popularPosts = useMemo(() => {
         if (!posts) return [];
