@@ -52,6 +52,7 @@ model User {
   postVotes                 PostVote[]
   hiddenPosts               PostHide[]
   reportedPosts             PostReport[]
+  categoryFollows           CategoryFollow[]
 }
 
 /// *

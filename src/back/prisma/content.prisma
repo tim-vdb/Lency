@@ -16,27 +16,28 @@ model Article {
 }
 
 model Category {
-  id              String     @id @default(cuid())
-  slug            String     @unique
+  id              String           @id @default(cuid())
+  slug            String           @unique
   name            String
   description     String?
-  visibility      Visibility @default(PUBLIC)
+  visibility      Visibility       @default(PUBLIC)
   createdBy       String
   iconUrl         String?
   bannerUrl       String?
   rules           String?
-  isNSFW          Boolean    @default(false)
-  members         Int        @default(0)
-  postCount       Int        @default(0)
-  subscriberCount Int        @default(0)
+  isNSFW          Boolean          @default(false)
+  members         Int              @default(0)
+  postCount       Int              @default(0)
+  subscriberCount Int              @default(0)
   lastPostAt      DateTime?
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   userId          String?
-  creator         User       @relation("CreatedCategories", fields: [createdBy], references: [id])
-  user            User?      @relation(fields: [userId], references: [id])
+  creator         User             @relation("CreatedCategories", fields: [createdBy], references: [id])
+  user            User?            @relation(fields: [userId], references: [id])
   posts           Post[]
   ressources      Resource[]
+  followers       CategoryFollow[]
 
   @@index([slug])
   @@index([visibility])
@@ -44,27 +45,27 @@ model Category {
 }
 
 model Post {
-  id           String     @id @default(cuid())
+  id           String       @id @default(cuid())
   title        String
   content      String
-  isLocked     Boolean    @default(false)
+  isLocked     Boolean      @default(false)
   categoryId   String
   authorId     String
-  format       PostFormat @default(DESKTOP)
-  viewCount    Int        @default(0)
-  upvoteCount  Int        @default(0)
-  commentCount Int        @default(0)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  isPublished  Boolean    @default(false)
-  saveCount    Int        @default(0)
+  format       PostFormat   @default(DESKTOP)
+  viewCount    Int          @default(0)
+  upvoteCount  Int          @default(0)
+  commentCount Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  isPublished  Boolean      @default(false)
+  saveCount    Int          @default(0)
   comments     Comment[]
   saves        PostSave[]
   votes        PostVote[]
   hides        PostHide[]
   reports      PostReport[]
-  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  category     Category   @relation(fields: [categoryId], references: [id])
+  author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category     Category     @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
   @@index([authorId])
@@ -142,4 +143,17 @@ model PostReport {
   @@unique([userId, postId])
   @@index([userId])
   @@index([postId])
+}
+
+model CategoryFollow {
+  id         String   @id @default(cuid())
+  userId     String
+  categoryId String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, categoryId])
+  @@index([userId])
+  @@index([categoryId])
 }
