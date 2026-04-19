@@ -5,6 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/front/components/ui/p
 import { cn } from "@/front/lib/utils";
 import { Download, Bookmark, EyeOff, Flag, Ellipsis, Heart, MessageCircleMore, Share, Play, Pause } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { PostWithUserState } from "@/front/types/post.schema";
 import { useToggleSavePost, useToggleVotePost, useHidePost, useReportPost } from "@/front/hooks/querys/use-posts";
@@ -226,7 +227,13 @@ export default function PostAudio({ post, audioUrl, className }: PostAudioProps)
                     <div className="flex flex-col min-w-0">
                         <span className="text-sm font-medium leading-tight">{displayName}</span>
                         {category && (
-                            <span className="text-xs text-neutral-400 leading-tight">{category.name}</span>
+                            <Link
+                                href={`/community/${category.slug}`}
+                                className="text-xs text-neutral-400 leading-tight hover:underline"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                {category.name}
+                            </Link>
                         )}
                     </div>
                 </div>

@@ -15,6 +15,7 @@ export interface Category {
     iconUrl?: string
     bannerUrl?: string
     rules?: string
+    subscriberCount: number
     lastPostAt?: Date
     createdAt: Date
     updatedAt: Date
@@ -99,6 +100,50 @@ export async function deleteCategory(categoryId: string): Promise<void> {
         const error = await response.json().catch(() => ({}))
         throw new Error(error.error || 'Erreur lors de la suppression de la catégorie')
     }
+}
+
+export async function fetchCategoryBySlug(slug: string): Promise<Category> {
+    const response = await fetch(`/api/categories/slug/${slug}`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération de la catégorie')
+    }
+    const data = await response.json()
+    return data.category
+}
+
+export async function fetchPostsByCategory(categoryId: string): Promise<import('@/front/types/post.schema').PostWithUserState[]> {
+    const response = await fetch(`/api/categories/${categoryId}/posts`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des posts de la catégorie')
+    }
+    const data = await response.json()
+    return data.posts
+}
+
+export async function toggleFollowCategory(categoryId: string): Promise<{ following: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/follow`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors du suivi de la catégorie')
+    }
+    return response.json()
+}
+
+export async function getFollowStatus(categoryId: string): Promise<{ following: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/follow`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération du statut de suivi')
+    }
+    return response.json()
 }
 
 /**

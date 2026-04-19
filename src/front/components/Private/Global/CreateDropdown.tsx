@@ -98,7 +98,7 @@ export function CreateDropdown() {
     const [modalOpen, setModalOpen] = useState(false)
     const [activeType, setActiveType] = useState<CreateType>("post")
 
-    const handleSelect = (type: CreateType) => {
+    function handleSelect(type: CreateType) {
         setActiveType(type)
         setModalOpen(true)
     }

@@ -1,9 +1,10 @@
 import { CardDescription, CardTitle } from "@/front/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
 import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
 
 export default function PostAvatar({ post }: { post: PostWithAuthorAndCategory }) {
-    const { author } = post;
+    const { author, category } = post;
     const displayName = author.firstname && author.lastname
         ? `${author.firstname} ${author.lastname}`
         : author.username ?? "Anonyme";
@@ -20,12 +21,20 @@ export default function PostAvatar({ post }: { post: PostWithAuthorAndCategory }
                     <Image src={author.avatarUrl} alt={displayName} width={100} height={100} className="w-8 h-8 rounded-full mr-2" />
                 ) : (
                     <div className="w-8 h-8 rounded-full mr-2 bg-neutral-200 flex items-center justify-center text-xs font-medium">
-                        {initialName}
+                        {initialName ? initialName : author.username ?? "Non renseigné"}
                     </div>
                 )}
                 <div>
                     <CardTitle className="text-sm">{displayName}</CardTitle>
-                    <CardDescription className="text-[10px] text-neutral-700">@{author.username ?? "inconnu"}</CardDescription>
+                    <CardDescription className="text-[10px] text-neutral-700">
+                        <Link
+                            href={`/community/${category.slug}`}
+                            className="hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            |{category.name ? category.name : "Non catégorisé"}
+                        </Link>
+                    </CardDescription>
                 </div>
             </div>
         </>

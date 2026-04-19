@@ -4,6 +4,8 @@ export interface CreatePostInput {
     title: string
     content: string
     categoryId: string
+    format?: "DESKTOP" | "MOBILE" | "AUDIO" | "TEXT"
+    isPublished?: boolean
 }
 
 export async function fetchPosts(): Promise<PostWithUserState[]> {
@@ -174,4 +176,13 @@ export async function reportPost(postId: string): Promise<void> {
         const error = await response.json().catch(() => ({}))
         throw new Error(error.error || 'Erreur lors du signalement du post')
     }
+}
+
+export async function fetchFollowedCategoryPosts(): Promise<PostWithUserState[]> {
+    const response = await fetch('/api/posts/followed', { method: 'GET', cache: 'no-store' })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des posts suivis')
+    }
+    const data = await response.json()
+    return data.posts
 }

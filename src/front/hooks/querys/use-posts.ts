@@ -4,6 +4,7 @@ import {
     createPost,
     deletePost,
     fetchCommentsByPostId,
+    fetchFollowedCategoryPosts,
     fetchPostById,
     fetchPosts,
     hidePost,
@@ -231,3 +232,10 @@ export const useReportPost = (postId: string) => {
         mutationFn: () => reportPost(postId),
     })
 }
+
+export const useFollowedCategoryPosts = () =>
+    useQuery({
+        queryKey: ["posts", "followed"] as const,
+        queryFn: fetchFollowedCategoryPosts,
+        staleTime: 1000 * 60,
+    })

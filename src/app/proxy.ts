@@ -17,7 +17,9 @@ export async function proxy(request: NextRequest) {
 
     if (isMemberRoute || isAdminRoute) {
         if (!sessionCookie) {
-            return NextResponse.redirect(new URL('/login', request.url))
+            const loginUrl = new URL('/login', request.url)
+            loginUrl.searchParams.set('callbackUrl', pathname)
+            return NextResponse.redirect(loginUrl)
         }
     }
 

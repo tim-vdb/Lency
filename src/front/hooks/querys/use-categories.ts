@@ -4,6 +4,10 @@ import {
     deleteCategory,
     fetchCategories,
     fetchCategoryById,
+    fetchCategoryBySlug,
+    fetchPostsByCategory,
+    getFollowStatus,
+    toggleFollowCategory,
     updateCategory,
     type Category,
     type CreateCategoryInput,
@@ -52,6 +56,53 @@ export const useUpdateCategory = () => {
     return useMutation({
         mutationFn: ({ id, data }: { id: string; data: Partial<CreateCategoryInput> }) => updateCategory(id, data),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: CATEGORY_ROOT }),
+    })
+}
+
+export const useCategoryBySlug = (slug: string) =>
+    useQuery({
+        queryKey: [...CATEGORY_ROOT, "slug", slug] as const,
+        queryFn: () => fetchCategoryBySlug(slug),
+        staleTime: 1000 * 60 * 5,
+        enabled: !!slug,
+    })
+
+export const usePostsByCategory = (categoryId: string) =>
+    useQuery({
+        queryKey: [...CATEGORY_ROOT, categoryId, "posts"] as const,
+        queryFn: () => fetchPostsByCategory(categoryId),
+        staleTime: 1000 * 60,
+        enabled: !!categoryId,
+    })
+
+export const useFollowStatus = (categoryId: string) =>
+    useQuery({
+        queryKey: [...CATEGORY_ROOT, categoryId, "follow"] as const,
+        queryFn: () => getFollowStatus(categoryId),
+        staleTime: 0,
+        enabled: !!categoryId,
+    })
+
+export const useToggleFollowCategory = (categoryId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => toggleFollowCategory(categoryId),
+        onMutate: async () => {
+            const followKey = [...CATEGORY_ROOT, categoryId, "follow"]
+            await queryClient.cancelQueries({ queryKey: followKey })
+            const previous = queryClient.getQueryData<{ following: boolean }>(followKey)
+            queryClient.setQueryData(followKey, { following: !previous?.following })
+            return { previous }
+        },
+        onError: (_err, _vars, context) => {
+            if (context?.previous !== undefined) {
+                queryClient.setQueryData([...CATEGORY_ROOT, categoryId, "follow"], context.previous)
+            }
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, categoryId, "follow"] })
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "slug"] })
+        },
     })
 }
 

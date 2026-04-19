@@ -11,6 +11,7 @@ import { Bookmark, Ellipsis, EyeOff, Flag, Heart, MessageCircleMore, Share } fro
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRecentlyViewed } from "@/front/hooks/use-recently-viewed";
 import { toast } from "sonner";
 import CommentRoot from "../Comments/CommentRoot";
 import Comments from "../Comments/Comments";
@@ -29,6 +30,7 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
     const router = useRouter();
     const pathname = usePathname();
     const isOnSelfPage = pathname === `/post/${post.id}`;
+    const addRecentlyViewed = useRecentlyViewed((s) => s.add);
 
     // Sync local state when navigating to a different post
     useEffect(() => {
@@ -93,7 +95,7 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
 
     return (
         <Card className={cn("gap-4 py-4 flex-1", className)}>
-            <CardContent className="relative" onClick={() => !isOnSelfPage && router.push(`/post/${post.id}`)}>
+            <CardContent className="relative" onClick={() => { if (!isOnSelfPage) { addRecentlyViewed(post); router.push(`/post/${post.id}`); } }}>
                 <div className="absolute top-2 w-[calc(100%-5rem)] translate-x-4 rounded-md flex items-center justify-between bg-transparent z-10">
                     <PostAvatar post={post} />
                     <Popover>
