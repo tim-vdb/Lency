@@ -18,6 +18,8 @@ export const PostsService = {
         title: string;
         content: string;
         categoryId: string;
+        format?: "DESKTOP" | "MOBILE" | "AUDIO" | "TEXT";
+        isPublished?: boolean;
     }) => {
         const user = await getUser();
         if (!user) throw new Error("Unauthorized");

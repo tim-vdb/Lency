@@ -16,6 +16,8 @@ export const PostsAction = {
         title: string;
         content: string;
         categoryId: string;
+        format?: "DESKTOP" | "MOBILE" | "AUDIO" | "TEXT";
+        isPublished?: boolean;
     }) => {
         return prisma.post.create({
             data: {
