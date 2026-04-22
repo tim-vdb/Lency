@@ -20,6 +20,30 @@ export const UsersAction = {
         }).catch(() => null);
     },
 
+    findByUsername: async (username: string) => {
+        return prisma.user.findUnique({
+            where: { username },
+            include: {
+                Posts: {
+                    where: { isPublished: true },
+                    include: { author: true, category: true },
+                    orderBy: { createdAt: "desc" },
+                },
+                projects: { orderBy: { createdAt: "desc" } },
+                badges: true,
+                categoryFollows: { include: { category: true } },
+                _count: {
+                    select: {
+                        Posts: true,
+                        projects: true,
+                        categoryFollows: true,
+                        badges: true,
+                    },
+                },
+            },
+        });
+    },
+
     create: async (data: {
         email: string;
         name?: string;

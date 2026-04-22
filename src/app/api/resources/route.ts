@@ -1,9 +1,10 @@
 import { ResourcesService } from "@/back/services/resources.service";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
-        const resources = await ResourcesService.findAllResources();
+        const categoryId = req.nextUrl.searchParams.get("categoryId") ?? undefined;
+        const resources = await ResourcesService.findAllResources({ categoryId });
         return NextResponse.json({ resources });
     } catch {
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });

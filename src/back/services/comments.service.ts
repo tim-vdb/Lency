@@ -9,19 +9,29 @@ export const CommentsService = {
     },
 
     findAllComments: async (postId: string) => {
-        return CommentsAction.findAll(postId);
+        return CommentsAction.findByPostId(postId);
+    },
+
+    findByResourceId: async (resourceId: string) => {
+        return CommentsAction.findByResourceId(resourceId);
     },
 
     createComment: async (data: {
         content: string;
-        postId: string;
+        postId?: string;
+        resourceId?: string;
         parentId?: string;
     }) => {
         const user = await getUser();
         if (!user) throw new Error("Unauthorized");
 
         if (!data.content) throw new Error("Content is required");
-        if (!data.postId) throw new Error("Post is required");
+
+        const hasPost = !!data.postId;
+        const hasResource = !!data.resourceId;
+        if (hasPost === hasResource) {
+            throw new Error("Target is required");
+        }
 
         return CommentsAction.create(user.id, data);
     },

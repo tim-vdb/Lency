@@ -3,6 +3,7 @@ import {
     changePassword,
     deleteUser,
     fetchUserById,
+    fetchUserByUsername,
     fetchUsers,
     updateUser,
     verifyEmailChange,
@@ -31,6 +32,14 @@ export const userQueries = {
             queryFn: () => fetchUserById(id),
             staleTime: 1000 * 60 * 5,
         }),
+
+    byUsername: (username: string) =>
+        queryOptions({
+            queryKey: [...USER_ROOT, "username", username] as const,
+            queryFn: () => fetchUserByUsername(username),
+            staleTime: 1000 * 60 * 5,
+            enabled: !!username,
+        }),
 }
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
@@ -38,6 +47,8 @@ export const userQueries = {
 export const useUsers = () => useQuery(userQueries.lists())
 
 export const useUserById = (id: string) => useQuery(userQueries.detail(id))
+
+export const useUserByUsername = (username: string) => useQuery(userQueries.byUsername(username))
 
 // ─── Mutations ────────────────────────────────────────────────────────────────
 

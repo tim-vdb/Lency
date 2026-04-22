@@ -1,4 +1,5 @@
 import { UsersAction } from "../repositories/users.action";
+import { PostsAction } from "../repositories/posts.action";
 import { getUser } from "../lib/auth-session";
 import crypto from "crypto";
 
@@ -7,6 +8,28 @@ export const UsersService = {
         const user = await UsersAction.findById(id);
         if (!user) throw new Error("User not found");
         return user;
+    },
+
+    findByUsername: async (username: string) => {
+        const user = await UsersAction.findByUsername(username);
+        if (!user) throw new Error("User not found");
+        const currentUser = await getUser();
+        const postIds = user.Posts.map((p) => p.id);
+        if (!currentUser || postIds.length === 0) {
+            return {
+                ...user,
+                Posts: user.Posts.map((p) => ({ ...p, isSaved: false, isVoted: false })),
+            };
+        }
+        const { savedIds, votedIds } = await PostsAction.getUserStates(currentUser.id, postIds);
+        return {
+            ...user,
+            Posts: user.Posts.map((p) => ({
+                ...p,
+                isSaved: savedIds.has(p.id),
+                isVoted: votedIds.has(p.id),
+            })),
+        };
     },
 
     findAllUsers: async () => {

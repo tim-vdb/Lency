@@ -53,6 +53,9 @@ model User {
   hiddenPosts               PostHide[]
   reportedPosts             PostReport[]
   categoryFollows           CategoryFollow[]
+  resources                 Resource[]             @relation("UserResources")
+  resourceVotes             ResourceVote[]
+  resourceSaves             ResourceSave[]
 }
 
 /// *

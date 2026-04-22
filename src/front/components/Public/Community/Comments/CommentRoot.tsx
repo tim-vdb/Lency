@@ -3,15 +3,20 @@
 import { Form, FormControl, FormField, FormItem } from "@/front/components/ui/form";
 import { Item, ItemContent } from "@/front/components/ui/item";
 import { useCreateComment } from "@/front/hooks/querys/use-posts";
+import { useCreateResourceComment } from "@/front/hooks/querys/use-resources";
+import { CommentTarget } from "@/front/types/comment-target";
 import { CreateCommentFormValues, CreateCommentSchema } from "@/front/types/comment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export default function CommentRoot({ postId }: { postId: string }) {
-    const { mutate: createComment, isPending } = useCreateComment(postId);
-
+export default function CommentRoot({ target }: { target: CommentTarget }) {
+    const postMutation = useCreateComment(target.type === "post" ? target.id : "");
+    const resourceMutation = useCreateResourceComment(target.type === "resource" ? target.id : "");
+    const { mutate: createPostComment, isPending: postPending } = postMutation;
+    const { mutate: createResourceComment, isPending: resourcePending } = resourceMutation;
+    const isPending = target.type === "post" ? postPending : resourcePending;
 
     const form = useForm<CreateCommentFormValues>({
         resolver: zodResolver(CreateCommentSchema),
@@ -19,18 +24,19 @@ export default function CommentRoot({ postId }: { postId: string }) {
     });
 
     function onSubmit(values: CreateCommentFormValues) {
-        createComment(
-            { content: values.content, postId },
-            {
-                onSuccess: () => {
-                    toast.success("Commentaire publié.");
-                    form.reset();
-                },
-                onError: (error) => {
-                    toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
-                },
-            }
-        );
+        const onSuccess = () => {
+            toast.success("Commentaire publié.");
+            form.reset();
+        };
+        const onError = (error: unknown) => {
+            toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
+        };
+
+        if (target.type === "post") {
+            createPostComment({ content: values.content, postId: target.id }, { onSuccess, onError });
+        } else {
+            createResourceComment({ content: values.content, resourceId: target.id }, { onSuccess, onError });
+        }
     }
 
     return (
@@ -67,6 +73,5 @@ export default function CommentRoot({ postId }: { postId: string }) {
                 </Form>
             </ItemContent>
         </Item>
-
     );
 }

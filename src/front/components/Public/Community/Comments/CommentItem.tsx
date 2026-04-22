@@ -1,7 +1,9 @@
 "use client";
 
 import { useCreateComment, useVoteComment } from "@/front/hooks/querys/use-posts";
+import { useCreateResourceComment, useVoteResourceComment } from "@/front/hooks/querys/use-resources";
 import { timeAgo } from "@/front/lib/utils";
+import { CommentTarget } from "@/front/types/comment-target";
 import { CreateCommentSchema, type CreateCommentFormValues } from "@/front/types/comment.schema";
 import { CommentBase, CommentWithChildren } from "@/front/types/post.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,18 +13,26 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-function CommentRow({ comment }: { comment: CommentBase }) {
+function CommentRow({ comment, target }: { comment: CommentBase; target: CommentTarget }) {
     const [isAnswering, setIsAnswering] = React.useState(false);
     const [userVote, setUserVote] = React.useState<"upvote" | "downvote" | null>(null);
 
-    const { mutate: createComment, isPending } = useCreateComment(comment.postId);
-    const { mutate: vote } = useVoteComment(comment.postId);
+    const postCreate = useCreateComment(target.type === "post" ? target.id : "");
+    const resourceCreate = useCreateResourceComment(target.type === "resource" ? target.id : "");
+    const postVote = useVoteComment(target.type === "post" ? target.id : "");
+    const resourceVote = useVoteResourceComment(target.type === "resource" ? target.id : "");
+
+    const isPending = target.type === "post" ? postCreate.isPending : resourceCreate.isPending;
 
     function handleVote(type: "upvote" | "downvote") {
         const prev = userVote;
-        const next = userVote === type ? null : type; // même vote → toggle off
+        const next = userVote === type ? null : type;
         setUserVote(next);
-        vote({ commentId: comment.id, postId: comment.postId, prev, next });
+        if (target.type === "post") {
+            postVote.mutate({ commentId: comment.id, postId: target.id, prev, next });
+        } else {
+            resourceVote.mutate({ commentId: comment.id, resourceId: target.id, prev, next });
+        }
     }
 
     const { author } = comment;
@@ -41,19 +51,26 @@ function CommentRow({ comment }: { comment: CommentBase }) {
     });
 
     function onSubmit(values: CreateCommentFormValues) {
-        createComment(
-            { content: values.content, postId: comment.postId, parentId: comment.id },
-            {
-                onSuccess: () => {
-                    toast.success("Réponse publiée.");
-                    reset();
-                    setIsAnswering(false);
-                },
-                onError: (error) => {
-                    toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
-                },
-            }
-        );
+        const onSuccess = () => {
+            toast.success("Réponse publiée.");
+            reset();
+            setIsAnswering(false);
+        };
+        const onError = (error: unknown) => {
+            toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
+        };
+
+        if (target.type === "post") {
+            postCreate.mutate(
+                { content: values.content, postId: target.id, parentId: comment.id },
+                { onSuccess, onError }
+            );
+        } else {
+            resourceCreate.mutate(
+                { content: values.content, resourceId: target.id, parentId: comment.id },
+                { onSuccess, onError }
+            );
+        }
     }
 
     return (
@@ -129,17 +146,15 @@ function CommentRow({ comment }: { comment: CommentBase }) {
     );
 }
 
-export function CommentItem({ comment }: { comment: CommentWithChildren }) {
+export function CommentItem({ comment, target }: { comment: CommentWithChildren; target: CommentTarget }) {
     return (
         <div className="flex flex-col gap-3">
-            {/* Le commentaire lui-même */}
-            <CommentRow comment={comment} />
+            <CommentRow comment={comment} target={target} />
 
-            {/* Ses enfants — chacun est un CommentItem complet qui fera pareil */}
             {comment.children.length > 0 && (
                 <div className="ml-11 flex flex-col gap-3 border-l border-neutral-200 pl-4">
                     {comment.children.map((child) => (
-                        <CommentItem key={child.id} comment={child} />
+                        <CommentItem key={child.id} comment={child} target={target} />
                     ))}
                 </div>
             )}

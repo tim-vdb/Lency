@@ -10,7 +10,8 @@ import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { Separator } from "@/front/components/ui/separator";
 import { useCategoryBySlug, useFollowStatus, usePostsByCategory, useToggleFollowCategory } from "@/front/hooks/querys/use-categories";
-import { Check, Settings, Users } from "lucide-react";
+import { BookOpen, Check, Settings, Users } from "lucide-react";
+import Link from "next/link";
 import { use } from "react";
 import { toast } from "sonner";
 
@@ -163,6 +164,14 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                             </div>
                         </CardContent>
                     </Card>
+
+                    {/* Ressources */}
+                    <Button asChild variant="outline" className="gap-1.5 w-full">
+                        <Link href={`/community/${slug}/resources`}>
+                            <BookOpen className="w-4 h-4" />
+                            Voir les ressources
+                        </Link>
+                    </Button>
 
                     {/* Sujets de communauté */}
                     <Card>

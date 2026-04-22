@@ -1,15 +1,21 @@
 "use client";
 
 import { useCommentsByPostId } from "@/front/hooks/querys/use-posts";
+import { useResourceComments } from "@/front/hooks/querys/use-resources";
+import { CommentTarget } from "@/front/types/comment-target";
 import { CommentItem } from "./CommentItem";
 
 interface CommentsProps {
-    postId: string;
+    target: CommentTarget;
     commentCount: number;
 }
 
-export default function Comments({ postId, commentCount }: CommentsProps) {
-    const { data: comments, isLoading } = useCommentsByPostId(postId);
+export default function Comments({ target, commentCount }: CommentsProps) {
+    const postQuery = useCommentsByPostId(target.type === "post" ? target.id : "");
+    const resourceQuery = useResourceComments(target.type === "resource" ? target.id : "");
+
+    const { data: comments, isLoading } =
+        target.type === "post" ? postQuery : resourceQuery;
 
     const count = commentCount;
 
@@ -22,7 +28,7 @@ export default function Comments({ postId, commentCount }: CommentsProps) {
             </p>
             <div className="flex flex-col gap-5">
                 {comments?.map((comment) => (
-                    <CommentItem key={comment.id} comment={comment} />
+                    <CommentItem key={comment.id} comment={comment} target={target} />
                 ))}
             </div>
         </div>

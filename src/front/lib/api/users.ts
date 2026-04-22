@@ -1,6 +1,8 @@
+import { UserProfile } from "@/front/types/user.schema";
+
 /**
  * Helpers API pour gérer les utilisateurs
- * 
+ *
  * Ces fonctions sont utilisées par React Query pour:
  * - Récupérer les données (GET)
  * - Créer/Modifier/Supprimer des données (POST/PUT/DELETE)
@@ -74,6 +76,23 @@ export async function fetchUserById(userId: string): Promise<User> {
 
     const data = await response.json()
     return data.user ?? data
+}
+
+/**
+ * Récupère un utilisateur par son username (profil complet)
+ */
+export async function fetchUserByUsername(username: string): Promise<UserProfile> {
+    const response = await fetch(`/api/users/username/${encodeURIComponent(username)}`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors de la récupération du profil')
+    }
+
+    return response.json()
 }
 
 /**

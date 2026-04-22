@@ -181,8 +181,8 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                 <p className="text-sm text-neutral-500 line-clamp-2">{post.content}</p>
                 {openComments && (
                     <div className="w-full">
-                        <CommentRoot postId={post.id} />
-                        <Comments postId={post.id} commentCount={post.commentCount} />
+                        <CommentRoot target={{ type: "post", id: post.id }} />
+                        <Comments target={{ type: "post", id: post.id }} commentCount={post.commentCount} />
                     </div>
                 )}
             </CardFooter>
