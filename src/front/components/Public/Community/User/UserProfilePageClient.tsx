@@ -1,0 +1,84 @@
+"use client";
+
+import PostAudio from "@/front/components/Public/Community/Posts/PostAudio";
+import PostDesktop from "@/front/components/Public/Community/Posts/PostDesktop";
+import PostMobile from "@/front/components/Public/Community/Posts/PostMobile";
+import PostText from "@/front/components/Public/Community/Posts/PostText";
+import ProjectCard from "@/front/components/Public/Community/Projects/ProjectCard";
+import UserAchievementsCard from "@/front/components/Public/Community/User/UserAchievementsCard";
+import UserFollowingCommunities from "@/front/components/Public/Community/User/UserFollowingCommunities";
+import UserProfileHeader from "@/front/components/Public/Community/User/UserProfileHeader";
+import { Button } from "@/front/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs";
+import { useUserByUsername } from "@/front/hooks/querys/use-users";
+import { MapPin } from "lucide-react";
+import { toast } from "sonner";
+
+export default function UserProfilePageClient({ userName }: { userName: string }) {
+    const { data: user, isPending, error } = useUserByUsername(userName);
+
+    if (isPending) {
+        return (
+            <div className="flex items-center justify-center py-20">
+                <p className="text-neutral-500">Chargement...</p>
+            </div>
+        );
+    }
+
+    if (error || !user) {
+        return (
+            <div className="flex items-center justify-center py-20">
+                <p className="text-neutral-500">Utilisateur introuvable.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="grid grid-cols-7 gap-4">
+            <div className="col-span-5 flex flex-col gap-4">
+                <UserProfileHeader user={user} />
+
+                <Tabs defaultValue="posts" className="w-full">
+                    <TabsList>
+                        <TabsTrigger value="posts">Posts ({user._count.Posts})</TabsTrigger>
+                        <TabsTrigger value="projects">Projets ({user._count.projects})</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="posts" className="flex flex-col gap-4 mt-4">
+                        {user.Posts.length === 0 && (
+                            <p className="text-sm text-neutral-500">Aucun post publié.</p>
+                        )}
+                        {user.Posts.map((post) => (
+                            <div key={post.id}>
+                                {post.format === "DESKTOP" && <PostDesktop post={post} />}
+                                {post.format === "MOBILE" && <PostMobile post={post} />}
+                                {post.format === "AUDIO" && <PostAudio post={post} />}
+                                {post.format === "TEXT" && <PostText post={post} />}
+                            </div>
+                        ))}
+                    </TabsContent>
+                    <TabsContent value="projects" className="flex flex-col gap-4 mt-4">
+                        {user.projects.length === 0 && (
+                            <p className="text-sm text-neutral-500">Aucun projet.</p>
+                        )}
+                        {user.projects.map((project) => (
+                            <ProjectCard key={project.id} project={project} />
+                        ))}
+                    </TabsContent>
+                </Tabs>
+            </div>
+
+            <div className="col-span-2 flex flex-col gap-3 sticky top-2 self-start">
+                <Button
+                    variant="outline"
+                    className="gap-1.5 w-full"
+                    onClick={() => toast.info("Bientôt disponible")}
+                >
+                    <MapPin className="w-4 h-4" />
+                    Voir la localisation
+                </Button>
+                <UserFollowingCommunities follows={user.categoryFollows} />
+                <UserAchievementsCard badges={user.badges} userId={user.id} />
+            </div>
+        </div>
+    );
+}

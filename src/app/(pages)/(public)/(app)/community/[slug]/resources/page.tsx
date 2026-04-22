@@ -1,48 +1,10 @@
-"use client";
+import CategoryResourcesPageClient from "@/front/components/Public/Community/Resources/CategoryResourcesPageClient";
 
-import ResourceCard from "@/front/components/Public/Community/Resources/ResourceCard";
-import ResourceFiltersTabs from "@/front/components/Public/Community/Resources/ResourceFiltersTabs";
-import { useCategoryBySlug } from "@/front/hooks/querys/use-categories";
-import { useResources } from "@/front/hooks/querys/use-resources";
-import { use } from "react";
-
-export default function CategoryResourcesPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
-    const { data: category, isPending: categoryPending } = useCategoryBySlug(slug);
-    const { data: resources, isPending: resourcesPending } = useResources(category?.id);
-
-    if (categoryPending) {
-        return (
-            <div className="flex items-center justify-center py-20">
-                <p className="text-neutral-500">Chargement...</p>
-            </div>
-        );
-    }
-
-    if (!category) {
-        return (
-            <div className="flex items-center justify-center py-20">
-                <p className="text-neutral-500">Catégorie introuvable.</p>
-            </div>
-        );
-    }
-
-    return (
-        <div className="flex flex-col gap-4">
-            <ResourceFiltersTabs activeSlug={slug} />
-
-            {resourcesPending && (
-                <p className="text-sm text-neutral-500">Chargement des ressources...</p>
-            )}
-            {!resourcesPending && resources?.length === 0 && (
-                <p className="text-sm text-neutral-500">Aucune ressource dans cette catégorie.</p>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {resources?.map((resource) => (
-                    <ResourceCard key={resource.id} resource={resource} variant="grid" />
-                ))}
-            </div>
-        </div>
-    );
+export default async function CategoryResourcesPage({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const { slug } = await params;
+    return <CategoryResourcesPageClient slug={slug} />;
 }
