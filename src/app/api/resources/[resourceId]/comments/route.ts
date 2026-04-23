@@ -24,6 +24,7 @@ export async function POST(
         const newComment = await CommentsService.createComment({ ...data, resourceId });
         return NextResponse.json({ comment: newComment }, { status: 201 });
     } catch (error) {
+        console.error("[POST /api/resources/:resourceId/comments]", error);
         if (error instanceof Error) {
             if (error.message === "Unauthorized") {
                 return NextResponse.json({ error: error.message }, { status: 401 });

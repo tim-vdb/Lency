@@ -83,6 +83,8 @@ export interface CreateResourceCommentInput {
     resourceId: string;
     content: string;
     parentId?: string;
+    imageUrl?: string | null;
+    videoUrl?: string | null;
 }
 
 export async function createResourceComment(
@@ -91,7 +93,12 @@ export async function createResourceComment(
     const response = await fetch(`/api/resources/${input.resourceId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: input.content, parentId: input.parentId }),
+        body: JSON.stringify({
+            content: input.content,
+            parentId: input.parentId,
+            imageUrl: input.imageUrl,
+            videoUrl: input.videoUrl,
+        }),
     });
     if (!response.ok) {
         const error = await response.json().catch(() => ({}));

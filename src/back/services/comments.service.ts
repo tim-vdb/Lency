@@ -18,6 +18,8 @@ export const CommentsService = {
 
     createComment: async (data: {
         content: string;
+        imageUrl?: string | null;
+        videoUrl?: string | null;
         postId?: string;
         resourceId?: string;
         parentId?: string;
@@ -25,7 +27,10 @@ export const CommentsService = {
         const user = await getUser();
         if (!user) throw new Error("Unauthorized");
 
-        if (!data.content) throw new Error("Content is required");
+        const hasContent = !!data.content && data.content.trim().length > 0;
+        const hasImage = !!data.imageUrl;
+        const hasVideo = !!data.videoUrl;
+        if (!hasContent && !hasImage && !hasVideo) throw new Error("Content is required");
 
         const hasPost = !!data.postId;
         const hasResource = !!data.resourceId;

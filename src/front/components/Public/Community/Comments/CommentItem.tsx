@@ -1,5 +1,6 @@
 "use client";
 
+import ImageKitUploader from "@/front/components/common/ImageKitUploader";
 import { useCreateComment, useVoteComment } from "@/front/hooks/querys/use-posts";
 import { useCreateResourceComment, useVoteResourceComment } from "@/front/hooks/querys/use-resources";
 import { timeAgo } from "@/front/lib/utils";
@@ -10,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, ThumbsDown, ThumbsUp } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 function CommentRow({ comment, target }: { comment: CommentBase; target: CommentTarget }) {
@@ -45,15 +46,19 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
         .join("")
         .toUpperCase() || "?";
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateCommentFormValues>({
-        resolver: zodResolver(CreateCommentSchema),
-        defaultValues: { content: "" },
-    });
+    const { register, handleSubmit, reset, control, setValue, watch, formState: { errors } } =
+        useForm<CreateCommentFormValues>({
+            resolver: zodResolver(CreateCommentSchema),
+            defaultValues: { content: "", imageUrl: null, videoUrl: null },
+        });
+
+    const replyImageUrl = watch("imageUrl") ?? null;
+    const replyVideoUrl = watch("videoUrl") ?? null;
 
     function onSubmit(values: CreateCommentFormValues) {
         const onSuccess = () => {
             toast.success("Réponse publiée.");
-            reset();
+            reset({ content: "", imageUrl: null, videoUrl: null });
             setIsAnswering(false);
         };
         const onError = (error: unknown) => {
@@ -62,12 +67,24 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
 
         if (target.type === "post") {
             postCreate.mutate(
-                { content: values.content, postId: target.id, parentId: comment.id },
+                {
+                    content: values.content,
+                    postId: target.id,
+                    parentId: comment.id,
+                    imageUrl: values.imageUrl,
+                    videoUrl: values.videoUrl,
+                },
                 { onSuccess, onError }
             );
         } else {
             resourceCreate.mutate(
-                { content: values.content, resourceId: target.id, parentId: comment.id },
+                {
+                    content: values.content,
+                    resourceId: target.id,
+                    parentId: comment.id,
+                    imageUrl: values.imageUrl,
+                    videoUrl: values.videoUrl,
+                },
                 { onSuccess, onError }
             );
         }
@@ -89,7 +106,32 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
                     <span className="text-sm font-medium">{displayName}</span>
                     <span className="text-xs text-neutral-400">{timeAgo(comment.createdAt)}</span>
                 </div>
-                <p className="text-sm text-neutral-700">{comment.content}</p>
+                {comment.content && (
+                    <p className="text-sm text-neutral-700">{comment.content}</p>
+                )}
+                {comment.imageUrl && (
+                    <a
+                        href={comment.imageUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-1 inline-block"
+                    >
+                        <Image
+                            src={comment.imageUrl}
+                            alt="Pièce jointe"
+                            width={320}
+                            height={240}
+                            className="rounded-md object-cover border border-neutral-200 max-h-64 w-auto"
+                        />
+                    </a>
+                )}
+                {comment.videoUrl && (
+                    <video
+                        src={comment.videoUrl}
+                        controls
+                        className="mt-1 rounded-md border border-neutral-200 max-h-64 w-auto"
+                    />
+                )}
                 <div className="flex flex-col items-start gap-3 mt-1">
                     <div className="flex items-center gap-2">
                         <button
@@ -116,7 +158,7 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
                         </div>
                     </div>
                     {isAnswering && (
-                        <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-1">
+                        <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-2">
                             <div className="flex gap-2">
                                 <input
                                     {...register("content")}
@@ -134,6 +176,36 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
                                     {isPending && <Loader2 className="w-3 h-3 animate-spin" />}
                                     Envoyer
                                 </button>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Controller
+                                    control={control}
+                                    name="imageUrl"
+                                    render={() => (
+                                        <ImageKitUploader
+                                            kind="image"
+                                            value={replyImageUrl}
+                                            onChange={(url) =>
+                                                setValue("imageUrl", url, { shouldValidate: true })
+                                            }
+                                            disabled={isPending}
+                                        />
+                                    )}
+                                />
+                                <Controller
+                                    control={control}
+                                    name="videoUrl"
+                                    render={() => (
+                                        <ImageKitUploader
+                                            kind="video"
+                                            value={replyVideoUrl}
+                                            onChange={(url) =>
+                                                setValue("videoUrl", url, { shouldValidate: true })
+                                            }
+                                            disabled={isPending}
+                                        />
+                                    )}
+                                />
                             </div>
                             {errors.content && (
                                 <p className="text-xs text-red-500">{errors.content.message}</p>

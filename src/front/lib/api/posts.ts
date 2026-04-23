@@ -93,6 +93,8 @@ export interface CreateCommentInput {
     content: string;
     postId: string;
     parentId?: string;
+    imageUrl?: string | null;
+    videoUrl?: string | null;
 }
 
 export async function createComment(input: CreateCommentInput): Promise<CommentWithChildren> {
