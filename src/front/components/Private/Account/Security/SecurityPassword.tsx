@@ -8,7 +8,7 @@ import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/front/components/ui/form";
 import { Input } from "@/front/components/ui/input";
-import { useChangePassword } from "@/front/hooks/querys/use-users";
+import { useChangePassword } from "@/front/hooks/queries/use-users";
 import { ChangePasswordSchema, type ChangePasswordFormValues } from "@/front/types/auth/change-password.schema";
 import { useState } from "react";
 import { cn } from "@/front/lib/utils";

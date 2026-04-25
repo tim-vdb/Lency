@@ -9,7 +9,8 @@ import { Badge } from "@/front/components/ui/badge";
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { Separator } from "@/front/components/ui/separator";
-import { useCategoryBySlug, useFollowStatus, usePostsByCategory, useToggleFollowCategory } from "@/front/hooks/querys/use-categories";
+import { useCategoryBySlug, useFollowStatus, usePostsByCategory, useToggleFollowCategory } from "@/front/hooks/queries/use-categories";
+import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 import { BookOpen, Check, Settings, Users } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -20,6 +21,7 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
     const { data: followData } = useFollowStatus(category?.id ?? "");
     const { mutate: toggleFollow, isPending: followPending } = useToggleFollowCategory(category?.id ?? "");
     const isFollowing = followData?.following ?? false;
+    useBreadcrumbOverride(slug, category?.name, "category");
 
     function handleFollow() {
         if (!category) return;
@@ -51,7 +53,7 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
     return (
         <div className="flex flex-col gap-4">
             {/* Bandeau */}
-            <div className="relative w-full h-32 rounded-xl overflow-hidden bg-gradient-to-r from-pink-200 via-pink-100 to-rose-200">
+            <div className="relative w-full h-32 rounded-xl overflow-hidden bg-linear-to-r from-pink-200 via-pink-100 to-rose-200">
                 {category.bannerUrl && (
                     <img
                         src={category.bannerUrl}

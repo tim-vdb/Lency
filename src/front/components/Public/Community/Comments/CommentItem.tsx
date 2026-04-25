@@ -1,8 +1,9 @@
 "use client";
 
 import ImageKitUploader from "@/front/components/common/ImageKitUploader";
-import { useCreateComment, useVoteComment } from "@/front/hooks/querys/use-posts";
-import { useCreateResourceComment, useVoteResourceComment } from "@/front/hooks/querys/use-resources";
+import { useRequireAuth } from "@/front/hooks/use-modals";
+import { useCreateComment, useVoteComment } from "@/front/hooks/queries/use-posts";
+import { useCreateResourceComment, useVoteResourceComment } from "@/front/hooks/queries/use-resources";
 import { timeAgo } from "@/front/lib/utils";
 import { CommentTarget } from "@/front/types/comment-target";
 import { CreateCommentSchema, type CreateCommentFormValues } from "@/front/types/comment.schema";
@@ -15,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 function CommentRow({ comment, target }: { comment: CommentBase; target: CommentTarget }) {
+    const requireAuth = useRequireAuth();
     const [isAnswering, setIsAnswering] = React.useState(false);
     const [userVote, setUserVote] = React.useState<"upvote" | "downvote" | null>(null);
 
@@ -26,14 +28,24 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
     const isPending = target.type === "post" ? postCreate.isPending : resourceCreate.isPending;
 
     function handleVote(type: "upvote" | "downvote") {
-        const prev = userVote;
-        const next = userVote === type ? null : type;
-        setUserVote(next);
-        if (target.type === "post") {
-            postVote.mutate({ commentId: comment.id, postId: target.id, prev, next });
-        } else {
-            resourceVote.mutate({ commentId: comment.id, resourceId: target.id, prev, next });
+        requireAuth(() => {
+            const prev = userVote;
+            const next = userVote === type ? null : type;
+            setUserVote(next);
+            if (target.type === "post") {
+                postVote.mutate({ commentId: comment.id, postId: target.id, prev, next });
+            } else {
+                resourceVote.mutate({ commentId: comment.id, resourceId: target.id, prev, next });
+            }
+        });
+    }
+
+    function handleToggleAnswering() {
+        if (isAnswering) {
+            setIsAnswering(false);
+            return;
         }
+        requireAuth(() => setIsAnswering(true));
     }
 
     const { author } = comment;
@@ -56,38 +68,40 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
     const replyVideoUrl = watch("videoUrl") ?? null;
 
     function onSubmit(values: CreateCommentFormValues) {
-        const onSuccess = () => {
-            toast.success("Réponse publiée.");
-            reset({ content: "", imageUrl: null, videoUrl: null });
-            setIsAnswering(false);
-        };
-        const onError = (error: unknown) => {
-            toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
-        };
+        requireAuth(() => {
+            const onSuccess = () => {
+                toast.success("Réponse publiée.");
+                reset({ content: "", imageUrl: null, videoUrl: null });
+                setIsAnswering(false);
+            };
+            const onError = (error: unknown) => {
+                toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
+            };
 
-        if (target.type === "post") {
-            postCreate.mutate(
-                {
-                    content: values.content,
-                    postId: target.id,
-                    parentId: comment.id,
-                    imageUrl: values.imageUrl,
-                    videoUrl: values.videoUrl,
-                },
-                { onSuccess, onError }
-            );
-        } else {
-            resourceCreate.mutate(
-                {
-                    content: values.content,
-                    resourceId: target.id,
-                    parentId: comment.id,
-                    imageUrl: values.imageUrl,
-                    videoUrl: values.videoUrl,
-                },
-                { onSuccess, onError }
-            );
-        }
+            if (target.type === "post") {
+                postCreate.mutate(
+                    {
+                        content: values.content,
+                        postId: target.id,
+                        parentId: comment.id,
+                        imageUrl: values.imageUrl,
+                        videoUrl: values.videoUrl,
+                    },
+                    { onSuccess, onError }
+                );
+            } else {
+                resourceCreate.mutate(
+                    {
+                        content: values.content,
+                        resourceId: target.id,
+                        parentId: comment.id,
+                        imageUrl: values.imageUrl,
+                        videoUrl: values.videoUrl,
+                    },
+                    { onSuccess, onError }
+                );
+            }
+        });
     }
 
     return (
@@ -135,7 +149,7 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
                 <div className="flex flex-col items-start gap-3 mt-1">
                     <div className="flex items-center gap-2">
                         <button
-                            onClick={() => setIsAnswering(!isAnswering)}
+                            onClick={handleToggleAnswering}
                             className="text-xs text-neutral-400 hover:text-neutral-600 transition-colors cursor-pointer"
                         >
                             {isAnswering ? "Annuler" : "Répondre"}

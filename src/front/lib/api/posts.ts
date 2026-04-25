@@ -164,14 +164,6 @@ export async function toggleVotePost(postId: string): Promise<{ voted: boolean }
     return response.json()
 }
 
-export async function hidePost(postId: string): Promise<void> {
-    const response = await fetch(`/api/posts/${postId}/hide`, { method: 'POST' })
-    if (!response.ok) {
-        const error = await response.json().catch(() => ({}))
-        throw new Error(error.error || 'Erreur lors du masquage du post')
-    }
-}
-
 export async function reportPost(postId: string): Promise<void> {
     const response = await fetch(`/api/posts/${postId}/report`, { method: 'POST' })
     if (!response.ok) {

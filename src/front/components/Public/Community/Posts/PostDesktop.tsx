@@ -3,19 +3,21 @@
 import { Card, CardContent, CardFooter } from "@/front/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/front/components/ui/popover";
 import { Tooltip, TooltipContent } from "@/front/components/ui/tooltip";
-import { useHidePost, useReportPost, useToggleSavePost, useToggleVotePost } from "@/front/hooks/querys/use-posts";
+import { useReportPost, useToggleSavePost, useToggleVotePost } from "@/front/hooks/queries/use-posts";
 import { cn } from "@/front/lib/utils";
 import { PostWithUserState } from "@/front/types/post.schema";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
-import { Bookmark, Ellipsis, EyeOff, Flag, Heart, MessageCircleMore, Share } from "lucide-react";
+import { Bookmark, Ellipsis, Flag, Heart, MessageCircleMore, Share } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRecentlyViewed } from "@/front/hooks/use-recently-viewed";
+import { useRecentlyViewed } from "@/front/stores/use-recently-viewed.store";
 import { toast } from "sonner";
 import CommentRoot from "../Comments/CommentRoot";
 import Comments from "../Comments/Comments";
 import PostAvatar from "./PostAvatar";
+import { useRequireAuth } from "@/front/hooks/use-modals";
+import { useShare } from "@/front/hooks/use-share";
 
 interface PostDesktopProps {
     post: PostWithUserState;
@@ -23,13 +25,15 @@ interface PostDesktopProps {
 }
 
 export default function PostDesktop({ post, className }: PostDesktopProps) {
+    const requireAuth = useRequireAuth();
+    const share = useShare();
     const [openComments, setOpenComments] = useState(false);
     const [isVoted, setIsVoted] = useState(post.isVoted ?? false);
     const [isSaved, setIsSaved] = useState(post.isSaved ?? false);
     const [upvoteCount, setUpvoteCount] = useState(post.upvoteCount);
     const router = useRouter();
     const pathname = usePathname();
-    const isOnSelfPage = pathname === `/post/${post.id}`;
+    const isOnSelfPage = pathname === `/community/${post.category.slug}/post/${post.id}`;
     const addRecentlyViewed = useRecentlyViewed((s) => s.add);
 
     // Sync local state when navigating to a different post
@@ -41,45 +45,50 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
 
     const { mutate: toggleSavePost } = useToggleSavePost(post.id);
     const { mutate: toggleVotePost } = useToggleVotePost(post.id);
-    const { mutate: hide } = useHidePost(post.id);
     const { mutate: report } = useReportPost(post.id);
 
     function handleVote() {
-        setIsVoted(!isVoted);
-        setUpvoteCount((c) => !isVoted ? c + 1 : c - 1);
-        toggleVotePost(undefined, {
-            onError: () => {
-                setIsVoted(isVoted);
-                setUpvoteCount((c) => !isVoted ? c - 1 : c + 1);
-            },
+        requireAuth(() => {
+            setIsVoted(!isVoted);
+            setUpvoteCount((c) => !isVoted ? c + 1 : c - 1);
+            toggleVotePost(undefined, {
+                onError: () => {
+                    setIsVoted(isVoted);
+                    setUpvoteCount((c) => !isVoted ? c - 1 : c + 1);
+                },
+            });
         });
     }
 
     function handleSave() {
-        const nextSaved = !isSaved;
-        setIsSaved(nextSaved);
-        toggleSavePost(undefined, {
-            onSuccess: () => toast.success(nextSaved ? "Post enregistré." : "Post retiré des enregistrements."),
-            onError: () => setIsSaved(isSaved),
+        requireAuth(() => {
+            const nextSaved = !isSaved;
+            setIsSaved(nextSaved);
+            toggleSavePost(undefined, {
+                onSuccess: () => toast.success(nextSaved ? "Post enregistré." : "Post retiré des enregistrements."),
+                onError: () => setIsSaved(isSaved),
+            });
+        });
+    }
+
+    function handleReport() {
+        requireAuth(() => {
+            report(undefined, { onSuccess: () => toast.success("Post signalé.") });
         });
     }
 
     const menuItems = [
-        { icon: Share, label: "Partager", filled: false, onClick: undefined },
+        {
+            icon: Share,
+            label: "Partager",
+            filled: false,
+            onClick: (e: React.MouseEvent) => { e.stopPropagation(); share(`/community/${post.category.slug}/post/${post.id}`, post.title); },
+        },
         {
             icon: Bookmark,
             label: isSaved ? "Enregistré" : "Enregistrer",
             filled: isSaved,
             onClick: (e: React.MouseEvent) => { e.stopPropagation(); handleSave(); },
-        },
-        {
-            icon: EyeOff,
-            label: "Pas intéressé",
-            filled: false,
-            onClick: (e: React.MouseEvent) => {
-                e.stopPropagation();
-                hide(undefined, { onSuccess: () => toast.success("Post masqué.") });
-            },
         },
         {
             icon: Flag,
@@ -88,14 +97,14 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
             filled: false,
             onClick: (e: React.MouseEvent) => {
                 e.stopPropagation();
-                report(undefined, { onSuccess: () => toast.success("Post signalé.") });
+                handleReport();
             },
         },
     ]
 
     return (
         <Card className={cn("gap-4 py-4 flex-1", className)}>
-            <CardContent className="relative" onClick={() => { if (!isOnSelfPage) { addRecentlyViewed(post); router.push(`/post/${post.id}`); } }}>
+            <CardContent className="relative" onClick={() => { if (!isOnSelfPage) { addRecentlyViewed(post); router.push(`/community/${post.category.slug}/post/${post.id}`); } }}>
                 <div className="absolute top-2 w-[calc(100%-5rem)] translate-x-4 rounded-md flex items-center justify-between bg-transparent z-10">
                     <PostAvatar post={post} />
                     <Popover>
@@ -168,7 +177,7 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                     <div className="flex flex-col items-center gap-2">
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Share className="w-6 h-6 cursor-pointer" onClick={(e) => { e.stopPropagation(); }} />
+                                <Share className="w-6 h-6 cursor-pointer" onClick={(e) => { e.stopPropagation(); share(`/community/${post.category.slug}/post/${post.id}`, post.title); }} />
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Partager</p>

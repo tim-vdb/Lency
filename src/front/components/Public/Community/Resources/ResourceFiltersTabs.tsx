@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/front/components/ui/badge";
-import { useCategories } from "@/front/hooks/querys/use-categories";
+import { useCategories } from "@/front/hooks/queries/use-categories";
 import { cn } from "@/front/lib/utils";
 import Link from "next/link";
 
@@ -13,19 +13,8 @@ export default function ResourceFiltersTabs({ activeSlug }: ResourceFiltersTabsP
     const { data: categories } = useCategories();
 
     return (
-        <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-md -mx-2 px-2 py-2 overflow-x-auto">
+        <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-md rounded-xl mr-1.5 px-2 py-2 overflow-x-auto">
             <div className="flex items-center gap-2 whitespace-nowrap">
-                <Link href="/community">
-                    <Badge
-                        variant={!activeSlug ? "default" : "secondary"}
-                        className={cn(
-                            "cursor-pointer transition-colors",
-                            !activeSlug ? "bg-neutral-900" : "hover:bg-neutral-200"
-                        )}
-                    >
-                        Tout
-                    </Badge>
-                </Link>
                 {categories?.map((category) => {
                     const isActive = category.slug === activeSlug;
                     return (

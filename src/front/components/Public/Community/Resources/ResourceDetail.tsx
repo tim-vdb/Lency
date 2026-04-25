@@ -2,8 +2,8 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
 import { Badge } from "@/front/components/ui/badge";
-import { Button } from "@/front/components/ui/button";
-import { useToggleSaveResource, useToggleVoteResource } from "@/front/hooks/querys/use-resources";
+import { useRequireAuth } from "@/front/hooks/use-modals";
+import { useToggleSaveResource, useToggleVoteResource } from "@/front/hooks/queries/use-resources";
 import { cn, timeAgo } from "@/front/lib/utils";
 import { ResourceWithUserState } from "@/front/types/resource.schema";
 import { Bookmark, ExternalLink, Heart, MessageCircleMore, Share } from "lucide-react";
@@ -12,6 +12,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import CommentRoot from "../Comments/CommentRoot";
 import Comments from "../Comments/Comments";
+import { useShare } from "@/front/hooks/use-share";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/front/components/ui/tooltip";
 
 const BADGE_PALETTE = [
     "bg-blue-100 text-blue-700",
@@ -31,8 +33,11 @@ function colorForSlug(slug: string) {
 }
 
 export default function ResourceDetail({ resource }: { resource: ResourceWithUserState }) {
+    const href = `/community/${resource.category.slug}/resources/${resource.id}`;
+    const requireAuth = useRequireAuth();
     const [isVoted, setIsVoted] = useState(resource.isVoted);
     const [isSaved, setIsSaved] = useState(resource.isSaved);
+    const share = useShare();
     const [upvoteCount, setUpvoteCount] = useState(resource.upvoteCount);
 
     const { mutate: toggleVote } = useToggleVoteResource(resource.id, resource.categoryId);
@@ -48,23 +53,27 @@ export default function ResourceDetail({ resource }: { resource: ResourceWithUse
     const badgeClass = colorForSlug(resource.category.slug);
 
     function handleVote() {
-        const prev = isVoted;
-        setIsVoted(!prev);
-        setUpvoteCount((c) => (prev ? c - 1 : c + 1));
-        toggleVote(undefined, {
-            onError: () => {
-                setIsVoted(prev);
-                setUpvoteCount((c) => (prev ? c + 1 : c - 1));
-            },
+        requireAuth(() => {
+            const prev = isVoted;
+            setIsVoted(!prev);
+            setUpvoteCount((c) => (prev ? c - 1 : c + 1));
+            toggleVote(undefined, {
+                onError: () => {
+                    setIsVoted(prev);
+                    setUpvoteCount((c) => (prev ? c + 1 : c - 1));
+                },
+            });
         });
     }
 
     function handleSave() {
-        const prev = isSaved;
-        setIsSaved(!prev);
-        toggleSave(undefined, {
-            onSuccess: () => toast.success(!prev ? "Ressource enregistrée." : "Ressource retirée."),
-            onError: () => setIsSaved(prev),
+        requireAuth(() => {
+            const prev = isSaved;
+            setIsSaved(!prev);
+            toggleSave(undefined, {
+                onSuccess: () => toast.success(!prev ? "Ressource enregistrée." : "Ressource retirée."),
+                onError: () => setIsSaved(prev),
+            });
         });
     }
 
@@ -81,7 +90,7 @@ export default function ResourceDetail({ resource }: { resource: ResourceWithUse
                 </div>
             </div>
 
-            <div className="relative w-full h-80 rounded-xl overflow-hidden bg-gradient-to-br from-pink-100 via-pink-50 to-rose-200">
+            <div className="relative w-full h-80 rounded-xl overflow-hidden bg-linear-to-br from-pink-100 via-pink-50 to-rose-200">
                 {resource.imageUrl && (
                     <Image
                         src={resource.imageUrl}
@@ -127,23 +136,35 @@ export default function ResourceDetail({ resource }: { resource: ResourceWithUse
             </a>
 
             <div className="flex items-center gap-4 pt-2 border-t border-neutral-200">
-                <button
-                    onClick={handleVote}
-                    className="flex items-center gap-1.5 text-sm hover:text-red-500 transition-colors cursor-pointer"
-                >
-                    <Heart className={cn("w-5 h-5", isVoted && "fill-red-500 text-red-500")} />
+                <div className="flex items-center gap-2">
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Heart className={cn("w-6 h-6 cursor-pointer hover:text-red-500", isVoted && "fill-red-500 text-red-500")} onClick={(e) => { e.stopPropagation(); handleVote(); }} />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Aimer</p>
+                        </TooltipContent>
+                    </Tooltip>
                     <span>{upvoteCount}</span>
-                </button>
-                <button
-                    onClick={handleSave}
-                    className="flex items-center gap-1.5 text-sm hover:text-neutral-900 transition-colors cursor-pointer"
-                >
-                    <Bookmark className={cn("w-5 h-5", isSaved && "fill-neutral-900 text-neutral-900")} />
-                </button>
-                <Button variant="ghost" size="sm" className="gap-1.5">
-                    <Share className="w-4 h-4" />
-                    Partager
-                </Button>
+                </div>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Bookmark className={cn("w-6 h-6 cursor-pointer transition-colors", isSaved ? "fill-neutral-900 text-neutral-900" : "")} onClick={(e) => { e.stopPropagation(); handleSave(); }} />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Enregistrer</p>
+                    </TooltipContent>
+                </Tooltip>
+                <div className="flex flex-col items-center gap-2">
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Share className="w-6 h-6 cursor-pointer" onClick={(e) => { e.stopPropagation(); share(href, resource.title); }} />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Partager</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </div>
             </div>
 
             <div className="flex flex-col gap-4 pt-2">

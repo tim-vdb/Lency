@@ -2,12 +2,14 @@
 
 import ResourceCard from "@/front/components/Public/Community/Resources/ResourceCard";
 import ResourceFiltersTabs from "@/front/components/Public/Community/Resources/ResourceFiltersTabs";
-import { useCategoryBySlug } from "@/front/hooks/querys/use-categories";
-import { useResources } from "@/front/hooks/querys/use-resources";
+import { useCategoryBySlug } from "@/front/hooks/queries/use-categories";
+import { useResources } from "@/front/hooks/queries/use-resources";
+import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 
 export default function CategoryResourcesPageClient({ slug }: { slug: string }) {
     const { data: category, isPending: categoryPending } = useCategoryBySlug(slug);
     const { data: resources, isPending: resourcesPending } = useResources(category?.id);
+    useBreadcrumbOverride(slug, category?.name, "category");
 
     if (categoryPending) {
         return (

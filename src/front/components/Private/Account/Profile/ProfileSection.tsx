@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/front/components/ui/input"
 import { Separator } from "@/front/components/ui/separator"
 import { useUser } from "@/front/context/UserContext"
-import { useUpdateUser } from "@/front/hooks/querys/use-users"
+import { useUpdateUser } from "@/front/hooks/queries/use-users"
 import { UpdateProfileSchema, type UpdateProfileFormValues } from "@/front/types/profile.schema"
 import { VerifyEmailChangeModal } from "./VerifyEmailChangeModal"
 

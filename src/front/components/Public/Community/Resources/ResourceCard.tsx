@@ -52,7 +52,7 @@ export default function ResourceCard({ resource, variant = "grid", isActive }: R
                         isActive && "ring-2 ring-pink-300 bg-pink-50/50"
                     )}
                 >
-                    <div className="relative w-24 h-16 shrink-0 rounded-md overflow-hidden bg-gradient-to-br from-pink-100 to-rose-200">
+                    <div className="relative w-24 h-16 shrink-0 rounded-md overflow-hidden bg-linear-to-br from-pink-100 to-rose-200">
                         {resource.imageUrl && (
                             <Image
                                 src={resource.imageUrl}
@@ -79,7 +79,7 @@ export default function ResourceCard({ resource, variant = "grid", isActive }: R
     return (
         <Link href={href} className="group">
             <Card className="gap-3 py-3 overflow-hidden transition-shadow group-hover:shadow-md h-full">
-                <div className="relative mx-3 h-40 rounded-md overflow-hidden bg-gradient-to-br from-pink-100 via-pink-50 to-rose-200">
+                <div className="relative mx-3 h-40 rounded-md overflow-hidden bg-linear-to-br from-pink-100 via-pink-50 to-rose-200">
                     {resource.imageUrl ? (
                         <Image
                             src={resource.imageUrl}

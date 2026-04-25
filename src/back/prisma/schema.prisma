@@ -50,7 +50,6 @@ model User {
   events                    Event[]                @relation("UserEvent")
   savedPosts                PostSave[]
   postVotes                 PostVote[]
-  hiddenPosts               PostHide[]
   reportedPosts             PostReport[]
   categoryFollows           CategoryFollow[]
   resources                 Resource[]             @relation("UserResources")

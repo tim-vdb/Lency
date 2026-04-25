@@ -1,7 +1,7 @@
 "use client";
 
-import { useCommentsByPostId } from "@/front/hooks/querys/use-posts";
-import { useResourceComments } from "@/front/hooks/querys/use-resources";
+import { useCommentsByPostId } from "@/front/hooks/queries/use-posts";
+import { useResourceComments } from "@/front/hooks/queries/use-resources";
 import { CommentTarget } from "@/front/types/comment-target";
 import { CommentItem } from "./CommentItem";
 

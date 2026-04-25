@@ -10,12 +10,17 @@ import UserFollowingCommunities from "@/front/components/Public/Community/User/U
 import UserProfileHeader from "@/front/components/Public/Community/User/UserProfileHeader";
 import { Button } from "@/front/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs";
-import { useUserByUsername } from "@/front/hooks/querys/use-users";
+import { useUserByUsername } from "@/front/hooks/queries/use-users";
+import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 import { MapPin } from "lucide-react";
 import { toast } from "sonner";
 
 export default function UserProfilePageClient({ userName }: { userName: string }) {
     const { data: user, isPending, error } = useUserByUsername(userName);
+    const displayName = user?.firstname && user?.lastname
+        ? `${user.firstname} ${user.lastname}`
+        : user?.username;
+    useBreadcrumbOverride(userName, displayName);
 
     if (isPending) {
         return (

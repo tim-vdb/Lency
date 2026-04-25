@@ -62,7 +62,6 @@ model Post {
   comments     Comment[]
   saves        PostSave[]
   votes        PostVote[]
-  hides        PostHide[]
   reports      PostReport[]
   author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   category     Category     @relation(fields: [categoryId], references: [id])
@@ -111,19 +110,6 @@ model PostSave {
 }
 
 model PostVote {
-  id        String   @id @default(cuid())
-  userId    String
-  postId    String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, postId])
-  @@index([userId])
-  @@index([postId])
-}
-
-model PostHide {
   id        String   @id @default(cuid())
   userId    String
   postId    String

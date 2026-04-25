@@ -3,8 +3,9 @@
 import ImageKitUploader from "@/front/components/common/ImageKitUploader";
 import { Form, FormControl, FormField, FormItem } from "@/front/components/ui/form";
 import { Item, ItemContent } from "@/front/components/ui/item";
-import { useCreateComment } from "@/front/hooks/querys/use-posts";
-import { useCreateResourceComment } from "@/front/hooks/querys/use-resources";
+import { useRequireAuth } from "@/front/hooks/use-modals";
+import { useCreateComment } from "@/front/hooks/queries/use-posts";
+import { useCreateResourceComment } from "@/front/hooks/queries/use-resources";
 import { CommentTarget } from "@/front/types/comment-target";
 import { CreateCommentFormValues, CreateCommentSchema } from "@/front/types/comment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export default function CommentRoot({ target }: { target: CommentTarget }) {
+    const requireAuth = useRequireAuth();
     const postMutation = useCreateComment(target.type === "post" ? target.id : "");
     const resourceMutation = useCreateResourceComment(target.type === "resource" ? target.id : "");
     const { mutate: createPostComment, isPending: postPending } = postMutation;
@@ -28,35 +30,37 @@ export default function CommentRoot({ target }: { target: CommentTarget }) {
     const videoUrl = form.watch("videoUrl") ?? null;
 
     function onSubmit(values: CreateCommentFormValues) {
-        const onSuccess = () => {
-            toast.success("Commentaire publié.");
-            form.reset({ content: "", imageUrl: null, videoUrl: null });
-        };
-        const onError = (error: unknown) => {
-            toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
-        };
+        requireAuth(() => {
+            const onSuccess = () => {
+                toast.success("Commentaire publié.");
+                form.reset({ content: "", imageUrl: null, videoUrl: null });
+            };
+            const onError = (error: unknown) => {
+                toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
+            };
 
-        if (target.type === "post") {
-            createPostComment(
-                {
-                    content: values.content,
-                    postId: target.id,
-                    imageUrl: values.imageUrl,
-                    videoUrl: values.videoUrl,
-                },
-                { onSuccess, onError }
-            );
-        } else {
-            createResourceComment(
-                {
-                    content: values.content,
-                    resourceId: target.id,
-                    imageUrl: values.imageUrl,
-                    videoUrl: values.videoUrl,
-                },
-                { onSuccess, onError }
-            );
-        }
+            if (target.type === "post") {
+                createPostComment(
+                    {
+                        content: values.content,
+                        postId: target.id,
+                        imageUrl: values.imageUrl,
+                        videoUrl: values.videoUrl,
+                    },
+                    { onSuccess, onError }
+                );
+            } else {
+                createResourceComment(
+                    {
+                        content: values.content,
+                        resourceId: target.id,
+                        imageUrl: values.imageUrl,
+                        videoUrl: values.videoUrl,
+                    },
+                    { onSuccess, onError }
+                );
+            }
+        });
     }
 
     return (

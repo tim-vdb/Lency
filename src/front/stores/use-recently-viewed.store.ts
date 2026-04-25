@@ -8,6 +8,7 @@ export interface RecentlyViewedEntry {
     id: string;
     title: string;
     content: string;
+    categorySlug: string;
     authorName: string;
     authorAvatarUrl: string | null;
     upvoteCount: number;
@@ -37,6 +38,7 @@ export const useRecentlyViewed = create<RecentlyViewedStore>()(
                     id: post.id,
                     title: post.title,
                     content: post.content,
+                    categorySlug: post.category.slug,
                     authorName,
                     authorAvatarUrl: author.avatarUrl ?? null,
                     upvoteCount: post.upvoteCount,
