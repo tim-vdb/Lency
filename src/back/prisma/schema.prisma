@@ -19,7 +19,6 @@ model User {
   username                  String?                @unique
   phone                     String?
   bio                       String?
-  avatarUrl                 String?
   role                      Role                   @default(MEMBER)
   isPremium                 Boolean                @default(false)
   cv                        String?
@@ -55,6 +54,10 @@ model User {
   resources                 Resource[]             @relation("UserResources")
   resourceVotes             ResourceVote[]
   resourceSaves             ResourceSave[]
+  followers                 UserFollow[]           @relation("Following")
+  following                 UserFollow[]           @relation("Followers")
+  reportsMade               UserReport[]           @relation("UserReporters")
+  reportsReceived           UserReport[]           @relation("ReportedUsers")
 }
 
 /// *

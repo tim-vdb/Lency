@@ -7,16 +7,14 @@ export function useRequireAuth() {
     const user = useUser();
     const openModal = useModalStore((state) => state.openModal);
 
-    return (callback: () => void): boolean => {
+    return (callback: () => void) => {
         if (!user) {
             openModal("authPrompt");
-            return false;
+            return;
         }
         callback();
-        return true;
     };
 }
-
 interface UseConfirmOptions {
     title?: string;
     description?: string;

@@ -48,7 +48,7 @@ export const updateUserProfile = async (data: {
     email?: string;
     phone?: string;
     bio?: string;
-    avatarUrl?: string;
+    image?: string;
     portfolio?: string;
     cv?: string;
 }) => {

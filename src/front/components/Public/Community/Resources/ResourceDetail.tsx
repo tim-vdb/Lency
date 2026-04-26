@@ -81,7 +81,7 @@ export default function ResourceDetail({ resource }: { resource: ResourceWithUse
         <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
                 <Avatar className="w-10 h-10">
-                    <AvatarImage src={resource.author.avatarUrl ?? undefined} alt={authorName} />
+                    <AvatarImage src={resource.author.image ?? undefined} alt={authorName} />
                     <AvatarFallback className="text-xs bg-neutral-100">{authorInitials}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">

@@ -101,7 +101,7 @@ export default function ResourceCard({ resource, variant = "grid", isActive }: R
                 <div className="px-4 flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                         <Avatar className="w-6 h-6">
-                            <AvatarImage src={resource.author.avatarUrl ?? undefined} alt={authorName} />
+                            <AvatarImage src={resource.author.image ?? undefined} alt={authorName} />
                             <AvatarFallback className="text-[10px] bg-neutral-100">
                                 {authorInitials}
                             </AvatarFallback>

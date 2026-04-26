@@ -5,6 +5,9 @@ import {
     fetchUserById,
     fetchUserByUsername,
     fetchUsers,
+    getFollowStatus,
+    reportUser,
+    toggleFollowUser,
     updateUser,
     verifyEmailChange,
     type ChangePasswordInput,
@@ -73,3 +76,37 @@ export const useChangePassword = () =>
 
 export const useVerifyEmailChange = () =>
     useMutation({ mutationFn: (input: VerifyEmailChangeInput) => verifyEmailChange(input) })
+
+export const useFollowStatus = (userId: string) =>
+    useQuery({
+        queryKey: [...USER_ROOT, userId, "follow"] as const,
+        queryFn: () => getFollowStatus(userId),
+        staleTime: 1000 * 60,
+        enabled: !!userId,
+    })
+
+export const useToggleFollowUser = (userId: string, username: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => toggleFollowUser(userId),
+        onMutate: async () => {
+            const followKey = [...USER_ROOT, userId, "follow"]
+            await queryClient.cancelQueries({ queryKey: followKey })
+            const previous = queryClient.getQueryData<{ following: boolean }>(followKey)
+            queryClient.setQueryData(followKey, { following: !previous?.following })
+            return { previous }
+        },
+        onError: (_err, _vars, context) => {
+            if (context?.previous !== undefined) {
+                queryClient.setQueryData([...USER_ROOT, userId, "follow"], context.previous)
+            }
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: [...USER_ROOT, userId, "follow"] })
+            queryClient.invalidateQueries({ queryKey: [...USER_ROOT, "username", username] })
+        },
+    })
+}
+
+export const useReportUser = (userId: string) =>
+    useMutation({ mutationFn: (reason?: string) => reportUser(userId, reason) })

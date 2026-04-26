@@ -18,12 +18,11 @@ export interface User {
     username?: string;
     phone?: string;
     bio?: string;
-    avatarUrl?: string;
+    image?: string;
     portfolio?: string;
     cv?: string;
     role?: string;
     emailVerified?: boolean;
-    image?: string;
     isPremium?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
@@ -37,7 +36,7 @@ export interface UpdateUserInput {
     email?: string;
     phone?: string;
     bio?: string;
-    avatarUrl?: string;
+    image?: string;
     portfolio?: string;
     cv?: string;
 }
@@ -146,6 +145,33 @@ export async function changePassword(input: ChangePasswordInput): Promise<void> 
  * Supprime un utilisateur (ou son propre compte)
  * Utilisé avec useMutation
  */
+export async function toggleFollowUser(userId: string): Promise<{ following: boolean }> {
+    const response = await fetch(`/api/users/${userId}/follow`, { method: 'POST' });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || 'Erreur lors du suivi de l\'utilisateur');
+    }
+    return response.json();
+}
+
+export async function getFollowStatus(userId: string): Promise<{ following: boolean }> {
+    const response = await fetch(`/api/users/${userId}/follow`, { method: 'GET', cache: 'no-store' });
+    if (!response.ok) throw new Error('Erreur lors de la récupération du statut de suivi');
+    return response.json();
+}
+
+export async function reportUser(userId: string, reason?: string): Promise<void> {
+    const response = await fetch(`/api/users/${userId}/report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason }),
+    });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || 'Erreur lors du signalement de l\'utilisateur');
+    }
+}
+
 export async function deleteUser(userId: string): Promise<void> {
     const response = await fetch(`/api/users/${userId}`, {
         method: 'DELETE',

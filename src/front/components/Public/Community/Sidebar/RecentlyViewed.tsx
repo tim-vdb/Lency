@@ -28,9 +28,9 @@ function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {
         <div className="flex flex-col gap-2 py-3">
             {/* Header: avatar + username + date */}
             <div className="flex items-center gap-2">
-                {entry.authorAvatarUrl ? (
+                {entry.authorImage ? (
                     <Image
-                        src={entry.authorAvatarUrl}
+                        src={entry.authorImage}
                         alt={entry.authorName}
                         width={28}
                         height={28}
@@ -53,16 +53,16 @@ function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {
             </Link>
 
             {/* Footer: stats */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
                 {[
                     { icon: Heart, count: entry.upvoteCount },
                     { icon: MessageCircleMore, count: entry.commentCount },
-                    { icon: Bookmark, count: entry.saveCount },
-                    { icon: Share, count: 0 },
+                    { icon: Bookmark, },
+                    { icon: Share },
                 ].map(({ icon: Icon, count }, i) => (
                     <div key={i} className="flex items-center gap-1">
                         <Icon className="w-3.5 h-3.5 text-neutral-500" />
-                        <span className="text-[10px] text-neutral-400">{formatCount(count)}</span>
+                        <span className="text-[10px] text-neutral-400">{count ? formatCount(count) : null}</span>
                     </div>
                 ))}
             </div>

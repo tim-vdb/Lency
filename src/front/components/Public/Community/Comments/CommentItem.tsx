@@ -107,8 +107,8 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
     return (
         <div className="flex gap-3">
             <div className="shrink-0">
-                {author.avatarUrl ? (
-                    <Image src={author.avatarUrl} alt={displayName} width={32} height={32} className="w-8 h-8 rounded-full" />
+                {author.image ? (
+                    <Image src={author.image} alt={displayName} width={32} height={32} className="w-8 h-8 rounded-full" />
                 ) : (
                     <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-medium text-white">
                         {initials}

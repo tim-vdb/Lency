@@ -17,7 +17,7 @@ async function main() {
             username: "admin",
             role: "ADMIN",
             emailVerified: true,
-            avatarUrl: null,
+            image: null,
         },
     })
 
@@ -31,7 +31,7 @@ async function main() {
             username: "timvdb",
             role: "MEMBER",
             emailVerified: true,
-            avatarUrl: null,
+            image: null,
         },
     })
 
@@ -45,7 +45,7 @@ async function main() {
             username: "guerric",
             role: "MEMBER",
             emailVerified: true,
-            avatarUrl: null,
+            image: null,
         },
     })
 
@@ -59,7 +59,7 @@ async function main() {
             username: "alexdupont",
             role: "USER",
             emailVerified: false,
-            avatarUrl: null,
+            image: null,
         },
     })
 
@@ -73,7 +73,7 @@ async function main() {
             username: "sophiemartin",
             role: "PREMIUM",
             emailVerified: true,
-            avatarUrl: null,
+            image: null,
         },
     })
 

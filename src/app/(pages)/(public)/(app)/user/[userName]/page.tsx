@@ -3,8 +3,8 @@ import UserProfilePageClient from "@/front/components/Public/Community/User/User
 export default async function UserProfilePage({
     params,
 }: {
-    params: Promise<{ userName: string }>;
+    params: Promise<{ username: string }>;
 }) {
-    const { userName } = await params;
-    return <UserProfilePageClient userName={userName} />;
+    const { username } = await params;
+    return <UserProfilePageClient username={username} />;
 }

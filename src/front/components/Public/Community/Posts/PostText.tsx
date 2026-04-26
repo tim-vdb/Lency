@@ -128,9 +128,9 @@ export default function PostText({ post, className }: PostTextProps) {
 
                 {/* Avatar + username + category */}
                 <div className="flex items-center gap-2 pr-8">
-                    {author.avatarUrl ? (
+                    {author.image ? (
                         <Image
-                            src={author.avatarUrl}
+                            src={author.image}
                             alt={displayName}
                             width={36}
                             height={36}

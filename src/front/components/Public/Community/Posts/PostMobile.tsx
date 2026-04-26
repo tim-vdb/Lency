@@ -140,9 +140,9 @@ export default function PostMobile({ post, className }: PostMobileProps) {
 
                     {/* Avatar + username + category */}
                     <div className="flex items-center gap-2 pr-6">
-                        {author.avatarUrl ? (
+                        {author.image ? (
                             <Image
-                                src={author.avatarUrl}
+                                src={author.image}
                                 alt={displayName}
                                 width={32}
                                 height={32}

@@ -6,12 +6,26 @@ export type UserProfileBase = Prisma.UserGetPayload<{
         projects: true;
         badges: true;
         categoryFollows: { include: { category: true } };
+        followers: {
+            include: {
+                follower: {
+                    select: {
+                        id: true;
+                        username: true;
+                        firstname: true;
+                        lastname: true;
+                        image: true;
+                    };
+                };
+            };
+        };
         _count: {
             select: {
                 Posts: true;
                 projects: true;
                 categoryFollows: true;
                 badges: true;
+                followers: true;
             };
         };
     };
@@ -19,4 +33,6 @@ export type UserProfileBase = Prisma.UserGetPayload<{
 
 export type UserProfile = UserProfileBase & {
     Posts: PostWithUserState[];
+    isFollowed: boolean;
+    isReported: boolean;
 };

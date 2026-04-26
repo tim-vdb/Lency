@@ -105,7 +105,7 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
     return (
         <Card className={cn("gap-4 py-4 flex-1", className)}>
             <CardContent className="relative" onClick={() => { if (!isOnSelfPage) { addRecentlyViewed(post); router.push(`/community/${post.category.slug}/post/${post.id}`); } }}>
-                <div className="absolute top-2 w-[calc(100%-5rem)] translate-x-4 rounded-md flex items-center justify-between bg-transparent z-10">
+                <div className="absolute top-2 w-[calc(100%-5rem)] translate-x-3.5 rounded-md flex items-start justify-between bg-transparent z-10">
                     <PostAvatar post={post} />
                     <Popover>
                         <PopoverTrigger asChild>
@@ -139,7 +139,7 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                 <Image src={"/images/blog/img1.jpg"} alt={post.title} width={500} height={500} className={cn("w-full h-[450px] object-cover rounded-md", !isOnSelfPage ? "cursor-pointer" : "")} />
             </CardContent>
             <CardFooter className="flex flex-col items-start gap-2">
-                <div className="flex items-top gap-2 pl-6">
+                <div className="flex gap-2">
                     <div className="flex flex-col items-center gap-2">
                         <Tooltip>
                             <TooltipTrigger asChild>
