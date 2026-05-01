@@ -42,7 +42,7 @@ export default function CommunityPage() {
     return (
         <div>
             <Tabs defaultValue="general" className="flex flex-col gap-4 items-center justify-start">
-                <TabsList className="w-md justify-evenly">
+                <TabsList className="w-full justify-start px-1">
                     <TabsTrigger value="general">Général</TabsTrigger>
                     <TabsTrigger value="popular">Populaire</TabsTrigger>
                     <TabsTrigger value="following">Suivis</TabsTrigger>

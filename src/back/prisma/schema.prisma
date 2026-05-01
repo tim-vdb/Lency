@@ -28,6 +28,7 @@ model User {
   updatedAt                 DateTime               @updatedAt
   emailVerified             Boolean                @default(false)
   image                     String?
+  avatarUrl                 String?
   name                      String?
   pendingEmail              String?
   emailChangeToken          String?
@@ -107,18 +108,18 @@ model Verification {
 }
 
 model ContactMessage {
-  id        String        @id @default(cuid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  prenom    String
-  nom       String
-  email     String
-  sujet     String
-  message   String        @db.Text
+  prenom  String
+  nom     String
+  email   String
+  sujet   String
+  message String @db.Text
 
-  type      ContactType   @default(CONTACT_GENERAL)
-  status    ContactStatus @default(EN_ATTENTE)
+  type   ContactType   @default(CONTACT_GENERAL)
+  status ContactStatus @default(EN_ATTENTE)
 
   @@map("contact_messages")
 }
