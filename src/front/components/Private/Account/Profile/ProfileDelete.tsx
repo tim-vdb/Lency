@@ -2,7 +2,7 @@
 import { AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
 import { Button } from "../../../ui/button";
-import { useDeleteUser } from '@/front/hooks/querys/use-users';
+import { useDeleteUser } from '@/front/hooks/queries/use-users';
 import { useRouter } from 'next/navigation';
 import { useUser } from "@/front/context/UserContext";
 
@@ -13,7 +13,7 @@ export default function ProfileDelete() {
 
     const handleDelete = async () => {
         if (!window.confirm("Êtes-vous sûr ? Cette action est irréversible.")) return;
-        
+
         if (!user?.id) {
             alert('Erreur : utilisateur non identifié');
             return;

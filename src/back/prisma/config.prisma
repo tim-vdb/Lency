@@ -10,12 +10,53 @@ model UserConfig {
 }
 
 model Resource {
-  id          String       @id @default(cuid())
-  title       String
-  description String?
-  type        ResourceType
-  url         String
-  categoryId  String
-  createdAt   DateTime     @default(now())
-  category    Category     @relation(fields: [categoryId], references: [id])
+  id           String         @id @default(cuid())
+  title        String
+  description  String?
+  type         ResourceType
+  url          String
+  imageUrl     String?
+  authorId     String
+  categoryId   String
+  upvoteCount  Int            @default(0)
+  saveCount    Int            @default(0)
+  commentCount Int            @default(0)
+  viewCount    Int            @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  author       User           @relation("UserResources", fields: [authorId], references: [id], onDelete: Cascade)
+  category     Category       @relation(fields: [categoryId], references: [id])
+  comments     Comment[]
+  votes        ResourceVote[]
+  saves        ResourceSave[]
+
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([createdAt(sort: Desc)])
+}
+
+model ResourceVote {
+  id         String   @id @default(cuid())
+  userId     String
+  resourceId String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, resourceId])
+  @@index([userId])
+  @@index([resourceId])
+}
+
+model ResourceSave {
+  id         String   @id @default(cuid())
+  userId     String
+  resourceId String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, resourceId])
+  @@index([userId])
+  @@index([resourceId])
 }

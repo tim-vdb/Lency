@@ -47,22 +47,22 @@ const navMain: NavMainItem[] = [
     items: [
       {
         title: "Compte",
-        url: "/account/profile",
+        url: "/account/settings/profile",
         icon: User2,
       },
       {
         title: "Notifications",
-        url: "/account/notifs",
+        url: "/account/settings/notifs",
         icon: Bell,
       },
       {
         title: "Sécurité",
-        url: "/account/security",
+        url: "/account/settings/security",
         icon: Shield,
       },
       {
         title: "Facturation",
-        url: "/account/billing",
+        url: "/account/settings/billing",
         icon: CreditCard,
       },
     ],

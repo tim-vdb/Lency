@@ -3,14 +3,16 @@
 import { Card, CardContent } from "@/front/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/front/components/ui/popover";
 import { cn } from "@/front/lib/utils";
-import { Download, Bookmark, EyeOff, Flag, Ellipsis, Heart, MessageCircleMore, Share } from "lucide-react";
+import { Download, Bookmark, Flag, Ellipsis, Heart, MessageCircleMore, Share } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { PostWithUserState } from "@/front/types/post.schema";
-import { useToggleSavePost, useToggleVotePost, useHidePost, useReportPost } from "@/front/hooks/querys/use-posts";
+import { useToggleSavePost, useToggleVotePost, useReportPost } from "@/front/hooks/queries/use-posts";
 import { toast } from "sonner";
 import { Tooltip, TooltipContent } from "@/front/components/ui/tooltip";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import { useRequireAuth } from "@/front/hooks/use-modals";
+import { useShare } from "@/front/hooks/use-share";
 
 interface PostTextProps {
     post: PostWithUserState;
@@ -19,6 +21,8 @@ interface PostTextProps {
 
 export default function PostText({ post, className }: PostTextProps) {
     const { author, category } = post;
+    const requireAuth = useRequireAuth();
+    const share = useShare();
     const [expanded, setExpanded] = useState(false);
     const [isVoted, setIsVoted] = useState(post.isVoted ?? false);
     const [isSaved, setIsSaved] = useState(post.isSaved ?? false);
@@ -32,26 +36,35 @@ export default function PostText({ post, className }: PostTextProps) {
 
     const { mutate: toggleSavePost } = useToggleSavePost(post.id);
     const { mutate: toggleVotePost } = useToggleVotePost(post.id);
-    const { mutate: hide } = useHidePost(post.id);
     const { mutate: report } = useReportPost(post.id);
 
     function handleVote() {
-        setIsVoted(!isVoted);
-        setUpvoteCount((c) => !isVoted ? c + 1 : c - 1);
-        toggleVotePost(undefined, {
-            onError: () => {
-                setIsVoted(isVoted);
-                setUpvoteCount((c) => !isVoted ? c - 1 : c + 1);
-            },
+        requireAuth(() => {
+            setIsVoted(!isVoted);
+            setUpvoteCount((c) => !isVoted ? c + 1 : c - 1);
+            toggleVotePost(undefined, {
+                onError: () => {
+                    setIsVoted(isVoted);
+                    setUpvoteCount((c) => !isVoted ? c - 1 : c + 1);
+                },
+            });
         });
     }
 
     function handleSave() {
-        const nextSaved = !isSaved;
-        setIsSaved(nextSaved);
-        toggleSavePost(undefined, {
-            onSuccess: () => toast.success(nextSaved ? "Post enregistré." : "Post retiré des enregistrements."),
-            onError: () => setIsSaved(isSaved),
+        requireAuth(() => {
+            const nextSaved = !isSaved;
+            setIsSaved(nextSaved);
+            toggleSavePost(undefined, {
+                onSuccess: () => toast.success(nextSaved ? "Post enregistré." : "Post retiré des enregistrements."),
+                onError: () => setIsSaved(isSaved),
+            });
+        });
+    }
+
+    function handleReport() {
+        requireAuth(() => {
+            report(undefined, { onSuccess: () => toast.success("Post signalé.") });
         });
     }
 
@@ -64,22 +77,13 @@ export default function PostText({ post, className }: PostTextProps) {
             onClick: (e: React.MouseEvent) => { e.stopPropagation(); handleSave(); },
         },
         {
-            icon: EyeOff,
-            label: "Pas intéressé",
-            filled: false,
-            onClick: (e: React.MouseEvent) => {
-                e.stopPropagation();
-                hide(undefined, { onSuccess: () => toast.success("Post masqué.") });
-            },
-        },
-        {
             icon: Flag,
             label: "Signaler",
             className: "text-red-500",
             filled: false,
             onClick: (e: React.MouseEvent) => {
                 e.stopPropagation();
-                report(undefined, { onSuccess: () => toast.success("Post signalé.") });
+                handleReport();
             },
         },
     ];
@@ -124,9 +128,9 @@ export default function PostText({ post, className }: PostTextProps) {
 
                 {/* Avatar + username + category */}
                 <div className="flex items-center gap-2 pr-8">
-                    {author.avatarUrl ? (
+                    {author.image ? (
                         <Image
-                            src={author.avatarUrl}
+                            src={author.image}
                             alt={displayName}
                             width={36}
                             height={36}
@@ -194,7 +198,7 @@ export default function PostText({ post, className }: PostTextProps) {
                     <div className="flex flex-col items-center gap-0.5">
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Share className="w-5 h-5 text-neutral-600 dark:text-neutral-300 cursor-pointer" />
+                                <Share className="w-5 h-5 text-neutral-600 dark:text-neutral-300 cursor-pointer" onClick={() => share(`/community/${post.category.slug}/post/${post.id}`, post.title)} />
                             </TooltipTrigger>
                             <TooltipContent><p>Partager</p></TooltipContent>
                         </Tooltip>

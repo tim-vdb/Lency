@@ -8,8 +8,8 @@ import RecentlyViewed from "@/front/components/Public/Community/Sidebar/Recently
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
-import { useRecentlyViewed } from "@/front/hooks/use-recently-viewed";
-import { useFollowedCategoryPosts, usePosts } from "@/front/hooks/querys/use-posts"
+import { useRecentlyViewed } from "@/front/stores/use-recently-viewed.store";
+import { useFollowedCategoryPosts, usePosts } from "@/front/hooks/queries/use-posts"
 import { useMemo } from "react";
 import type { PostWithUserState } from "@/front/types/post.schema";
 
@@ -42,7 +42,7 @@ export default function CommunityPage() {
     return (
         <div>
             <Tabs defaultValue="general" className="flex flex-col gap-4 items-center justify-start">
-                <TabsList className="w-md justify-evenly">
+                <TabsList className="w-full justify-start px-1">
                     <TabsTrigger value="general">Général</TabsTrigger>
                     <TabsTrigger value="popular">Populaire</TabsTrigger>
                     <TabsTrigger value="following">Suivis</TabsTrigger>

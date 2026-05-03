@@ -107,14 +107,6 @@ export const PostsAction = {
         return { voted: true };
     },
 
-    hidePost: async (userId: string, postId: string) => {
-        return prisma.postHide.upsert({
-            where: { userId_postId: { userId, postId } },
-            create: { userId, postId },
-            update: {},
-        });
-    },
-
     reportPost: async (userId: string, postId: string, reason?: string) => {
         return prisma.postReport.upsert({
             where: { userId_postId: { userId, postId } },

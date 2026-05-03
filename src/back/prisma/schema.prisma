@@ -19,7 +19,6 @@ model User {
   username                  String?                @unique
   phone                     String?
   bio                       String?
-  avatarUrl                 String?
   role                      Role                   @default(MEMBER)
   isPremium                 Boolean                @default(false)
   cv                        String?
@@ -29,6 +28,7 @@ model User {
   updatedAt                 DateTime               @updatedAt
   emailVerified             Boolean                @default(false)
   image                     String?
+  avatarUrl                 String?
   name                      String?
   pendingEmail              String?
   emailChangeToken          String?
@@ -50,9 +50,15 @@ model User {
   events                    Event[]                @relation("UserEvent")
   savedPosts                PostSave[]
   postVotes                 PostVote[]
-  hiddenPosts               PostHide[]
   reportedPosts             PostReport[]
   categoryFollows           CategoryFollow[]
+  resources                 Resource[]             @relation("UserResources")
+  resourceVotes             ResourceVote[]
+  resourceSaves             ResourceSave[]
+  followers                 UserFollow[]           @relation("Following")
+  following                 UserFollow[]           @relation("Followers")
+  reportsMade               UserReport[]           @relation("UserReporters")
+  reportsReceived           UserReport[]           @relation("ReportedUsers")
 }
 
 /// *
@@ -102,18 +108,18 @@ model Verification {
 }
 
 model ContactMessage {
-  id        String        @id @default(cuid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  prenom    String
-  nom       String
-  email     String
-  sujet     String
-  message   String        @db.Text
+  prenom  String
+  nom     String
+  email   String
+  sujet   String
+  message String @db.Text
 
-  type      ContactType   @default(CONTACT_GENERAL)
-  status    ContactStatus @default(EN_ATTENTE)
+  type   ContactType   @default(CONTACT_GENERAL)
+  status ContactStatus @default(EN_ATTENTE)
 
   @@map("contact_messages")
 }

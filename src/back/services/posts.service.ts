@@ -79,13 +79,6 @@ export const PostsService = {
         return PostsAction.toggleVote(user.id, postId);
     },
 
-    hidePost: async (postId: string) => {
-        const user = await getUser();
-        if (!user) throw new Error("Unauthorized");
-        await PostsService.findByIdPost(postId);
-        return PostsAction.hidePost(user.id, postId);
-    },
-
     reportPost: async (postId: string, reason?: string) => {
         const user = await getUser();
         if (!user) throw new Error("Unauthorized");

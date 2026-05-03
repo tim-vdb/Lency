@@ -85,8 +85,16 @@ export function NavUser() {
               Account
             </Link>
           </DropdownMenuItem>
+          {user?.username && (
+            <DropdownMenuItem asChild>
+              <Link href={`/user/${user.username}`}>
+                <UserRound className="size-4" />
+                Mon profil
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild>
-            <Link href="/account/profile">
+            <Link href="/account/badges">
               <Star className="size-4" />
               Badges
             </Link>

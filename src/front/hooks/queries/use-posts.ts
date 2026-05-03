@@ -7,7 +7,6 @@ import {
     fetchFollowedCategoryPosts,
     fetchPostById,
     fetchPosts,
-    hidePost,
     reportPost,
     toggleSavePost,
     toggleVotePost,
@@ -216,14 +215,6 @@ export const useToggleVotePost = (postId: string) => {
             if (context?.previous) queryClient.setQueryData(listKey, context.previous)
         },
         onSettled: () => queryClient.invalidateQueries({ queryKey: listKey }),
-    })
-}
-
-export const useHidePost = (postId: string) => {
-    const queryClient = useQueryClient()
-    return useMutation({
-        mutationFn: () => hidePost(postId),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: postQueries.lists().queryKey }),
     })
 }
 

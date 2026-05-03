@@ -4,7 +4,7 @@ import { Bookmark, Heart, MessageCircleMore, Share } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Separator } from "@/front/components/ui/separator";
-import type { RecentlyViewedEntry } from "@/front/hooks/use-recently-viewed";
+import type { RecentlyViewedEntry } from "@/front/stores/use-recently-viewed.store";
 
 function formatCount(n: number): string {
     if (n >= 1000) return `${(n / 1000).toFixed(1).replace(".0", "")}k`;
@@ -28,9 +28,9 @@ function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {
         <div className="flex flex-col gap-2 py-3">
             {/* Header: avatar + username + date */}
             <div className="flex items-center gap-2">
-                {entry.authorAvatarUrl ? (
+                {entry.authorImage ? (
                     <Image
-                        src={entry.authorAvatarUrl}
+                        src={entry.authorImage}
                         alt={entry.authorName}
                         width={28}
                         height={28}
@@ -46,23 +46,23 @@ function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {
             </div>
 
             {/* Body: excerpt */}
-            <Link href={`/post/${entry.id}`} className="group">
+            <Link href={`/community/${entry.categorySlug}/post/${entry.id}`} className="group">
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-snug line-clamp-2 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors">
                     {entry.content}
                 </p>
             </Link>
 
             {/* Footer: stats */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
                 {[
                     { icon: Heart, count: entry.upvoteCount },
                     { icon: MessageCircleMore, count: entry.commentCount },
-                    { icon: Bookmark, count: entry.saveCount },
-                    { icon: Share, count: 0 },
+                    { icon: Bookmark, },
+                    { icon: Share },
                 ].map(({ icon: Icon, count }, i) => (
                     <div key={i} className="flex items-center gap-1">
                         <Icon className="w-3.5 h-3.5 text-neutral-500" />
-                        <span className="text-[10px] text-neutral-400">{formatCount(count)}</span>
+                        <span className="text-[10px] text-neutral-400">{count ? formatCount(count) : null}</span>
                     </div>
                 ))}
             </div>

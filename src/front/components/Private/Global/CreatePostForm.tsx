@@ -26,8 +26,8 @@ import {
 } from "@/front/components/ui/select"
 import { Switch } from "@/front/components/ui/switch"
 import { Textarea } from "@/front/components/ui/textarea"
-import { useCategories } from "@/front/hooks/querys/use-categories"
-import { useCreatePost } from "@/front/hooks/querys/use-posts"
+import { useCategories } from "@/front/hooks/queries/use-categories"
+import { useCreatePost } from "@/front/hooks/queries/use-posts"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 

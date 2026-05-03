@@ -62,7 +62,6 @@ model Post {
   comments     Comment[]
   saves        PostSave[]
   votes        PostVote[]
-  hides        PostHide[]
   reports      PostReport[]
   author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   category     Category     @relation(fields: [categoryId], references: [id])
@@ -75,7 +74,10 @@ model Post {
 model Comment {
   id            String    @id @default(cuid())
   content       String
-  postId        String
+  imageUrl      String?
+  videoUrl      String?
+  postId        String?
+  resourceId    String?
   authorId      String
   parentId      String?
   upvoteCount   Int       @default(0)
@@ -85,9 +87,11 @@ model Comment {
   author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parent        Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   children      Comment[] @relation("CommentReplies")
-  post          Post      @relation(fields: [postId], references: [id])
+  post          Post?     @relation(fields: [postId], references: [id])
+  resource      Resource? @relation(fields: [resourceId], references: [id])
 
   @@index([postId])
+  @@index([resourceId])
   @@index([authorId])
   @@index([parentId])
 }
@@ -106,19 +110,6 @@ model PostSave {
 }
 
 model PostVote {
-  id        String   @id @default(cuid())
-  userId    String
-  postId    String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, postId])
-  @@index([userId])
-  @@index([postId])
-}
-
-model PostHide {
   id        String   @id @default(cuid())
   userId    String
   postId    String
@@ -156,4 +147,31 @@ model CategoryFollow {
   @@unique([userId, categoryId])
   @@index([userId])
   @@index([categoryId])
+}
+
+model UserFollow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  follower    User     @relation("Followers", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model UserReport {
+  id         String   @id @default(cuid())
+  reporterId String
+  reportedId String
+  reason     String?
+  createdAt  DateTime @default(now())
+  reporter   User     @relation("UserReporters", fields: [reporterId], references: [id], onDelete: Cascade)
+  reported   User     @relation("ReportedUsers", fields: [reportedId], references: [id], onDelete: Cascade)
+
+  @@unique([reporterId, reportedId])
+  @@index([reporterId])
+  @@index([reportedId])
 }

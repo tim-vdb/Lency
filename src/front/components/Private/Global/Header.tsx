@@ -1,7 +1,6 @@
 "use client";
 
 import { Bell } from "lucide-react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../../ui/breadcrumb";
 import { Separator } from "../../ui/separator";
 import { SheetTrigger } from "../../ui/sheet";
 import { NavUser } from "./Sidebar/nav-user";
@@ -10,6 +9,7 @@ import { cn } from "@/front/lib/utils";
 import { useSidebar } from "../../ui/sidebar";
 import { usePathname } from "next/navigation";
 import { CreateDropdown } from "./CreateDropdown";
+import BreadcrumbAuto from "./BreadcrumbAuto";
 
 export default function Header({ className }: { className?: string }) {
     const [isNotifs,] = useState(true)
@@ -43,19 +43,7 @@ export default function Header({ className }: { className?: string }) {
             className
         )}>
             <div className="flex items-center justify-between gap-2 px-4 w-full">
-                <Breadcrumb className="flex items-center gap-2">
-                    <BreadcrumbList>
-                        <BreadcrumbItem className="hidden md:block">
-                            <BreadcrumbLink href="#" className="text-black dark:text-white">
-                                Build Your Application
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator className="hidden md:block text-black dark:text-white" />
-                        <BreadcrumbItem>
-                            <BreadcrumbPage className="text-black dark:text-white">Data Fetching</BreadcrumbPage>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
+                <BreadcrumbAuto />
                 <div className="flex items-center gap-4">
                     <CreateDropdown />
                     <SheetTrigger className="cursor-pointer relative flex">

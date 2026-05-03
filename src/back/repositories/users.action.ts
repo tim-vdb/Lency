@@ -20,6 +20,81 @@ export const UsersAction = {
         }).catch(() => null);
     },
 
+    findByUsername: async (username: string) => {
+        return prisma.user.findUnique({
+            where: { username },
+            include: {
+                Posts: {
+                    where: { isPublished: true },
+                    include: { author: true, category: true },
+                    orderBy: { createdAt: "desc" },
+                },
+                projects: { orderBy: { createdAt: "desc" } },
+                badges: true,
+                categoryFollows: { include: { category: true } },
+                followers: {
+                    include: {
+                        follower: {
+                            select: {
+                                id: true,
+                                username: true,
+                                firstname: true,
+                                lastname: true,
+                                image: true,
+                            },
+                        },
+                    },
+                    orderBy: { createdAt: "desc" },
+                },
+                _count: {
+                    select: {
+                        Posts: true,
+                        projects: true,
+                        categoryFollows: true,
+                        badges: true,
+                        followers: true,
+                    },
+                },
+            },
+        });
+    },
+
+    toggleFollowUser: async (followerId: string, followingId: string) => {
+        const existing = await prisma.userFollow.findUnique({
+            where: { followerId_followingId: { followerId, followingId } },
+        });
+        if (existing) {
+            await prisma.userFollow.delete({
+                where: { followerId_followingId: { followerId, followingId } },
+            });
+            return { following: false };
+        }
+        await prisma.userFollow.create({ data: { followerId, followingId } });
+        return { following: true };
+    },
+
+    isFollowing: async (followerId: string, followingId: string) => {
+        const record = await prisma.userFollow.findUnique({
+            where: { followerId_followingId: { followerId, followingId } },
+        });
+        return !!record;
+    },
+
+    reportUser: async (reporterId: string, reportedId: string, reason?: string) => {
+        return prisma.userReport.upsert({
+            where: { reporterId_reportedId: { reporterId, reportedId } },
+            create: { reporterId, reportedId, reason },
+            update: { reason },
+        });
+    },
+
+    isReported: async (reporterId: string, reportedId: string) => {
+        const record = await prisma.userReport.findUnique({
+            where: { reporterId_reportedId: { reporterId, reportedId } },
+        });
+        return !!record;
+    },
+
     create: async (data: {
         email: string;
         name?: string;
@@ -41,7 +116,7 @@ export const UsersAction = {
             username?: string;
             phone?: string;
             bio?: string;
-            avatarUrl?: string;
+            image?: string;
             cv?: string;
             portfolio?: string;
             role?: "ADMIN" | "MEMBER";

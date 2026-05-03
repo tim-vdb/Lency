@@ -93,6 +93,8 @@ export interface CreateCommentInput {
     content: string;
     postId: string;
     parentId?: string;
+    imageUrl?: string | null;
+    videoUrl?: string | null;
 }
 
 export async function createComment(input: CreateCommentInput): Promise<CommentWithChildren> {
@@ -160,14 +162,6 @@ export async function toggleVotePost(postId: string): Promise<{ voted: boolean }
         throw new Error(error.error || 'Erreur lors du vote')
     }
     return response.json()
-}
-
-export async function hidePost(postId: string): Promise<void> {
-    const response = await fetch(`/api/posts/${postId}/hide`, { method: 'POST' })
-    if (!response.ok) {
-        const error = await response.json().catch(() => ({}))
-        throw new Error(error.error || 'Erreur lors du masquage du post')
-    }
 }
 
 export async function reportPost(postId: string): Promise<void> {
