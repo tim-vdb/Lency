@@ -144,7 +144,7 @@ async function main() {
             content: "Salut à tous ! Bienvenue sur la plateforme Lency. N'hésitez pas à vous présenter et à partager vos projets.",
             categoryId: catGeneral.id,
             authorId: admin.id,
-            format: "DESKTOP",
+            format: "TEXT",
             isPublished: true,
         },
     })
@@ -155,7 +155,7 @@ async function main() {
             content: "Quelles sont vos tendances design préférées cette année ? Personnellement je suis fan du retour au flat design avec des touches de glassmorphism.",
             categoryId: catDesign.id,
             authorId: user1.id,
-            format: "DESKTOP",
+            format: "TEXT",
             isPublished: true,
         },
     })
@@ -166,7 +166,7 @@ async function main() {
             content: "On utilise cette stack sur Lency et franchement c'est un game changer. Le combo Server Components + Prisma est vraiment performant.",
             categoryId: catDev.id,
             authorId: user2.id,
-            format: "DESKTOP",
+            format: "TEXT",
             isPublished: true,
         },
     })
@@ -177,7 +177,7 @@ async function main() {
             content: "Je viens de refaire mon portfolio, vous en pensez quoi ? Je suis preneur de tout retour constructif !",
             categoryId: catDesign.id,
             authorId: user1.id,
-            format: "MOBILE",
+            format: "TEXT",
             isPublished: true,
         },
     })

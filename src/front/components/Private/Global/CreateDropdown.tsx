@@ -22,11 +22,12 @@ import { Textarea } from "@/front/components/ui/textarea"
 import { cn } from "@/front/lib/utils"
 import { FileText, FolderKanban, Plus, Tag } from "lucide-react"
 import { useState } from "react"
+import { CreateCategoryForm } from "./CreateCategoryForm"
 import { CreatePostForm } from "./CreatePostForm"
 
 type CreateType = "post" | "project" | "category"
 
-// ─── Placeholder forms (project & category) ───────────────────────────────────
+// ─── Placeholder form (project) ───────────────────────────────────────────────
 
 function CreateProjectForm() {
     return (
@@ -57,36 +58,6 @@ function CreateProjectForm() {
             </div>
             <div className="flex justify-end pt-2">
                 <Button>Créer le projet</Button>
-            </div>
-        </div>
-    )
-}
-
-function CreateCategoryForm() {
-    return (
-        <div className="flex flex-col gap-5">
-            <div>
-                <h2 className="text-lg font-semibold">Créer une catégorie</h2>
-                <p className="text-sm text-muted-foreground">
-                    Organisez le contenu par thématique.
-                </p>
-            </div>
-            <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="cat-name">Nom</Label>
-                    <Input id="cat-name" placeholder="Ex : Photographie, Montage…" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="cat-description">Description</Label>
-                    <Textarea
-                        id="cat-description"
-                        placeholder="Décrivez cette catégorie…"
-                        className="min-h-32 resize-none"
-                    />
-                </div>
-            </div>
-            <div className="flex justify-end pt-2">
-                <Button>Créer la catégorie</Button>
             </div>
         </div>
     )
@@ -200,7 +171,7 @@ export function CreateDropdown() {
                                 value="category"
                                 className="flex-1 overflow-y-auto p-6 mt-0"
                             >
-                                <CreateCategoryForm />
+                                <CreateCategoryForm onSuccess={() => setModalOpen(false)} />
                             </TabsContent>
                         </Tabs>
                     </DialogContent>

@@ -1,12 +1,12 @@
 import Image from "next/image";
-import Link from "next/link";
 import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
 import { useRouter } from "next/navigation";
-import { Item, ItemDescription, ItemTitle } from "@/front/components/ui/item";
+import { Item, ItemTitle } from "@/front/components/ui/item";
+import { cn } from "@/front/lib/utils";
 
-export default function PostAvatar({ post }: { post: PostWithAuthorAndCategory }) {
+export default function PostAvatar({ post, className }: { post: PostWithAuthorAndCategory, className?: string }) {
     const router = useRouter()
-    const { author, category } = post;
+    const { author } = post;
     const displayName = author.firstname && author.lastname
         ? `${author.firstname} ${author.lastname}`
         : author.username ?? "Anonyme";
@@ -21,7 +21,7 @@ export default function PostAvatar({ post }: { post: PostWithAuthorAndCategory }
     return (
         <>
             <Item
-                className="flex items-center group hover:bg-neutral-50/20 p-2 rounded-md transition-colors cursor-pointer gap-0"
+                className={cn("flex items-center group hover:bg-neutral-50/20 p-2 rounded-md transition-colors cursor-pointer gap-0", className)}
                 onClick={(e) => { e.stopPropagation(); router.push(userHref ?? "#"); }}
             >
                 {author.image ? (
@@ -37,17 +37,7 @@ export default function PostAvatar({ post }: { post: PostWithAuthorAndCategory }
                         {initialName ? initialName : author.username ?? "Non renseigné"}
                     </div>
                 )}
-                <div className="flex flex-col">
-                    <ItemTitle className="text-sm">{displayName}</ItemTitle>
-                    <Link
-                        href={`/community/${category.slug}`}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <ItemDescription className="text-[10px] text-neutral-700 hover:underline w-fit">
-                            {category.name ? category.name : "Non catégorisé"}
-                        </ItemDescription>
-                    </Link>
-                </div>
+                <ItemTitle className="text-base">{displayName}</ItemTitle>
             </Item>
         </>
     );

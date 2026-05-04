@@ -4,7 +4,10 @@ export interface CreatePostInput {
     title: string
     content: string
     categoryId: string
-    format?: "DESKTOP" | "MOBILE" | "AUDIO" | "TEXT"
+    format?: "DESKTOP" | "MOBILE" | "TEXT" | "IMAGE" | "VIDEO" | "AUDIO"
+    imageUrl?: string
+    videoUrl?: string
+    audioUrl?: string
     isPublished?: boolean
 }
 

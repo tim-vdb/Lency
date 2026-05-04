@@ -4,7 +4,7 @@ import PostAudio from "@/front/components/Public/Community/Posts/PostAudio";
 import PostDesktop from "@/front/components/Public/Community/Posts/PostDesktop";
 import PostMobile from "@/front/components/Public/Community/Posts/PostMobile";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
-import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
+import { Avatar, AvatarFallback, } from "@/front/components/ui/avatar";
 import { Badge } from "@/front/components/ui/badge";
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card";
@@ -68,13 +68,6 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                 <div className="col-span-5 flex flex-col gap-4">
                     {/* En-tête catégorie */}
                     <div className="flex items-center gap-4">
-                        {/* Icône catégorie */}
-                        <Avatar className="w-14 h-14 border-4 border-background shadow-md">
-                            <AvatarImage src={category.iconUrl ?? undefined} alt={category.name} />
-                            <AvatarFallback className="bg-pink-100 text-pink-700 text-lg font-semibold">
-                                {creatorInitials}
-                            </AvatarFallback>
-                        </Avatar>
 
                         <div className="flex-1 min-w-0">
                             <h1 className="text-xl font-bold truncate">{category.name}</h1>
@@ -109,8 +102,8 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                     )}
                     {postsData?.map((post) => (
                         <div key={post.id}>
-                            {post.format === "DESKTOP" && <PostDesktop post={post} />}
-                            {post.format === "MOBILE" && <PostMobile post={post} />}
+                            {post.format === "IMAGE" && <PostDesktop post={post} />}
+                            {post.format === "VIDEO" && <PostMobile post={post} />}
                             {post.format === "AUDIO" && <PostAudio post={post} />}
                             {post.format === "TEXT" && <PostText post={post} />}
                         </div>

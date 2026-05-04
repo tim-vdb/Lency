@@ -70,8 +70,8 @@ export default function UserProfilePageClient({ username }: { username: string }
                                 )}
                                 {user.Posts.map((post) => (
                                     <div key={post.id}>
-                                        {post.format === "DESKTOP" && <PostDesktop post={post} />}
-                                        {post.format === "MOBILE" && <PostMobile post={post} />}
+                                        {post.format === "IMAGE" && <PostDesktop post={post} />}
+                                        {post.format === "VIDEO" && <PostMobile post={post} />}
                                         {post.format === "AUDIO" && <PostAudio post={post} />}
                                         {post.format === "TEXT" && <PostText post={post} />}
                                     </div>

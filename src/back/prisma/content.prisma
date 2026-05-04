@@ -52,6 +52,9 @@ model Post {
   categoryId   String
   authorId     String
   format       PostFormat   @default(DESKTOP)
+  imageUrl     String?
+  videoUrl     String?
+  audioUrl     String?
   viewCount    Int          @default(0)
   upvoteCount  Int          @default(0)
   commentCount Int          @default(0)

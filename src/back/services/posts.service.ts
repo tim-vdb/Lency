@@ -18,7 +18,10 @@ export const PostsService = {
         title: string;
         content: string;
         categoryId: string;
-        format?: "DESKTOP" | "MOBILE" | "AUDIO" | "TEXT";
+        format?: "DESKTOP" | "MOBILE" | "TEXT" | "IMAGE" | "VIDEO" | "AUDIO";
+        imageUrl?: string;
+        videoUrl?: string;
+        audioUrl?: string;
         isPublished?: boolean;
     }) => {
         const user = await getUser();
@@ -37,6 +40,9 @@ export const PostsService = {
         isPublished?: boolean;
         isLocked?: boolean;
         categoryId?: string;
+        imageUrl?: string;
+        videoUrl?: string;
+        audioUrl?: string;
     }) => {
         if (!data || Object.keys(data).length === 0) {
             throw new Error("No data to update");

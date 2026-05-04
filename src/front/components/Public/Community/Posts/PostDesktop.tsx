@@ -9,15 +9,14 @@ import { PostWithUserState } from "@/front/types/post.schema";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Bookmark, Ellipsis, Flag, Heart, MessageCircleMore, Share } from "lucide-react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRecentlyViewed } from "@/front/stores/use-recently-viewed.store";
 import { toast } from "sonner";
 import CommentRoot from "../Comments/CommentRoot";
 import Comments from "../Comments/Comments";
 import PostAvatar from "./PostAvatar";
 import { useRequireAuth } from "@/front/hooks/use-modals";
 import { useShare } from "@/front/hooks/use-share";
+import { IoArrowRedoOutline } from "react-icons/io5";
 
 interface PostDesktopProps {
     post: PostWithUserState;
@@ -31,10 +30,6 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
     const [isVoted, setIsVoted] = useState(post.isVoted ?? false);
     const [isSaved, setIsSaved] = useState(post.isSaved ?? false);
     const [upvoteCount, setUpvoteCount] = useState(post.upvoteCount);
-    const router = useRouter();
-    const pathname = usePathname();
-    const isOnSelfPage = pathname === `/community/${post.category.slug}/post/${post.id}`;
-    const addRecentlyViewed = useRecentlyViewed((s) => s.add);
 
     // Sync local state when navigating to a different post
     useEffect(() => {
@@ -104,13 +99,13 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
 
     return (
         <Card className={cn("gap-4 py-4 flex-1", className)}>
-            <CardContent className="relative" onClick={() => { if (!isOnSelfPage) { addRecentlyViewed(post); router.push(`/community/${post.category.slug}/post/${post.id}`); } }}>
-                <div className="absolute top-2 w-[calc(100%-5rem)] translate-x-3.5 rounded-md flex items-start justify-between bg-transparent z-10">
-                    <PostAvatar post={post} />
+            <CardContent className="relative">
+                <div className="flex items-center justify-between bg-transparent z-10">
+                    <PostAvatar post={post} className="pl-0" />
                     <Popover>
                         <PopoverTrigger asChild>
                             <button
-                                className="p-1 rounded-md hover:bg-neutral-100 transition-colors"
+                                className="p-1 rounded-md hover:bg-neutral-100 transition-colors cursor-pointer"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <Ellipsis className="w-6 h-6 text-neutral-500" />
@@ -118,7 +113,6 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                         </PopoverTrigger>
                         <PopoverContent className="w-44 p-1" align="end">
                             {menuItems.map(({ icon: Icon, label, className, onClick, filled }) => (
-
                                 <button
                                     key={label}
                                     className={cn(
@@ -127,23 +121,21 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                                     )}
                                     onClick={onClick}
                                 >
-
                                     <Icon className={cn("w-4 h-4", filled ? "fill-neutral-900 text-neutral-900" : "")} />
-
                                     {label}
                                 </button>
                             ))}
                         </PopoverContent>
                     </Popover>
                 </div>
-                <Image src={"/images/blog/img1.jpg"} alt={post.title} width={500} height={500} className={cn("w-full h-[450px] object-cover rounded-md", !isOnSelfPage ? "cursor-pointer" : "")} />
+                <Image src={"/images/blog/img1.jpg"} alt={post.title} width={500} height={500} className={cn("w-full h-[450px] object-cover rounded-md")} />
             </CardContent>
             <CardFooter className="flex flex-col items-start gap-2">
-                <div className="flex gap-2">
+                <div className="flex gap-4">
                     <div className="flex flex-col items-center gap-2">
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Heart className={cn("w-6 h-6 cursor-pointer transition-colors", isVoted ? "fill-red-500 text-red-500" : "")} onClick={(e) => { e.stopPropagation(); handleVote(); }} />
+                                <Heart className={cn("w-7 h-7 cursor-pointer transition-colors", isVoted ? "fill-red-500 text-red-500" : "")} onClick={(e) => { e.stopPropagation(); handleVote(); }} />
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Aimer</p>
@@ -154,7 +146,7 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                     <div className="flex flex-col items-center gap-2">
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <MessageCircleMore className="w-6 h-6 cursor-pointer" onClick={() => setOpenComments(!openComments)} />
+                                <MessageCircleMore className="w-7 h-7 cursor-pointer" onClick={() => setOpenComments(!openComments)} />
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Commentaires</p>
@@ -167,7 +159,7 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                     <div className="flex flex-col items-center gap-2">
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Bookmark className={cn("w-6 h-6 cursor-pointer transition-colors", isSaved ? "fill-neutral-900 text-neutral-900" : "")} onClick={(e) => { e.stopPropagation(); handleSave(); }} />
+                                <Bookmark className={cn("w-7 h-7 cursor-pointer transition-colors", isSaved ? "fill-neutral-900 text-neutral-900" : "")} onClick={(e) => { e.stopPropagation(); handleSave(); }} />
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Enregistrer</p>
@@ -177,7 +169,7 @@ export default function PostDesktop({ post, className }: PostDesktopProps) {
                     <div className="flex flex-col items-center gap-2">
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Share className="w-6 h-6 cursor-pointer" onClick={(e) => { e.stopPropagation(); share(`/community/${post.category.slug}/post/${post.id}`, post.title); }} />
+                                <IoArrowRedoOutline className="w-8 h-8 -translate-y-1 cursor-pointer" onClick={(e) => { e.stopPropagation(); share(`/community/${post.category.slug}/post/${post.id}`, post.title); }} />
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Partager</p>

@@ -16,14 +16,18 @@ export const PostsAction = {
         title: string;
         content: string;
         categoryId: string;
-        format?: "DESKTOP" | "MOBILE" | "AUDIO" | "TEXT";
+        format?: "DESKTOP" | "MOBILE" | "TEXT" | "IMAGE" | "VIDEO" | "AUDIO";
+        imageUrl?: string;
+        videoUrl?: string;
+        audioUrl?: string;
         isPublished?: boolean;
     }) => {
         return prisma.post.create({
             data: {
                 ...data,
                 authorId: userId,
-            }
+            },
+            include: { author: true, category: true },
         });
     },
 
@@ -33,6 +37,9 @@ export const PostsAction = {
         isPublished?: boolean;
         isLocked?: boolean;
         categoryId?: string;
+        imageUrl?: string;
+        videoUrl?: string;
+        audioUrl?: string;
     }) => {
         return prisma.post.update({
             where: { id },
