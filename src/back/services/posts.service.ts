@@ -15,10 +15,10 @@ export const PostsService = {
     },
 
     createPost: async (data: {
-        title: string;
         content: string;
         categoryId: string;
-        format?: "DESKTOP" | "MOBILE" | "TEXT" | "IMAGE" | "VIDEO" | "AUDIO";
+        format?: "TEXT" | "IMAGE" | "VIDEO" | "AUDIO";
+        orientation?: "LANDSCAPE" | "PORTRAIT";
         imageUrl?: string;
         videoUrl?: string;
         audioUrl?: string;
@@ -27,7 +27,6 @@ export const PostsService = {
         const user = await getUser();
         if (!user) throw new Error("Unauthorized");
 
-        if (!data.title) throw new Error("Title is required");
         if (!data.content) throw new Error("Content is required");
         if (!data.categoryId) throw new Error("Category is required");
 
@@ -35,7 +34,6 @@ export const PostsService = {
     },
 
     updatePost: async (id: string, data: {
-        title?: string;
         content?: string;
         isPublished?: boolean;
         isLocked?: boolean;

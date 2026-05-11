@@ -2,20 +2,13 @@ import Image from "next/image";
 import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
 import { useRouter } from "next/navigation";
 import { Item, ItemTitle } from "@/front/components/ui/item";
-import { cn } from "@/front/lib/utils";
+import { cn, getDisplayName, getInitialName } from "@/front/lib/utils";
 
 export default function PostAvatar({ post, className }: { post: PostWithAuthorAndCategory, className?: string }) {
     const router = useRouter()
     const { author } = post;
-    const displayName = author.firstname && author.lastname
-        ? `${author.firstname} ${author.lastname}`
-        : author.username ?? "Anonyme";
-
-    const initialName = [
-        author.firstname?.[0]?.toUpperCase(),
-        author.lastname?.[0]?.toUpperCase()
-    ].filter(Boolean).join("") || "?"
-
+    const displayName = getDisplayName(author);
+    const initialName = getInitialName(author);
     const userHref = author.username ? `/user/${author.username}` : null;
 
     return (
@@ -34,7 +27,7 @@ export default function PostAvatar({ post, className }: { post: PostWithAuthorAn
                     />
                 ) : (
                     <div className="w-8 h-8 rounded-full mr-2 bg-neutral-200 flex items-center justify-center text-xs font-medium group-hover:ring-2 group-hover:ring-neutral-300 transition-all">
-                        {initialName ? initialName : author.username ?? "Non renseigné"}
+                        {initialName}
                     </div>
                 )}
                 <ItemTitle className="text-base">{displayName}</ItemTitle>

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server"
 import path from "path"
 
 const ALLOWED_TYPES = [
-    "image/jpeg", "image/png", "image/webp", "image/gif",
+    "image/jpeg", "image/png", "image/webp", "image/gif", "image/avif", "image/heic", "image/heif", "image/tiff", "image/bmp", "image/x-icon",
     "video/mp4", "video/webm", "video/ogg",
     "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
 ]

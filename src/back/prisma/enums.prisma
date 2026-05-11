@@ -48,6 +48,11 @@ enum PostFormat {
   AUDIO
 }
 
+enum PostOrientation {
+  LANDSCAPE
+  PORTRAIT
+}
+
 enum ContactType {
   SUPPORT_TECHNIQUE
   CONTACT_GENERAL

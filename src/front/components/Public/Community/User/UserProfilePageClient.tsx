@@ -1,8 +1,8 @@
 "use client";
 
 import PostAudio from "@/front/components/Public/Community/Posts/PostAudio";
-import PostDesktop from "@/front/components/Public/Community/Posts/PostDesktop";
-import PostMobile from "@/front/components/Public/Community/Posts/PostMobile";
+import PostImage from "@/front/components/Public/Community/Posts/PostImage";
+import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
 import ProjectCard from "@/front/components/Public/Community/Projects/ProjectCard";
 import UserAchievementsCard from "@/front/components/Public/Community/User/UserAchievementsCard";
@@ -70,8 +70,8 @@ export default function UserProfilePageClient({ username }: { username: string }
                                 )}
                                 {user.Posts.map((post) => (
                                     <div key={post.id}>
-                                        {post.format === "IMAGE" && <PostDesktop post={post} />}
-                                        {post.format === "VIDEO" && <PostMobile post={post} />}
+                                        {post.format === "IMAGE" && <PostImage post={post} />}
+                                        {post.format === "VIDEO" && <PostVideo post={post} />}
                                         {post.format === "AUDIO" && <PostAudio post={post} />}
                                         {post.format === "TEXT" && <PostText post={post} />}
                                     </div>

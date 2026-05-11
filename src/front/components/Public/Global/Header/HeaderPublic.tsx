@@ -65,22 +65,7 @@ export default function HeaderPublic() {
             </Button>
           )}
           <ToggleDarkMode className='w-fit' />
-          {user && <NavUser />}
-          {!user && (
-            <>
-              <Button variant="default" size="sm" className="ml-4">
-                <Link href="/login">
-                  Login
-                </Link>
-              </Button>
-
-              <Button variant="default" size="sm" className="ml-4">
-                <Link href="/sign-up">
-                  Sign Up
-                </Link>
-              </Button>
-            </>
-          )}
+          <NavUser />
         </div>
       </div>
     </header>

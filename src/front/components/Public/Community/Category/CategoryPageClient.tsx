@@ -1,8 +1,8 @@
 "use client";
 
 import PostAudio from "@/front/components/Public/Community/Posts/PostAudio";
-import PostDesktop from "@/front/components/Public/Community/Posts/PostDesktop";
-import PostMobile from "@/front/components/Public/Community/Posts/PostMobile";
+import PostImage from "@/front/components/Public/Community/Posts/PostImage";
+import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
 import { Avatar, AvatarFallback, } from "@/front/components/ui/avatar";
 import { Badge } from "@/front/components/ui/badge";
@@ -102,8 +102,8 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                     )}
                     {postsData?.map((post) => (
                         <div key={post.id}>
-                            {post.format === "IMAGE" && <PostDesktop post={post} />}
-                            {post.format === "VIDEO" && <PostMobile post={post} />}
+                            {post.format === "IMAGE" && <PostImage post={post} />}
+                            {post.format === "VIDEO" && <PostVideo post={post} />}
                             {post.format === "AUDIO" && <PostAudio post={post} />}
                             {post.format === "TEXT" && <PostText post={post} />}
                         </div>

@@ -5,7 +5,8 @@ export async function GET() {
     try {
         const data = await PostsService.findAllPosts();
         return NextResponse.json({ posts: data });
-    } catch {
+    } catch (e) {
+        console.error("[GET /api/posts]", e);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
@@ -21,7 +22,6 @@ export async function POST(req: NextRequest) {
                 return NextResponse.json({ error: error.message }, { status: 401 });
             }
             if ([
-                "Title is required",
                 "Content is required",
                 "Category is required",
             ].includes(error.message)) {

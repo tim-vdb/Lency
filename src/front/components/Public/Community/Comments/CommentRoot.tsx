@@ -64,7 +64,7 @@ export default function CommentRoot({ target }: { target: CommentTarget }) {
     }
 
     return (
-        <Item variant={"outline"} className="w-full text-md border-2 p-0">
+        <Item variant={"outline"} className="w-full text-md border-2 px-3 py-2">
             <ItemContent>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2">
@@ -79,7 +79,7 @@ export default function CommentRoot({ target }: { target: CommentTarget }) {
                                                 {...field}
                                                 type="text"
                                                 placeholder="Rejoindre la conversation"
-                                                className="w-full text-sm border border-neutral-200 rounded-md p-4 outline-none focus:ring-2 focus:ring-neutral-300 transition-all"
+                                                className="w-full py-2 text-sm rounded-md outline-none transition-all"
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -95,7 +95,7 @@ export default function CommentRoot({ target }: { target: CommentTarget }) {
                                 Envoyer
                             </button>
                         </div>
-                        <div className="flex items-center gap-3 pl-1">
+                        <div className="flex items-center gap-3">
                             <ImageKitUploader
                                 kind="image"
                                 value={imageUrl}

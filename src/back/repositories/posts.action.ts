@@ -13,10 +13,10 @@ export const PostsAction = {
     },
 
     create: async (userId: string, data: {
-        title: string;
         content: string;
         categoryId: string;
-        format?: "DESKTOP" | "MOBILE" | "TEXT" | "IMAGE" | "VIDEO" | "AUDIO";
+        format?: "TEXT" | "IMAGE" | "VIDEO" | "AUDIO";
+        orientation?: "LANDSCAPE" | "PORTRAIT";
         imageUrl?: string;
         videoUrl?: string;
         audioUrl?: string;

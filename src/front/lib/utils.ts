@@ -28,3 +28,19 @@ export function timeAgo(date: Date | string): string {
   if (months < 12) return `${months} mois`;
   return `${Math.floor(months / 12)} an`;
 }
+
+export function getDisplayName(author: { firstname?: string | null; lastname?: string | null; name?: string | null; username?: string | null }): string {
+  return author.firstname && author.lastname
+    ? `${author.firstname} ${author.lastname}`
+    : (author.name || author.username) ?? "Anonyme";
+}
+
+export function getInitialName(author: { firstname?: string | null; lastname?: string | null; name?: string | null; username?: string | null }): string {
+  return author.firstname && author.lastname
+    ? [author.firstname[0]?.toUpperCase(), author.lastname[0]?.toUpperCase()].join("")
+    : (author.name || author.username || "")
+        .split(" ")
+        .slice(0, 2)
+        .map(word => word[0]?.toUpperCase())
+        .join("") || "?";
+}

@@ -26,7 +26,6 @@ import {
     FormLabel,
     FormMessage,
 } from "@/front/components/ui/form"
-import { Input } from "@/front/components/ui/input"
 import {
     Select,
     SelectContent,
@@ -45,7 +44,7 @@ import { cn } from "@/front/lib/utils"
 const CONTENT_TYPES = ["TEXT", "IMAGE", "VIDEO", "AUDIO"] as const
 type ContentType = (typeof CONTENT_TYPES)[number]
 
-type PostFormat = "DESKTOP" | "MOBILE" | "TEXT" | "IMAGE" | "VIDEO" | "AUDIO"
+type PostOrientation = "LANDSCAPE" | "PORTRAIT"
 
 type ContentConfig = {
     label: string
@@ -65,13 +64,14 @@ const CONTENT_CONFIG: Record<ContentType, ContentConfig> = {
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 
-const ALL_FORMATS = ["DESKTOP", "MOBILE", "TEXT", "IMAGE", "VIDEO", "AUDIO"] as const
+const ALL_FORMATS = ["TEXT", "IMAGE", "VIDEO", "AUDIO"] as const
+const ALL_ORIENTATIONS = ["LANDSCAPE", "PORTRAIT"] as const
 
 const CreatePostSchema = z.object({
-    title:       z.string().min(3, "Minimum 3 caractères").max(200, "Maximum 200 caractères"),
     content:     z.string().min(1, "Le contenu est requis"),
     categoryId:  z.string().min(1, "Choisissez une catégorie"),
     format:      z.enum(ALL_FORMATS),
+    orientation: z.enum(ALL_ORIENTATIONS).optional(),
     isPublished: z.boolean(),
     imageUrl:    z.string().optional(),
     videoUrl:    z.string().optional(),
@@ -102,22 +102,13 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps) {
     const form = useForm<CreatePostValues>({
         resolver: zodResolver(CreatePostSchema),
         defaultValues: {
-            title: "",
             content: "",
             categoryId: "",
-            format: "TEXT",
+            format: "TEXT" as const,
+            orientation: undefined,
             isPublished: false,
         },
     })
-
-    // ── Format resolution ─────────────────────────────────────────────────────
-    // TEXT / AUDIO → stored as-is
-    // IMAGE / VIDEO → orientation takes priority: DESKTOP or MOBILE
-
-    function resolveFormat(type: ContentType, mobile: boolean): PostFormat {
-        if (type === "TEXT" || type === "AUDIO") return type
-        return mobile ? "MOBILE" : "DESKTOP"
-    }
 
     // ── Media upload ──────────────────────────────────────────────────────────
 
@@ -154,12 +145,13 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps) {
         clearMedia()
         setContentType(type)
         setIsMobile(false)
-        form.setValue("format", resolveFormat(type, false))
+        form.setValue("format", type)
+        form.setValue("orientation", CONTENT_CONFIG[type].hasOrientation ? "LANDSCAPE" : undefined)
     }
 
     function toggleOrientation(mobile: boolean) {
         setIsMobile(mobile)
-        form.setValue("format", resolveFormat(contentType, mobile))
+        form.setValue("orientation", mobile ? "PORTRAIT" : "LANDSCAPE")
     }
 
     // ── Submit ────────────────────────────────────────────────────────────────
@@ -322,21 +314,6 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps) {
                             />
                         </div>
                     )}
-
-                    {/* ── Titre ── */}
-                    <FormField
-                        control={form.control}
-                        name="title"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Titre</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Donnez un titre à votre post…" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
 
                     {/* ── Contenu / Description ── */}
                     <FormField

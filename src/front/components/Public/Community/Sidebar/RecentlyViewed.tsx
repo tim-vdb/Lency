@@ -8,7 +8,6 @@ import type { RecentlyViewedEntry } from "@/front/stores/use-recently-viewed.sto
 import type { PostWithAuthorAndCategory } from "@/front/types/post.schema";
 import { Card, CardContent, CardFooter, CardHeader } from "@/front/components/ui/card";
 import Image from "next/image";
-import { cn } from "@/front/lib/utils";
 import PostAvatar from "../Posts/PostAvatar";
 
 function formatCount(n: number): string {
@@ -33,7 +32,7 @@ function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {
 
     return (
         <Card
-            className="flex justify-between items-center flex-row gap-2 p-4 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+            className="flex justify-between items-center flex-row gap-2 w-80 p-4 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
             onClick={() => router.push(postHref)}
         >
             <div className="flex flex-col gap-3">
@@ -63,7 +62,7 @@ function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {
                         />
                     </div>
                     <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-snug line-clamp-2">
-                        {entry.title}
+                        {entry.content}
                     </p>
                 </CardContent>
 
@@ -83,7 +82,9 @@ function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {
                     </div>
                 </CardFooter>
             </div>
-            <Image src={"/images/blog/img1.jpg"} alt={entry.title} width={500} height={500} className={cn("w-32 h-full object-cover rounded-md")} />
+            {entry.imageUrl && (
+                <Image src={entry.imageUrl} alt={entry.content} width={500} height={500} className="w-24 h-24 object-cover rounded-md shrink-0" />
+            )}
         </Card>
     );
 }

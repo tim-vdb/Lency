@@ -35,11 +35,11 @@ export default function Header({ className }: { className?: string }) {
     return (
         <header className={cn(
             "flex h-14 shrink-0 items-center gap-2 border dark:border-white backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-black/40 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 mr-1.5",
-            isScrolled && "rounded-t-none bg-white",
+            isScrolled && "rounded-t-none",
             isFixedLayout && "fixed top-2 z-40",
             isFixedLayout && state === "expanded"
-                ? "left-[calc(14.3rem)] right-2"
-                : isFixedLayout && "left-16.5 right-2",
+                ? "md:left-[14.3rem] md:right-2"
+                : isFixedLayout && "md:left-16.5 md:right-2",
             className
         )}>
             <div className="flex items-center justify-between gap-2 px-4 w-full">

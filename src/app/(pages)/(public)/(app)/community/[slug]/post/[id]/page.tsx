@@ -1,4 +1,7 @@
-import PostDesktop from "@/front/components/Public/Community/Posts/PostDesktop";
+import PostImage from "@/front/components/Public/Community/Posts/PostImage";
+import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
+import PostAudio from "@/front/components/Public/Community/Posts/PostAudio";
+import PostText from "@/front/components/Public/Community/Posts/PostText";
 import { PostsService } from "@/back/services/posts.service";
 import PostsInfos from "@/front/components/Public/Community/Sidebar/PostsInfos";
 import BreadcrumbOverride from "@/front/components/Private/Global/BreadcrumbOverride";
@@ -18,8 +21,11 @@ export default async function PostPage({ params }: PostPageProps) {
     return (
         <div className="flex gap-2">
             <BreadcrumbOverride segment={slug} label={post.category.name} type="category" />
-            <BreadcrumbOverride segment={post.id} label={post.title} />
-            <PostDesktop post={post} />
+            <BreadcrumbOverride segment={post.id} label={post.content.slice(0, 40)} />
+            {post.format === "IMAGE" && <PostImage post={post} />}
+            {post.format === "VIDEO" && <PostVideo post={post} />}
+            {post.format === "AUDIO" && <PostAudio post={post} />}
+            {post.format === "TEXT" && <PostText post={post} />}
             <PostsInfos post={post} />
         </div>
     );

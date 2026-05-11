@@ -65,12 +65,11 @@ export default function PostsBlock() {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-xs font-medium text-neutral-800 line-clamp-1">{post.title}</p>
-                                    <p className="text-xs 2xl:text-sm text-neutral-500 line-clamp-1 max-w-md">{post.content}</p>
+                                    <p className="text-xs font-medium text-neutral-800 line-clamp-1">{post.content}</p>
                                 </div>
                                 <Image
                                     src={"/images/blog/img1.jpg"}
-                                    alt={post.title}
+                                    alt="Post"
                                     width={100}
                                     height={100}
                                     className="w-18 2xl:w-20 h-full 2xl:h-20 bg-contain rounded-md"

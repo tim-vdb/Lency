@@ -6,11 +6,11 @@ import type { PostWithUserState } from "@/front/types/post.schema";
 
 export interface RecentlyViewedEntry {
     id: string;
-    title: string;
     content: string;
     categorySlug: string;
     authorName: string;
     authorImage: string | null;
+    imageUrl: string | null;
     upvoteCount: number;
     commentCount: number;
     saveCount: number;
@@ -36,11 +36,11 @@ export const useRecentlyViewed = create<RecentlyViewedStore>()(
 
                 const entry: RecentlyViewedEntry = {
                     id: post.id,
-                    title: post.title,
                     content: post.content,
                     categorySlug: post.category.slug,
                     authorName,
                     authorImage: author.image ?? null,
+                    imageUrl: post.imageUrl ?? null,
                     upvoteCount: post.upvoteCount,
                     commentCount: post.commentCount,
                     saveCount: post.saveCount,
