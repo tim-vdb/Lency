@@ -3,7 +3,7 @@ import { Skeleton } from "@/front/components/ui/skeleton";
 
 export default function PostSkeleton() {
     return (
-        <Card>
+        <Card className="w-full">
             <CardContent className="flex flex-col gap-4 p-5">
                 {/* Avatar + name */}
                 <div className="flex items-center gap-2.5">

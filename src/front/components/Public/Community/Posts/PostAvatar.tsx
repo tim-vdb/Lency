@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
 import { useRouter } from "next/navigation";
-import { Item, ItemTitle } from "@/front/components/ui/item";
+import { Item } from "@/front/components/ui/item";
 import { cn, getDisplayName, getInitialName } from "@/front/lib/utils";
 
 export default function PostAvatar({ post, className }: { post: PostWithAuthorAndCategory, className?: string }) {
@@ -14,23 +14,25 @@ export default function PostAvatar({ post, className }: { post: PostWithAuthorAn
     return (
         <>
             <Item
-                className={cn("flex items-center group hover:bg-neutral-50/20 p-2 rounded-md transition-colors cursor-pointer gap-0", className)}
+                className={cn("flex flex-nowrap items-center group hover:bg-neutral-50/20 p-0 rounded-md transition-colors cursor-pointer gap-2 min-w-0", className)}
                 onClick={(e) => { e.stopPropagation(); router.push(userHref ?? "#"); }}
             >
-                {author.image ? (
-                    <Image
-                        src={author.image}
-                        alt={displayName}
-                        width={100}
-                        height={100}
-                        className="w-8 h-8 rounded-full mr-2 group-hover:ring-2 group-hover:ring-neutral-300 transition-all"
-                    />
-                ) : (
-                    <div className="w-8 h-8 rounded-full mr-2 bg-neutral-200 flex items-center justify-center text-xs font-medium group-hover:ring-2 group-hover:ring-neutral-300 transition-all">
-                        {initialName}
-                    </div>
-                )}
-                <ItemTitle className="text-base">{displayName}</ItemTitle>
+                <div className="shrink-0">
+                    {author.image ? (
+                        <Image
+                            src={author.image}
+                            alt={displayName}
+                            width={100}
+                            height={100}
+                            className="w-8 h-8 rounded-full group-hover:ring-2 group-hover:ring-neutral-300 transition-all"
+                        />
+                    ) : (
+                        <div className="w-8 h-8 rounded-full bg-neutral-200 flex items-center justify-center text-xs font-medium group-hover:ring-2 group-hover:ring-neutral-300 transition-all">
+                            {initialName}
+                        </div>
+                    )}
+                </div>
+                <span className="text-base font-medium truncate min-w-0 overflow-hidden">{displayName}</span>
             </Item>
         </>
     );

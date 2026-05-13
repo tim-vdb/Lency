@@ -11,6 +11,7 @@ import Comments from "../Comments/Comments";
 import PostActionsPopup from "./PostActionsPopup";
 import PostActions from "./PostActions";
 import PostAvatar from "./PostAvatar";
+import ExpandableText from "./ExpandableText";
 
 interface PostAudioProps {
     post: PostWithUserState;
@@ -116,7 +117,7 @@ function AudioPlayer({ audioUrl }: { audioUrl?: string }) {
 export default function PostAudio({ post, audioUrl, className }: PostAudioProps) {
     const { category } = post;
     const postState = usePostState(post);
-    const { expanded, setExpanded, openComments } = postState;
+    const { openComments } = postState;
 
     return (
         <Card className={cn("relative p-12", className)}>
@@ -127,20 +128,7 @@ export default function PostAudio({ post, audioUrl, className }: PostAudioProps)
                     <PostActionsPopup post={post} {...postState} />
                 </div>
 
-                {/* Text content */}
-                <div>
-                    <p className={cn("text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed", !expanded && "line-clamp-3")}>
-                        {post.content}
-                    </p>
-                    {!expanded && (
-                        <button
-                            onClick={() => setExpanded(true)}
-                            className="text-sm text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors mt-0.5"
-                        >
-                            Voir plus
-                        </button>
-                    )}
-                </div>
+                <ExpandableText content={post.content} lineClamp={3} />
 
                 {/* Audio player */}
                 <AudioPlayer audioUrl={audioUrl ?? post.audioUrl ?? undefined} />

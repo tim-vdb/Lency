@@ -17,7 +17,7 @@ export function AppShell({ user, children }: { user: User | null; children: Reac
                         <AppSidebar />
                         <SidebarInset className="relative bg-transparent">
                             <Header />
-                            <main className="pt-16 h-[calc(100vh-1rem)] overflow-y-auto pr-2">
+                            <main className="pt-2 md:pt-16 h-[calc(100vh-1rem)] overflow-y-auto pr-2">
                                 {children}
                             </main>
                         </SidebarInset>

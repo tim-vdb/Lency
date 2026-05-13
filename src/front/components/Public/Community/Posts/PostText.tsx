@@ -9,6 +9,7 @@ import Comments from "../Comments/Comments";
 import PostActions from "./PostActions";
 import PostActionsPopup from "./PostActionsPopup";
 import PostAvatar from "./PostAvatar";
+import ExpandableText from "./ExpandableText";
 
 interface PostTextProps {
     post: PostWithUserState;
@@ -18,7 +19,7 @@ interface PostTextProps {
 export default function PostText({ post, className }: PostTextProps) {
     const { category } = post;
     const postState = usePostState(post);
-    const { expanded, setExpanded, openComments } = postState;
+    const { openComments } = postState;
 
     return (
         <Card className={cn("relative p-12", className)}>
@@ -28,19 +29,7 @@ export default function PostText({ post, className }: PostTextProps) {
                     <PostActionsPopup post={post} {...postState} />
                 </div>
 
-                <div>
-                    <p className={cn("text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed", !expanded && "line-clamp-3")}>
-                        {post.content}
-                    </p>
-                    {!expanded && (
-                        <button
-                            onClick={() => setExpanded(true)}
-                            className="text-sm text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors mt-0.5"
-                        >
-                            Voir plus
-                        </button>
-                    )}
-                </div>
+                <ExpandableText content={post.content} lineClamp={3} />
 
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col w-full gap-3">

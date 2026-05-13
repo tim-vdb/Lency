@@ -16,8 +16,8 @@ import type { PostWithUserState } from "@/front/types/post.schema";
 
 function PostListSkeleton() {
     return (
-        <div className="flex flex-col gap-4 w-full">
-            {Array.from({ length: 4 }).map((_, i) => (
+        <div className="flex flex-col gap-4 max-w-3xl">
+            {Array.from({ length: 5 }).map((_, i) => (
                 <PostSkeleton key={i} />
             ))}
         </div>
@@ -26,7 +26,7 @@ function PostListSkeleton() {
 
 function PostList({ posts }: { posts: PostWithUserState[] }) {
     return (
-        <div className="flex flex-col gap-4 w-full">
+        <div className="flex flex-col gap-4 max-w-3xl">
             {posts.map((post) => (
                 <div key={post.id}>
                     {post.format === "IMAGE" && <PostImage post={post} />}
@@ -51,16 +51,15 @@ export default function CommunityPage() {
     }, [posts])
 
     return (
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-5xl mx-auto">
             <Tabs defaultValue="general" className="flex flex-col gap-4 w-full">
-                <TabsList className="w-fit justify-start px-1">
+                <TabsList className="w-fit justify-start p-0">
                     <TabsTrigger value="general">Général</TabsTrigger>
                     <TabsTrigger value="popular">Populaire</TabsTrigger>
                     <TabsTrigger value="following">Suivis</TabsTrigger>
                 </TabsList>
-                <div className="flex lg:gap-4 items-start w-full">
-                    {/* Colonne posts */}
-                    <div className="flex-1">
+                <div className="lg:flex lg:gap-4 items-start justify-center w-full">
+                    <div className="">
                         <TabsContent value="general" className="flex flex-col gap-4 mt-0">
                             {isPending && <PostListSkeleton />}
                             {!isPending && posts?.length === 0 && <p>Aucun post trouvé.</p>}
@@ -82,8 +81,7 @@ export default function CommunityPage() {
                         </TabsContent>
                     </div>
 
-                    {/* Sidebar */}
-                    <div className="sticky top-0.5">
+                    <div className="sticky top-0.5 w-60">
                         <Card className="hidden lg:block shrink-0">
                             <CardHeader className="flex items-center justify-between gap-2">
                                 <CardTitle>Récemment vu</CardTitle>
