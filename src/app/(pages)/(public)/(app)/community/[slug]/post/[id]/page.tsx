@@ -19,14 +19,14 @@ export default async function PostPage({ params }: PostPageProps) {
     }
 
     return (
-        <div className="flex gap-2">
+        <div className="flex gap-4 max-w-6xl mx-auto">
             <BreadcrumbOverride segment={slug} label={post.category.name} type="category" />
             <BreadcrumbOverride segment={post.id} label={post.content.slice(0, 40)} />
             {post.format === "IMAGE" && <PostImage post={post} />}
             {post.format === "VIDEO" && <PostVideo post={post} />}
             {post.format === "AUDIO" && <PostAudio post={post} />}
             {post.format === "TEXT" && <PostText post={post} />}
-            <PostsInfos post={post} />
+            <PostsInfos post={post} className="hidden xl:flex" />
         </div>
     );
 }

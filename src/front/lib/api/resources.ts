@@ -1,6 +1,20 @@
 import { CommentWithChildren } from "@/front/types/post.schema";
 import { ResourceWithUserState } from "@/front/types/resource.schema";
 
+export async function fetchSavedResources(): Promise<ResourceWithUserState[]> {
+    const response = await fetch("/api/resources/saved", { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur lors de la récupération des ressources enregistrées");
+    const data = await response.json();
+    return data.resources;
+}
+
+export async function fetchResourcesByAuthor(authorId: string): Promise<ResourceWithUserState[]> {
+    const response = await fetch(`/api/resources?authorId=${authorId}`, { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur lors de la récupération des ressources");
+    const data = await response.json();
+    return data.resources;
+}
+
 export async function fetchResources(categoryId?: string): Promise<ResourceWithUserState[]> {
     const url = categoryId ? `/api/resources?categoryId=${categoryId}` : "/api/resources";
     const response = await fetch(url, { method: "GET", cache: "no-store" });
@@ -85,6 +99,31 @@ export interface CreateResourceCommentInput {
     parentId?: string;
     imageUrl?: string | null;
     videoUrl?: string | null;
+}
+
+export interface CreateResourceInput {
+    title: string;
+    description?: string;
+    type: "ASSET" | "TUTORIAL" | "LINK";
+    url?: string;
+    imageUrl?: string;
+    videoUrl?: string;
+    audioUrl?: string;
+    categoryId: string;
+}
+
+export async function createResource(input: CreateResourceInput): Promise<ResourceWithUserState> {
+    const response = await fetch("/api/resources", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+    });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la création de la ressource");
+    }
+    const data = await response.json();
+    return data.resource;
 }
 
 export async function createResourceComment(

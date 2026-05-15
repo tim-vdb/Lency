@@ -28,6 +28,7 @@ export type UserProfileBase = Prisma.UserGetPayload<{
                 followers: true;
             };
         };
+        socialLinks: true;
     };
 }>;
 

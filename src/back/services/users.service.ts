@@ -189,4 +189,16 @@ export const UsersService = {
         const account = await UsersAction.findCredentialAccount(userId);
         return !!account?.password;
     },
+
+    upsertSocialLink: async (platform: string, url: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        return UsersAction.upsertSocialLink(user.id, platform, url);
+    },
+
+    deleteSocialLink: async (platform: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        return UsersAction.deleteSocialLink(user.id, platform);
+    },
 };

@@ -1,29 +1,13 @@
 "use client";
 
-import { Bookmark, Heart, MessageCircleMore, Share } from "lucide-react";
+import { Heart, MessageCircleMore } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Separator } from "@/front/components/ui/separator";
 import type { RecentlyViewedEntry } from "@/front/stores/use-recently-viewed.store";
-import type { PostWithAuthorAndCategory } from "@/front/types/post.schema";
-import { Card, CardContent, CardFooter, CardHeader } from "@/front/components/ui/card";
 import Image from "next/image";
+import { Button } from "@/front/components/ui/button";
 import PostAvatar from "../Posts/PostAvatar";
-
-function formatCount(n: number): string {
-    if (n >= 1000) return `${(n / 1000).toFixed(1).replace(".0", "")}k`;
-    return String(n);
-}
-
-function timeAgo(isoDate: string): string {
-    const diff = Date.now() - new Date(isoDate).getTime();
-    const minutes = Math.floor(diff / 60_000);
-    if (minutes < 1) return "À l'instant";
-    if (minutes < 60) return `il y a ${minutes}min`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `il y a ${hours}h`;
-    return `il y a ${Math.floor(hours / 24)}j`;
-}
+import { formatCount, timeAgo } from "@/front/lib/utils";
 
 function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {
     const router = useRouter();
@@ -31,61 +15,136 @@ function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {
     const categoryHref = `/community/${entry.categorySlug}`;
 
     return (
-        <Card
-            className="flex justify-between items-center flex-row gap-2 w-80 p-4 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+        <div
+            className="flex gap-2 px-2 py-2 min-h-30 cursor-pointer border-t rounded-none border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 transition-colors"
             onClick={() => router.push(postHref)}
         >
-            <div className="flex flex-col gap-3">
-                <CardHeader className="flex px-0">
-                    <span className="text-[10px] text-neutral-400 shrink-0">{timeAgo(entry.viewedAt)}</span>
-                    <span className="text-[10px] text-neutral-400 shrink-0">-</span>
-                    <Link
-                        href={categoryHref}
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-[10px] text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 hover:underline shrink-0 transition-colors"
-                    >
-                        {entry.categorySlug}
-                    </Link>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2 px-0">
-                    <div onClick={(e) => e.stopPropagation()}>
+            <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">
+                {entry.imageUrl && (
+                    <div className="flex flex-col gap-1.5">
                         <PostAvatar
-                            post={{
-                                author: {
+                            author={{
+                                image: entry.authorImage,
+                                firstname: entry.authorName.split(" ")[0] ?? null,
+                                lastname: entry.authorName.split(" ").slice(1).join(" ") || null,
+                                username: entry.authorName,
+                            }}
+                            className="[&_img]:h-6 [&_img]:w-6 [&_span]:text-sm"
+                        />
+                        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug line-clamp-2">
+                            {entry.content || <span className="italic text-neutral-400">Sans texte</span>}
+                        </p>
+                    </div>
+                )}
+                {!entry.imageUrl && (
+                    <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center justify-between">
+                            <PostAvatar
+                                author={{
                                     image: entry.authorImage,
                                     firstname: entry.authorName.split(" ")[0] ?? null,
                                     lastname: entry.authorName.split(" ").slice(1).join(" ") || null,
-                                    username: entry.authorName,
-                                },
-                            } as unknown as PostWithAuthorAndCategory}
-                            className="p-0"
-                        />
+                                    username: entry.authorUsername,
+                                }}
+                                className="[&_img]:h-6 [&_img]:w-6 [&_span]:text-sm"
+                            />
+                            <span className="text-[10px] text-neutral-400">{timeAgo(entry.viewedAt)}</span>
+                        </div>
+                        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug line-clamp-2">
+                            {entry.content || <span className="italic text-neutral-400">Sans texte</span>}
+                        </p>
                     </div>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-snug line-clamp-2">
-                        {entry.content}
-                    </p>
-                </CardContent>
+                )}
 
-                <CardFooter className="px-0">
-                    <div className="flex items-center gap-2">
-                        {[
-                            { icon: Heart, count: entry.upvoteCount },
-                            { icon: MessageCircleMore, count: entry.commentCount },
-                            { icon: Bookmark },
-                            { icon: Share },
-                        ].map(({ icon: Icon, count }, i) => (
-                            <div key={i} className="flex items-center gap-1">
-                                <Icon className="w-3.5 h-3.5 text-neutral-500" />
-                                <span className="text-[10px] text-neutral-400">{count ? formatCount(count) : null}</span>
+                {entry.imageUrl && (
+                    <Button asChild variant="outline" className="p-0.5 px-1 h-fit border border-black hover:bg-neutral-300 rounded-sm w-fit">
+                        <Link
+                            href={categoryHref}
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-[10px] transition-colors truncate capitalize"
+                        >
+                            {entry.categorySlug}
+                        </Link>
+                    </Button>
+                )}
+                {!entry.imageUrl && (
+                    <div className="flex items-center justify-between">
+                        <Button asChild variant="outline" className="p-0.5 px-1 h-fit border border-black hover:bg-neutral-300 rounded-sm w-fit">
+                            <Link
+                                href={categoryHref}
+                                onClick={(e) => e.stopPropagation()}
+                                className="text-[10px] transition-colors truncate capitalize"
+                            >
+                                {entry.categorySlug}
+                            </Link>
+                        </Button>
+
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <div className="flex items-center gap-1">
+                                <Heart className="w-2.5 h-2.5 text-neutral-400" />
+                                <span className="text-[10px] text-neutral-400 tabular-nums">{formatCount(entry.upvoteCount)}</span>
                             </div>
-                        ))}
+                            <div className="flex items-center gap-1">
+                                <MessageCircleMore className="w-2.5 h-2.5 text-neutral-400" />
+                                <span className="text-[10px] text-neutral-400 tabular-nums">{formatCount(entry.commentCount)}</span>
+                            </div>
+                        </div>
                     </div>
-                </CardFooter>
+                )}
             </div>
+
             {entry.imageUrl && (
-                <Image src={entry.imageUrl} alt={entry.content} width={500} height={500} className="w-24 h-24 object-cover rounded-md shrink-0" />
+                <div className="flex flex-col justify-between items-end gap-2">
+                    <span className="text-[10px] text-neutral-400 translate-y-2">{timeAgo(entry.viewedAt)}</span>
+                    <Image
+                        src={entry.imageUrl}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className="w-12 h-12 rounded-lg object-cover shrink-0 mt-0.5"
+                    />
+
+                    <div className="flex items-center gap-2 flex-wrap">
+                        <div className="flex items-center gap-1">
+                            <Heart className="w-2.5 h-2.5 text-neutral-400" />
+                            <span className="text-[10px] text-neutral-400 tabular-nums">{formatCount(entry.upvoteCount)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <MessageCircleMore className="w-2.5 h-2.5 text-neutral-400" />
+                            <span className="text-[10px] text-neutral-400 tabular-nums">{formatCount(entry.commentCount)}</span>
+                        </div>
+                    </div>
+                </div>
             )}
-        </Card>
+        </div>
+    );
+}
+
+export function RecentlyViewedSkeleton({ count = 3 }: { count?: number }) {
+    return (
+        <div className="flex flex-col">
+            {Array.from({ length: count }).map((_, i) => (
+                <div key={i} className="flex gap-2 px-0 py-2 min-h-30 border-t border-neutral-200 animate-pulse">
+                    <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">
+                        <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-neutral-200 dark:bg-neutral-700 shrink-0" />
+                                <div className="h-3 w-24 rounded bg-neutral-200 dark:bg-neutral-700" />
+                            </div>
+                            <div className="h-2.5 w-full rounded bg-neutral-100 dark:bg-neutral-800" />
+                            <div className="h-2.5 w-3/4 rounded bg-neutral-100 dark:bg-neutral-800" />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <div className="h-4 w-14 rounded bg-neutral-100 dark:bg-neutral-800" />
+                            <div className="flex items-center gap-2">
+                                <div className="h-2.5 w-6 rounded bg-neutral-100 dark:bg-neutral-800" />
+                                <div className="h-2.5 w-6 rounded bg-neutral-100 dark:bg-neutral-800" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
     );
 }
 
@@ -93,23 +152,30 @@ interface RecentlyViewedProps {
     entries: RecentlyViewedEntry[];
 }
 
+const MAX_VISIBLE = 6;
+
 export default function RecentlyViewed({ entries }: RecentlyViewedProps) {
     if (entries.length === 0) {
         return (
-            <p className="text-xs text-neutral-400 py-2 text-center">
+            <p className="text-xs text-neutral-400 py-4 text-center">
                 Aucun post visité récemment.
             </p>
         );
     }
 
+    const displayed = entries.slice(0, MAX_VISIBLE);
+    const hasMore = entries.length > MAX_VISIBLE;
+
     return (
-        <div className="flex flex-col">
-            {entries.map((entry, i) => (
-                <div key={entry.id}>
-                    <RecentlyViewedItem entry={entry} />
-                    {i < entries.length - 1 && <Separator />}
-                </div>
-            ))}
+        <div className="relative">
+            <div className="flex flex-col gap-2">
+                {displayed.map((entry) => (
+                    <RecentlyViewedItem key={entry.id} entry={entry} />
+                ))}
+            </div>
+            {hasMore && (
+                <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-white dark:from-card to-transparent pointer-events-none" />
+            )}
         </div>
     );
 }

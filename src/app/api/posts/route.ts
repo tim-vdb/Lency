@@ -1,9 +1,11 @@
 import { PostsService } from "@/back/services/posts.service";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
-        const data = await PostsService.findAllPosts();
+        const { searchParams } = new URL(req.url);
+        const authorId = searchParams.get("authorId") ?? undefined;
+        const data = await PostsService.findAllPosts(authorId);
         return NextResponse.json({ posts: data });
     } catch (e) {
         console.error("[GET /api/posts]", e);

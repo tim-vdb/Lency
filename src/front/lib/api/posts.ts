@@ -175,6 +175,25 @@ export async function reportPost(postId: string): Promise<void> {
     }
 }
 
+export async function fetchPostsByAuthor(authorId: string): Promise<PostWithUserState[]> {
+    const response = await fetch(`/api/posts?authorId=${authorId}`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des posts')
+    }
+    const data = await response.json()
+    return data.posts
+}
+
+export async function fetchSavedPosts(): Promise<PostWithUserState[]> {
+    const response = await fetch("/api/posts/saved", { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur lors de la récupération des posts enregistrés");
+    const data = await response.json();
+    return data.posts;
+}
+
 export async function fetchFollowedCategoryPosts(): Promise<PostWithUserState[]> {
     const response = await fetch('/api/posts/followed', { method: 'GET', cache: 'no-store' })
     if (!response.ok) {

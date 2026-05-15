@@ -21,19 +21,19 @@ export default function unauthorized() {
           </p>
           {/* Bouton */}
           <div className='flex flex-col gap-2'>
-            <Link href="/login">
-              <Button className='w-full cursor-pointer bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2'>
+            <Button asChild className='w-full cursor-pointer bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2'>
+              <Link href="/login">
                 <ArrowLeftIcon className="w-4 h-4" />
                 Login
-              </Button>
-            </Link>
+              </Link>
+            </Button>
 
-            <Link href="/">
-              <Button className='w-full cursor-pointer bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2'>
+            <Button asChild className='w-full cursor-pointer bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2'>
+              <Link href="/">
                 <ArrowLeftIcon className="w-4 h-4" />
                 Or go back to the home page
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
 
         </div>

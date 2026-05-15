@@ -1,3 +1,4 @@
+import { Prisma } from "../generated/prisma_client";
 import prisma from "../lib/prisma";
 
 export const ResourcesAction = {
@@ -12,9 +13,25 @@ export const ResourcesAction = {
         return { ...resource, isSaved: savedIds.has(id), isVoted: votedIds.has(id) };
     },
 
-    findAll: async (opts?: { categoryId?: string; userId?: string }) => {
+    findSaved: async (userId: string) => {
+        const saves = await prisma.resourceSave.findMany({
+            where: { userId },
+            include: { resource: { include: { author: true, category: true } } },
+            orderBy: { createdAt: "desc" },
+        });
+        const resources = saves.map((s) => s.resource).filter(Boolean);
+        if (resources.length === 0) return [];
+        const { savedIds, votedIds } = await ResourcesAction.getUserStates(userId, resources.map((r) => r.id));
+        return resources.map((r) => ({ ...r, isSaved: savedIds.has(r.id), isVoted: votedIds.has(r.id) }));
+    },
+
+    findAll: async (opts?: { categoryId?: string; authorId?: string; userId?: string }) => {
         const resources = await prisma.resource.findMany({
-            where: opts?.categoryId ? { categoryId: opts.categoryId } : undefined,
+            where: opts?.categoryId
+                ? { categoryId: opts.categoryId }
+                : opts?.authorId
+                  ? { authorId: opts.authorId }
+                  : undefined,
             include: { author: true, category: true },
             orderBy: { createdAt: "desc" },
         });
@@ -51,21 +68,16 @@ export const ResourcesAction = {
         title: string;
         description?: string | null;
         type: "ASSET" | "TUTORIAL" | "LINK";
-        url: string;
+        url?: string | null;
         imageUrl?: string | null;
+        videoUrl?: string | null;
+        audioUrl?: string | null;
         categoryId: string;
     }) => {
         return prisma.resource.create({ data: { ...data, authorId } });
     },
 
-    update: async (id: string, data: {
-        title?: string;
-        description?: string | null;
-        type?: "ASSET" | "TUTORIAL" | "LINK";
-        url?: string;
-        imageUrl?: string | null;
-        categoryId?: string;
-    }) => {
+    update: async (id: string, data: Prisma.ResourceUncheckedUpdateInput) => {
         return prisma.resource.update({ where: { id }, data });
     },
 

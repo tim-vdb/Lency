@@ -51,11 +51,11 @@ export default function UserAchievementsCard({ badges, userId }: UserAchievement
                     <p className="text-xs text-neutral-500 flex-1">{label}</p>
                 </div>
                 {badges.length > 0 && (
-                    <Link href={`/user/${userId}/badges`}>
-                        <Button variant="outline" className="w-full text-xs">
+                    <Button asChild variant="outline" className="w-full text-xs">
+                        <Link href={`/user/${userId}/badges`}>
                             Voir tous les succès
-                        </Button>
-                    </Link>
+                        </Link>
+                    </Button>
                 )}
             </CardContent>
         </Card>

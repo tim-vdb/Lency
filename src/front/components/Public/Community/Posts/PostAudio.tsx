@@ -3,6 +3,7 @@
 import { Card, CardContent } from "@/front/components/ui/card";
 import { cn } from "@/front/lib/utils";
 import { Play, Pause } from "lucide-react";
+import Link from "next/link";
 import { useRef, useState } from "react";
 import { PostWithUserState } from "@/front/types/post.schema";
 import { usePostState } from "@/front/hooks/use-post-state";
@@ -12,6 +13,8 @@ import PostActionsPopup from "./PostActionsPopup";
 import PostActions from "./PostActions";
 import PostAvatar from "./PostAvatar";
 import ExpandableText from "./ExpandableText";
+import { useViewportRecentlyViewed } from "@/front/hooks/use-viewport-recently-viewed";
+import { Button } from "@/front/components/ui/button";
 
 interface PostAudioProps {
     post: PostWithUserState;
@@ -118,13 +121,14 @@ export default function PostAudio({ post, audioUrl, className }: PostAudioProps)
     const { category } = post;
     const postState = usePostState(post);
     const { openComments } = postState;
+    const cardRef = useViewportRecentlyViewed(post, 10_000);
 
     return (
-        <Card className={cn("relative p-12", className)}>
-            <CardContent className="flex flex-col gap-3 px-0">
+        <Card ref={cardRef} className={cn("relative p-12", className)}>
+            <CardContent className="flex flex-col gap-4 px-0">
                 {/* Avatar + username */}
                 <div className="flex items-center justify-between">
-                    <PostAvatar post={post} className="pl-0 py-0" />
+                    <PostAvatar author={post.author} className="pl-0 py-0" />
                     <PostActionsPopup post={post} {...postState} />
                 </div>
 
@@ -134,14 +138,20 @@ export default function PostAudio({ post, audioUrl, className }: PostAudioProps)
                 <AudioPlayer audioUrl={audioUrl ?? post.audioUrl ?? undefined} />
 
                 {/* Actions + category */}
-                <div className="flex flex-col w-full gap-3">
-                    <hr className="h-0.5 bg-neutral-100 dark:border-neutral-800 w-1/5" />
+                <div className="flex flex-col w-full gap-4">
+                    <hr className="h-0.5 bg-neutral-100 dark:border-neutral-800 w-1/4" />
                     <div className="flex items-center justify-between w-full">
                         <PostActions post={post} {...postState} />
                         {category && (
-                            <span className="text-xs font-medium px-3 py-1.5 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 rounded-md whitespace-nowrap">
-                                {category.name}
-                            </span>
+                            <Button asChild variant="outline" className="w-fit ml-auto">
+                                <Link
+                                    href={`/community/${category.slug}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-xs"
+                                >
+                                    {category.name}
+                                </Link>
+                            </Button>
                         )}
                     </div>
                 </div>

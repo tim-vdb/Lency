@@ -15,7 +15,7 @@ export function AccountShell({ user, children }: { user: User | null; children: 
 
     return (
         <UserProvider user={user}>
-            <div className="min-h-screen bg-[url('/images/bg2.jpg')] bg-cover bg-center">
+            <div className="bg-gray-lighter dark:bg-gray-dark min-h-screen">
                 <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
                     <Sheet>
                         <AppSidebar />

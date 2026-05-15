@@ -4,22 +4,22 @@ import PostAudio from "@/front/components/Public/Community/Posts/PostAudio";
 import PostImage from "@/front/components/Public/Community/Posts/PostImage";
 import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
-import PostSkeleton from "@/front/components/Public/Community/Posts/PostSkeleton";
-import RecentlyViewed from "@/front/components/Public/Community/Sidebar/RecentlyViewed";
+import PostSkeleton, { PostImageSkeleton } from "@/front/components/Public/Community/Posts/PostSkeleton";
+import RecentlyViewed, { RecentlyViewedSkeleton } from "@/front/components/Public/Community/Sidebar/RecentlyViewed";
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
 import { useRecentlyViewed } from "@/front/stores/use-recently-viewed.store";
 import { useFollowedCategoryPosts, usePosts } from "@/front/hooks/queries/use-posts"
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import type { PostWithUserState } from "@/front/types/post.schema";
 
 function PostListSkeleton() {
     return (
         <div className="flex flex-col gap-4 max-w-3xl">
-            {Array.from({ length: 5 }).map((_, i) => (
-                <PostSkeleton key={i} />
-            ))}
+            {Array.from({ length: 5 }).map((_, i) =>
+                i === 1 ? <PostImageSkeleton key={i} /> : <PostSkeleton key={i} />
+            )}
         </div>
     );
 }
@@ -44,6 +44,8 @@ export default function CommunityPage() {
     const { data: followedPosts, isPending: followedPending } = useFollowedCategoryPosts()
     const entries = useRecentlyViewed((s) => s.entries)
     const clearViewed = useRecentlyViewed((s) => s.clear)
+    const [mounted, setMounted] = useState(false)
+    useEffect(() => setMounted(true), [])
 
     const popularPosts = useMemo(() => {
         if (!posts) return [];
@@ -81,16 +83,19 @@ export default function CommunityPage() {
                         </TabsContent>
                     </div>
 
-                    <div className="sticky top-0.5 w-60">
-                        <Card className="hidden lg:block shrink-0">
-                            <CardHeader className="flex items-center justify-between gap-2">
-                                <CardTitle>Récemment vu</CardTitle>
-                                <Button variant="ghost" size="sm" onClick={clearViewed} className="text-[#F79478]">
+                    <div className="sticky top-0.5 w-60 p-4 bg-white rounded-xl">
+                        <Card className="hidden lg:block shrink-0 shadow-none">
+                            <CardHeader className="flex items-center justify-between gap-2 px-2">
+                                <CardTitle className="text-sm">Récemment vu</CardTitle>
+                                <Button variant="ghost" size="sm" onClick={clearViewed} className="text-[#F79478] px-0">
                                     Nettoyer
                                 </Button>
                             </CardHeader>
-                            <CardContent>
-                                <RecentlyViewed entries={entries} />
+                            <CardContent className="px-2">
+                                {!mounted
+                                    ? <RecentlyViewedSkeleton />
+                                    : <RecentlyViewed entries={entries} />
+                                }
                             </CardContent>
                         </Card>
                     </div>

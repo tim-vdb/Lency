@@ -7,6 +7,8 @@ import {
     fetchFollowedCategoryPosts,
     fetchPostById,
     fetchPosts,
+    fetchPostsByAuthor,
+    fetchSavedPosts,
     reportPost,
     toggleSavePost,
     toggleVotePost,
@@ -65,12 +67,21 @@ export const postQueries = {
             queryKey: [...POST_ROOT, "comments", postId] as const,
             queryFn: () => fetchCommentsByPostId(postId),
             staleTime: 1000 * 60 * 2,
+            enabled: !!postId,
         }),
 }
 
 // ─── Queries ─────────────────────────────────────────────────────────────────
 
 export const usePosts = () => useQuery(postQueries.lists())
+
+export const usePostsByAuthor = (authorId: string | undefined) =>
+    useQuery({
+        queryKey: [...POST_ROOT, "author", authorId] as const,
+        queryFn: () => fetchPostsByAuthor(authorId!),
+        staleTime: 1000 * 60 * 5,
+        enabled: !!authorId,
+    })
 
 export const usePostById = (id: string) => useQuery(postQueries.detail(id))
 
@@ -229,4 +240,11 @@ export const useFollowedCategoryPosts = () =>
         queryKey: ["posts", "followed"] as const,
         queryFn: fetchFollowedCategoryPosts,
         staleTime: 1000 * 60,
+    })
+
+export const useSavedPosts = () =>
+    useQuery({
+        queryKey: [...POST_ROOT, "saved"] as const,
+        queryFn: fetchSavedPosts,
+        staleTime: 1000 * 60 * 5,
     })

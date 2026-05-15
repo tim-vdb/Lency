@@ -55,6 +55,7 @@ export const UsersAction = {
                         followers: true,
                     },
                 },
+                socialLinks: { orderBy: { createdAt: "asc" } },
             },
         });
     },
@@ -163,6 +164,20 @@ export const UsersAction = {
                 emailChangeToken: null,
                 emailChangeTokenExpiresAt: null,
             },
+        });
+    },
+
+    upsertSocialLink: async (userId: string, platform: string, url: string) => {
+        return prisma.userSocialLink.upsert({
+            where: { userId_platform: { userId, platform } },
+            create: { userId, platform, url },
+            update: { url },
+        });
+    },
+
+    deleteSocialLink: async (userId: string, platform: string) => {
+        return prisma.userSocialLink.delete({
+            where: { userId_platform: { userId, platform } },
         });
     },
 };

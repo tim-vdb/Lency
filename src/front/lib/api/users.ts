@@ -28,6 +28,35 @@ export interface User {
     updatedAt?: Date;
 }
 
+export interface SocialLinkInput {
+    platform: string;
+    url: string;
+}
+
+export async function upsertSocialLink(input: SocialLinkInput): Promise<void> {
+    const res = await fetch('/api/users/social-links', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Erreur lors de la sauvegarde du lien');
+    }
+}
+
+export async function deleteSocialLink(platform: string): Promise<void> {
+    const res = await fetch('/api/users/social-links', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ platform }),
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Erreur lors de la suppression du lien');
+    }
+}
+
 // Type pour mettre à jour un utilisateur
 export interface UpdateUserInput {
     firstname?: string;

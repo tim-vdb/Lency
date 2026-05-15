@@ -23,6 +23,10 @@ export const auth = betterAuth({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       prompt: 'select_account',
+      mapProfileToUser: (profile) => ({
+        firstname: profile.given_name ?? null,
+        lastname: profile.family_name ?? null,
+      }),
     },
   },
   trustedOrigins: [
@@ -47,6 +51,15 @@ export const auth = betterAuth({
         type: 'string',
         required: false,
         defaultValue: 'MEMBER',
+        input: false,
+      },
+      firstname: {
+        type: 'string',
+        required: false,
+      },
+      lastname: {
+        type: 'string',
+        required: false,
       },
     },
   },

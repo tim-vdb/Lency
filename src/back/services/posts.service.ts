@@ -9,9 +9,15 @@ export const PostsService = {
         return post;
     },
 
-    findAllPosts: async () => {
+    findSavedPosts: async () => {
         const user = await getUser();
-        return PostsAction.findAll(user?.id ?? undefined);
+        if (!user) throw new Error("Unauthorized");
+        return PostsAction.findSaved(user.id);
+    },
+
+    findAllPosts: async (authorId?: string) => {
+        const user = await getUser();
+        return PostsAction.findAll(user?.id ?? undefined, authorId);
     },
 
     createPost: async (data: {

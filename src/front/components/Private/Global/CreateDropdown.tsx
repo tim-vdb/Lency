@@ -4,6 +4,7 @@ import { Button } from "@/front/components/ui/button"
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogOverlay,
     DialogPortal,
     DialogTitle
@@ -20,12 +21,13 @@ import { Label } from "@/front/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
 import { Textarea } from "@/front/components/ui/textarea"
 import { cn } from "@/front/lib/utils"
-import { FileText, FolderKanban, Plus, Tag } from "lucide-react"
+import { FileText, FolderKanban, Link2, Plus, Tag } from "lucide-react"
 import { useState } from "react"
 import { CreateCategoryForm } from "./CreateCategoryForm"
 import { CreatePostForm } from "./CreatePostForm"
+import { CreateResourceForm } from "./CreateResourceForm"
 
-type CreateType = "post" | "project" | "category"
+type CreateType = "post" | "project" | "category" | "resource"
 
 // ─── Placeholder form (project) ───────────────────────────────────────────────
 
@@ -80,10 +82,10 @@ export function CreateDropdown() {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="outline"
-                        className="ml-auto shadow-lg-base cursor-pointer border-neutral-300"
+                        className="ml-auto cursor-pointer border-neutral-300 bg-orange hover:bg-orange/80 rounded-sm"
                     >
-                        <span>Créer</span>
-                        <Plus className="w-4 h-4" />
+                        <Plus className="w-4 h-4 border border-white text-white rounded-[3px]" />
+                        <span className="text-white">Créer</span>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent side="bottom" align="end" sideOffset={8} className="min-w-44">
@@ -99,6 +101,10 @@ export function CreateDropdown() {
                         <DropdownMenuItem onClick={() => handleSelect("category")}>
                             <Tag className="size-4" />
                             Créer une catégorie
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleSelect("resource")}>
+                            <Link2 className="size-4" />
+                            Créer une ressource
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
@@ -116,6 +122,7 @@ export function CreateDropdown() {
                         )}
                     >
                         <DialogTitle className="sr-only">Créer du contenu</DialogTitle>
+                        <DialogDescription className="sr-only">Formulaire de création de contenu</DialogDescription>
 
                         {/* Tabs = sidebar gauche + contenu droite */}
                         <Tabs
@@ -152,6 +159,13 @@ export function CreateDropdown() {
                                     <Tag className="size-4 shrink-0" />
                                     Catégorie
                                 </TabsTrigger>
+                                <TabsTrigger
+                                    value="resource"
+                                    className="w-full justify-start gap-2.5"
+                                >
+                                    <Link2 className="size-4 shrink-0" />
+                                    Ressource
+                                </TabsTrigger>
                             </TabsList>
 
                             {/* Content */}
@@ -172,6 +186,12 @@ export function CreateDropdown() {
                                 className="flex-1 overflow-y-auto p-6 mt-0"
                             >
                                 <CreateCategoryForm onSuccess={() => setModalOpen(false)} />
+                            </TabsContent>
+                            <TabsContent
+                                value="resource"
+                                className="flex-1 overflow-y-auto p-6 mt-0"
+                            >
+                                <CreateResourceForm onSuccess={() => setModalOpen(false)} />
                             </TabsContent>
                         </Tabs>
                     </DialogContent>

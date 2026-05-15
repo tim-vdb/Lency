@@ -2,6 +2,7 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/r
 import {
     changePassword,
     deleteUser,
+    deleteSocialLink,
     fetchUserById,
     fetchUserByUsername,
     fetchUsers,
@@ -9,8 +10,10 @@ import {
     reportUser,
     toggleFollowUser,
     updateUser,
+    upsertSocialLink,
     verifyEmailChange,
     type ChangePasswordInput,
+    type SocialLinkInput,
     type UpdateUserInput,
     type VerifyEmailChangeInput,
 } from "@/front/lib/api/users"
@@ -110,3 +113,19 @@ export const useToggleFollowUser = (userId: string, username: string) => {
 
 export const useReportUser = (userId: string) =>
     useMutation({ mutationFn: (reason?: string) => reportUser(userId, reason) })
+
+export const useUpsertSocialLink = (username: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (input: SocialLinkInput) => upsertSocialLink(input),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: [...USER_ROOT, "username", username] }),
+    })
+}
+
+export const useDeleteSocialLink = (username: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (platform: string) => deleteSocialLink(platform),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: [...USER_ROOT, "username", username] }),
+    })
+}

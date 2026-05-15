@@ -14,12 +14,14 @@ interface PostActionsPopupProps {
     post: PostWithUserState;
     isSaved: boolean;
     setIsSaved: (value: boolean) => void;
+    markViewed: () => void;
 }
 
 export default function PostActionsPopup({
     post,
     isSaved,
     setIsSaved,
+    markViewed,
 }: PostActionsPopupProps) {
     const { mutate: toggleSavePost } = useToggleSavePost(post.id);
     const { mutate: report } = useReportPost(post.id);
@@ -30,6 +32,7 @@ export default function PostActionsPopup({
     function handleSave(e: React.MouseEvent) {
         e.stopPropagation();
         requireAuth(() => {
+            markViewed();
             const nextSaved = !isSaved;
             setIsSaved(nextSaved);
             toggleSavePost();
@@ -39,12 +42,14 @@ export default function PostActionsPopup({
     function handleReport(e: React.MouseEvent) {
         e.stopPropagation();
         requireAuth(() => {
+            markViewed();
             report(undefined, { onSuccess: () => toast.success("Post signalé.") });
         });
     }
 
     function handleShare(e: React.MouseEvent) {
         e.stopPropagation();
+        markViewed();
         share(`/community/${post.category.slug}/post/${post.id}`, post.content.slice(0, 60));
     }
 

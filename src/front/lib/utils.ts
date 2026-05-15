@@ -29,6 +29,11 @@ export function timeAgo(date: Date | string): string {
   return `${Math.floor(months / 12)} an`;
 }
 
+export function formatCount(n: number): string {
+  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(".0", "")}k`;
+  return String(n);
+}
+
 export function getDisplayName(author: { firstname?: string | null; lastname?: string | null; name?: string | null; username?: string | null }): string {
   return author.firstname && author.lastname
     ? `${author.firstname} ${author.lastname}`

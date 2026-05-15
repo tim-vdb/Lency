@@ -19,6 +19,7 @@ interface PostActionsProps {
     setUpvoteCount: (value: number | ((prev: number) => number)) => void;
     setOpenComments: (value: boolean) => void;
     setIsSaved: (value: boolean) => void;
+    markViewed: () => void;
 }
 
 export default function PostActions({
@@ -31,6 +32,7 @@ export default function PostActions({
     setUpvoteCount,
     setOpenComments,
     setIsSaved,
+    markViewed,
 }: PostActionsProps) {
     const { mutate: toggleVotePost } = useToggleVotePost(post.id);
     const { mutate: toggleSavePost } = useToggleSavePost(post.id);
@@ -39,6 +41,7 @@ export default function PostActions({
 
     function handleVote() {
         requireAuth(() => {
+            markViewed();
             const nextVoted = !isVoted;
             setIsVoted(nextVoted);
             setUpvoteCount((c) => nextVoted ? c + 1 : c - 1);
@@ -53,6 +56,7 @@ export default function PostActions({
 
     function handleSave() {
         requireAuth(() => {
+            markViewed();
             const nextSaved = !isSaved;
             setIsSaved(nextSaved);
             toggleSavePost();
@@ -60,6 +64,7 @@ export default function PostActions({
     }
 
     function handleShare() {
+        markViewed();
         share(`/community/${post.category.slug}/post/${post.id}`, post.content.slice(0, 60));
     }
 
@@ -88,7 +93,7 @@ export default function PostActions({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <button
-                            onClick={() => setOpenComments(!openComments)}
+                            onClick={() => { if (!openComments) markViewed(); setOpenComments(!openComments); }}
                             className="transition-transform hover:scale-110"
                         >
                             <MessageCircleMore

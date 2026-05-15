@@ -1,13 +1,17 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+    createResource,
     createResourceComment,
     fetchResourceById,
     fetchResourceComments,
     fetchResources,
+    fetchResourcesByAuthor,
+    fetchSavedResources,
     toggleSaveResource,
     toggleVoteResource,
     voteResourceComment,
     type CreateResourceCommentInput,
+    type CreateResourceInput,
     type VoteResourceCommentInput,
 } from "@/front/lib/api/resources";
 import { CommentWithChildren } from "@/front/types/post.schema";
@@ -63,6 +67,21 @@ export const resourceQueries = {
 };
 
 export const useResources = (categoryId?: string) => useQuery(resourceQueries.lists(categoryId));
+
+export const useSavedResources = () =>
+    useQuery({
+        queryKey: [...RESOURCE_ROOT, "saved"] as const,
+        queryFn: fetchSavedResources,
+        staleTime: 1000 * 60 * 5,
+    });
+
+export const useResourcesByAuthor = (authorId: string | undefined) =>
+    useQuery({
+        queryKey: [...RESOURCE_ROOT, "author", authorId] as const,
+        queryFn: () => fetchResourcesByAuthor(authorId!),
+        staleTime: 1000 * 60 * 5,
+        enabled: !!authorId,
+    });
 
 export const useResourceById = (id: string) => useQuery(resourceQueries.detail(id));
 
@@ -181,6 +200,17 @@ export const useVoteResourceComment = (resourceId: string) => {
             }
         },
         onSettled: () => queryClient.invalidateQueries({ queryKey: commentsKey }),
+    });
+};
+
+export const useCreateResource = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (input: CreateResourceInput) => createResource(input),
+        onSuccess: (_data, variables) => {
+            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", variables.categoryId] });
+            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", "all"] });
+        },
     });
 };
 

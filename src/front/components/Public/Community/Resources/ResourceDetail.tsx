@@ -1,19 +1,21 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
 import { Badge } from "@/front/components/ui/badge";
-import { useRequireAuth } from "@/front/hooks/use-modals";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/front/components/ui/tooltip";
 import { useToggleSaveResource, useToggleVoteResource } from "@/front/hooks/queries/use-resources";
+import { useRequireAuth } from "@/front/hooks/use-modals";
+import { useShare } from "@/front/hooks/use-share";
 import { cn, timeAgo } from "@/front/lib/utils";
 import { ResourceWithUserState } from "@/front/types/resource.schema";
 import { Bookmark, ExternalLink, Heart, MessageCircleMore, Share } from "lucide-react";
+import MediaLightbox, { MediaExpandOverlay } from "@/front/components/Public/Community/MediaLightbox";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import CommentRoot from "../Comments/CommentRoot";
 import Comments from "../Comments/Comments";
-import { useShare } from "@/front/hooks/use-share";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/front/components/ui/tooltip";
+import PostAvatar from "../Posts/PostAvatar";
+import Link from "next/link";
 
 const BADGE_PALETTE = [
     "bg-blue-100 text-blue-700",
@@ -42,14 +44,6 @@ export default function ResourceDetail({ resource }: { resource: ResourceWithUse
 
     const { mutate: toggleVote } = useToggleVoteResource(resource.id, resource.categoryId);
     const { mutate: toggleSave } = useToggleSaveResource(resource.id, resource.categoryId);
-
-    const authorName = resource.author.firstname && resource.author.lastname
-        ? `${resource.author.firstname} ${resource.author.lastname}`
-        : resource.author.username ?? "Anonyme";
-    const authorInitials = [resource.author.firstname?.[0], resource.author.lastname?.[0]]
-        .filter(Boolean)
-        .join("")
-        .toUpperCase() || "?";
     const badgeClass = colorForSlug(resource.category.slug);
 
     function handleVote() {
@@ -80,42 +74,49 @@ export default function ResourceDetail({ resource }: { resource: ResourceWithUse
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
-                <Avatar className="w-10 h-10">
-                    <AvatarImage src={resource.author.image ?? undefined} alt={authorName} />
-                    <AvatarFallback className="text-xs bg-neutral-100">{authorInitials}</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col">
-                    <span className="text-sm font-medium">{authorName}</span>
-                    <span className="text-xs text-neutral-400">{timeAgo(resource.createdAt)}</span>
-                </div>
+                <PostAvatar author={resource.author} />
+                <span className="text-xs text-neutral-400">• {timeAgo(resource.createdAt)}</span>
             </div>
 
-            <div className="relative w-full h-80 rounded-xl overflow-hidden bg-linear-to-br from-pink-100 via-pink-50 to-rose-200">
-                {resource.imageUrl && (
-                    <Image
-                        src={resource.imageUrl}
-                        alt={resource.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 66vw"
-                        className="object-cover"
-                    />
-                )}
-                <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-3 py-1 rounded-full flex items-center gap-3">
-                    <span className="flex items-center gap-1">
-                        <Heart className="w-3 h-3" />
-                        {upvoteCount}
-                    </span>
-                    <span className="flex items-center gap-1">
-                        <MessageCircleMore className="w-3 h-3" />
-                        {resource.commentCount}
-                    </span>
-                </div>
-            </div>
+            {/* ── Media ── */}
+            {resource.imageUrl && (
+                <MediaLightbox type="image" src={resource.imageUrl} alt={resource.title}>
+                    <div className="relative w-full h-80 rounded-xl overflow-hidden bg-linear-to-br from-pink-100 via-pink-50 to-rose-200 group">
+                        <Image
+                            src={resource.imageUrl}
+                            alt={resource.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 66vw"
+                            className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                        />
+                        <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-3 py-1 rounded-full flex items-center gap-3">
+                            <span className="flex items-center gap-1"><Heart className="w-3 h-3" />{upvoteCount}</span>
+                            <span className="flex items-center gap-1"><MessageCircleMore className="w-3 h-3" />{resource.commentCount}</span>
+                        </div>
+                        <MediaExpandOverlay />
+                    </div>
+                </MediaLightbox>
+            )}
+
+            {resource.videoUrl && (
+                <video
+                    src={resource.videoUrl}
+                    controls
+                    className="w-full rounded-xl bg-black"
+                    style={{ maxHeight: "420px" }}
+                />
+            )}
+
+            {resource.audioUrl && (
+                <audio src={resource.audioUrl} controls className="w-full" />
+            )}
 
             <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-2xl font-bold">{resource.title}</h1>
                 <Badge variant="secondary" className={cn("text-xs font-medium", badgeClass)}>
-                    {resource.category.name}
+                    <Link href={`/community/${resource.category.slug}`} className="hover:underline">
+                        {resource.category.name}
+                    </Link>
                 </Badge>
             </div>
 
@@ -125,15 +126,17 @@ export default function ResourceDetail({ resource }: { resource: ResourceWithUse
                 </p>
             )}
 
-            <a
-                href={resource.url}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 underline w-fit"
-            >
-                <ExternalLink className="w-4 h-4" />
-                {resource.url}
-            </a>
+            {resource.url && (
+                <a
+                    href={resource.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 underline w-fit"
+                >
+                    <ExternalLink className="w-4 h-4" />
+                    {resource.url}
+                </a>
+            )}
 
             <div className="flex items-center gap-4 pt-2 border-t border-neutral-200">
                 <div className="flex items-center gap-2">
@@ -169,7 +172,7 @@ export default function ResourceDetail({ resource }: { resource: ResourceWithUse
 
             <div className="flex flex-col gap-4 pt-2">
                 <CommentRoot target={{ type: "resource", id: resource.id }} />
-                <Comments target={{ type: "resource", id: resource.id }} commentCount={resource.commentCount} />
+                <Comments target={{ type: "resource", id: resource.id }} />
             </div>
         </div>
     );

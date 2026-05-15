@@ -68,8 +68,21 @@ export const PostsAction = {
         };
     },
 
-    findAll: async (userId?: string) => {
+    findSaved: async (userId: string) => {
+        const saves = await prisma.postSave.findMany({
+            where: { userId },
+            include: { post: { include: { author: true, category: true } } },
+            orderBy: { createdAt: "desc" },
+        });
+        const posts = saves.map((s) => s.post).filter(Boolean);
+        if (posts.length === 0) return [];
+        const { savedIds, votedIds } = await PostsAction.getUserStates(userId, posts.map((p) => p.id));
+        return posts.map((p) => ({ ...p, isSaved: savedIds.has(p.id), isVoted: votedIds.has(p.id) }));
+    },
+
+    findAll: async (userId?: string, authorId?: string) => {
         const posts = await prisma.post.findMany({
+            where: authorId ? { authorId } : undefined,
             include: { author: true, category: true },
             orderBy: { createdAt: "desc" },
         });

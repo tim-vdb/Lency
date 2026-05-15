@@ -2,13 +2,16 @@
 
 import { useUser } from "@/front/context/UserContext"
 import {
+  BadgeCheck,
+  Bell,
+  ChevronRight,
   ChevronsUpDown,
-  House,
-  LayoutTemplate,
+  CreditCard,
+  LogOutIcon,
+  Settings,
   Shield,
-  Star,
   User2,
-  UserRound,
+  UserRound
 } from "lucide-react"
 import Link from "next/link"
 
@@ -18,6 +21,11 @@ import {
   AvatarImage,
 } from "@/front/components/ui/avatar"
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/front/components/ui/collapsible"
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -26,8 +34,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/front/components/ui/dropdown-menu"
+import {
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem
+} from "@/front/components/ui/sidebar"
 import LogOut from "../../Auth/LogOut"
-import { usePathname } from "next/navigation"
+
+const settingsItems = [
+  { title: "Compte", url: "/account/settings/profile", icon: User2 },
+  { title: "Notifications", url: "/account/settings/notifs", icon: Bell },
+  { title: "Sécurité", url: "/account/settings/security", icon: Shield },
+  { title: "Facturation", url: "/account/settings/billing", icon: CreditCard },
+]
 
 export function NavUser() {
   const user = useUser()
@@ -36,15 +57,12 @@ export function NavUser() {
     ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
     : "??"
 
-  const pathname = usePathname();
-  const isHomePage = pathname === '/';
-
   return (
     <>
       {user ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-1 rounded-lg px-2 py-1 text-sm outline-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+            <button className="flex items-center gap-1 rounded-lg px-2 py-1 text-sm outline-none hover:bg-neutral-150 hover:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer">
               <Avatar className="h-8 w-8 rounded-full">
                 <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
                 <AvatarFallback className="rounded-full text-xs bg-black dark:bg-white text-white dark:text-black">{initials}</AvatarFallback>
@@ -72,40 +90,45 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href="/account">
-                  <LayoutTemplate className="size-4" />
-                  Dashboard
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/account/profile">
-                  <UserRound className="size-4" />
-                  Account
-                </Link>
-              </DropdownMenuItem>
               {user?.username && (
                 <DropdownMenuItem asChild>
                   <Link href={`/user/${user.username}`}>
                     <UserRound className="size-4" />
-                    Mon profil
+                    Compte
                   </Link>
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem asChild>
                 <Link href="/account/badges">
-                  <Star className="size-4" />
+                  <BadgeCheck className="size-4" />
                   Badges
                 </Link>
               </DropdownMenuItem>
-              {!isHomePage && (
-                <DropdownMenuItem asChild>
-                  <Link href="/">
-                    <House className="size-4" />
-                    Homepage
-                  </Link>
-                </DropdownMenuItem>
-              )}
+              <Collapsible asChild className="group/collapsible">
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton tooltip="Paramètres">
+                      <Settings className="w-4 h-4" />
+                      <span className="items_sidebar">Paramètres</span>
+                      <ChevronRight className="ml-auto transition-[transform,opacity] duration-800 ease-in-out group-data-[state=open]/collapsible:rotate-90 group-data-[collapsible=icon]:opacity-0" />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {settingsItems.map((item) => (
+                        <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubButton asChild>
+                            <Link href={item.url}>
+                              <item.icon className="size-4" />
+                              <span className="items_sidebar">{item.title}</span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
             </DropdownMenuGroup>
             {user?.role === "ADMIN" && (
               <>
@@ -122,15 +145,17 @@ export function NavUser() {
             )}
             <DropdownMenuSeparator />
             <DropdownMenuItem>
+              <LogOutIcon />
               <LogOut />
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu >
       ) : (
         <Link href="/login">
           <User2 className="w-7 h-7" />
         </Link>
-      )}
+      )
+      }
     </>
   )
 }

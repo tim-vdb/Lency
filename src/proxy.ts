@@ -21,7 +21,7 @@ export async function proxy(request: NextRequest) {
 
     if (isAdminRoute) {
         const session = await auth.api.getSession({ headers: request.headers })
-        if (session?.user?.role !== 'admin') {
+        if (session?.user?.role !== 'ADMIN') {
             return NextResponse.redirect(new URL('/unauthorized', request.url))
         }
     }

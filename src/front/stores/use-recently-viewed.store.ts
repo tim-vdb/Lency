@@ -9,6 +9,7 @@ export interface RecentlyViewedEntry {
     content: string;
     categorySlug: string;
     authorName: string;
+    authorUsername: string | null;
     authorImage: string | null;
     imageUrl: string | null;
     upvoteCount: number;
@@ -17,9 +18,12 @@ export interface RecentlyViewedEntry {
     viewedAt: string;
 }
 
+type CountUpdates = Pick<RecentlyViewedEntry, "upvoteCount" | "commentCount" | "saveCount">;
+
 interface RecentlyViewedStore {
     entries: RecentlyViewedEntry[];
     add: (post: PostWithUserState) => void;
+    syncCounts: (postId: string, counts: CountUpdates) => void;
     clear: () => void;
 }
 
@@ -39,6 +43,7 @@ export const useRecentlyViewed = create<RecentlyViewedStore>()(
                     content: post.content,
                     categorySlug: post.category.slug,
                     authorName,
+                    authorUsername: author.username ?? null,
                     authorImage: author.image ?? null,
                     imageUrl: post.imageUrl ?? null,
                     upvoteCount: post.upvoteCount,
@@ -51,6 +56,12 @@ export const useRecentlyViewed = create<RecentlyViewedStore>()(
                     entries: [entry, ...state.entries.filter((e) => e.id !== post.id)].slice(0, 10),
                 }));
             },
+            syncCounts: (postId, counts) =>
+                set((state) => ({
+                    entries: state.entries.map((e) =>
+                        e.id === postId ? { ...e, ...counts } : e
+                    ),
+                })),
             clear: () => set({ entries: [] }),
         }),
         { name: "lency:recently-viewed" }
