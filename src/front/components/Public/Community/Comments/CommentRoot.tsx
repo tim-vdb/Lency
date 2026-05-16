@@ -6,6 +6,7 @@ import { Item, ItemContent } from "@/front/components/ui/item";
 import { useRequireAuth } from "@/front/hooks/use-modals";
 import { useCreateComment } from "@/front/hooks/queries/use-posts";
 import { useCreateResourceComment } from "@/front/hooks/queries/use-resources";
+import { useCreateProjectComment } from "@/front/hooks/queries/use-projects";
 import { CommentTarget } from "@/front/types/comment-target";
 import { CreateCommentFormValues, CreateCommentSchema } from "@/front/types/comment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,9 +18,11 @@ export default function CommentRoot({ target }: { target: CommentTarget }) {
     const requireAuth = useRequireAuth();
     const postMutation = useCreateComment(target.type === "post" ? target.id : "");
     const resourceMutation = useCreateResourceComment(target.type === "resource" ? target.id : "");
+    const projectMutation = useCreateProjectComment(target.type === "project" ? target.id : "");
     const { mutate: createPostComment, isPending: postPending } = postMutation;
     const { mutate: createResourceComment, isPending: resourcePending } = resourceMutation;
-    const isPending = target.type === "post" ? postPending : resourcePending;
+    const { mutate: createProjectComment, isPending: projectPending } = projectMutation;
+    const isPending = target.type === "post" ? postPending : target.type === "resource" ? resourcePending : projectPending;
 
     const form = useForm<CreateCommentFormValues>({
         resolver: zodResolver(CreateCommentSchema),
@@ -41,22 +44,17 @@ export default function CommentRoot({ target }: { target: CommentTarget }) {
 
             if (target.type === "post") {
                 createPostComment(
-                    {
-                        content: values.content,
-                        postId: target.id,
-                        imageUrl: values.imageUrl,
-                        videoUrl: values.videoUrl,
-                    },
+                    { content: values.content, postId: target.id, imageUrl: values.imageUrl, videoUrl: values.videoUrl },
+                    { onSuccess, onError }
+                );
+            } else if (target.type === "resource") {
+                createResourceComment(
+                    { content: values.content, resourceId: target.id, imageUrl: values.imageUrl, videoUrl: values.videoUrl },
                     { onSuccess, onError }
                 );
             } else {
-                createResourceComment(
-                    {
-                        content: values.content,
-                        resourceId: target.id,
-                        imageUrl: values.imageUrl,
-                        videoUrl: values.videoUrl,
-                    },
+                createProjectComment(
+                    { content: values.content, projectId: target.id, imageUrl: values.imageUrl, videoUrl: values.videoUrl },
                     { onSuccess, onError }
                 );
             }

@@ -5,13 +5,23 @@ model Project {
   title         String
   description   String
   status        ProjectStatus @default(PUBLISHED)
+  visibility    Visibility    @default(PUBLIC)
   ownerId       String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   mapLocationId String?
+  // Marketplace fields
+  bannerUrl     String?
+  projectType   String?
+  remuneration  String?
+  startDate     DateTime?
+  roles         Json?
+  attachments   Json?
+  commentCount  Int           @default(0)
   mapLocation   MapLocation?  @relation(fields: [mapLocationId], references: [id])
   owner         User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   participants  User[]        @relation("Participants")
+  comments      Comment[]
 }
 
 model Event {

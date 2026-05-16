@@ -23,12 +23,22 @@ export const CommentsAction = {
         return buildTree(flat);
     },
 
+    findByProjectId: async (projectId: string) => {
+        const flat = await prisma.comment.findMany({
+            where: { projectId },
+            include: { author: true },
+            orderBy: { createdAt: "asc" },
+        });
+        return buildTree(flat);
+    },
+
     create: async (userId: string, data: {
         content: string;
         imageUrl?: string | null;
         videoUrl?: string | null;
         postId?: string;
         resourceId?: string;
+        projectId?: string;
         parentId?: string;
     }) => {
         const comment = await prisma.comment.create({
@@ -38,6 +48,7 @@ export const CommentsAction = {
                 videoUrl: data.videoUrl ?? null,
                 postId: data.postId,
                 resourceId: data.resourceId,
+                projectId: data.projectId,
                 authorId: userId,
                 parentId: data.parentId,
             },
@@ -51,6 +62,11 @@ export const CommentsAction = {
         } else if (data.resourceId) {
             await prisma.resource.update({
                 where: { id: data.resourceId },
+                data: { commentCount: { increment: 1 } },
+            });
+        } else if (data.projectId) {
+            await prisma.project.update({
+                where: { id: data.projectId },
                 data: { commentCount: { increment: 1 } },
             });
         }
@@ -100,6 +116,11 @@ export const CommentsAction = {
         } else if (comment.resourceId) {
             await prisma.resource.update({
                 where: { id: comment.resourceId },
+                data: { commentCount: { decrement: 1 } },
+            });
+        } else if (comment.projectId) {
+            await prisma.project.update({
+                where: { id: comment.projectId },
                 data: { commentCount: { decrement: 1 } },
             });
         }

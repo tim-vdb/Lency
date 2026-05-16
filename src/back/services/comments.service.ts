@@ -16,12 +16,17 @@ export const CommentsService = {
         return CommentsAction.findByResourceId(resourceId);
     },
 
+    findByProjectId: async (projectId: string) => {
+        return CommentsAction.findByProjectId(projectId);
+    },
+
     createComment: async (data: {
         content: string;
         imageUrl?: string | null;
         videoUrl?: string | null;
         postId?: string;
         resourceId?: string;
+        projectId?: string;
         parentId?: string;
     }) => {
         const user = await getUser();
@@ -32,11 +37,8 @@ export const CommentsService = {
         const hasVideo = !!data.videoUrl;
         if (!hasContent && !hasImage && !hasVideo) throw new Error("Content is required");
 
-        const hasPost = !!data.postId;
-        const hasResource = !!data.resourceId;
-        if (hasPost === hasResource) {
-            throw new Error("Target is required");
-        }
+        const targetCount = [!!data.postId, !!data.resourceId, !!data.projectId].filter(Boolean).length;
+        if (targetCount !== 1) throw new Error("Target is required");
 
         return CommentsAction.create(user.id, data);
     },

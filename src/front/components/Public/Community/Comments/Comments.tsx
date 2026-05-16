@@ -2,6 +2,7 @@
 
 import { useCommentsByPostId } from "@/front/hooks/queries/use-posts";
 import { useResourceComments } from "@/front/hooks/queries/use-resources";
+import { useProjectComments } from "@/front/hooks/queries/use-projects";
 import { CommentTarget } from "@/front/types/comment-target";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { CommentItem } from "./CommentItem";
@@ -26,9 +27,10 @@ function CommentSkeleton() {
 export default function Comments({ target }: CommentsProps) {
     const postQuery = useCommentsByPostId(target.type === "post" ? target.id : "");
     const resourceQuery = useResourceComments(target.type === "resource" ? target.id : "");
+    const projectQuery = useProjectComments(target.type === "project" ? target.id : "");
 
     const { data: comments, isLoading } =
-        target.type === "post" ? postQuery : resourceQuery;
+        target.type === "post" ? postQuery : target.type === "resource" ? resourceQuery : projectQuery;
 
     if (isLoading) {
         return (

@@ -22,7 +22,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/front/components/ui/sidebar"
-import { ChevronRight, Store, Users, Rss, BookOpen, Bookmark, type LucideIcon } from "lucide-react"
+import { Briefcase, ChevronRight, Store, Users, Rss, BookOpen, Bookmark, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 import React from "react"
 
@@ -55,7 +55,9 @@ const navMain: NavMainItem[] = [
     title: "Marketplace",
     url: "/marketplace",
     icon: Store,
-    items: [],
+    items: [
+      { title: "Projets", url: "/marketplace", icon: Briefcase },
+    ],
   }
 ]
 

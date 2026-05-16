@@ -81,6 +81,7 @@ model Comment {
   videoUrl      String?
   postId        String?
   resourceId    String?
+  projectId     String?
   authorId      String
   parentId      String?
   upvoteCount   Int       @default(0)
@@ -92,9 +93,11 @@ model Comment {
   children      Comment[] @relation("CommentReplies")
   post          Post?     @relation(fields: [postId], references: [id])
   resource      Resource? @relation(fields: [resourceId], references: [id])
+  project       Project?  @relation(fields: [projectId], references: [id])
 
   @@index([postId])
   @@index([resourceId])
+  @@index([projectId])
   @@index([authorId])
   @@index([parentId])
 }

@@ -16,6 +16,7 @@ import { Fragment } from "react";
 const SEGMENT_LABELS: Record<string, string> = {
     community: "Communauté",
     resources: "Ressources",
+    marketplace: "Marketplace",
     user: "Profil",
     dashboard: "Dashboard",
     account: "Compte",
