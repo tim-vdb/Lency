@@ -13,15 +13,21 @@ export const PostsAction = {
     },
 
     create: async (userId: string, data: {
-        title: string;
         content: string;
         categoryId: string;
+        format?: "TEXT" | "IMAGE" | "VIDEO" | "AUDIO";
+        orientation?: "LANDSCAPE" | "PORTRAIT";
+        imageUrl?: string;
+        videoUrl?: string;
+        audioUrl?: string;
+        isPublished?: boolean;
     }) => {
         return prisma.post.create({
             data: {
                 ...data,
                 authorId: userId,
-            }
+            },
+            include: { author: true, category: true },
         });
     },
 
@@ -31,6 +37,9 @@ export const PostsAction = {
         isPublished?: boolean;
         isLocked?: boolean;
         categoryId?: string;
+        imageUrl?: string;
+        videoUrl?: string;
+        audioUrl?: string;
     }) => {
         return prisma.post.update({
             where: { id },
@@ -59,8 +68,21 @@ export const PostsAction = {
         };
     },
 
-    findAll: async (userId?: string) => {
+    findSaved: async (userId: string) => {
+        const saves = await prisma.postSave.findMany({
+            where: { userId },
+            include: { post: { include: { author: true, category: true } } },
+            orderBy: { createdAt: "desc" },
+        });
+        const posts = saves.map((s) => s.post).filter(Boolean);
+        if (posts.length === 0) return [];
+        const { savedIds, votedIds } = await PostsAction.getUserStates(userId, posts.map((p) => p.id));
+        return posts.map((p) => ({ ...p, isSaved: savedIds.has(p.id), isVoted: votedIds.has(p.id) }));
+    },
+
+    findAll: async (userId?: string, authorId?: string) => {
         const posts = await prisma.post.findMany({
+            where: authorId ? { authorId } : undefined,
             include: { author: true, category: true },
             orderBy: { createdAt: "desc" },
         });
@@ -103,14 +125,6 @@ export const PostsAction = {
             prisma.post.update({ where: { id: postId }, data: { upvoteCount: { increment: 1 } } }),
         ]);
         return { voted: true };
-    },
-
-    hidePost: async (userId: string, postId: string) => {
-        return prisma.postHide.upsert({
-            where: { userId_postId: { userId, postId } },
-            create: { userId, postId },
-            update: {},
-        });
     },
 
     reportPost: async (userId: string, postId: string, reason?: string) => {

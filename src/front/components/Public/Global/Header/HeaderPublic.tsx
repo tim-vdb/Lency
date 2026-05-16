@@ -7,11 +7,12 @@ import DesktopNavbar from '@/front/components/Public/Global/Navbar/DesktopNavbar
 import MobileNavbar from '@/front/components/Public/Global/Navbar/MobileNavbar';
 import Image from 'next/image';
 import { useState } from 'react';
-import { NavUser } from '@/front/components/Private/Global/Sidebar/nav-user';
 import { useUser } from '@/front/context/UserContext';
 import { Button } from '@/front/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { ToggleDarkMode } from '@/front/components/DarkMode/ToggleDarkMode';
+import { NavUser } from '@/front/components/Private/Global/Sidebar/nav-user';
+import { SidebarProvider } from '@/front/components/ui/sidebar';
 
 export default function HeaderPublic() {
   const user = useUser();
@@ -58,29 +59,14 @@ export default function HeaderPublic() {
             </button>
           </div>
           {!isDashboard && user && (
-            <Button variant="default" size="sm" className="ml-4">
-              <Link href="/account">
-                Dashboard
-              </Link>
+            <Button asChild variant="default" size="sm" className="ml-4">
+              <Link href="/account">Dashboard</Link>
             </Button>
           )}
           <ToggleDarkMode className='w-fit' />
-          {user && <NavUser />}
-          {!user && (
-            <>
-              <Button variant="default" size="sm" className="ml-4">
-                <Link href="/login">
-                  Login
-                </Link>
-              </Button>
-
-              <Button variant="default" size="sm" className="ml-4">
-                <Link href="/sign-up">
-                  Sign Up
-                </Link>
-              </Button>
-            </>
-          )}
+          <SidebarProvider className='w-fit min-h-auto'>
+            <NavUser />
+          </SidebarProvider>
         </div>
       </div>
     </header>

@@ -16,27 +16,28 @@ model Article {
 }
 
 model Category {
-  id              String     @id @default(cuid())
-  slug            String     @unique
+  id              String           @id @default(cuid())
+  slug            String           @unique
   name            String
   description     String?
-  visibility      Visibility @default(PUBLIC)
+  visibility      Visibility       @default(PUBLIC)
   createdBy       String
   iconUrl         String?
   bannerUrl       String?
   rules           String?
-  isNSFW          Boolean    @default(false)
-  members         Int        @default(0)
-  postCount       Int        @default(0)
-  subscriberCount Int        @default(0)
+  isNSFW          Boolean          @default(false)
+  members         Int              @default(0)
+  postCount       Int              @default(0)
+  subscriberCount Int              @default(0)
   lastPostAt      DateTime?
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   userId          String?
-  creator         User       @relation("CreatedCategories", fields: [createdBy], references: [id])
-  user            User?      @relation(fields: [userId], references: [id])
+  creator         User             @relation("CreatedCategories", fields: [createdBy], references: [id])
+  user            User?            @relation(fields: [userId], references: [id])
   posts           Post[]
   ressources      Resource[]
+  followers       CategoryFollow[]
 
   @@index([slug])
   @@index([visibility])
@@ -44,27 +45,29 @@ model Category {
 }
 
 model Post {
-  id           String     @id @default(cuid())
-  title        String
+  id           String       @id @default(cuid())
   content      String
-  isLocked     Boolean    @default(false)
+  isLocked     Boolean      @default(false)
   categoryId   String
   authorId     String
-  format       PostFormat @default(DESKTOP)
-  viewCount    Int        @default(0)
-  upvoteCount  Int        @default(0)
-  commentCount Int        @default(0)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  isPublished  Boolean    @default(false)
-  saveCount    Int        @default(0)
+  format       PostFormat      @default(TEXT)
+  orientation  PostOrientation @default(LANDSCAPE)
+  imageUrl     String?
+  videoUrl     String?
+  audioUrl     String?
+  viewCount    Int          @default(0)
+  upvoteCount  Int          @default(0)
+  commentCount Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  isPublished  Boolean      @default(false)
+  saveCount    Int          @default(0)
   comments     Comment[]
   saves        PostSave[]
   votes        PostVote[]
-  hides        PostHide[]
   reports      PostReport[]
-  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  category     Category   @relation(fields: [categoryId], references: [id])
+  author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category     Category     @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
   @@index([authorId])
@@ -74,7 +77,10 @@ model Post {
 model Comment {
   id            String    @id @default(cuid())
   content       String
-  postId        String
+  imageUrl      String?
+  videoUrl      String?
+  postId        String?
+  resourceId    String?
   authorId      String
   parentId      String?
   upvoteCount   Int       @default(0)
@@ -84,9 +90,11 @@ model Comment {
   author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parent        Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   children      Comment[] @relation("CommentReplies")
-  post          Post      @relation(fields: [postId], references: [id])
+  post          Post?     @relation(fields: [postId], references: [id])
+  resource      Resource? @relation(fields: [resourceId], references: [id])
 
   @@index([postId])
+  @@index([resourceId])
   @@index([authorId])
   @@index([parentId])
 }
@@ -117,19 +125,6 @@ model PostVote {
   @@index([postId])
 }
 
-model PostHide {
-  id        String   @id @default(cuid())
-  userId    String
-  postId    String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, postId])
-  @@index([userId])
-  @@index([postId])
-}
-
 model PostReport {
   id        String   @id @default(cuid())
   userId    String
@@ -142,4 +137,44 @@ model PostReport {
   @@unique([userId, postId])
   @@index([userId])
   @@index([postId])
+}
+
+model CategoryFollow {
+  id         String   @id @default(cuid())
+  userId     String
+  categoryId String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, categoryId])
+  @@index([userId])
+  @@index([categoryId])
+}
+
+model UserFollow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  follower    User     @relation("Followers", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model UserReport {
+  id         String   @id @default(cuid())
+  reporterId String
+  reportedId String
+  reason     String?
+  createdAt  DateTime @default(now())
+  reporter   User     @relation("UserReporters", fields: [reporterId], references: [id], onDelete: Cascade)
+  reported   User     @relation("ReportedUsers", fields: [reportedId], references: [id], onDelete: Cascade)
+
+  @@unique([reporterId, reportedId])
+  @@index([reporterId])
+  @@index([reportedId])
 }

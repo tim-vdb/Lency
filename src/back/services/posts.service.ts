@@ -9,20 +9,30 @@ export const PostsService = {
         return post;
     },
 
-    findAllPosts: async () => {
+    findSavedPosts: async () => {
         const user = await getUser();
-        return PostsAction.findAll(user?.id ?? undefined);
+        if (!user) throw new Error("Unauthorized");
+        return PostsAction.findSaved(user.id);
+    },
+
+    findAllPosts: async (authorId?: string) => {
+        const user = await getUser();
+        return PostsAction.findAll(user?.id ?? undefined, authorId);
     },
 
     createPost: async (data: {
-        title: string;
         content: string;
         categoryId: string;
+        format?: "TEXT" | "IMAGE" | "VIDEO" | "AUDIO";
+        orientation?: "LANDSCAPE" | "PORTRAIT";
+        imageUrl?: string;
+        videoUrl?: string;
+        audioUrl?: string;
+        isPublished?: boolean;
     }) => {
         const user = await getUser();
         if (!user) throw new Error("Unauthorized");
 
-        if (!data.title) throw new Error("Title is required");
         if (!data.content) throw new Error("Content is required");
         if (!data.categoryId) throw new Error("Category is required");
 
@@ -30,11 +40,13 @@ export const PostsService = {
     },
 
     updatePost: async (id: string, data: {
-        title?: string;
         content?: string;
         isPublished?: boolean;
         isLocked?: boolean;
         categoryId?: string;
+        imageUrl?: string;
+        videoUrl?: string;
+        audioUrl?: string;
     }) => {
         if (!data || Object.keys(data).length === 0) {
             throw new Error("No data to update");
@@ -75,13 +87,6 @@ export const PostsService = {
         if (!user) throw new Error("Unauthorized");
         await PostsService.findByIdPost(postId);
         return PostsAction.toggleVote(user.id, postId);
-    },
-
-    hidePost: async (postId: string) => {
-        const user = await getUser();
-        if (!user) throw new Error("Unauthorized");
-        await PostsService.findByIdPost(postId);
-        return PostsAction.hidePost(user.id, postId);
     },
 
     reportPost: async (postId: string, reason?: string) => {

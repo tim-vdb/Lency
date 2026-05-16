@@ -1,10 +1,11 @@
 'use client';
 
+import { cn } from '@/front/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { toast } from 'sonner';
 
-export default function LogOut() {
+export default function LogOut({ className }: { className?: string }) {
   const pathname = usePathname()
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function LogOut() {
     <form onSubmit={handleSubmit}>
       <button
         type="submit"
-        className="cursor-pointer w-full text-left py-1.5 px-2"
+        className={cn("cursor-pointer w-full text-left py-1.5", className)}
         disabled={isPending}
       >
         {isPending ? 'Déconnexion...' : 'Se déconnecter'}

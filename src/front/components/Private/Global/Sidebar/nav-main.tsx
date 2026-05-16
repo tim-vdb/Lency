@@ -1,5 +1,6 @@
 "use client"
 
+import DashboardIcon from "@/front/assets/icons/dashboard-icon.svg"
 import {
   Collapsible,
   CollapsibleContent,
@@ -21,7 +22,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/front/components/ui/sidebar"
-import { Bell, ChevronRight, CreditCard, Settings2, Shield, User2, Users2Icon, type LucideIcon } from "lucide-react"
+import { ChevronRight, Store, Users, Rss, BookOpen, Bookmark, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 import React from "react"
 
@@ -41,43 +42,20 @@ type NavMainItem = {
 
 const navMain: NavMainItem[] = [
   {
-    title: "Settings",
-    url: "#",
-    icon: Settings2,
+    title: "Communauté",
+    url: "/community",
+    icon: Users,
     items: [
-      {
-        title: "Compte",
-        url: "/account/profile",
-        icon: User2,
-      },
-      {
-        title: "Notifications",
-        url: "/account/notifs",
-        icon: Bell,
-      },
-      {
-        title: "Sécurité",
-        url: "/account/security",
-        icon: Shield,
-      },
-      {
-        title: "Facturation",
-        url: "/account/billing",
-        icon: CreditCard,
-      },
+      { title: "Fil d'actualité", url: "/community", icon: Rss },
+      { title: "Ressources", url: "/community/resources", icon: BookOpen },
+      { title: "Enregistrés", url: "/community/saved", icon: Bookmark },
     ],
   },
   {
-    title: "Community",
-    url: "/community",
-    icon: User2,
-    items: [
-      {
-        title: "Fil d'actualité",
-        url: "/community",
-        icon: Users2Icon,
-      }
-    ],
+    title: "Marketplace",
+    url: "/marketplace",
+    icon: Store,
+    items: [],
   }
 ]
 
@@ -142,8 +120,14 @@ export function NavMain() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>Fonctionnalités</SidebarGroupLabel>
       <SidebarMenu>
+        <SidebarMenuButton asChild tooltip="Dashboard">
+          <Link href="/account">
+            <DashboardIcon />
+            <span className="items_sidebar">Dashboard</span>
+          </Link>
+        </SidebarMenuButton>
         {isHydrated && navMain.map((item) => (
           <Collapsible
             key={item.title}

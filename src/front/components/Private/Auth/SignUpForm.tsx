@@ -78,6 +78,8 @@ export default function SignUpForm() {
         try {
             const payload = {
                 name: `${values.firstName} ${values.lastName}`,
+                firstname: values.firstName,
+                lastname: values.lastName,
                 email: values.email,
                 password: values.password,
                 image: image ? await convertImageToBase64(image) : "",

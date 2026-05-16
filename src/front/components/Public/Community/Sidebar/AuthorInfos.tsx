@@ -30,7 +30,7 @@ export default function AuthorInfos({ post }: { post: PostWithAuthorAndCategory 
     return (
         <Card className="shadow-none gap-2 py-4">
             <CardHeader className="px-4">
-                <PostAvatar post={post} />
+                <PostAvatar author={post.author} />
             </CardHeader>
             <CardContent className="flex flex-col gap-2 px-4">
                 <div className="flex items-center justify-end gap-1 w-full">
@@ -69,11 +69,11 @@ export default function AuthorInfos({ post }: { post: PostWithAuthorAndCategory 
                         </AvatarGroup>
                         <p className="text-xs text-neutral-500 w-40">Travailleur, Artiste et 3 autres succès débloqué</p>
                     </div>
-                    <Link href={`/user/${post.author.id}/badges`} className="w-full cursor-pointer">
-                        <Button variant="outline" className="w-full py-0 text-sm cursor-pointer">
+                    <Button asChild variant="outline" className="w-full py-0 text-sm cursor-pointer">
+                        <Link href={`/user/${post.author.id}/badges`}>
                             Voir tous les succès
-                        </Button>
-                    </Link>
+                        </Link>
+                    </Button>
                 </div>
             </CardFooter>
         </Card >

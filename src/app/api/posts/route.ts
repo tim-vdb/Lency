@@ -1,11 +1,14 @@
 import { PostsService } from "@/back/services/posts.service";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
-        const data = await PostsService.findAllPosts();
+        const { searchParams } = new URL(req.url);
+        const authorId = searchParams.get("authorId") ?? undefined;
+        const data = await PostsService.findAllPosts(authorId);
         return NextResponse.json({ posts: data });
-    } catch {
+    } catch (e) {
+        console.error("[GET /api/posts]", e);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
@@ -21,7 +24,6 @@ export async function POST(req: NextRequest) {
                 return NextResponse.json({ error: error.message }, { status: 401 });
             }
             if ([
-                "Title is required",
                 "Content is required",
                 "Category is required",
             ].includes(error.message)) {

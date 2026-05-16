@@ -7,7 +7,7 @@ import { toast } from "sonner"
 import { Button } from "@/front/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/front/components/ui/form"
 import { Input } from "@/front/components/ui/input"
-import { useVerifyEmailChange } from "@/front/hooks/querys/use-users"
+import { useVerifyEmailChange } from "@/front/hooks/queries/use-users"
 import { VerifyEmailChangeSchema, type VerifyEmailChangeValues } from "@/front/types/email-change.schema"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/front/components/ui/dialog"
 

@@ -1,4 +1,5 @@
 import { UsersAction } from "../repositories/users.action";
+import { PostsAction } from "../repositories/posts.action";
 import { getUser } from "../lib/auth-session";
 import crypto from "crypto";
 
@@ -7,6 +8,61 @@ export const UsersService = {
         const user = await UsersAction.findById(id);
         if (!user) throw new Error("User not found");
         return user;
+    },
+
+    findByUsername: async (username: string) => {
+        const user = await UsersAction.findByUsername(username);
+        if (!user) throw new Error("User not found");
+        const currentUser = await getUser();
+        const postIds = user.Posts.map((p) => p.id);
+
+        const [postStates, isFollowed, isReported] = await Promise.all([
+            currentUser && postIds.length > 0
+                ? PostsAction.getUserStates(currentUser.id, postIds)
+                : Promise.resolve(null),
+            currentUser && currentUser.id !== user.id
+                ? UsersAction.isFollowing(currentUser.id, user.id)
+                : Promise.resolve(false),
+            currentUser
+                ? UsersAction.isReported(currentUser.id, user.id)
+                : Promise.resolve(false),
+        ]);
+
+        return {
+            ...user,
+            Posts: user.Posts.map((p) => ({
+                ...p,
+                isSaved: postStates ? postStates.savedIds.has(p.id) : false,
+                isVoted: postStates ? postStates.votedIds.has(p.id) : false,
+            })),
+            isFollowed,
+            isReported,
+        };
+    },
+
+    toggleFollowUser: async (targetUserId: string) => {
+        const currentUser = await getUser();
+        if (!currentUser) throw new Error("Unauthorized");
+        if (currentUser.id === targetUserId) throw new Error("Cannot follow yourself");
+        const target = await UsersAction.findById(targetUserId);
+        if (!target) throw new Error("User not found");
+        return UsersAction.toggleFollowUser(currentUser.id, targetUserId);
+    },
+
+    getFollowStatus: async (targetUserId: string) => {
+        const currentUser = await getUser();
+        if (!currentUser) return { following: false };
+        const following = await UsersAction.isFollowing(currentUser.id, targetUserId);
+        return { following };
+    },
+
+    reportUser: async (targetUserId: string, reason?: string) => {
+        const currentUser = await getUser();
+        if (!currentUser) throw new Error("Unauthorized");
+        if (currentUser.id === targetUserId) throw new Error("Cannot report yourself");
+        const target = await UsersAction.findById(targetUserId);
+        if (!target) throw new Error("User not found");
+        return UsersAction.reportUser(currentUser.id, targetUserId, reason);
     },
 
     findAllUsers: async () => {
@@ -51,7 +107,7 @@ export const UsersService = {
             username?: string;
             phone?: string;
             bio?: string;
-            avatarUrl?: string;
+            image?: string;
             cv?: string;
             portfolio?: string;
         }
@@ -132,5 +188,17 @@ export const UsersService = {
     hasCredentialAccount: async (userId: string) => {
         const account = await UsersAction.findCredentialAccount(userId);
         return !!account?.password;
+    },
+
+    upsertSocialLink: async (platform: string, url: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        return UsersAction.upsertSocialLink(user.id, platform, url);
+    },
+
+    deleteSocialLink: async (platform: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        return UsersAction.deleteSocialLink(user.id, platform);
     },
 };

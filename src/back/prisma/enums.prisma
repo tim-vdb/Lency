@@ -42,8 +42,15 @@ enum TypeEvent {
 enum PostFormat {
   DESKTOP
   MOBILE
-  AUDIO
   TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+enum PostOrientation {
+  LANDSCAPE
+  PORTRAIT
 }
 
 enum ContactType {
