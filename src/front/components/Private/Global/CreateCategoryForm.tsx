@@ -20,6 +20,7 @@ import {
 import { Input } from "@/front/components/ui/input"
 import { Textarea } from "@/front/components/ui/textarea"
 import { useCreateCategory } from "@/front/hooks/queries/use-categories"
+import { uploadToImageKit } from "@/front/lib/upload"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 
@@ -91,14 +92,7 @@ export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
     async function handleImageUpload(file: File, type: "icon" | "banner") {
         setUploading(type)
         try {
-            const fd = new FormData()
-            fd.append("file", file)
-            const res = await fetch("/api/upload", { method: "POST", body: fd })
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}))
-                throw new Error(err.error || "Erreur lors de l'upload")
-            }
-            const { url } = await res.json()
+            const url = await uploadToImageKit(file, "/categories")
             if (type === "icon") {
                 form.setValue("iconUrl", url)
                 setIconPreview(URL.createObjectURL(file))

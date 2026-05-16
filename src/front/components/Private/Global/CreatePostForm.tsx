@@ -38,6 +38,7 @@ import { Textarea } from "@/front/components/ui/textarea"
 import { useCategories } from "@/front/hooks/queries/use-categories"
 import { useCreatePost } from "@/front/hooks/queries/use-posts"
 import { cn } from "@/front/lib/utils"
+import { uploadToImageKit } from "@/front/lib/upload"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -115,14 +116,7 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps) {
     async function handleFileUpload(file: File) {
         setUploading(true)
         try {
-            const fd = new FormData()
-            fd.append("file", file)
-            const res = await fetch("/api/upload", { method: "POST", body: fd })
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}))
-                throw new Error(err.error || "Erreur lors de l'upload")
-            }
-            const { url } = await res.json()
+            const url = await uploadToImageKit(file, "/posts")
             form.setValue(config.mediaKey!, url)
             setMediaName(file.name)
             if (contentType === "IMAGE") setMediaPreview(URL.createObjectURL(file))

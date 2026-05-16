@@ -46,7 +46,7 @@ export default function MediaLightbox({
 
             <Dialog open={open} onOpenChange={handleOpenChange}>
                 <DialogContent
-                    className="max-w-none w-screen h-screen p-0 bg-black/96 border-0 flex flex-col items-center justify-center rounded-none [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:top-4 [&>button]:right-4"
+                    className="max-w-none w-screen h-screen p-0 bg-black/96 border-0 flex flex-col items-center justify-center rounded-none [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:top-4 [&>button]:right-4 [&>button]:w-10 [&>button]:h-10 [&>button]:cursor-pointer [&>button>svg]:w-full [&>button>svg]:h-full"
                     aria-describedby={undefined}
                 >
                     <DialogTitle className="sr-only">{alt || "Média"}</DialogTitle>

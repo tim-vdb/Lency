@@ -60,6 +60,7 @@ model User {
   reportsMade               UserReport[]           @relation("UserReporters")
   reportsReceived           UserReport[]           @relation("ReportedUsers")
   socialLinks               UserSocialLink[]
+  feedbacks                 Feedback[]
 }
 
 model UserSocialLink {
@@ -135,4 +136,17 @@ model ContactMessage {
   status ContactStatus @default(EN_ATTENTE)
 
   @@map("contact_messages")
+}
+
+model Feedback {
+  id          String   @id @default(cuid())
+  description String   @db.Text
+  imageUrl    String?
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("feedbacks")
 }

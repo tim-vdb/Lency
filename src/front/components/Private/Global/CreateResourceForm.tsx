@@ -27,6 +27,7 @@ import {
 import { Textarea } from "@/front/components/ui/textarea"
 import { useCategories } from "@/front/hooks/queries/use-categories"
 import { useCreateResource } from "@/front/hooks/queries/use-resources"
+import { uploadToImageKit } from "@/front/lib/upload"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 
@@ -64,17 +65,6 @@ const RESOURCE_TYPE_LABELS: Record<string, string> = {
 
 // ─── Upload helper ────────────────────────────────────────────────────────────
 
-async function uploadFile(file: File): Promise<string> {
-    const fd = new FormData()
-    fd.append("file", file)
-    const res = await fetch("/api/upload", { method: "POST", body: fd })
-    if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        throw new Error(err.error || "Erreur upload")
-    }
-    const { url } = await res.json()
-    return url
-}
 
 // ─── DropZone ─────────────────────────────────────────────────────────────────
 
@@ -167,7 +157,7 @@ export function CreateResourceForm({ onSuccess }: CreateResourceFormProps) {
     async function handleUpload(file: File, field: "imageUrl" | "videoUrl" | "audioUrl", setPreview: (v: string | null) => void) {
         setUploading(true)
         try {
-            const url = await uploadFile(file)
+            const url = await uploadToImageKit(file, "/resources")
             form.setValue(field, url)
             setPreview(URL.createObjectURL(file))
         } catch (err) {
