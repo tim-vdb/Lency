@@ -1,10 +1,12 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+    createProject,
     createProjectComment,
     fetchProjectById,
     fetchProjectComments,
     fetchProjects,
     type CreateProjectCommentInput,
+    type CreateProjectInput,
 } from "@/front/lib/api/projects";
 import { CommentWithChildren } from "@/front/types/post.schema";
 
@@ -40,6 +42,14 @@ export const projectQueries = {
 export const useProjects = () => useQuery(projectQueries.lists());
 
 export const useProjectById = (id: string) => useQuery(projectQueries.detail(id));
+
+export const useCreateProject = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (input: CreateProjectInput) => createProject(input),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: PROJECT_ROOT }),
+    });
+};
 
 export const useProjectComments = (projectId: string) =>
     useQuery(projectQueries.comments(projectId));

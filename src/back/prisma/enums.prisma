@@ -67,3 +67,20 @@ enum ContactStatus {
   RESOLU
   FERME
 }
+
+enum ProjectLevel {
+  DEBUTANT
+  INTERMEDIAIRE
+  AVANCE
+}
+
+enum WorkMode {
+  PRESENTIEL
+  DISTANCIEL
+  HYBRIDE
+}
+
+enum RemunerationType {
+  NON_REMUNERE
+  REMUNERE
+}

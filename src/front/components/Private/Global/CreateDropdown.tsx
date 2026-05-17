@@ -16,54 +16,16 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/front/components/ui/dropdown-menu"
-import { Input } from "@/front/components/ui/input"
-import { Label } from "@/front/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
-import { Textarea } from "@/front/components/ui/textarea"
 import { cn } from "@/front/lib/utils"
 import { FileText, FolderKanban, Link2, Plus, Tag } from "lucide-react"
 import { useState } from "react"
 import { CreateCategoryForm } from "./CreateCategoryForm"
 import { CreatePostForm } from "./CreatePostForm"
+import { CreateProjectForm } from "./CreateProjectForm"
 import { CreateResourceForm } from "./CreateResourceForm"
 
 type CreateType = "post" | "project" | "category" | "resource"
-
-// ─── Placeholder form (project) ───────────────────────────────────────────────
-
-function CreateProjectForm() {
-    return (
-        <div className="flex flex-col gap-5">
-            <div>
-                <h2 className="text-lg font-semibold">Créer un projet</h2>
-                <p className="text-sm text-muted-foreground">
-                    Présentez votre projet à la communauté.
-                </p>
-            </div>
-            <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="project-title">Titre</Label>
-                    <Input id="project-title" placeholder="Nom de votre projet…" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="project-description">Description</Label>
-                    <Textarea
-                        id="project-description"
-                        placeholder="Décrivez votre projet…"
-                        className="min-h-36 resize-none"
-                    />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="project-link">Lien (optionnel)</Label>
-                    <Input id="project-link" type="url" placeholder="https://…" />
-                </div>
-            </div>
-            <div className="flex justify-end pt-2">
-                <Button>Créer le projet</Button>
-            </div>
-        </div>
-    )
-}
 
 // ─── Main component ────────────────────────────────────────────────────────────
 
@@ -179,7 +141,7 @@ export function CreateDropdown() {
                                 value="project"
                                 className="flex-1 overflow-y-auto p-6 mt-0"
                             >
-                                <CreateProjectForm />
+                                <CreateProjectForm onSuccess={() => setModalOpen(false)} />
                             </TabsContent>
                             <TabsContent
                                 value="category"

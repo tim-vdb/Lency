@@ -11,11 +11,13 @@ model Project {
   updatedAt     DateTime      @updatedAt
   mapLocationId String?
   // Marketplace fields
-  bannerUrl     String?
-  projectType   String?
-  remuneration  String?
-  startDate     DateTime?
-  roles         Json?
+  bannerUrl         String?
+  projectType       String?
+  remunerationType  RemunerationType?
+  level             ProjectLevel?
+  workMode          WorkMode?
+  startDate         DateTime?
+  roles             Json?
   attachments   Json?
   commentCount  Int           @default(0)
   mapLocation   MapLocation?  @relation(fields: [mapLocationId], references: [id])

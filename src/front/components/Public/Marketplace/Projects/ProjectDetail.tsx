@@ -21,6 +21,7 @@ import {
     Briefcase,
     CalendarDays,
     ExternalLink,
+    GraduationCap,
     Lock,
     MapPin,
     MessageCircle,
@@ -34,10 +35,21 @@ import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const REMUNERATION_COLORS: Record<string, string> = {
-    "Non rémunéré": "text-rose-600",
-    "À discuter": "text-amber-600",
-    "Rémunéré": "text-emerald-600",
+const LEVEL_LABEL: Record<string, string> = {
+    DEBUTANT: "Débutant",
+    INTERMEDIAIRE: "Intermédiaire",
+    AVANCE: "Avancé",
+};
+
+const WORKMODE_LABEL: Record<string, string> = {
+    PRESENTIEL: "Présentiel",
+    DISTANCIEL: "Distanciel",
+    HYBRIDE: "Hybride",
+};
+
+const REMUNERATION_LABEL: Record<string, { label: string; color: string }> = {
+    NON_REMUNERE: { label: "Non rémunéré", color: "text-rose-600" },
+    REMUNERE: { label: "Rémunéré", color: "text-emerald-600" },
 };
 
 export default function ProjectDetail({ project }: { project: ProjectWithOwner }) {
@@ -58,7 +70,9 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
         }, 800);
     }
 
-    const remunColor = project.remuneration ? (REMUNERATION_COLORS[project.remuneration] ?? "text-neutral-700") : "text-neutral-700";
+    const remuInfo = project.remunerationType ? REMUNERATION_LABEL[project.remunerationType] : null;
+    const levelStr = project.level ? LEVEL_LABEL[project.level] : null;
+    const workModeStr = project.workMode ? WORKMODE_LABEL[project.workMode] : null;
 
     return (
         <div className="flex flex-col xl:flex-row gap-6 max-w-6xl mx-auto">
@@ -214,18 +228,30 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                                     <MapPin className="w-3.5 h-3.5" />
                                     Localisation
                                 </p>
-                                <p className="text-sm font-medium pl-5">{project.mapLocation.name}</p>
+                                <p className="text-sm font-medium pl-5">
+                                    {[project.mapLocation.name, workModeStr].filter(Boolean).join(" / ")}
+                                </p>
                             </div>
                         )}
 
-                        {project.remuneration && (
+                        {levelStr && (
+                            <div className="flex flex-col gap-0.5">
+                                <p className="text-xs text-neutral-400 flex items-center gap-1.5">
+                                    <GraduationCap className="w-3.5 h-3.5" />
+                                    Niveau
+                                </p>
+                                <p className="text-sm font-medium pl-5">{levelStr}</p>
+                            </div>
+                        )}
+
+                        {remuInfo && (
                             <div className="flex flex-col gap-0.5">
                                 <p className="text-xs text-neutral-400 flex items-center gap-1.5">
                                     <Wallet className="w-3.5 h-3.5" />
                                     Rémunération
                                 </p>
-                                <p className={cn("text-sm font-medium pl-5", remunColor)}>
-                                    {project.remuneration}
+                                <p className={cn("text-sm font-medium pl-5", remuInfo.color)}>
+                                    {remuInfo.label}
                                 </p>
                             </div>
                         )}
@@ -266,7 +292,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                         )}
 
                         {/* Aucune info */}
-                        {!project.projectType && !project.mapLocation && !project.remuneration && !project.startDate && roles.length === 0 && (
+                        {!project.projectType && !project.mapLocation && !project.remunerationType && !project.level && !project.startDate && roles.length === 0 && (
                             <p className="text-xs text-neutral-400 italic">Aucune information renseignée.</p>
                         )}
                     </CardContent>

@@ -1,6 +1,33 @@
 import { CommentWithChildren } from "@/front/types/post.schema";
 import { ProjectWithOwner } from "@/front/types/project.schema";
 
+export interface CreateProjectInput {
+    title: string;
+    description: string;
+    bannerUrl?: string;
+    projectType?: string;
+    remunerationType?: "NON_REMUNERE" | "REMUNERE";
+    level?: "DEBUTANT" | "INTERMEDIAIRE" | "AVANCE";
+    workMode?: "PRESENTIEL" | "DISTANCIEL" | "HYBRIDE";
+    startDate?: string;
+    roles?: string[];
+    visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
+    city?: string;
+}
+
+export async function createProject(input: CreateProjectInput): Promise<ProjectWithOwner> {
+    const res = await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+    });
+    if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la création du projet");
+    }
+    return (await res.json()).project;
+}
+
 export async function fetchProjects(): Promise<ProjectWithOwner[]> {
     const res = await fetch("/api/projects", { cache: "no-store" });
     if (!res.ok) throw new Error("Erreur lors de la récupération des projets");
