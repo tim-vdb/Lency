@@ -178,3 +178,17 @@ model UserReport {
   @@index([reporterId])
   @@index([reportedId])
 }
+
+model Blog {
+  id        String     @id @default(cuid())
+  title     String
+  content   String
+  coverUrl  String?
+  tag       BlogTag
+  status    BlogStatus @default(DRAFT)
+  authorId  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}

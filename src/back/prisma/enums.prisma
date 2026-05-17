@@ -67,3 +67,15 @@ enum ContactStatus {
   RESOLU
   FERME
 }
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum BlogTag {
+  VIDEO
+  MOTION
+  OUTILS
+}
