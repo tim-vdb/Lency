@@ -10,6 +10,9 @@ export default async function BlogPage() {
 
     const isAdmin = user?.role === "ADMIN"
 
+    // Filtrer les blogs : admins voient tout, sinon seulement les PUBLISHED
+    const filteredBlogs = isAdmin ? blogs : blogs.filter((b) => b.status === "PUBLISHED")
+
     return (
         <main className="min-h-screen bg-white">
             <section className="w-full py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -18,7 +21,7 @@ export default async function BlogPage() {
                         Notre Blog
                     </h1>
                 </div>
-                <BlogList blogs={blogs} isAdmin={isAdmin} />
+                <BlogList blogs={filteredBlogs} isAdmin={isAdmin} />
             </section>
         </main>
     )
