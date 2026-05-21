@@ -38,7 +38,7 @@ import { Textarea } from "@/front/components/ui/textarea"
 import { useCategories } from "@/front/hooks/queries/use-categories"
 import { useCreatePost } from "@/front/hooks/queries/use-posts"
 import { cn } from "@/front/lib/utils"
-import { uploadToImageKit } from "@/front/lib/upload"
+import { uploadToImageKit } from "@/front/lib/api/upload"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -57,10 +57,10 @@ type ContentConfig = {
 }
 
 const CONTENT_CONFIG: Record<ContentType, ContentConfig> = {
-    TEXT:  { label: "Texte",  icon: FileText,  accept: "",        mediaKey: null,       hint: "",              hasOrientation: false },
-    IMAGE: { label: "Image",  icon: ImageIcon, accept: "image/*", mediaKey: "imageUrl", hint: "JPG, PNG, WebP, GIF", hasOrientation: true },
-    VIDEO: { label: "Vidéo",  icon: Video,     accept: "video/*", mediaKey: "videoUrl", hint: "MP4, WebM",     hasOrientation: true },
-    AUDIO: { label: "Audio",  icon: Music,     accept: "audio/*", mediaKey: "audioUrl", hint: "MP3, WAV, OGG", hasOrientation: false },
+    TEXT: { label: "Texte", icon: FileText, accept: "", mediaKey: null, hint: "", hasOrientation: false },
+    IMAGE: { label: "Image", icon: ImageIcon, accept: "image/*", mediaKey: "imageUrl", hint: "JPG, PNG, WebP, GIF", hasOrientation: true },
+    VIDEO: { label: "Vidéo", icon: Video, accept: "video/*", mediaKey: "videoUrl", hint: "MP4, WebM", hasOrientation: true },
+    AUDIO: { label: "Audio", icon: Music, accept: "audio/*", mediaKey: "audioUrl", hint: "MP3, WAV, OGG", hasOrientation: false },
 }
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
@@ -69,14 +69,14 @@ const ALL_FORMATS = ["TEXT", "IMAGE", "VIDEO", "AUDIO"] as const
 const ALL_ORIENTATIONS = ["LANDSCAPE", "PORTRAIT"] as const
 
 const CreatePostSchema = z.object({
-    content:     z.string().min(1, "Le contenu est requis"),
-    categoryId:  z.string().min(1, "Choisissez une catégorie"),
-    format:      z.enum(ALL_FORMATS),
+    content: z.string().min(1, "Le contenu est requis"),
+    categoryId: z.string().min(1, "Choisissez une catégorie"),
+    format: z.enum(ALL_FORMATS),
     orientation: z.enum(ALL_ORIENTATIONS).optional(),
     isPublished: z.boolean(),
-    imageUrl:    z.string().optional(),
-    videoUrl:    z.string().optional(),
-    audioUrl:    z.string().optional(),
+    imageUrl: z.string().optional(),
+    videoUrl: z.string().optional(),
+    audioUrl: z.string().optional(),
 })
 
 type CreatePostValues = z.infer<typeof CreatePostSchema>
@@ -92,10 +92,10 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps) {
     const { data: categories, isLoading: categoriesLoading } = useCategories()
 
     const [contentType, setContentType] = useState<ContentType>("TEXT")
-    const [isMobile, setIsMobile]       = useState(false)
-    const [uploading, setUploading]     = useState(false)
+    const [isMobile, setIsMobile] = useState(false)
+    const [uploading, setUploading] = useState(false)
     const [mediaPreview, setMediaPreview] = useState<string | null>(null)
-    const [mediaName, setMediaName]       = useState<string | null>(null)
+    const [mediaName, setMediaName] = useState<string | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     const config = CONTENT_CONFIG[contentType]

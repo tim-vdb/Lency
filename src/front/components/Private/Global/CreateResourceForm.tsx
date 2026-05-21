@@ -27,7 +27,7 @@ import {
 import { Textarea } from "@/front/components/ui/textarea"
 import { useCategories } from "@/front/hooks/queries/use-categories"
 import { useCreateResource } from "@/front/hooks/queries/use-resources"
-import { uploadToImageKit } from "@/front/lib/upload"
+import { uploadToImageKit } from "@/front/lib/api/upload"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 

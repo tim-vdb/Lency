@@ -20,7 +20,7 @@ import {
 import { Input } from "@/front/components/ui/input"
 import { Textarea } from "@/front/components/ui/textarea"
 import { useCreateCategory } from "@/front/hooks/queries/use-categories"
-import { uploadToImageKit } from "@/front/lib/upload"
+import { uploadToImageKit } from "@/front/lib/api/upload"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 
@@ -44,7 +44,7 @@ const CreateCategorySchema = z.object({
         .max(1000, "Maximum 1000 caractères")
         .optional()
         .or(z.literal("")),
-    iconUrl:   z.string().optional(),
+    iconUrl: z.string().optional(),
     bannerUrl: z.string().optional(),
 })
 
@@ -58,10 +58,10 @@ interface CreateCategoryFormProps {
 
 export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
     const { mutate, isPending } = useCreateCategory()
-    const [iconPreview,   setIconPreview]   = useState<string | null>(null)
+    const [iconPreview, setIconPreview] = useState<string | null>(null)
     const [bannerPreview, setBannerPreview] = useState<string | null>(null)
     const [uploading, setUploading] = useState<"icon" | "banner" | null>(null)
-    const iconInputRef   = useRef<HTMLInputElement>(null)
+    const iconInputRef = useRef<HTMLInputElement>(null)
     const bannerInputRef = useRef<HTMLInputElement>(null)
 
     const form = useForm<CreateCategoryValues>({
@@ -112,12 +112,12 @@ export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
     function onSubmit(values: CreateCategoryValues) {
         mutate(
             {
-                name:        values.name,
-                slug:        values.slug,
+                name: values.name,
+                slug: values.slug,
                 description: values.description || undefined,
-                iconUrl:     values.iconUrl     || undefined,
-                bannerUrl:   values.bannerUrl   || undefined,
-                rules:       values.rules       || undefined,
+                iconUrl: values.iconUrl || undefined,
+                bannerUrl: values.bannerUrl || undefined,
+                rules: values.rules || undefined,
             },
             {
                 onSuccess: (cat) => {
