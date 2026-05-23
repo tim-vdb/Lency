@@ -16,9 +16,11 @@ import { useUser } from "@/front/context/UserContext"
 import { useUpdateUser } from "@/front/hooks/queries/use-users"
 import { UpdateProfileSchema, type UpdateProfileFormValues } from "@/front/types/profile.schema"
 import { VerifyEmailChangeModal } from "./VerifyEmailChangeModal"
+import { useRouter } from "next/navigation"
 
 export function ProfileSection() {
     const user = useUser()
+    const router = useRouter()
     const { mutate: updateUser, isPending } = useUpdateUser()
     const [showEmailModal, setShowEmailModal] = useState(false)
 
@@ -40,6 +42,7 @@ export function ProfileSection() {
             {
                 onSuccess: () => {
                     toast.success("Profil mis à jour avec succès.")
+                    router.refresh()
                 },
                 onError: (error) => {
                     toast.error(error instanceof Error ? error.message : "Une erreur est survenue")

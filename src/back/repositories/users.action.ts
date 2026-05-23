@@ -127,6 +127,16 @@ export const UsersAction = {
         return prisma.user.update({ where: { id }, data });
     },
 
+    generateUniqueUsername: async (base: string): Promise<string> => {
+        const slug = base.toLowerCase().replace(/\s+/g, "");
+        let candidate = slug;
+        let suffix = 1;
+        while (await prisma.user.findUnique({ where: { username: candidate } })) {
+            candidate = `${slug}${suffix++}`;
+        }
+        return candidate;
+    },
+
     delete: async (id: string) => {
         return prisma.user.delete({ where: { id } });
     },

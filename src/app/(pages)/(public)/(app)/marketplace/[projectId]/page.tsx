@@ -9,9 +9,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     const { projectId } = await params;
 
     return (
-        <>
-            <BreadcrumbOverride segment={projectId} label={null} />
-            <ProjectDetailPageClient projectId={projectId} />
-        </>
+        <ProjectDetailPageClient projectId={projectId} />
     );
 }

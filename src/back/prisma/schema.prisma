@@ -21,6 +21,7 @@ model User {
   bio                       String?
   role                      Role                   @default(MEMBER)
   isPremium                 Boolean                @default(false)
+  isMarketplaceTalent       Boolean                @default(false)
   cv                        String?
   portfolio                 String?
   eventId                   String?

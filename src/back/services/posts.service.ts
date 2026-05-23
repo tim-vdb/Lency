@@ -95,4 +95,9 @@ export const PostsService = {
         await PostsService.findByIdPost(postId);
         return PostsAction.reportPost(user.id, postId, reason);
     },
+
+    validateIds: async (ids: string[]): Promise<string[]> => {
+        if (!Array.isArray(ids) || ids.length === 0) return [];
+        return PostsAction.findExistingIds(ids);
+    },
 };

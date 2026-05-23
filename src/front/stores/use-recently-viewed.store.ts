@@ -25,6 +25,7 @@ interface RecentlyViewedStore {
     add: (post: PostWithUserState) => void;
     syncCounts: (postId: string, counts: CountUpdates) => void;
     clear: () => void;
+    purgeInvalid: () => Promise<void>;
 }
 
 export const useRecentlyViewed = create<RecentlyViewedStore>()(
@@ -63,6 +64,25 @@ export const useRecentlyViewed = create<RecentlyViewedStore>()(
                     ),
                 })),
             clear: () => set({ entries: [] }),
+            purgeInvalid: async () => {
+                const ids = useRecentlyViewed.getState().entries.map((e) => e.id);
+                if (ids.length === 0) return;
+                try {
+                    const res = await fetch("/api/posts/validate", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ ids }),
+                    });
+                    if (!res.ok) return;
+                    const { validIds } = await res.json() as { validIds: string[] };
+                    const validSet = new Set(validIds);
+                    set((state) => ({
+                        entries: state.entries.filter((e) => validSet.has(e.id)),
+                    }));
+                } catch {
+                    // silencieux — on garde les entrées en cas d'erreur réseau
+                }
+            },
         }),
         { name: "lency:recently-viewed" }
     )

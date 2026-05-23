@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import ExpandableText from "@/front/components/Public/Community/Posts/ExpandableText";
 import PostSkeleton, { PostImageSkeleton } from "@/front/components/Public/Community/Posts/PostSkeleton";

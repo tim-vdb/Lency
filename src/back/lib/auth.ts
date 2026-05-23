@@ -1,5 +1,6 @@
 // lib/auth.ts
 
+import { UsersAction } from '@/back/repositories/users.action';
 import { prisma } from '@/back/lib/prisma';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
@@ -32,6 +33,18 @@ export const auth = betterAuth({
   trustedOrigins: [
     process.env.BASE_URL ?? 'http://localhost:3000',
   ],
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          if (!user.username && user.firstname) {
+            const username = await UsersAction.generateUniqueUsername(user.firstname as string);
+            await UsersAction.update(user.id, { username });
+          }
+        },
+      },
+    },
+  },
   plugins: [
     nextCookies(),
     emailOTP({

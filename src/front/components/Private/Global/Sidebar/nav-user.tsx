@@ -95,14 +95,12 @@ export function NavUser() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                {user?.username && (
-                  <DropdownMenuItem asChild className="cursor-pointer">
-                    <Link href={`/user/${user.username}`}>
-                      <UserRound className="size-4" />
-                      Compte
-                    </Link>
-                  </DropdownMenuItem>
-                )}
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href={`/user/${user.username ?? user.firstname}`}>
+                    <UserRound className="size-4" />
+                    Mon profil
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild className="cursor-pointer">
                   <Link href="/account/badges">
                     <BadgeCheck className="size-4" />

@@ -10,7 +10,7 @@ import { useProjects } from "@/front/hooks/queries/use-projects";
 
 function ProjectDetailSkeleton() {
     return (
-        <div className="flex flex-col xl:flex-row gap-6 max-w-6xl mx-auto">
+        <div className="flex flex-col xl:flex-row gap-6">
             <div className="flex-1 flex flex-col gap-5">
                 <Skeleton className="w-full h-64 rounded-xl" />
                 <div className="flex items-center gap-3">
@@ -47,7 +47,7 @@ export default function ProjectDetailPageClient({ projectId }: { projectId: stri
         .slice(0, 3) ?? [];
 
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 max-w-7xl mx-auto w-full">
             {isPending && <ProjectDetailSkeleton />}
             {!isPending && !project && (
                 <div className="flex items-center justify-center py-24">
@@ -58,7 +58,7 @@ export default function ProjectDetailPageClient({ projectId }: { projectId: stri
 
             {/* Autres projets */}
             {related.length > 0 && (
-                <div className="flex flex-col gap-4 max-w-6xl mx-auto w-full">
+                <div className="flex flex-col gap-4">
                     <Separator />
                     <p className="text-sm font-semibold text-neutral-700">D&apos;autres projets à découvrir</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

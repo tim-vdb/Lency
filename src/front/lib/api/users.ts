@@ -68,6 +68,7 @@ export interface UpdateUserInput {
     image?: string;
     portfolio?: string;
     cv?: string;
+    isMarketplaceTalent?: boolean;
 }
 
 /**

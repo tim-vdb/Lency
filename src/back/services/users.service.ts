@@ -110,6 +110,7 @@ export const UsersService = {
             image?: string;
             cv?: string;
             portfolio?: string;
+            isMarketplaceTalent?: boolean;
         }
     ) => {
         if (!data || Object.keys(data).length === 0) {
@@ -123,9 +124,19 @@ export const UsersService = {
             throw new Error("Forbidden");
         }
 
-        await UsersService.findByIdUser(id);
+        const existing = await UsersService.findByIdUser(id);
 
-        return UsersAction.update(id, data);
+        let finalData = { ...data };
+
+        // Si le firstname change et que l'user n'a pas encore de username, en générer un
+        if (data.firstname && !existing.username && !data.username) {
+            finalData = {
+                ...finalData,
+                username: await UsersAction.generateUniqueUsername(data.firstname),
+            };
+        }
+
+        return UsersAction.update(id, finalData);
     },
 
     updateUserRole: async (id: string, role: "ADMIN" | "MEMBER") => {

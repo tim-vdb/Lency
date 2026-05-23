@@ -44,8 +44,12 @@ export default function CommunityPage() {
     const { data: followedPosts, isPending: followedPending } = useFollowedCategoryPosts()
     const entries = useRecentlyViewed((s) => s.entries)
     const clearViewed = useRecentlyViewed((s) => s.clear)
+    const purgeInvalid = useRecentlyViewed((s) => s.purgeInvalid)
     const [mounted, setMounted] = useState(false)
-    useEffect(() => setMounted(true), [])
+    useEffect(() => {
+        setMounted(true);
+        purgeInvalid();
+    }, [])
 
     const popularPosts = useMemo(() => {
         if (!posts) return [];

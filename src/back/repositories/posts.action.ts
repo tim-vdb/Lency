@@ -134,4 +134,12 @@ export const PostsAction = {
             update: { reason },
         });
     },
+
+    findExistingIds: async (ids: string[]): Promise<string[]> => {
+        const posts = await prisma.post.findMany({
+            where: { id: { in: ids } },
+            select: { id: true },
+        });
+        return posts.map((p) => p.id);
+    },
 };

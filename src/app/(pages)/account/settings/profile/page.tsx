@@ -2,12 +2,16 @@
 
 import { ProfileSection } from '@/front/components/Private/Account/Profile/ProfileSection';
 import ProfileDelete from '@/front/components/Private/Account/Profile/ProfileDelete';
+import { TalentProfileForm } from '@/front/components/Private/Account/Profile/TalentProfileForm';
+import { AudiovisualConfigSection } from '@/front/components/Private/Account/Profile/AudiovisualConfigSection';
 
 export default function ProfilePage() {
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-6">
       <ProfileSection />
+      <TalentProfileForm />
+      <AudiovisualConfigSection />
       <ProfileDelete />
     </div>
   );
