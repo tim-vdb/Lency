@@ -18,6 +18,7 @@ import "swiper/css/navigation";
 import ProjectCard from "./Projects/ProjectCard";
 import TalentCard from "./Talents/TalentCard";
 import { cn } from "@/front/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
 
@@ -496,14 +497,24 @@ function EmptyState({
 // ─── Composant principal ──────────────────────────────────────────────────────
 
 export default function MarketplacePageClient() {
-    const [activeTab, setActiveTab] = useState<"projets" | "talents">("projets");
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    const initialTab = searchParams.get("tab") === "talents" ? "talents" : "projets";
+    const [activeTab, setActiveTab] = useState<"projets" | "talents">(initialTab);
+
+    function handleTabChange(tab: "projets" | "talents") {
+        setActiveTab(tab);
+        const url = tab === "talents" ? "/marketplace?tab=talents" : "/marketplace";
+        router.replace(url, { scroll: false });
+    }
 
     return (
         <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full">
             {/* Tabs Projets / Talents */}
             <div className="flex items-center gap-0 bg-white rounded-[5px] p-1 w-fit">
                 <button
-                    onClick={() => setActiveTab("projets")}
+                    onClick={() => handleTabChange("projets")}
                     className={cn("px-6 py-2 rounded-lg font-['Poppins',sans-serif] font-medium text-[16px] leading-6 transition-colors", {
                         "bg-black text-white": activeTab === "projets",
                         "text-[#4c4a43] hover:bg-neutral-50": activeTab !== "projets"
@@ -512,7 +523,7 @@ export default function MarketplacePageClient() {
                     Projets
                 </button>
                 <button
-                    onClick={() => setActiveTab("talents")}
+                    onClick={() => handleTabChange("talents")}
                     className={cn("px-6 py-2 rounded-lg font-['Poppins',sans-serif] font-medium text-[16px] leading-6 transition-colors", {
                         "bg-black text-white": activeTab === "talents",
                         "text-[#4c4a43] hover:bg-neutral-50": activeTab !== "talents"

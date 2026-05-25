@@ -3,7 +3,7 @@ import { PostWithUserState } from "./post.schema";
 
 export type UserProfileBase = Prisma.UserGetPayload<{
     include: {
-        projects: true;
+        projects: { include: { mapLocation: true } };
         badges: true;
         categoryFollows: { include: { category: true } };
         followers: {

@@ -14,10 +14,10 @@ model Resource {
   title        String
   description  String?
   type         ResourceType
-  url          String?
-  imageUrl     String?
-  videoUrl     String?
-  audioUrl     String?
+  urls         String[]
+  imageUrls    String[]
+  videoUrls    String[]
+  audioUrls    String[]
   authorId     String
   categoryId   String
   upvoteCount  Int            @default(0)

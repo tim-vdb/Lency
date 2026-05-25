@@ -1,9 +1,13 @@
 "use client";
 
-import { ProjectWithOwner } from "@/front/types/project.schema";
-import { MapPin, Wallet } from "lucide-react";
+import { Prisma } from "@/back/generated/prisma_client";
+import { FolderOpen, MapPin, TrendingUp, Wallet } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+
+type ProjectCardProps = Prisma.ProjectGetPayload<{
+    include: { mapLocation: true };
+}>;
 
 const WORKMODE_LABEL: Record<string, string> = {
     PRESENTIEL: "Présentiel",
@@ -16,7 +20,7 @@ const REMUNERATION_LABEL: Record<string, string> = {
     REMUNERE: "Rémunéré",
 };
 
-export default function ProjectCard({ project }: { project: ProjectWithOwner }) {
+export default function ProjectCard({ project, showProjectType }: { project: ProjectCardProps; showProjectType?: boolean }) {
     const roles = Array.isArray(project.roles) ? (project.roles as string[]) : [];
 
     const dateLabel = project.startDate
@@ -28,6 +32,7 @@ export default function ProjectCard({ project }: { project: ProjectWithOwner }) 
     const workMode = project.workMode ? WORKMODE_LABEL[project.workMode] ?? null : null;
     const locationLine = [cityName, workMode].filter(Boolean).join(" / ");
     const remuLine = project.remunerationType ? REMUNERATION_LABEL[project.remunerationType] ?? null : null;
+    const levelLine = project.level ? `Niveau ${project.level.toLowerCase()}` : null;
 
     return (
         <Link href={`/marketplace/${project.id}`} className="block group h-full">
@@ -88,8 +93,16 @@ export default function ProjectCard({ project }: { project: ProjectWithOwner }) 
                         )}
 
                         {/* Meta */}
-                        {(locationLine || remuLine) && (
+                        {(locationLine || remuLine || levelLine || (showProjectType && project.projectType)) && (
                             <div className="flex flex-col gap-2 min-w-0 shrink-0">
+                                {showProjectType && project.projectType && (
+                                    <div className="flex items-center gap-1.5">
+                                        <FolderOpen className="w-3.5 h-3.5 text-[#4c4a43] shrink-0" />
+                                        <span className="font-['Poppins',sans-serif] text-[12px] font-medium text-[#4c4a43] truncate">
+                                            {project.projectType}
+                                        </span>
+                                    </div>
+                                )}
                                 {locationLine && (
                                     <div className="flex items-center gap-1.5">
                                         <MapPin className="w-3.5 h-3.5 text-[#4c4a43] shrink-0" />
@@ -103,6 +116,14 @@ export default function ProjectCard({ project }: { project: ProjectWithOwner }) 
                                         <Wallet className="w-3.5 h-3.5 text-[#4c4a43] shrink-0" />
                                         <span className="font-['Poppins',sans-serif] text-[12px] text-[#4c4a43] truncate">
                                             {remuLine}
+                                        </span>
+                                    </div>
+                                )}
+                                {levelLine && (
+                                    <div className="flex items-center gap-1.5">
+                                        <TrendingUp className="w-3.5 h-3.5 text-[#4c4a43] shrink-0" />
+                                        <span className="font-['Poppins',sans-serif] text-[12px] text-[#4c4a43] truncate">
+                                            {levelLine}
                                         </span>
                                     </div>
                                 )}

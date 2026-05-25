@@ -1,11 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/front/components/ui/form";
@@ -14,8 +8,14 @@ import { Separator } from "@/front/components/ui/separator";
 import { Switch } from "@/front/components/ui/switch";
 import { Textarea } from "@/front/components/ui/textarea";
 import { useUser } from "@/front/context/UserContext";
-import { useMyConfigs, useCreateUserConfig, useDeleteUserConfig } from "@/front/hooks/queries/use-userConfigs";
+import { useCreateUserConfig, useDeleteUserConfig, useMyConfigs } from "@/front/hooks/queries/use-userConfigs";
 import { useUpdateUser } from "@/front/hooks/queries/use-users";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const TalentProfileSchema = z.object({
     bio: z.string().max(500, "Max 500 caractères").optional(),

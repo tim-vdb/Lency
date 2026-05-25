@@ -6,7 +6,10 @@ export interface Talent {
     image: string | null;
     avatarUrl: string | null;
     bio: string | null;
+    portfolio: string | null;
+    cv: string | null;
     badges: { id: string; name: string }[];
+    categoryFollows: { category: { id: string; name: string } }[];
     _count: { followers: number };
 }
 

@@ -5,7 +5,7 @@ import PostImage from "@/front/components/Public/Community/Posts/PostImage";
 import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
 import PostSkeleton, { PostImageSkeleton } from "@/front/components/Public/Community/Posts/PostSkeleton";
-import ProjectCard from "@/front/components/Public/Community/Projects/ProjectCard";
+import ProjectCard from "@/front/components/Public/Marketplace/Projects/ProjectCard";
 import UserAchievementsCard from "@/front/components/Public/Community/User/UserAchievementsCard";
 import UserFollowingCommunities from "@/front/components/Public/Community/User/UserFollowingCommunities";
 import UserProfileHeader from "@/front/components/Public/Community/User/UserProfileHeader";
@@ -18,10 +18,97 @@ import { useUserByUsername } from "@/front/hooks/queries/use-users";
 import { usePostsByAuthor } from "@/front/hooks/queries/use-posts";
 import { useResourcesByAuthor } from "@/front/hooks/queries/use-resources";
 import ResourceCard from "@/front/components/Public/Community/Resources/ResourceCard";
+import { TalentProfileModal } from "@/front/components/Private/Global/TalentProfileModal";
+import { useUser } from "@/front/context/UserContext";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
-import { MapPin } from "lucide-react";
+import { ExternalLink, FileText, MapPin, Sparkles, UserCog } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { getDisplayName } from "@/front/lib/utils";
+import { UserProfile } from "@/front/types/user.schema";
+
+function TalentProfileCard({ user }: { user: UserProfile }) {
+    if (!user.isMarketplaceTalent) return null;
+
+    return (
+        <Card className="border-orange/30 bg-orange/5">
+            <CardContent className="p-4 flex flex-col gap-3">
+                {/* Header */}
+                <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-orange shrink-0" />
+                    <span className="text-sm font-semibold text-foreground">Talent disponible</span>
+                    <span className="ml-auto w-2 h-2 rounded-full bg-green-500 shrink-0" title="Disponible" />
+                </div>
+
+                {/* Catégories suivies */}
+                {user.categoryFollows.length > 0 && (
+                    <div className="flex flex-col gap-1.5">
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                            Spécialités
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                            {user.categoryFollows.slice(0, 4).map(({ category }) => (
+                                <span
+                                    key={category.id}
+                                    className="inline-flex items-center h-5 px-2 bg-white rounded-full border border-neutral-200 text-[11px] text-foreground"
+                                >
+                                    {category.name}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Badges / rôles */}
+                {user.badges.length > 0 && (
+                    <div className="flex flex-col gap-1.5">
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                            Rôles
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                            {user.badges.slice(0, 4).map((badge) => (
+                                <span
+                                    key={badge.id}
+                                    className="inline-flex items-center h-5 px-2 border border-foreground rounded text-[11px] text-foreground"
+                                >
+                                    {badge.name}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Portfolio + CV */}
+                {(user.portfolio || user.cv) && (
+                    <div className="flex flex-col gap-1.5 pt-1 border-t border-orange/20">
+                        {user.portfolio && (
+                            <a
+                                href={user.portfolio}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                className="flex items-center gap-2 text-xs text-foreground hover:text-orange transition-colors"
+                            >
+                                <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                                <span className="truncate">Portfolio</span>
+                            </a>
+                        )}
+                        {user.cv && (
+                            <a
+                                href={user.cv}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                className="flex items-center gap-2 text-xs text-foreground hover:text-orange transition-colors"
+                            >
+                                <FileText className="w-3.5 h-3.5 shrink-0" />
+                                <span className="truncate">Voir le CV</span>
+                            </a>
+                        )}
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
 
 function UserProfileSkeleton() {
     return (
@@ -126,6 +213,10 @@ export default function UserProfilePageClient({ username }: { username: string }
     const displayName = user ? getDisplayName(user) : undefined;
     useBreadcrumbOverride(username, displayName);
 
+    const currentUser = useUser();
+    const isOwnProfile = !!currentUser && !!user && currentUser.id === user.id;
+    const [talentModalOpen, setTalentModalOpen] = useState(false);
+
     if (isPending) return <UserProfileSkeleton />;
 
     if (error || !user) {
@@ -223,13 +314,15 @@ export default function UserProfilePageClient({ username }: { username: string }
                             )}
                         </TabsContent>
 
-                        <TabsContent value="projects" className="mt-0 flex flex-col gap-4">
+                        <TabsContent value="projects" className="mt-0">
                             {user.projects.length === 0 && (
                                 <p className="text-sm text-neutral-500">Aucun projet.</p>
                             )}
-                            {user.projects.map((project) => (
-                                <ProjectCard key={project.id} project={project} />
-                            ))}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {user.projects.map((project) => (
+                                    <ProjectCard key={project.id} project={project} showProjectType />
+                                ))}
+                            </div>
                         </TabsContent>
                     </div>
 
@@ -242,9 +335,22 @@ export default function UserProfilePageClient({ username }: { username: string }
                             <MapPin className="w-4 h-4" />
                             Voir la localisation
                         </Button>
+                        {isOwnProfile && (
+                            <Button
+                                variant="outline"
+                                className="w-full gap-2"
+                                onClick={() => setTalentModalOpen(true)}
+                            >
+                                <UserCog className="w-4 h-4" />
+                                {user.isMarketplaceTalent ? "Modifier le profil talent" : "Créer le profil talent"}
+                            </Button>
+                        )}
+                        <TalentProfileCard user={user} />
                         <UserFollowingCommunities follows={user.categoryFollows} />
                         <UserAchievementsCard badges={user.badges} userId={user.id} />
                     </div>
+
+                    <TalentProfileModal open={talentModalOpen} onOpenChange={setTalentModalOpen} />
                 </div>
             </Tabs>
         </div>

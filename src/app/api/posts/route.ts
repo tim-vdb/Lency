@@ -1,4 +1,5 @@
 import { PostsService } from "@/back/services/posts.service";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -17,6 +18,8 @@ export async function POST(req: NextRequest) {
     try {
         const data = await req.json();
         const newPost = await PostsService.createPost(data);
+        revalidatePath("/community", "layout");
+        revalidatePath("/user", "layout");
         return NextResponse.json({ post: newPost }, { status: 201 });
     } catch (error) {
         if (error instanceof Error) {

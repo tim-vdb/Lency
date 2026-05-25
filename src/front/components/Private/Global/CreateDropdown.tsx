@@ -44,7 +44,7 @@ export function CreateDropdown() {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="outline"
-                        className="ml-auto cursor-pointer border-neutral-300 bg-orange hover:bg-orange/80 rounded-sm"
+                        className="flex gap-2 ml-auto cursor-pointer border-neutral-300 bg-orange hover:bg-orange/80 rounded-sm"
                     >
                         <Plus className="w-4 h-4 border border-white text-white rounded-[3px]" />
                         <span className="text-white">Créer</span>
@@ -79,7 +79,7 @@ export function CreateDropdown() {
                     <DialogContent
                         className={cn(
                             "p-0 gap-0",
-                            "w-full max-w-2xl h-[560px]",
+                            "w-full max-w-[820px] h-[600px]",
                             "flex overflow-hidden rounded-xl",
                         )}
                     >
@@ -130,29 +130,17 @@ export function CreateDropdown() {
                                 </TabsTrigger>
                             </TabsList>
 
-                            {/* Content */}
-                            <TabsContent
-                                value="post"
-                                className="flex-1 overflow-y-auto p-6 mt-0"
-                            >
+                            {/* Content — MultistepForm renders its own <form> + step sidebar */}
+                            <TabsContent value="post" className="flex-1 overflow-hidden mt-0 flex">
                                 <CreatePostForm onSuccess={() => setModalOpen(false)} />
                             </TabsContent>
-                            <TabsContent
-                                value="project"
-                                className="flex-1 overflow-y-auto p-6 mt-0"
-                            >
+                            <TabsContent value="project" className="flex-1 overflow-hidden mt-0 flex">
                                 <CreateProjectForm onSuccess={() => setModalOpen(false)} />
                             </TabsContent>
-                            <TabsContent
-                                value="category"
-                                className="flex-1 overflow-y-auto p-6 mt-0"
-                            >
+                            <TabsContent value="category" className="flex-1 overflow-hidden mt-0 flex">
                                 <CreateCategoryForm onSuccess={() => setModalOpen(false)} />
                             </TabsContent>
-                            <TabsContent
-                                value="resource"
-                                className="flex-1 overflow-y-auto p-6 mt-0"
-                            >
+                            <TabsContent value="resource" className="flex-1 overflow-hidden mt-0 flex">
                                 <CreateResourceForm onSuccess={() => setModalOpen(false)} />
                             </TabsContent>
                         </Tabs>

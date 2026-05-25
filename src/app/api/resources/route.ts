@@ -1,4 +1,5 @@
 import { ResourcesService } from "@/back/services/resources.service";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -16,17 +17,15 @@ export async function POST(req: NextRequest) {
     try {
         const data = await req.json();
         const newResource = await ResourcesService.createResource(data);
+        revalidatePath("/community", "layout");
+        revalidatePath("/user", "layout");
         return NextResponse.json({ resource: newResource }, { status: 201 });
     } catch (error) {
         if (error instanceof Error) {
             if (error.message === "Unauthorized") {
                 return NextResponse.json({ error: error.message }, { status: 401 });
             }
-            if ([
-                "Title is required",
-                "Type is required",
-                "Category is required",
-            ].includes(error.message)) {
+            if (["Title is required", "Type is required", "Category is required"].includes(error.message)) {
                 return NextResponse.json({ error: error.message }, { status: 400 });
             }
         }

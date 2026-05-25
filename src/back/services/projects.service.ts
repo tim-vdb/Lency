@@ -55,6 +55,15 @@ export const ProjectsService = {
         title?: string;
         description?: string;
         status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
+        bannerUrl?: string;
+        projectType?: string;
+        remunerationType?: RemunerationType;
+        level?: ProjectLevel;
+        workMode?: WorkMode;
+        startDate?: string;
+        roles?: string[];
+        visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
+        city?: string;
     }) => {
         if (!data || Object.keys(data).length === 0) throw new Error("No data to update");
 
@@ -64,7 +73,32 @@ export const ProjectsService = {
         const project = await ProjectsService.findByIdProject(id);
         if (project.ownerId !== user.id) throw new Error("Forbidden");
 
-        return ProjectsAction.update(id, data);
+        return ProjectsAction.update(id, {
+            title: data.title,
+            description: data.description,
+            status: data.status,
+            bannerUrl: data.bannerUrl,
+            projectType: data.projectType,
+            remunerationType: data.remunerationType,
+            level: data.level,
+            workMode: data.workMode,
+            startDate: data.startDate ? new Date(data.startDate) : undefined,
+            roles: data.roles,
+            visibility: data.visibility,
+            ...(data.city !== undefined && {
+                mapLocation: { name: data.city || "", latitude: 0, longitude: 0 },
+            }),
+        });
+    },
+
+    reportProject: async (projectId: string, reason?: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+
+        const project = await ProjectsAction.findById(projectId);
+        if (!project) throw new Error("Project not found");
+
+        return ProjectsAction.reportProject(user.id, projectId, reason);
     },
 
     deleteProject: async (id: string) => {

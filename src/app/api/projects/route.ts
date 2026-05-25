@@ -1,4 +1,5 @@
 import { ProjectsService } from "@/back/services/projects.service";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
@@ -14,6 +15,8 @@ export async function POST(req: NextRequest) {
     try {
         const data = await req.json();
         const newProject = await ProjectsService.createProject(data);
+        revalidatePath("/marketplace");
+        revalidatePath("/user", "layout");
         return NextResponse.json({ project: newProject }, { status: 201 });
     } catch (error) {
         if (error instanceof Error) {

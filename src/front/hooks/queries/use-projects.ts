@@ -2,11 +2,15 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/r
 import {
     createProject,
     createProjectComment,
+    deleteProject,
     fetchProjectById,
     fetchProjectComments,
     fetchProjects,
+    reportProject,
+    updateProject,
     type CreateProjectCommentInput,
     type CreateProjectInput,
+    type UpdateProjectInput,
 } from "@/front/lib/api/projects";
 import { CommentWithChildren } from "@/front/types/post.schema";
 
@@ -62,6 +66,28 @@ export const useCreateProjectComment = (projectId: string) => {
             queryClient.invalidateQueries({ queryKey: [...PROJECT_ROOT, "comments", projectId] });
             queryClient.invalidateQueries({ queryKey: [...PROJECT_ROOT, "detail", projectId] });
         },
+    });
+};
+
+export const useUpdateProject = (projectId: string) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (input: UpdateProjectInput) => updateProject(projectId, input),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: PROJECT_ROOT }),
+    });
+};
+
+export const useDeleteProject = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id: string) => deleteProject(id),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: PROJECT_ROOT }),
+    });
+};
+
+export const useReportProject = (projectId: string) => {
+    return useMutation({
+        mutationFn: (reason?: string) => reportProject(projectId, reason),
     });
 };
 

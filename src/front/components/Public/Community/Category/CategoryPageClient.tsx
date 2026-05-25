@@ -214,9 +214,9 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                                 {resources.slice(0, 4).map((resource) => (
                                     <Link key={resource.id} href={`/community/${slug}/resources/${resource.id}`} className="flex flex-col gap-1 group">
                                         <div className="w-full aspect-video rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-                                            {resource.imageUrl ? (
+                                            {resource.imageUrls?.[0] ? (
                                                 <Image
-                                                    src={resource.imageUrl}
+                                                    src={resource.imageUrls[0]}
                                                     alt={resource.title}
                                                     width={120}
                                                     height={68}

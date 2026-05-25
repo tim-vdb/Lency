@@ -23,7 +23,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const PLATFORMS = [
-    { value: "portfolio", label: "Portfolio", icon: Briefcase },
     { value: "instagram", label: "Instagram", icon: FaInstagram },
     { value: "behance", label: "Behance", icon: FaBehance },
     { value: "tiktok", label: "TikTok", icon: FaTiktok },

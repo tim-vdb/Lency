@@ -54,6 +54,54 @@ export interface CreateProjectCommentInput {
     videoUrl?: string | null;
 }
 
+export interface UpdateProjectInput {
+    title?: string;
+    description?: string;
+    bannerUrl?: string;
+    projectType?: string;
+    remunerationType?: "NON_REMUNERE" | "REMUNERE";
+    level?: "DEBUTANT" | "INTERMEDIAIRE" | "AVANCE";
+    workMode?: "PRESENTIEL" | "DISTANCIEL" | "HYBRIDE";
+    startDate?: string;
+    roles?: string[];
+    visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
+    city?: string;
+    status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
+}
+
+export async function updateProject(projectId: string, input: UpdateProjectInput): Promise<ProjectWithOwner> {
+    const res = await fetch(`/api/projects/${projectId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+    });
+    if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la mise à jour du projet");
+    }
+    return (await res.json()).project;
+}
+
+export async function deleteProject(projectId: string): Promise<void> {
+    const res = await fetch(`/api/projects/${projectId}`, { method: "DELETE" });
+    if (!res.ok && res.status !== 204) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la suppression du projet");
+    }
+}
+
+export async function reportProject(projectId: string, reason?: string): Promise<void> {
+    const res = await fetch(`/api/projects/${projectId}/report`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason }),
+    });
+    if (!res.ok && res.status !== 204) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors du signalement");
+    }
+}
+
 export async function createProjectComment(input: CreateProjectCommentInput): Promise<CommentWithChildren> {
     const res = await fetch(`/api/projects/${input.projectId}/comments`, {
         method: "POST",

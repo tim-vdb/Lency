@@ -57,6 +57,7 @@ const navMain: NavMainItem[] = [
     icon: Store,
     items: [
       { title: "Projets", url: "/marketplace", icon: Briefcase },
+      { title: "Talents", url: "/marketplace?tab=talents", icon: Users },
     ],
   }
 ]

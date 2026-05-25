@@ -24,6 +24,21 @@ model Project {
   owner         User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   participants  User[]        @relation("Participants")
   comments      Comment[]
+  reports       ProjectReport[]
+}
+
+model ProjectReport {
+  id        String   @id @default(cuid())
+  userId    String
+  projectId String
+  reason    String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+  @@index([userId])
+  @@index([projectId])
 }
 
 model Event {

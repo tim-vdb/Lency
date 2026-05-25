@@ -46,7 +46,7 @@ export default function CategoryResourcesPageClient({ slug }: { slug: string }) 
                 {resources?.map((resource) => (
                     <div key={resource.id} className="relative">
                         <ResourceCard resource={resource} variant="grid" />
-                        <Badge className="absolute top-3 left-3 bg-black/70 rounded-tl-lg rounded-bl-none rounded-r-sm text-white text-[10px] pointer-events-none">
+                        <Badge className="absolute top-0 left-0 bg-black/70 rounded-tl-lg rounded-bl-none rounded-r-sm text-white text-[10px] pointer-events-none">
                             {resource.author.id === user?.id ? (
                                 <span>
                                     Par vous

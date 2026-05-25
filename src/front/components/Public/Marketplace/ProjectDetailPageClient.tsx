@@ -63,7 +63,7 @@ export default function ProjectDetailPageClient({ projectId }: { projectId: stri
                     <p className="text-sm font-semibold text-neutral-700">D&apos;autres projets à découvrir</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                         {related.map((p) => (
-                            <ProjectCard key={p.id} project={p} />
+                            <ProjectCard key={p.id} project={p} showProjectType />
                         ))}
                     </div>
                 </div>

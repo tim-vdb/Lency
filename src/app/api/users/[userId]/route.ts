@@ -1,4 +1,5 @@
 import { UsersService } from "@/back/services/users.service";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -31,6 +32,8 @@ export async function PATCH(
         const data = await req.json();
 
         const updatedUser = await UsersService.updateUser(userId, data);
+        revalidatePath("/user", "layout");
+        revalidatePath("/marketplace", "layout");
         return NextResponse.json({ user: updatedUser });
     } catch (error) {
         if (error instanceof Error) {

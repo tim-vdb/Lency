@@ -3,14 +3,36 @@
 import CommentRoot from "@/front/components/Public/Community/Comments/CommentRoot";
 import Comments from "@/front/components/Public/Community/Comments/Comments";
 import MediaLightbox, { MediaExpandOverlay } from "@/front/components/Public/Community/MediaLightbox";
+import { EditProjectForm } from "@/front/components/Private/Global/EditProjectForm";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/front/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
 import { Button } from "@/front/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogOverlay,
+    DialogPortal,
+    DialogTitle,
+} from "@/front/components/ui/dialog";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/front/components/ui/dropdown-menu";
+import { useUser } from "@/front/context/UserContext";
+import { useDeleteProject, useReportProject } from "@/front/hooks/queries/use-projects";
 import { useShare } from "@/front/hooks/use-share";
 import { cn, getDisplayName, getInitialName, timeAgo } from "@/front/lib/utils";
 import { ProjectAttachment, ProjectWithOwner } from "@/front/types/project.schema";
@@ -23,11 +45,12 @@ import {
     MapPin,
     MessageCircle,
     MoreHorizontal,
-    Paperclip,
+    Pencil,
     Users,
     Wallet,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -50,8 +73,15 @@ const REMUNERATION_LABEL: Record<string, { label: string; color: string }> = {
 
 export default function ProjectDetail({ project }: { project: ProjectWithOwner }) {
     const [applyPending, setApplyPending] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const share = useShare();
+    const router = useRouter();
+    const currentUser = useUser();
+    const isOwner = currentUser?.id === project.ownerId;
     const href = `/marketplace/${project.id}`;
+    const { mutate: report, isPending: isReporting } = useReportProject(project.id);
+    const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
 
     const roles = Array.isArray(project.roles) ? (project.roles as string[]) : [];
     const attachments = Array.isArray(project.attachments)
@@ -73,6 +103,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
     const hasInfos = !!(project.projectType || project.mapLocation || workModeStr || remuInfo || levelStr || project.startDate || roles.length > 0);
 
     return (
+        <>
         <div className="flex flex-col gap-0">
             {/* Bannière pleine largeur */}
             {project.bannerUrl ? (
@@ -124,9 +155,30 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                                 <DropdownMenuItem onClick={() => share(href, project.title)}>
                                     Partager le projet
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => toast.info("Signalement en cours de développement.")}>
-                                    Signaler
-                                </DropdownMenuItem>
+                                {!isOwner && (
+                                    <DropdownMenuItem
+                                        disabled={isReporting}
+                                        onClick={() =>
+                                            report(undefined, {
+                                                onSuccess: () => toast.success("Projet signalé. Merci pour votre retour."),
+                                                onError: (err) => toast.error(err.message),
+                                            })
+                                        }
+                                    >
+                                        Signaler
+                                    </DropdownMenuItem>
+                                )}
+                                {isOwner && (
+                                    <>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem
+                                            className="text-destructive focus:text-destructive"
+                                            onClick={() => setDeleteOpen(true)}
+                                        >
+                                            Supprimer le projet
+                                        </DropdownMenuItem>
+                                    </>
+                                )}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -189,14 +241,28 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
 
                 {/* Colonne droite : sticky */}
                 <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
-                    {/* Bouton Postuler */}
-                    <Button
-                        className="w-full h-[55px] bg-[#ea3d0e] hover:bg-[#d13500] text-white font-['Poppins',sans-serif] font-bold text-[20px] leading-[24px] rounded-[5px] border-0"
-                        onClick={handleApply}
-                        disabled={applyPending}
-                    >
-                        {applyPending ? "Envoi..." : "Postuler au projet"}
-                    </Button>
+                    {/* Bouton Postuler — masqué pour le créateur */}
+                    {!isOwner && (
+                        <Button
+                            className="w-full h-[55px] bg-[#ea3d0e] hover:bg-[#d13500] text-white font-['Poppins',sans-serif] font-bold text-[20px] leading-[24px] rounded-[5px] border-0"
+                            onClick={handleApply}
+                            disabled={applyPending}
+                        >
+                            {applyPending ? "Envoi..." : "Postuler au projet"}
+                        </Button>
+                    )}
+
+                    {/* Bouton Modifier — visible uniquement par le créateur */}
+                    {isOwner && (
+                        <Button
+                            variant="outline"
+                            className="w-full h-[55px] font-['Poppins',sans-serif] font-semibold text-[18px] leading-[24px] rounded-[5px] gap-2"
+                            onClick={() => setEditOpen(true)}
+                        >
+                            <Pencil className="w-5 h-5" />
+                            Modifier le projet
+                        </Button>
+                    )}
 
                     {/* Card Infos pratiques */}
                     <div className="bg-white rounded-[10px] p-[27px] flex flex-col gap-0">
@@ -279,6 +345,49 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                 </aside>
             </div>
         </div>
+
+        {/* ── Modal édition ── */}
+        <Dialog open={editOpen} onOpenChange={setEditOpen}>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent className="p-0 gap-0 w-full max-w-[820px] h-[600px] flex overflow-hidden rounded-xl">
+                    <DialogTitle className="sr-only">Modifier le projet</DialogTitle>
+                    <DialogDescription className="sr-only">Formulaire de modification du projet</DialogDescription>
+                    <EditProjectForm project={project} onSuccess={() => setEditOpen(false)} />
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
+
+        {/* ── Confirmation suppression ── */}
+        <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Supprimer ce projet ?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Cette action est irréversible. Le projet et tous ses commentaires seront définitivement supprimés.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel disabled={isDeleting}>Annuler</AlertDialogCancel>
+                    <AlertDialogAction
+                        disabled={isDeleting}
+                        className="bg-destructive hover:bg-destructive/90"
+                        onClick={() =>
+                            deleteProject(project.id, {
+                                onSuccess: () => {
+                                    toast.success("Projet supprimé.");
+                                    router.push("/marketplace");
+                                },
+                                onError: (err) => toast.error(err.message),
+                            })
+                        }
+                    >
+                        {isDeleting ? "Suppression…" : "Supprimer"}
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+        </>
     );
 }
 

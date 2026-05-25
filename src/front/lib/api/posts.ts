@@ -1,10 +1,11 @@
 import { CommentWithChildren, PostWithAuthorAndCategory, PostWithUserState } from "@/front/types/post.schema";
 
 export interface CreatePostInput {
-    title: string
+    title?: string
     content: string
     categoryId: string
     format?: "DESKTOP" | "MOBILE" | "TEXT" | "IMAGE" | "VIDEO" | "AUDIO"
+    orientation?: "LANDSCAPE" | "PORTRAIT"
     imageUrl?: string
     videoUrl?: string
     audioUrl?: string

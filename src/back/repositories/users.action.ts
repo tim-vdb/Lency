@@ -29,7 +29,7 @@ export const UsersAction = {
                     include: { author: true, category: true },
                     orderBy: { createdAt: "desc" },
                 },
-                projects: { orderBy: { createdAt: "desc" } },
+                projects: { include: { mapLocation: true }, orderBy: { createdAt: "desc" } },
                 badges: true,
                 categoryFollows: { include: { category: true } },
                 followers: {
@@ -122,6 +122,7 @@ export const UsersAction = {
             portfolio?: string;
             role?: "ADMIN" | "MEMBER";
             isPremium?: boolean;
+            isMarketplaceTalent?: boolean;
         }
     ) => {
         return prisma.user.update({ where: { id }, data });

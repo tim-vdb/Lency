@@ -26,7 +26,7 @@ import {
 } from "@/front/components/ui/select"
 import { Textarea } from "@/front/components/ui/textarea"
 import { Badge } from "@/front/components/ui/badge"
-import { Separator } from "@/front/components/ui/separator"
+import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/components/ui/multistep-form"
 import { useCreateProject } from "@/front/hooks/queries/use-projects"
 import { uploadToImageKit } from "@/front/lib/upload"
 
@@ -41,14 +41,20 @@ const CreateProjectSchema = z.object({
     workMode: z.enum(["PRESENTIEL", "DISTANCIEL", "HYBRIDE"]).optional(),
     city: z.string().max(100).optional(),
     startDate: z.string().optional(),
-    visibility: z.enum(["PUBLIC", "PRIVATE", "MEMBERS_ONLY"]).default("PUBLIC"),
+    visibility: z.enum(["PUBLIC", "PRIVATE", "MEMBERS_ONLY"]),
     bannerUrl: z.string().optional(),
-    roles: z.array(z.string()).default([]),
+    roles: z.array(z.string()),
 })
 
 type CreateProjectValues = z.infer<typeof CreateProjectSchema>
 
 // ─── Constantes ────────────────────────────────────────────────────────────────
+
+const STEPS = [
+    { id: "presentation", title: "Présentation" },
+    { id: "caracteristiques", title: "Caractéristiques" },
+    { id: "finalisation", title: "Finalisation" },
+]
 
 const PROJECT_TYPES = ["Court métrage", "Long métrage", "Série", "Clip", "Documentaire", "YouTube", "Autre"]
 
@@ -198,16 +204,24 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
     }
 
     return (
-        <div className="flex flex-col gap-5">
-            <div>
-                <h2 className="text-lg font-semibold">Publier un projet</h2>
-                <p className="text-sm text-muted-foreground">Décrivez votre projet et les profils que vous recherchez.</p>
-            </div>
-
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
-
-                    {/* ── Bannière ── */}
+        <Form {...form}>
+            <MultistepForm
+                steps={STEPS}
+                onFormSubmit={form.handleSubmit(onSubmit)}
+                navigation={
+                    <MultistepNavigation
+                        onNext={async (step) => {
+                            if (step === 0) return form.trigger(["title", "description"])
+                            return true
+                        }}
+                        isPending={isPending}
+                        disabled={uploading}
+                        submitLabel="Publier le projet"
+                    />
+                }
+            >
+                {/* ── Étape 1 : Présentation ── */}
+                <MultistepStep title="Présentation du projet" description="Donnez un titre, une bannière et une description.">
                     <FormField
                         control={form.control}
                         name="bannerUrl"
@@ -218,7 +232,7 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
                                     <div>
                                         {bannerPrev ? (
                                             <div className="relative rounded-xl overflow-hidden">
-                                                <img src={bannerPrev} alt="" className="w-full h-40 object-cover" />
+                                                <img src={bannerPrev} alt="" className="w-full h-36 object-cover" />
                                                 <button
                                                     type="button"
                                                     onClick={clearBanner}
@@ -232,7 +246,7 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
                                                 type="button"
                                                 disabled={uploading}
                                                 onClick={() => bannerRef.current?.click()}
-                                                className="w-full h-32 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-1.5 text-sm text-muted-foreground hover:border-muted-foreground/50 hover:text-foreground transition-colors disabled:opacity-50"
+                                                className="w-full h-28 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-1.5 text-sm text-muted-foreground hover:border-muted-foreground/50 hover:text-foreground transition-colors disabled:opacity-50"
                                             >
                                                 {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
                                                 <span>Ajouter une image de couverture</span>
@@ -252,179 +266,114 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
                         )}
                     />
 
-                    <Separator />
+                    <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Titre du projet</FormLabel>
+                                <FormControl><Input placeholder="Les Larmes du Molosse…" {...field} /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                    {/* ── Général ── */}
-                    <div className="flex flex-col gap-4">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Général</p>
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline justify-between">
+                                    <FormLabel>Description</FormLabel>
+                                    <span className="text-xs text-muted-foreground tabular-nums">{descriptionLength}/2000</span>
+                                </div>
+                                <FormControl>
+                                    <Textarea placeholder="Décrivez votre projet, son contexte, ce que vous cherchez…" className="min-h-24 resize-none" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </MultistepStep>
 
+                {/* ── Étape 2 : Caractéristiques ── */}
+                <MultistepStep title="Caractéristiques" description="Tous les champs sont optionnels.">
+                    <div className="grid grid-cols-2 gap-3">
                         <FormField
                             control={form.control}
-                            name="title"
+                            name="projectType"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Titre du projet</FormLabel>
-                                    <FormControl><Input placeholder="Les Larmes du Molosse…" {...field} /></FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline justify-between">
-                                        <FormLabel>Description</FormLabel>
-                                        <span className="text-xs text-muted-foreground tabular-nums">{descriptionLength}/2000</span>
-                                    </div>
-                                    <FormControl>
-                                        <Textarea placeholder="Décrivez votre projet, son contexte, ce que vous cherchez…" className="min-h-28 resize-none" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-
-                    <Separator />
-
-                    {/* ── Caractéristiques ── */}
-                    <div className="flex flex-col gap-4">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Caractéristiques</p>
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <FormField
-                                control={form.control}
-                                name="projectType"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Type de projet</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value ?? ""}>
-                                            <FormControl>
-                                                <SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {PROJECT_TYPES.map((t) => (
-                                                    <SelectItem key={t} value={t}>{t}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="level"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Niveau</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value ?? ""}>
-                                            <FormControl>
-                                                <SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {LEVEL_OPTIONS.map((o) => (
-                                                    <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="remunerationType"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Rémunération</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value ?? ""}>
-                                            <FormControl>
-                                                <SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {REMUNERATION_OPTIONS.map((o) => (
-                                                    <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="workMode"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Mode de travail</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value ?? ""}>
-                                            <FormControl>
-                                                <SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {WORKMODE_OPTIONS.map((o) => (
-                                                    <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* ── Logistique ── */}
-                    <div className="flex flex-col gap-4">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Logistique</p>
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <FormField
-                                control={form.control}
-                                name="city"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Ville <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
-                                        <FormControl><Input placeholder="Paris, Lyon…" {...field} /></FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="startDate"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Date de début <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
-                                        <FormControl><Input type="date" {...field} /></FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-
-                        <FormField
-                            control={form.control}
-                            name="visibility"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Visibilité</FormLabel>
-                                    <Select onValueChange={field.onChange} value={field.value}>
+                                    <FormLabel>Type de projet</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value ?? ""}>
                                         <FormControl>
-                                            <SelectTrigger><SelectValue /></SelectTrigger>
+                                            <SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {VISIBILITY_OPTIONS.map((o) => (
+                                            {PROJECT_TYPES.map((t) => (
+                                                <SelectItem key={t} value={t}>{t}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="level"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Niveau</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                                        <FormControl>
+                                            <SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {LEVEL_OPTIONS.map((o) => (
+                                                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="remunerationType"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Rémunération</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                                        <FormControl>
+                                            <SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {REMUNERATION_OPTIONS.map((o) => (
+                                                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="workMode"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Mode de travail</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                                        <FormControl>
+                                            <SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {WORKMODE_OPTIONS.map((o) => (
                                                 <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
                                             ))}
                                         </SelectContent>
@@ -434,47 +383,72 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
                             )}
                         />
                     </div>
+                </MultistepStep>
 
-                    <Separator />
-
-                    {/* ── Rôles ── */}
-                    <div className="flex flex-col gap-4">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Rôles recherchés</p>
+                {/* ── Étape 3 : Finalisation ── */}
+                <MultistepStep title="Finalisation" description="Localisation, date de début, visibilité et rôles recherchés.">
+                    <div className="grid grid-cols-2 gap-3">
+                        <FormField
+                            control={form.control}
+                            name="city"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Ville <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
+                                    <FormControl><Input placeholder="Paris, Lyon…" {...field} /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
                         <FormField
                             control={form.control}
-                            name="roles"
+                            name="startDate"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Ajouter des rôles <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
-                                    <FormControl>
-                                        <RolesInput value={field.value} onChange={field.onChange} />
-                                    </FormControl>
+                                    <FormLabel>Date de début <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
+                                    <FormControl><Input type="date" {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
 
-                    {/* ── Submit ── */}
-                    <div className="flex justify-end gap-2 pt-1">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => { form.reset(); setBannerPrev(null) }}
-                            disabled={isPending}
-                        >
-                            Réinitialiser
-                        </Button>
-                        <Button type="submit" disabled={isPending || uploading}>
-                            {isPending
-                                ? <><Loader2 className="w-4 h-4 animate-spin" />Publication…</>
-                                : "Publier le projet"
-                            }
-                        </Button>
-                    </div>
-                </form>
-            </Form>
-        </div>
+                    <FormField
+                        control={form.control}
+                        name="visibility"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Visibilité</FormLabel>
+                                <Select onValueChange={field.onChange} value={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger><SelectValue /></SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {VISIBILITY_OPTIONS.map((o) => (
+                                            <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="roles"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Rôles recherchés <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
+                                <FormControl>
+                                    <RolesInput value={field.value} onChange={field.onChange} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </MultistepStep>
+            </MultistepForm>
+        </Form>
     )
 }

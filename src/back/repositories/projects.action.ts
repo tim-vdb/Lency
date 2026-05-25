@@ -101,6 +101,14 @@ export const ProjectsAction = {
         });
     },
 
+    reportProject: async (userId: string, projectId: string, reason?: string) => {
+        return prisma.projectReport.upsert({
+            where: { userId_projectId: { userId, projectId } },
+            create: { userId, projectId, reason },
+            update: { reason },
+        });
+    },
+
     delete: async (id: string) => {
         const project = await prisma.project.findUnique({
             where: { id },

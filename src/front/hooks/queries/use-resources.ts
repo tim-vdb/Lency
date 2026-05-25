@@ -2,6 +2,7 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/r
 import {
     createResource,
     createResourceComment,
+    deleteResource,
     fetchResourceById,
     fetchResourceComments,
     fetchResources,
@@ -9,9 +10,11 @@ import {
     fetchSavedResources,
     toggleSaveResource,
     toggleVoteResource,
+    updateResource,
     voteResourceComment,
     type CreateResourceCommentInput,
     type CreateResourceInput,
+    type UpdateResourceInput,
     type VoteResourceCommentInput,
 } from "@/front/lib/api/resources";
 import { CommentWithChildren } from "@/front/types/post.schema";
@@ -209,6 +212,29 @@ export const useCreateResource = () => {
         mutationFn: (input: CreateResourceInput) => createResource(input),
         onSuccess: (_data, variables) => {
             queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", variables.categoryId] });
+            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", "all"] });
+        },
+    });
+};
+
+export const useUpdateResource = (resourceId: string, categoryId?: string) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (input: UpdateResourceInput) => updateResource(resourceId, input),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "detail", resourceId] });
+            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", categoryId ?? "all"] });
+            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", "all"] });
+        },
+    });
+};
+
+export const useDeleteResource = (resourceId: string, categoryId?: string) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: () => deleteResource(resourceId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", categoryId ?? "all"] });
             queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", "all"] });
         },
     });

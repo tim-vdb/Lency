@@ -24,10 +24,10 @@ export const ResourcesService = {
         title: string;
         description?: string | null;
         type: "ASSET" | "TUTORIAL" | "LINK";
-        url?: string | null;
-        imageUrl?: string | null;
-        videoUrl?: string | null;
-        audioUrl?: string | null;
+        urls?: string[];
+        imageUrls?: string[];
+        videoUrls?: string[];
+        audioUrls?: string[];
         categoryId: string;
     }) => {
         const user = await getUser();
@@ -44,8 +44,10 @@ export const ResourcesService = {
         title?: string;
         description?: string | null;
         type?: "ASSET" | "TUTORIAL" | "LINK";
-        url?: string;
-        imageUrl?: string | null;
+        urls?: string[];
+        imageUrls?: string[];
+        videoUrls?: string[];
+        audioUrls?: string[];
         categoryId?: string;
     }) => {
         if (!data || Object.keys(data).length === 0) {

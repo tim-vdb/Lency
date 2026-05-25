@@ -52,6 +52,7 @@ model User {
   savedPosts                PostSave[]
   postVotes                 PostVote[]
   reportedPosts             PostReport[]
+  reportedProjects          ProjectReport[]
   categoryFollows           CategoryFollow[]
   resources                 Resource[]             @relation("UserResources")
   resourceVotes             ResourceVote[]

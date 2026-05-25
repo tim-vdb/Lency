@@ -45,9 +45,9 @@ export default function ResourceCard({ resource, variant = "grid" }: ResourceCar
                 onClick={() => router.push(href)}
             >
                 <div className="relative w-full h-44 bg-linear-to-br from-pink-100 via-pink-50 to-rose-200">
-                    {resource.imageUrl ? (
+                    {resource.imageUrls?.[0] ? (
                         <Image
-                            src={resource.imageUrl}
+                            src={resource.imageUrls[0]}
                             alt={resource.title}
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
@@ -89,13 +89,13 @@ export default function ResourceCard({ resource, variant = "grid" }: ResourceCar
 
     return (
         <Card
-            className="gap-3 py-3 overflow-hidden transition-shadow hover:shadow-md h-full cursor-pointer"
+            className="gap-3 py-6 overflow-hidden transition-shadow hover:shadow-md h-full cursor-pointer"
             onClick={() => router.push(href)}
         >
             <div className="relative mx-3 h-40 rounded-md overflow-hidden bg-linear-to-br from-pink-100 via-pink-50 to-rose-200">
-                {resource.imageUrl ? (
+                {resource.imageUrls?.[0] ? (
                     <Image
-                        src={resource.imageUrl}
+                        src={resource.imageUrls[0]}
                         alt={resource.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"
