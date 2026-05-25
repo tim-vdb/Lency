@@ -61,6 +61,7 @@ model User {
   reportsReceived           UserReport[]           @relation("ReportedUsers")
   socialLinks               UserSocialLink[]
   feedbacks                 Feedback[]
+  blogs Blog[]
 }
 
 model UserSocialLink {
