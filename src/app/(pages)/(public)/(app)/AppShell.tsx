@@ -7,10 +7,12 @@ import { UserProvider } from "@/front/context/UserContext"
 import { ModalRenderer } from "@/front/components/Modals/ModalRenderer"
 import type { User } from "@/back/generated/prisma_client"
 import Header from "../../../../front/components/Private/Global/Header"
+import { AblyInitializer } from "@/front/components/Private/Global/AblyInitializer"
 
 export function AppShell({ user, children }: { user: User | null; children: React.ReactNode }) {
     return (
         <UserProvider user={user}>
+            <AblyInitializer />
             <div className="bg-gray-lighter dark:bg-gray-dark min-h-screen">
                 <SidebarProvider className="gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
                     <Sheet>

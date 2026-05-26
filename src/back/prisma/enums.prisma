@@ -84,3 +84,9 @@ enum RemunerationType {
   NON_REMUNERE
   REMUNERE
 }
+
+enum ProjectApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}

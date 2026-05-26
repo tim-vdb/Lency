@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import { Toaster } from 'sonner';
 import { QueryProvider } from '@/front/components/providers/QueryProvider';
+import { NotificationsProvider } from '@/front/context/NotificationsContext';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,10 +33,12 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <QueryProvider>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-            {children}
-            <Toaster />
-          </ThemeProvider>
+          <NotificationsProvider>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </NotificationsProvider>
         </QueryProvider>
       </body>
     </html>

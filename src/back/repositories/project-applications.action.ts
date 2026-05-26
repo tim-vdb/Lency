@@ -1,0 +1,50 @@
+import { prisma } from "@/back/lib/prisma";
+
+export const ProjectApplicationAction = {
+  // Créer une candidature
+  create: (data: { projectId: string; userId: string }) =>
+    prisma.projectApplication.create({ data }),
+
+  // Récupérer une candidature par ID
+  findById: (id: string) =>
+    prisma.projectApplication.findUnique({
+      where: { id },
+      include: { user: true, project: true },
+    }),
+
+  // Récupérer les candidatures d'un projet
+  findByProjectId: (projectId: string) =>
+    prisma.projectApplication.findMany({
+      where: { projectId },
+      include: { user: true },
+      orderBy: { appliedAt: "desc" },
+    }),
+
+  // Récupérer les candidatures d'un utilisateur
+  findByUserId: (userId: string) =>
+    prisma.projectApplication.findMany({
+      where: { userId },
+      include: { project: true },
+      orderBy: { appliedAt: "desc" },
+    }),
+
+  // Vérifier si un utilisateur a déjà candidaté
+  findByProjectAndUser: (projectId: string, userId: string) =>
+    prisma.projectApplication.findUnique({
+      where: { projectId_userId: { projectId, userId } },
+    }),
+
+  // Mettre à jour le statut
+  updateStatus: (
+    id: string,
+    status: "PENDING" | "ACCEPTED" | "REJECTED"
+  ) =>
+    prisma.projectApplication.update({
+      where: { id },
+      data: { status, respondedAt: new Date() },
+      include: { user: true, project: true },
+    }),
+
+  // Supprimer une candidature
+  delete: (id: string) => prisma.projectApplication.delete({ where: { id } }),
+};

@@ -14,7 +14,7 @@ import {
 } from "@/front/components/ui/sidebar"
 import Link from "next/link"
 import * as React from "react"
-import AgendaSheet from "../AgendaSheet"
+import NotificationsSheet from "../NotificationsSheet"
 import { NavMain } from "./nav-main"
 import { NavProjects } from "./nav-projects"
 import { NavPublic } from "./nav-public"
@@ -43,7 +43,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavPublic />
       </SidebarContent>
       <SidebarFooter>
-        <AgendaSheet />
+        <NotificationsSheet />
 
 
         <ToggleDarkMode />

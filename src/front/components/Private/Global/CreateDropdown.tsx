@@ -18,8 +18,10 @@ import {
 } from "@/front/components/ui/dropdown-menu"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
 import { cn } from "@/front/lib/utils"
+import { useUser } from "@/front/context/UserContext"
 import { FileText, FolderKanban, Link2, Plus, Tag } from "lucide-react"
 import { useState } from "react"
+import Link from "next/link"
 import { CreateCategoryForm } from "./CreateCategoryForm"
 import { CreatePostForm } from "./CreatePostForm"
 import { CreateProjectForm } from "./CreateProjectForm"
@@ -30,10 +32,16 @@ type CreateType = "post" | "project" | "category" | "resource"
 // ─── Main component ────────────────────────────────────────────────────────────
 
 export function CreateDropdown() {
+    const user = useUser()
     const [modalOpen, setModalOpen] = useState(false)
+    const [authModalOpen, setAuthModalOpen] = useState(false)
     const [activeType, setActiveType] = useState<CreateType>("post")
 
     function handleSelect(type: CreateType) {
+        if (!user) {
+            setAuthModalOpen(true)
+            return
+        }
         setActiveType(type)
         setModalOpen(true)
     }
@@ -52,19 +60,19 @@ export function CreateDropdown() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent side="bottom" align="end" sideOffset={8} className="min-w-44">
                     <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={() => handleSelect("post")}>
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => handleSelect("post")}>
                             <FileText className="size-4" />
                             Créer un post
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSelect("project")}>
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => handleSelect("project")}>
                             <FolderKanban className="size-4" />
                             Créer un projet
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSelect("category")}>
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => handleSelect("category")}>
                             <Tag className="size-4" />
                             Créer une catégorie
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSelect("resource")}>
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => handleSelect("resource")}>
                             <Link2 className="size-4" />
                             Créer une ressource
                         </DropdownMenuItem>
@@ -144,6 +152,31 @@ export function CreateDropdown() {
                                 <CreateResourceForm onSuccess={() => setModalOpen(false)} />
                             </TabsContent>
                         </Tabs>
+                    </DialogContent>
+                </DialogPortal>
+            </Dialog>
+
+            {/* Auth Required Modal */}
+            <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
+                <DialogPortal>
+                    <DialogOverlay />
+                    <DialogContent className="max-w-md">
+                        <DialogTitle>Authentification requise</DialogTitle>
+                        <DialogDescription>
+                            Vous devez vous connecter ou créer un compte pour pouvoir créer du contenu.
+                        </DialogDescription>
+                        <div className="flex gap-3 mt-6 justify-end">
+                            <Link href="/sign-up" className="flex-1">
+                                <Button variant="outline" className="w-full border-neutral-600">
+                                    Créer un compte
+                                </Button>
+                            </Link>
+                            <Link href="/login" className="flex-1">
+                                <Button className="w-full">
+                                    Se connecter
+                                </Button>
+                            </Link>
+                        </div>
                     </DialogContent>
                 </DialogPortal>
             </Dialog>

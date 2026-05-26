@@ -8,6 +8,7 @@ import type { User } from "@/back/generated/prisma_client"
 import { usePathname } from "next/navigation"
 import { cn } from "@/front/lib/utils"
 import Header from "@/front/components/Private/Global/Header"
+import { AblyInitializer } from "@/front/components/Private/Global/AblyInitializer"
 
 export function AccountShell({ user, children }: { user: User | null; children: React.ReactNode }) {
     const pathname = usePathname()
@@ -15,6 +16,7 @@ export function AccountShell({ user, children }: { user: User | null; children: 
 
     return (
         <UserProvider user={user}>
+            <AblyInitializer />
             <div className="bg-gray-lighter dark:bg-gray-dark min-h-screen">
                 <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
                     <Sheet>
