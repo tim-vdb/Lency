@@ -28,7 +28,7 @@ import { Switch } from "@/front/components/ui/switch"
 import { Textarea } from "@/front/components/ui/textarea"
 import { BLOG_TAGS, type Blog } from "@/front/lib/api/blogs"
 import { useUpdateBlog } from "@/front/hooks/queries/use-blogs"
-import { uploadToImageKit } from "@/front/lib/upload"
+import { uploadToImageKit } from "@/front/lib/api/upload"
 import { useRouter } from "next/navigation"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────

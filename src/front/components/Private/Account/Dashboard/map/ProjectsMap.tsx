@@ -6,6 +6,6 @@ const ProjectsMapInner = dynamic(
     { ssr: false, loading: () => <div className="h-full w-full animate-pulse bg-muted rounded-lg" /> }
 )
 
-export function ProjectsMap({ projects }: { projects: Project[] }) {
-    return <ProjectsMapInner projects={projects} />
+export function ProjectsMap({ projects, addressCoords }: { projects: Project[]; addressCoords: { lat: number; lon: number } | null }) {
+    return <ProjectsMapInner projects={projects} addressCoords={addressCoords} />
 }

@@ -3,6 +3,7 @@
  */
 
 export type ProjectStatus = "PUBLISHED" | "DRAFT" | "ARCHIVED"
+export type ProjectSubject = "Tout" | "Vidéo" | "Motion" | "Photo" | "Outils"
 
 export interface MapLocation {
     id: string
@@ -17,6 +18,7 @@ export interface Project {
     title: string
     description: string
     status: ProjectStatus
+    subject: ProjectSubject
     ownerId: string
     mapLocationId?: string
     mapLocation?: MapLocation

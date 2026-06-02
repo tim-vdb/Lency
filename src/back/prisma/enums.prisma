@@ -79,3 +79,11 @@ enum BlogTag {
   MOTION
   OUTILS
 }
+
+enum ProjectSubject {
+  Tout
+  Vidéo
+  Motion
+  Photo
+  Outils
+}

@@ -1,5 +1,6 @@
 "use client"
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
+import { useEffect } from "react"
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
 import L from "leaflet"
 import { Project } from "@/front/lib/api/projects"
@@ -14,13 +15,32 @@ const icon = L.icon({
     popupAnchor: [1, -34],
 })
 
-export function ProjectsMapInner({ projects }: { projects: Project[] }) {
+interface ProjectsMapInnerProps {
+    projects: Project[]
+    addressCoords: { lat: number; lon: number } | null
+}
+
+// Composant interne qui utilise le hook useMap()
+function MapZoomController({ addressCoords }: { addressCoords: { lat: number; lon: number } | null }) {
+    const map = useMap()
+
+    useEffect(() => {
+        if (!addressCoords || !map) return
+        // Zoom sur l'adresse avec animation
+        map.setView([addressCoords.lat, addressCoords.lon], 12, { animate: true, duration: 0.5 })
+    }, [addressCoords, map])
+
+    return null
+}
+
+export function ProjectsMapInner({ projects, addressCoords }: ProjectsMapInnerProps) {
     return (
         <MapContainer center={[46.6, 2.3]} zoom={6} className="h-full w-full">
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='© OpenStreetMap'
             />
+            <MapZoomController addressCoords={addressCoords} />
             {projects
                 .filter((p) => p.mapLocation)
                 .map((p) => (

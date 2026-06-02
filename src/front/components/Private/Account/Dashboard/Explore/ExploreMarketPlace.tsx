@@ -1,15 +1,18 @@
 "use client"
 
-import { ProjectsMap } from "@/front/components/map/ProjectsMap"
+import { ProjectsMap } from "@/front/components/Private/Account/Dashboard/map/ProjectsMap"
 import { Card } from "@/front/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
-import { useProjects } from "@/front/hooks/queries/use-projects"
 import { Clapperboard, LandPlot } from "lucide-react"
+import type { Project } from "@/front/lib/api/projects"
 
 
-export default function ExploreMarketPlace() {
-    const { data: projects = [] } = useProjects()
+interface ExploreMarketPlaceProps {
+    filteredProjects: Project[]
+    addressCoords: { lat: number; lon: number } | null
+}
 
+export default function ExploreMarketPlace({ filteredProjects, addressCoords }: ExploreMarketPlaceProps) {
     return (
         <Tabs defaultValue="projects" className="flex flex-col items-center gap-1 h-full">
             <div className="px-5 w-full">
@@ -24,9 +27,9 @@ export default function ExploreMarketPlace() {
                     </TabsTrigger>
                 </TabsList>
             </div>
-            <TabsContent value="projects" className="flex flex-col gap-4 w-full overflow-y-auto flex-1 px-5 pb-1">
+            <TabsContent value="projects" className="flex flex-col gap-4 w-full overflow-hidden flex-1 px-5 pb-1">
                 <Card className="border border-neutral-600 gap-1 text-neutral-400 py-0 w-full h-full overflow-hidden">
-                    <ProjectsMap projects={projects} />
+                    <ProjectsMap projects={filteredProjects} addressCoords={addressCoords} />
                 </Card>
             </TabsContent>
             <TabsContent value="members" className="flex flex-col gap-4 w-full overflow-y-auto flex-1 px-5 pb-1">
