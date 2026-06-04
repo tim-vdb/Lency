@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import PostImage from "@/front/components/Public/Community/Posts/PostImage";
 import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostAudio from "@/front/components/Public/Community/Posts/PostAudio";
@@ -10,6 +11,17 @@ import { ArrowLeft } from "lucide-react";
 
 interface PostPageProps {
     params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+    const { id } = await params;
+    const post = await PostsService.findByIdPost(id).catch(() => null);
+    if (!post) return { title: 'Post introuvable — Lency' };
+    const title = post.content.slice(0, 60) + (post.content.length > 60 ? '…' : '');
+    return {
+        title: `${title} — Lency`,
+        description: post.content.slice(0, 160),
+    };
 }
 
 export default async function PostPage({ params }: PostPageProps) {

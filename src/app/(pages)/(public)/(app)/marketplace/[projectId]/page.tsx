@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound, redirect } from "next/navigation";
 import { getUser } from "@/back/lib/auth-session";
 import { ProjectsAction } from "@/back/repositories/projects.action";
@@ -5,6 +6,16 @@ import ProjectDetailPageClient from "@/front/components/Public/Marketplace/Proje
 
 interface ProjectPageProps {
     params: Promise<{ projectId: string }>;
+}
+
+export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+    const { projectId } = await params;
+    const project = await ProjectsAction.findById(projectId).catch(() => null);
+    if (!project) return { title: 'Projet introuvable — Lency' };
+    return {
+        title: `${project.title} — Marketplace Lency`,
+        description: project.description ?? `Découvrez le projet "${project.title}" sur le marketplace Lency.`,
+    };
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
