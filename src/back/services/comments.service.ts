@@ -79,7 +79,7 @@ export const CommentsService = {
                 const parentComment = await CommentsAction.findById(data.parentId);
                 // Pas de notif si on répond à son propre commentaire
                 if (parentComment && parentComment.authorId !== user.id) {
-                    const postTitle = post.title ?? "";
+                    const postTitle = post.content.substring(0, 60);
                     const postCategorySlug = post.category?.slug ?? "";
                     await NotificationService.upsertCommentForUser(
                         parentComment.authorId, "reply_to_comment", "postId", data.postId!,
@@ -96,7 +96,7 @@ export const CommentsService = {
                     await notifyCommentReply(parentComment.authorId, commentAuthorName, data.postId!, data.parentId, comment.id);
                 }
             } else if (post.authorId !== user.id) {
-                const postTitle = post.title ?? "";
+                const postTitle = post.content.substring(0, 60);
                 const postCategorySlug = post.category?.slug ?? "";
                 await NotificationService.upsertCommentForUser(
                     post.authorId, "comment_on_post", "postId", data.postId!,

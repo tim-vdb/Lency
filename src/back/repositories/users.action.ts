@@ -217,4 +217,36 @@ export const UsersAction = {
             where: { userId_platform: { userId, platform } },
         });
     },
+
+    search: async (q: string, excludeId: string) => {
+        return prisma.user.findMany({
+            where: {
+                readyToStart: true,
+                id: { not: excludeId },
+                ...(q && {
+                    OR: [
+                        { firstname: { contains: q, mode: "insensitive" } },
+                        { lastname: { contains: q, mode: "insensitive" } },
+                        { username: { contains: q, mode: "insensitive" } },
+                    ],
+                }),
+            },
+            select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                username: true,
+                image: true,
+                avatarUrl: true,
+                bio: true,
+                configs: {
+                    where: { title: "roles" },
+                    select: { content: true },
+                    take: 1,
+                },
+            },
+            take: 20,
+            orderBy: { createdAt: "desc" },
+        });
+    },
 };

@@ -1,35 +1,31 @@
 import { ProjectsService } from "@/back/services/projects.service";
+import { createProjectSchema } from "@/back/schemas/zod/project.zod";
+import { createZodRoute } from "next-zod-route";
 import { revalidatePath } from "next/cache";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
         const data = await ProjectsService.findAllProjects();
         return NextResponse.json({ projects: data });
     } catch {
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
 
-export async function POST(req: NextRequest) {
-    try {
-        const data = await req.json();
-        const newProject = await ProjectsService.createProject(data);
-        revalidatePath("/marketplace");
-        revalidatePath("/user", "layout");
-        return NextResponse.json({ project: newProject }, { status: 201 });
-    } catch (error) {
-        if (error instanceof Error) {
-            if (error.message === "Unauthorized") {
-                return NextResponse.json({ error: error.message }, { status: 401 });
+export const POST = createZodRoute()
+    .body(createProjectSchema)
+    .handler(async (_req, { body }) => {
+        try {
+            const newProject = await ProjectsService.createProject(body);
+            revalidatePath("/marketplace");
+            revalidatePath("/user", "layout");
+            return NextResponse.json({ project: newProject }, { status: 201 });
+        } catch (error) {
+            if (error instanceof Error) {
+                if (error.message === "Unauthorized")
+                    return NextResponse.json({ error: error.message }, { status: 401 });
             }
-            if ([
-                "Title is required",
-                "Description is required",
-            ].includes(error.message)) {
-                return NextResponse.json({ error: error.message }, { status: 400 });
-            }
+            return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
         }
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-    }
-}
+    });

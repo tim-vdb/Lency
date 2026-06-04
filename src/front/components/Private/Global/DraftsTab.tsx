@@ -29,7 +29,7 @@ function DraftPostCard({ post, onEdit }: { post: PostWithUserState; onEdit: (d: 
             { id: post.id, data: { isPublished: true } },
             {
                 onSuccess: () => toast.success("Post publié !"),
-                onError: (err) => toast.error(err.message),
+                onError: (err) => toast.error(err instanceof Error ? err.message : "Erreur"),
             }
         )
     }
@@ -37,7 +37,7 @@ function DraftPostCard({ post, onEdit }: { post: PostWithUserState; onEdit: (d: 
     function destroy() {
         remove(post.id, {
             onSuccess: () => toast.success("Brouillon supprimé."),
-            onError: (err) => toast.error(err.message),
+            onError: (err) => toast.error(err instanceof Error ? err.message : "Erreur"),
         })
     }
 
@@ -118,7 +118,7 @@ function DraftProjectCard({ project, onEdit }: { project: ProjectWithOwner; onEd
             { status: "PUBLISHED" },
             {
                 onSuccess: () => toast.success("Projet publié !"),
-                onError: (err) => toast.error(err.message),
+                onError: (err) => toast.error(err instanceof Error ? err.message : "Erreur"),
             }
         )
     }
@@ -126,7 +126,7 @@ function DraftProjectCard({ project, onEdit }: { project: ProjectWithOwner; onEd
     function destroy() {
         remove(project.id, {
             onSuccess: () => toast.success("Brouillon supprimé."),
-            onError: (err) => toast.error(err.message),
+            onError: (err) => toast.error(err instanceof Error ? err.message : "Erreur"),
         })
     }
 

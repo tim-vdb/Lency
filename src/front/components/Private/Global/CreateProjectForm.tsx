@@ -159,7 +159,7 @@ export function CreateProjectForm({ onSuccess, initialData, mode = "create" }: C
             startDate: initialData.startDate ? new Date(initialData.startDate).toISOString().split("T")[0] : "",
             visibility: (initialData.visibility === "MEMBERS_ONLY" ? "PUBLIC" : (initialData.visibility as "PUBLIC" | "PRIVATE")) ?? "PUBLIC",
             bannerUrl: initialData.bannerUrl ?? "",
-            roles: initialData.roles ?? [],
+            roles: (initialData.roles as string[]) ?? [],
             isPublished: initialData.status === "PUBLISHED",
         } : {
             title: "",

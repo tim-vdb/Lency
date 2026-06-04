@@ -240,4 +240,10 @@ export const UsersService = {
         if (!user) throw new Error("Unauthorized");
         return UsersAction.deleteSocialLink(user.id, platform);
     },
+
+    search: async (q: string) => {
+        const currentUser = await getUser();
+        if (!currentUser) throw new Error("Unauthorized");
+        return UsersAction.search(q, currentUser.id);
+    },
 };

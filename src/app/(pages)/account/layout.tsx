@@ -1,5 +1,7 @@
 import { getUser } from '@/back/lib/auth-session';
 import type { Metadata } from 'next';
+
+export const dynamic = 'force-dynamic';
 import { AccountShell } from './AccountShell';
 
 // const geistSans = Geist({

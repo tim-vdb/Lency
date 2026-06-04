@@ -124,6 +124,14 @@ export const ProjectsAction = {
         });
     },
 
+    findDrafts: async (userId: string) => {
+        return prisma.project.findMany({
+            where: { ownerId: userId, status: "DRAFT" },
+            include: { owner: true, participants: true, mapLocation: true },
+            orderBy: { updatedAt: "desc" },
+        });
+    },
+
     delete: async (id: string) => {
         const project = await prisma.project.findUnique({
             where: { id },

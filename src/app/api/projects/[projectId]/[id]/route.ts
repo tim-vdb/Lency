@@ -1,31 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/back/lib/prisma";
+import { ProjectsService } from "@/back/services/projects.service";
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
+    req: NextRequest,
+    { params }: { params: Promise<{ projectId: string; id: string }> }
 ) {
-  try {
-    const projectId = params.id;
-
-    const project = await prisma.project.findUnique({
-      where: { id: projectId },
-      include: { owner: true, mapLocation: true },
-    });
-
-    if (!project) {
-      return NextResponse.json(
-        { error: "Project not found" },
-        { status: 404 }
-      );
+    try {
+        const { id } = await params;
+        const project = await ProjectsService.findByIdProject(id);
+        return NextResponse.json({ project });
+    } catch (error) {
+        if (error instanceof Error) {
+            if (error.message === "Project not found")
+                return NextResponse.json({ error: "Project not found" }, { status: 404 });
+            if (error.message === "Forbidden")
+                return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+        }
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
-
-    return NextResponse.json({ project });
-  } catch (error) {
-    console.error("Error fetching project:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
 }

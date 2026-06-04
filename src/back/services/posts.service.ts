@@ -134,6 +134,13 @@ export const PostsService = {
         return PostsAction.reportPost(user.id, postId, reason);
     },
 
+    findDrafts: async () => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        const posts = await PostsAction.findDrafts(user.id);
+        return posts.map((p) => ({ ...p, isSaved: false, isVoted: false }));
+    },
+
     validateIds: async (ids: string[]): Promise<string[]> => {
         if (!Array.isArray(ids) || ids.length === 0) return [];
         return PostsAction.findExistingIds(ids);

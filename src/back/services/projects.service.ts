@@ -140,6 +140,12 @@ export const ProjectsService = {
         return ProjectsAction.reportProject(user.id, projectId, reason);
     },
 
+    findDrafts: async () => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        return ProjectsAction.findDrafts(user.id);
+    },
+
     deleteProject: async (id: string) => {
         const user = await getUser();
         if (!user) throw new Error("Unauthorized");
