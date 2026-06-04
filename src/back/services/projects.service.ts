@@ -1,12 +1,14 @@
 import { ProjectLevel, RemunerationType, WorkMode } from "../generated/prisma_client";
 import { ProjectsAction } from "../repositories/projects.action";
 import { getUser } from "../lib/auth-session";
+import { NotifyNewProject, notifyProjectStatusChanged, notifyProjectVisibilityChanged } from "../lib/ably";
+import { NotificationService } from "./notifications.service";
 
 export type CreateProjectInput = {
     title: string;
     description: string;
     bannerUrl?: string;
-    projectType?: string;
+    projectType: string;
     remunerationType?: RemunerationType;
     level?: ProjectLevel;
     workMode?: WorkMode;
@@ -20,6 +22,16 @@ export const ProjectsService = {
     findByIdProject: async (id: string) => {
         const project = await ProjectsAction.findById(id);
         if (!project) throw new Error("Project not found");
+
+        if (project.visibility === "PRIVATE") {
+            const user = await getUser();
+            const isMember = user && (
+                project.ownerId === user.id ||
+                project.participants.some((p) => p.id === user.id)
+            );
+            if (!isMember) throw new Error("Forbidden");
+        }
+
         return project;
     },
 
@@ -33,8 +45,9 @@ export const ProjectsService = {
 
         if (!data.title) throw new Error("Title is required");
         if (!data.description) throw new Error("Description is required");
+        if (!data.projectType) throw new Error("Project type is required");
 
-        return ProjectsAction.create(user.id, {
+        const project = await ProjectsAction.create(user.id, {
             title: data.title,
             description: data.description,
             bannerUrl: data.bannerUrl,
@@ -49,6 +62,10 @@ export const ProjectsService = {
                 mapLocation: { name: data.city, latitude: 0, longitude: 0 },
             }),
         });
+
+        await NotifyNewProject(user.id, project.id)
+
+        return project;
     },
 
     updateProject: async (id: string, data: {
@@ -73,7 +90,7 @@ export const ProjectsService = {
         const project = await ProjectsService.findByIdProject(id);
         if (project.ownerId !== user.id) throw new Error("Forbidden");
 
-        return ProjectsAction.update(id, {
+        const updatedProject = await ProjectsAction.update(id, {
             title: data.title,
             description: data.description,
             status: data.status,
@@ -85,10 +102,32 @@ export const ProjectsService = {
             startDate: data.startDate ? new Date(data.startDate) : undefined,
             roles: data.roles,
             visibility: data.visibility,
-            ...(data.city !== undefined && {
-                mapLocation: { name: data.city || "", latitude: 0, longitude: 0 },
+            ...(data.city && {
+                mapLocation: { name: data.city, latitude: 0, longitude: 0 },
             }),
         });
+
+        // Notifier tous les clients si la visibilité change
+        if (data.visibility && data.visibility !== project.visibility) {
+            await notifyProjectVisibilityChanged(id, data.visibility);
+        }
+
+        // Notifier les participants si le statut change
+        if (data.status && data.status !== project.status) {
+            const userName = user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.username || "Utilisateur";
+            const recipientIds = project.participants.map(p => p.id);
+            for (const recipientId of recipientIds) {
+                await NotificationService.createForUser(
+                    recipientId, "project_status_changed",
+                    `Le statut du projet "${project.title}" a changé`,
+                    `${userName} a mis à jour le statut en "${data.status}"`,
+                    { projectId: id, projectTitle: project.title, newStatus: data.status, changedByName: userName }
+                );
+            }
+            await notifyProjectStatusChanged(recipientIds, id, data.status, userName);
+        }
+
+        return updatedProject;
     },
 
     reportProject: async (projectId: string, reason?: string) => {

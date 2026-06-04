@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Image as ImageIcon, Loader2, Upload, X } from "lucide-react"
+import { Loader2, Upload, X } from "lucide-react"
 import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -33,7 +33,7 @@ const CreateCategorySchema = z.object({
         .regex(/^[a-z0-9-]+$/, "Lettres minuscules, chiffres et tirets uniquement"),
     description: z.string().max(500, "Maximum 500 caractères").optional().or(z.literal("")),
     rules: z.string().max(1000, "Maximum 1000 caractères").optional().or(z.literal("")),
-    iconUrl:   z.string().optional(),
+    iconUrl: z.string().optional(),
     bannerUrl: z.string().optional(),
 })
 
@@ -52,10 +52,8 @@ interface CreateCategoryFormProps {
 
 export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
     const { mutate, isPending } = useCreateCategory()
-    const [iconPreview,   setIconPreview]   = useState<string | null>(null)
     const [bannerPreview, setBannerPreview] = useState<string | null>(null)
     const [uploading, setUploading] = useState<"icon" | "banner" | null>(null)
-    const iconInputRef   = useRef<HTMLInputElement>(null)
     const bannerInputRef = useRef<HTMLInputElement>(null)
 
     const form = useForm<CreateCategoryValues>({
@@ -78,17 +76,13 @@ export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
             .trim()
     }
 
-    async function handleImageUpload(file: File, type: "icon" | "banner") {
+    async function handleImageUpload(file: File, type: "banner") {
         setUploading(type)
         try {
             const url = await uploadToImageKit(file, "/categories")
-            if (type === "icon") {
-                form.setValue("iconUrl", url)
-                setIconPreview(URL.createObjectURL(file))
-            } else {
-                form.setValue("bannerUrl", url)
-                setBannerPreview(URL.createObjectURL(file))
-            }
+            form.setValue("bannerUrl", url)
+            setBannerPreview(URL.createObjectURL(file))
+
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Erreur upload")
         } finally {
@@ -101,18 +95,17 @@ export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
     function onSubmit(values: CreateCategoryValues) {
         mutate(
             {
-                name:        values.name,
-                slug:        values.slug,
+                name: values.name,
+                slug: values.slug,
                 description: values.description || undefined,
-                iconUrl:     values.iconUrl     || undefined,
-                bannerUrl:   values.bannerUrl   || undefined,
-                rules:       values.rules       || undefined,
+                iconUrl: values.iconUrl || undefined,
+                bannerUrl: values.bannerUrl || undefined,
+                rules: values.rules || undefined,
             },
             {
                 onSuccess: (cat) => {
                     toast.success(`Catégorie "${cat.name}" créée !`)
                     form.reset()
-                    setIconPreview(null)
                     setBannerPreview(null)
                     onSuccess?.()
                 },
@@ -139,7 +132,7 @@ export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
                 }
             >
                 {/* ── Étape 1 : Identité ── */}
-                <MultistepStep title="Identité" description="Bannière, icône, nom et URL de la catégorie.">
+                <MultistepStep title="Identité" description="Bannière, nom et URL de la catégorie.">
                     {/* Bannière */}
                     <div>
                         <FormLabel className="mb-1.5 block">Bannière <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
@@ -177,37 +170,6 @@ export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
 
                     {/* Icône + Nom */}
                     <div className="flex gap-3 items-end">
-                        <div className="shrink-0">
-                            <FormLabel className="mb-1.5 block text-xs">Icône</FormLabel>
-                            {iconPreview ? (
-                                <div className="relative w-14 h-14">
-                                    <img src={iconPreview} alt="icon" className="w-14 h-14 rounded-lg object-cover" />
-                                    <button
-                                        type="button"
-                                        onClick={() => { form.setValue("iconUrl", ""); setIconPreview(null) }}
-                                        className="absolute -top-1.5 -right-1.5 rounded-full bg-black/60 p-0.5 text-white hover:bg-black/80 transition-colors"
-                                    >
-                                        <X className="size-3" />
-                                    </button>
-                                </div>
-                            ) : (
-                                <button
-                                    type="button"
-                                    disabled={uploading === "icon"}
-                                    onClick={() => iconInputRef.current?.click()}
-                                    className="w-14 h-14 rounded-lg border-2 border-dashed border-border flex items-center justify-center text-muted-foreground hover:border-muted-foreground/50 transition-colors disabled:opacity-50"
-                                >
-                                    {uploading === "icon" ? <Loader2 className="size-4 animate-spin" /> : <ImageIcon className="size-4" />}
-                                </button>
-                            )}
-                            <input
-                                ref={iconInputRef}
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageUpload(f, "icon") }}
-                            />
-                        </div>
 
                         <FormField
                             control={form.control}

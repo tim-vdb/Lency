@@ -9,7 +9,8 @@ export async function GET(
         const { projectId } = await params;
         const data = await CommentsService.findByProjectId(projectId);
         return NextResponse.json({ comments: data });
-    } catch {
+    } catch (err) {
+        console.error("[GET /api/projects/:projectId/comments]", err);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
@@ -27,6 +28,8 @@ export async function POST(
         if (error instanceof Error) {
             if (error.message === "Unauthorized")
                 return NextResponse.json({ error: error.message }, { status: 401 });
+            if (error.message === "Project not found")
+                return NextResponse.json({ error: error.message }, { status: 404 });
             if (["Content is required", "Target is required"].includes(error.message))
                 return NextResponse.json({ error: error.message }, { status: 400 });
         }

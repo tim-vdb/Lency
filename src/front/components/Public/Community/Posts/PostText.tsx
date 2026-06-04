@@ -17,13 +17,16 @@ import { Button } from "@/front/components/ui/button";
 interface PostTextProps {
     post: PostWithUserState;
     className?: string;
+    defaultOpenComments?: boolean;
+    lockOpenComments?: boolean;
+    viewDelay?: number;
 }
 
-export default function PostText({ post, className }: PostTextProps) {
+export default function PostText({ post, className, defaultOpenComments, lockOpenComments, viewDelay = 60_000 }: PostTextProps) {
     const { category } = post;
-    const postState = usePostState(post);
+    const postState = usePostState(post, { initialOpenComments: defaultOpenComments, lockOpenComments });
     const { openComments } = postState;
-    const cardRef = useViewportRecentlyViewed(post, 60_000);
+    const cardRef = useViewportRecentlyViewed(post, viewDelay);
 
     return (
         <Card ref={cardRef} className={cn("relative p-12", className)}>

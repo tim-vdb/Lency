@@ -1,8 +1,8 @@
 "use client";
 
-import { Talent } from "@/front/lib/api/talents";
+import { Talent, getTalentEquipment, getTalentPreferences, getTalentRoles } from "@/front/lib/api/talents";
 import { getDisplayName, getInitialName } from "@/front/lib/utils";
-import { ExternalLink, FileText } from "lucide-react";
+import { Briefcase, ExternalLink, FileText, TrendingUp, Wallet, Wrench, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,8 +13,20 @@ export default function TalentCard({ talent }: { talent: Talent }) {
     const followerCount = talent._count.followers;
     const profileHref = talent.username ? `/user/${talent.username}` : `/user/${talent.id}`;
 
+    const roles = getTalentRoles(talent);
+    const equipment = getTalentEquipment(talent);
+    const prefs = getTalentPreferences(talent);
+
+    const WORKMODE_LABEL: Record<string, string> = { PRESENTIEL: "Présentiel", DISTANCIEL: "Distanciel", HYBRIDE: "Hybride" };
+    const LEVEL_LABEL: Record<string, string> = { DEBUTANT: "Débutant", INTERMEDIAIRE: "Intermédiaire", AVANCE: "Avancé" };
+    const REMU_LABEL: Record<string, string> = { REMUNERE: "Rémunéré", NON_REMUNERE: "Non rémunéré" };
+
+    const workModeLabel = prefs.workMode ? WORKMODE_LABEL[prefs.workMode] : null;
+    const levelLabel = prefs.level ? LEVEL_LABEL[prefs.level] : null;
+    const remuLabel = prefs.remunerationType ? REMU_LABEL[prefs.remunerationType] : null;
+
     return (
-        <div className="bg-white rounded-[10px] p-5 flex flex-col gap-4 h-full transition-shadow duration-200 hover:shadow-md">
+        <div className="bg-white rounded-[10px] p-5 flex flex-col gap-3.5 h-full transition-shadow duration-200 hover:shadow-md">
 
             {/* ── Header : avatar + nom + followers ── */}
             <Link href={profileHref} className="flex items-start gap-3 group">
@@ -53,51 +65,37 @@ export default function TalentCard({ talent }: { talent: Talent }) {
                 </div>
             </Link>
 
-            {/* ── Catégories / spécialités ── */}
-            {talent.categoryFollows.length > 0 && (
+            {/* ── Compétences / rôles déclarés (UserConfig) ── */}
+            {roles.length > 0 && (
                 <div className="flex flex-col gap-1.5">
                     <span className="font-['Poppins',sans-serif] text-[11px] font-semibold uppercase tracking-wide text-gray">
-                        Spécialités
+                        Compétences
                     </span>
                     <div className="flex flex-wrap gap-1.5">
-                        {talent.categoryFollows.slice(0, 3).map(({ category }) => (
+                        {roles.slice(0, 4).map((role) => (
                             <span
-                                key={category.id}
-                                className="inline-flex items-center h-[22px] px-2.5 bg-neutral-100 rounded-full font-['Poppins',sans-serif] text-[11px] text-[#4c4a43]"
+                                key={role}
+                                className="inline-flex items-center h-6 px-2.5 bg-orange/10 border border-orange/30 rounded-[5px] font-['Poppins',sans-serif] text-[11px] text-orange font-medium"
                             >
-                                {category.name}
+                                {role}
                             </span>
                         ))}
-                        {talent.categoryFollows.length > 3 && (
-                            <span className="inline-flex items-center h-[22px] px-2 bg-neutral-100 rounded-full font-['Poppins',sans-serif] text-[11px] text-gray">
-                                +{talent.categoryFollows.length - 3}
+                        {roles.length > 4 && (
+                            <span className="inline-flex items-center h-6 px-2 border border-neutral-200 rounded-[5px] font-['Poppins',sans-serif] text-[11px] text-gray">
+                                +{roles.length - 4}
                             </span>
                         )}
                     </div>
                 </div>
             )}
 
-            {/* ── Badges / rôles ── */}
-            {talent.badges.length > 0 && (
-                <div className="flex flex-col gap-1.5">
-                    <span className="font-['Poppins',sans-serif] text-[11px] font-semibold uppercase tracking-wide text-gray">
-                        Rôles
+            {/* ── Projets (créés + rejoints) ── */}
+            {(talent._count.projects + talent._count.participants) > 0 && (
+                <div className="flex items-center gap-1.5">
+                    <Briefcase className="w-3 h-3 text-gray shrink-0" />
+                    <span className="font-['Poppins',sans-serif] text-[11px] text-[#4c4a43]">
+                        {talent._count.projects + talent._count.participants} projet{(talent._count.projects + talent._count.participants) > 1 ? "s" : ""} rejoint{(talent._count.projects + talent._count.participants) > 1 ? "s" : ""}
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
-                        {talent.badges.slice(0, 3).map((badge) => (
-                            <span
-                                key={badge.id}
-                                className="inline-flex items-center h-6 px-2.5 border border-black rounded-[5px] font-['Poppins',sans-serif] text-[11px] text-black"
-                            >
-                                {badge.name}
-                            </span>
-                        ))}
-                        {talent.badges.length > 3 && (
-                            <span className="inline-flex items-center h-6 px-2 border border-neutral-300 rounded-[5px] font-['Poppins',sans-serif] text-[11px] text-[#4c4a43]">
-                                +{talent.badges.length - 3}
-                            </span>
-                        )}
-                    </div>
                 </div>
             )}
 
@@ -108,11 +106,44 @@ export default function TalentCard({ talent }: { talent: Talent }) {
                 </p>
             )}
 
-            {/* ── Liens portfolio / CV ── */}
+            {/* ── Équipement (condensé) ── */}
+            {equipment.length > 0 && (
+                <div className="flex items-center gap-1.5 flex-wrap">
+                    <Wrench className="w-3 h-3 text-gray shrink-0" />
+                    <span className="font-['Poppins',sans-serif] text-[11px] text-gray line-clamp-1">
+                        {equipment.join(" · ")}
+                    </span>
+                </div>
+            )}
+
+            {/* ── Disponibilité (workMode / level / remu) ── */}
+            {(workModeLabel || levelLabel || remuLabel) && (
+                <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                    {workModeLabel && (
+                        <div className="flex items-center gap-1.5">
+                            <Zap className="w-3 h-3 text-gray shrink-0" />
+                            <span className="font-['Poppins',sans-serif] text-[11px] text-[#4c4a43]">{workModeLabel}</span>
+                        </div>
+                    )}
+                    {levelLabel && (
+                        <div className="flex items-center gap-1.5">
+                            <TrendingUp className="w-3 h-3 text-gray shrink-0" />
+                            <span className="font-['Poppins',sans-serif] text-[11px] text-[#4c4a43]">{levelLabel}</span>
+                        </div>
+                    )}
+                    {remuLabel && (
+                        <div className="flex items-center gap-1.5">
+                            <Wallet className="w-3 h-3 text-gray shrink-0" />
+                            <span className="font-['Poppins',sans-serif] text-[11px] text-[#4c4a43]">{remuLabel}</span>
+                        </div>
+                    )}
+                </div>
+            )}
+
             {(talent.portfolio || talent.cv) && (
                 <div className="flex gap-2 pt-1 border-t border-neutral-100 mt-auto">
                     {talent.portfolio && (
-                        <a
+                        <Link
                             href={talent.portfolio}
                             target="_blank"
                             rel="noreferrer noopener"
@@ -121,19 +152,19 @@ export default function TalentCard({ talent }: { talent: Talent }) {
                         >
                             <ExternalLink className="w-3 h-3" />
                             Portfolio
-                        </a>
+                        </Link>
                     )}
                     {talent.cv && (
-                        <a
+                        <Link
                             href={talent.cv}
                             target="_blank"
                             rel="noreferrer noopener"
                             onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-1.5 h-7 px-3 rounded-md border border-neutral-300 font-['Poppins',sans-serif] text-[11px] text-[#4c4a43] hover:border-black hover:text-black transition-colors"
+                            className="flex items-center gap-1.5 h-7 px-3 rounded-md border font-['Poppins',sans-serif] text-[11px] border-black text-[#4c4a43] hover:bg-black hover:text-white transition-colors"
                         >
                             <FileText className="w-3 h-3" />
                             CV
-                        </a>
+                        </Link>
                     )}
                 </div>
             )}

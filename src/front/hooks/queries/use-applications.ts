@@ -6,6 +6,7 @@ import {
   acceptApplication,
   rejectApplication,
   getProjectApplications,
+  type ApplicationData,
 } from "@/front/lib/api/applications";
 
 const APPLICATIONS_ROOT = ["applications"] as const;
@@ -15,7 +16,7 @@ export const applicationsQueries = {
     queryOptions({
       queryKey: [...APPLICATIONS_ROOT, "project", projectId],
       queryFn: () => getProjectApplications(projectId),
-      staleTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: 1000 * 60 * 2,
     }),
 };
 
@@ -24,25 +25,20 @@ export const useProjectApplications = (projectId: string) =>
 
 export const useApplyToProject = (projectId: string) => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: () => applyToProject(projectId),
+    mutationFn: (data?: ApplicationData) => applyToProject(projectId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [...APPLICATIONS_ROOT, "project", projectId],
-      });
+      queryClient.invalidateQueries({ queryKey: [...APPLICATIONS_ROOT, "project", projectId] });
     },
   });
 };
 
 export const useAcceptApplication = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (applicationId: string) =>
-      acceptApplication(applicationId),
+    mutationFn: ({ applicationId, ownerNote }: { applicationId: string; ownerNote?: string }) =>
+      acceptApplication(applicationId, ownerNote),
     onSuccess: (data) => {
-      // Invalide les candidatures du projet
       queryClient.invalidateQueries({
         queryKey: [...APPLICATIONS_ROOT, "project", data.application.projectId],
       });
@@ -52,12 +48,10 @@ export const useAcceptApplication = () => {
 
 export const useRejectApplication = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (applicationId: string) =>
-      rejectApplication(applicationId),
+    mutationFn: ({ applicationId, ownerNote }: { applicationId: string; ownerNote?: string }) =>
+      rejectApplication(applicationId, ownerNote),
     onSuccess: (data) => {
-      // Invalide les candidatures du projet
       queryClient.invalidateQueries({
         queryKey: [...APPLICATIONS_ROOT, "project", data.application.projectId],
       });

@@ -48,7 +48,7 @@ const CreateResourceSchema = baseSchema.superRefine((val, ctx) => {
     if (val.type === "LINK") {
         const valid = val.urls.filter((u) => u.match(/^https?:\/\/.+/))
         if (valid.length === 0) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Au moins un lien valide requis (https://…)", path: ["urls"] })
+            ctx.addIssue({ code: "custom", message: "Au moins un lien valide requis (https://…)", path: ["urls"] })
         }
     } else {
         const hasMedia =
@@ -57,7 +57,7 @@ const CreateResourceSchema = baseSchema.superRefine((val, ctx) => {
             val.audioUrls.some(Boolean) ||
             val.urls.some((u) => u.match(/^https?:\/\/.+/))
         if (!hasMedia) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Ajoute au moins un fichier ou une URL", path: ["imageUrls"] })
+            ctx.addIssue({ code: "custom", message: "Ajoute au moins un fichier ou une URL", path: ["imageUrls"] })
         }
     }
 })

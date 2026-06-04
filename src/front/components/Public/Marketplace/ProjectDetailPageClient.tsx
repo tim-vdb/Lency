@@ -7,6 +7,8 @@ import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 import ProjectDetail from "./Projects/ProjectDetail";
 import ProjectCard from "./Projects/ProjectCard";
 import { useProjects } from "@/front/hooks/queries/use-projects";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 function ProjectDetailSkeleton() {
     return (
@@ -38,9 +40,14 @@ function ProjectDetailSkeleton() {
 }
 
 export default function ProjectDetailPageClient({ projectId }: { projectId: string }) {
-    const { data: project, isPending } = useProjectById(projectId);
+    const router = useRouter();
+    const { data: project, isPending, error } = useProjectById(projectId);
     const { data: allProjects } = useProjects();
     useBreadcrumbOverride(projectId, project?.title);
+
+    useEffect(() => {
+        if (error?.message === "FORBIDDEN") router.replace("/marketplace");
+    }, [error, router]);
 
     const related = allProjects
         ?.filter((p) => p.id !== projectId && p.status === "PUBLISHED")

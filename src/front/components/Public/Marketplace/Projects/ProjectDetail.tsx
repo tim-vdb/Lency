@@ -33,7 +33,10 @@ import {
 } from "@/front/components/ui/dropdown-menu";
 import { useUser } from "@/front/context/UserContext";
 import { useDeleteProject, useReportProject } from "@/front/hooks/queries/use-projects";
-import { useApplyToProject } from "@/front/hooks/queries/use-applications";
+import { useProjectApplications } from "@/front/hooks/queries/use-applications";
+import { ApplyToProjectModal } from "@/front/components/Public/Marketplace/Projects/ApplyToProjectModal";
+import { ProjectInviteBlock } from "@/front/components/Public/Marketplace/Projects/ProjectInviteBlock";
+import { ProjectMembersCard } from "@/front/components/Public/Marketplace/Projects/ProjectMembersCard";
 import { useShare } from "@/front/hooks/use-share";
 import { cn, getDisplayName, getInitialName, timeAgo } from "@/front/lib/utils";
 import { ProjectAttachment, ProjectWithOwner } from "@/front/types/project.schema";
@@ -53,6 +56,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const LEVEL_LABEL: Record<string, string> = {
     DEBUTANT: "Débutant",
@@ -78,32 +82,26 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
     const router = useRouter();
     const currentUser = useUser();
     const isOwner = currentUser?.id === project.ownerId;
+    const isParticipant = project.participants.some((p) => p.id === currentUser?.id);
+    const isMember = isOwner || isParticipant;
+    const [applyModalOpen, setApplyModalOpen] = useState(false);
+    const { data: applicationsData } = useProjectApplications(project.id);
+    const pendingCount = (applicationsData?.applications ?? []).filter((a: { status: string }) => a.status === "PENDING").length;
     const href = `/marketplace/${project.id}`;
     const { mutate: report, isPending: isReporting } = useReportProject(project.id);
     const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
-    const { mutate: apply, isPending: isApplying } = useApplyToProject(project.id);
 
     const roles = Array.isArray(project.roles) ? (project.roles as string[]) : [];
     const attachments = Array.isArray(project.attachments)
         ? (project.attachments as ProjectAttachment[])
         : [];
 
-    function handleApply() {
-        apply(undefined, {
-            onSuccess: () => {
-                toast.success("Candidature envoyée ! Le créateur du projet vous contactera bientôt.");
-            },
-            onError: (err) => {
-                toast.error(err.message);
-            },
-        });
-    }
 
     const remuInfo = project.remunerationType ? REMUNERATION_LABEL[project.remunerationType] : null;
     const levelStr = project.level ? LEVEL_LABEL[project.level] : null;
     const workModeStr = project.workMode ? WORKMODE_LABEL[project.workMode] : null;
 
-    const hasInfos = !!(project.projectType || project.mapLocation || workModeStr || remuInfo || levelStr || project.startDate || roles.length > 0);
+    const hasInfos = !!(project.projectType || project.mapLocation?.name || workModeStr || remuInfo || levelStr || project.startDate || roles.length > 0);
 
     return (
         <>
@@ -149,10 +147,17 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                                 )}
                             </div>
                             <div className="flex items-center gap-2">
-                                <Button variant={"default"} className="flex items-center gap-2">
-                                    <span>Privée</span>
-                                    <MessageCircleMore className="w-4 h-4" />
-                                </Button>
+                                {isMember && (
+                                    <Link href={`/marketplace/${project.id}/chat`}>
+                                        <Button
+                                            variant="default"
+                                            className="flex items-center gap-2"
+                                        >
+                                            <MessageCircleMore className="w-4 h-4" />
+                                            <span>Chat projet</span>
+                                        </Button>
+                                    </Link>
+                                )}
 
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -194,25 +199,27 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                         </div>
 
                         {/* Auteur + date */}
-                        <div className="flex items-center gap-3">
-                            <Avatar className="w-9 h-9">
-                                <AvatarImage src={project.owner.image ?? undefined} />
-                                <AvatarFallback className="text-xs bg-neutral-100">
-                                    {getInitialName(project.owner)}
-                                </AvatarFallback>
-                            </Avatar>
-                            <div className="flex flex-col min-w-0">
-                                <span className="font-['Poppins',sans-serif] text-sm font-medium text-[#4c4a43] truncate">
-                                    {getDisplayName(project.owner)}
-                                </span>
-                                <span className="font-['Poppins',sans-serif] text-xs text-[#8c8a85]">
-                                    {timeAgo(project.createdAt)}
-                                </span>
+                        <Link href={`/user/${project.owner.username}`}>
+                            <div className="flex items-center gap-3">
+                                <Avatar className="w-9 h-9">
+                                    <AvatarImage src={project.owner.image ?? undefined} />
+                                    <AvatarFallback className="text-xs bg-neutral-100">
+                                        {getInitialName(project.owner)}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col min-w-0">
+                                    <span className="font-['Poppins',sans-serif] text-sm font-medium text-[#4c4a43] truncate">
+                                        {getDisplayName(project.owner)}
+                                    </span>
+                                    <span className="font-['Poppins',sans-serif] text-xs text-gray">
+                                        {timeAgo(project.createdAt)}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
 
                         {/* Description */}
-                        <p className="font-['Poppins',sans-serif] text-[16px] leading-[24px] text-black whitespace-pre-line">
+                        <p className="font-['Poppins',sans-serif] text-[16px] leading-6 text-black whitespace-pre-line">
                             {project.description}
                         </p>
 
@@ -251,14 +258,13 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
 
                     {/* Colonne droite : sticky */}
                     <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
-                        {/* Bouton Postuler — masqué pour le créateur */}
-                        {!isOwner && (
+                        {/* Bouton Postuler — masqué pour le créateur et pour les projets privés */}
+                        {!isOwner && project.visibility !== "PRIVATE" && (
                             <Button
-                                className="w-full h-[55px] bg-[#ea3d0e] hover:bg-[#d13500] text-white font-['Poppins',sans-serif] font-bold text-[20px] leading-[24px] rounded-[5px] border-0"
-                                onClick={handleApply}
-                                disabled={isApplying}
+                                className="w-full h-[55px] bg-orange hover:bg-orange/50 text-white font-['Poppins',sans-serif] font-bold text-[20px] leading-[24px] rounded-[5px] border-0"
+                                onClick={() => setApplyModalOpen(true)}
                             >
-                                {isApplying ? "Envoi..." : "Postuler au projet"}
+                                Postuler au projet
                             </Button>
                         )}
 
@@ -266,7 +272,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                         {isOwner && (
                             <Button
                                 variant="outline"
-                                className="w-full h-[55px] font-['Poppins',sans-serif] font-semibold text-[18px] leading-[24px] rounded-[5px] gap-2"
+                                className="w-full h-[55px] font-['Poppins',sans-serif] font-semibold text-[18px] leading-6 rounded-[5px] gap-2"
                                 onClick={() => setEditOpen(true)}
                             >
                                 <Pencil className="w-5 h-5" />
@@ -276,10 +282,10 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
 
                         {/* Card Infos pratiques */}
                         <div className="bg-white rounded-[10px] p-[27px] flex flex-col gap-0">
-                            <h2 className="font-['Poppins',sans-serif] font-semibold text-[24px] leading-[32px] text-black mb-4">
+                            <h2 className="font-['Poppins',sans-serif] font-semibold text-[24px] leading-8 text-black mb-4">
                                 Infos pratiques
                             </h2>
-                            <div className="w-full h-px bg-[#e8e8e1] rounded-full mb-6" />
+                            <div className="w-full h-px bg-gray-light rounded-full mb-6" />
 
                             {hasInfos ? (
                                 <div className="flex flex-col gap-8">
@@ -291,7 +297,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                                         />
                                     )}
 
-                                    {(project.mapLocation || workModeStr) && (
+                                    {(project.mapLocation?.name || workModeStr) && (
                                         <InfoBlock
                                             icon={<MapPin className="w-6 h-6 text-black" />}
                                             label="Localisation"
@@ -352,12 +358,50 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                                 </p>
                             )}
                         </div>
+
+                        {/* Card Candidatures — owner uniquement, projets publics */}
+                        {isOwner && project.visibility !== "PRIVATE" && (
+                            <button
+                                onClick={() => router.push(`/marketplace/${project.id}/candidature`)}
+                                className="w-full bg-white rounded-[10px] p-4 flex items-center gap-3 hover:bg-neutral-50 transition-colors text-left border border-neutral-100 hover:border-neutral-200"
+                            >
+                                <div className="h-10 w-10 rounded-lg bg-neutral-100 flex items-center justify-center shrink-0">
+                                    <MessageCircle className="w-5 h-5 text-neutral-500" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="font-semibold text-sm text-black">Candidatures</p>
+                                    <p className="text-xs text-neutral-400">
+                                        {pendingCount > 0 ? `${pendingCount} en attente` : "Gérer les candidats"}
+                                    </p>
+                                </div>
+                                {pendingCount > 0 && (
+                                    <span className="min-w-[22px] h-[22px] rounded-full bg-orange flex items-center justify-center text-[10px] text-white font-bold px-1 shrink-0">
+                                        {pendingCount > 9 ? "9+" : pendingCount}
+                                    </span>
+                                )}
+                            </button>
+                        )}
+
+                        {/* Card membres */}
+                        <ProjectMembersCard
+                            owner={project.owner}
+                            participants={project.participants}
+                        />
+
+                        {/* Bloc invitation — owner uniquement */}
+                        {isOwner && (
+                            <ProjectInviteBlock
+                                projectId={project.id}
+                                participantIds={project.participants.map((p) => p.id)}
+                            />
+                        )}
                     </aside>
                 </div>
-            </div>
+            </div >
+
 
             {/* ── Modal édition ── */}
-            <Dialog open={editOpen} onOpenChange={setEditOpen}>
+            <Dialog open={editOpen} onOpenChange={setEditOpen} >
                 <DialogPortal>
                     <DialogOverlay />
                     <DialogContent className="p-0 gap-0 w-full max-w-[820px] h-[600px] flex overflow-hidden rounded-xl">
@@ -369,7 +413,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
             </Dialog>
 
             {/* ── Confirmation suppression ── */}
-            <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+            <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen} >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Supprimer ce projet ?</AlertDialogTitle>
@@ -397,6 +441,13 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+            <ApplyToProjectModal
+                open={applyModalOpen}
+                onClose={() => setApplyModalOpen(false)}
+                projectId={project.id}
+                projectTitle={project.title}
+            />
         </>
     );
 }

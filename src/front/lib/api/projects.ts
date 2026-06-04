@@ -15,6 +15,20 @@ export interface CreateProjectInput {
     city?: string;
 }
 
+export type MyProject = { id: string; title: string; ownerId: string };
+
+export async function fetchMyDraftProjects(): Promise<ProjectWithOwner[]> {
+    const res = await fetch("/api/projects/drafts", { cache: "no-store" });
+    if (!res.ok) throw new Error("Erreur fetch brouillons projets");
+    return (await res.json()).projects;
+}
+
+export async function fetchMyProjects(): Promise<MyProject[]> {
+    const res = await fetch("/api/projects/mine", { cache: "no-store" });
+    if (!res.ok) throw new Error("Erreur fetch mes projets");
+    return (await res.json()).projects;
+}
+
 export async function createProject(input: CreateProjectInput): Promise<ProjectWithOwner> {
     const res = await fetch("/api/projects", {
         method: "POST",
@@ -36,6 +50,7 @@ export async function fetchProjects(): Promise<ProjectWithOwner[]> {
 
 export async function fetchProjectById(projectId: string): Promise<ProjectWithOwner> {
     const res = await fetch(`/api/projects/${projectId}`, { cache: "no-store" });
+    if (res.status === 403) throw new Error("FORBIDDEN");
     if (!res.ok) throw new Error("Erreur lors de la récupération du projet");
     return (await res.json()).project;
 }

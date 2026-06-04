@@ -3,15 +3,17 @@ import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostAudio from "@/front/components/Public/Community/Posts/PostAudio";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
 import { PostsService } from "@/back/services/posts.service";
-import PostsInfos from "@/front/components/Public/Community/Sidebar/PostsInfos";
+import RecentlyViewedSidebar from "@/front/components/Public/Community/Sidebar/RecentlyViewedSidebar";
 import BreadcrumbOverride from "@/front/components/Private/Global/BreadcrumbOverride";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 interface PostPageProps {
-    params: Promise<{ slug: string; id: string }>;
+    params: Promise<{ id: string }>;
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-    const { id, slug } = await params;
+    const { id } = await params;
     const post = await PostsService.findByIdPost(id).catch(() => null);
 
     if (!post) {
@@ -19,14 +21,29 @@ export default async function PostPage({ params }: PostPageProps) {
     }
 
     return (
-        <div className="flex gap-4 max-w-6xl mx-auto">
-            <BreadcrumbOverride segment={slug} label={post.category.name} type="category" />
+        <div className="flex flex-col gap-4 max-w-5xl mx-auto">
             <BreadcrumbOverride segment={post.id} label={post.content.slice(0, 40)} />
-            {post.format === "IMAGE" && <PostImage post={post} />}
-            {post.format === "VIDEO" && <PostVideo post={post} />}
-            {post.format === "AUDIO" && <PostAudio post={post} />}
-            {post.format === "TEXT" && <PostText post={post} />}
-            <PostsInfos post={post} className="hidden xl:flex" />
+
+            <div className="flex flex-col gap-1">
+                <Link
+                    href={`/community/${post.category.slug}`}
+                    className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-700 w-fit transition-colors"
+                >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    {post.category.name}
+                </Link>
+                <h1 className="text-xl font-semibold line-clamp-2">{post.content.slice(0, 80)}{post.content.length > 80 ? "…" : ""}</h1>
+            </div>
+
+            <div className="lg:flex lg:gap-4 items-start w-full">
+                <div className="flex-1 min-w-0">
+                    {post.format === "IMAGE" && <PostImage post={post} defaultOpenComments lockOpenComments viewDelay={800} />}
+                    {post.format === "VIDEO" && <PostVideo post={post} defaultOpenComments lockOpenComments viewDelay={800} />}
+                    {post.format === "AUDIO" && <PostAudio post={post} defaultOpenComments lockOpenComments viewDelay={800} />}
+                    {post.format === "TEXT" && <PostText post={post} defaultOpenComments lockOpenComments viewDelay={800} />}
+                </div>
+                <RecentlyViewedSidebar />
+            </div>
         </div>
     );
 }

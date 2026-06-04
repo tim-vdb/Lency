@@ -1,9 +1,16 @@
 // Fetch wrappers pour les candidatures
 
-export async function applyToProject(projectId: string) {
+export interface ApplicationData {
+  applicantNote?: string;
+  portfolioUrl?: string;
+  cvUrl?: string;
+}
+
+export async function applyToProject(projectId: string, data?: ApplicationData) {
   const res = await fetch(`/api/projects/${projectId}/apply`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data ?? {}),
   });
   if (!res.ok) {
     const error = await res.json();
@@ -12,10 +19,11 @@ export async function applyToProject(projectId: string) {
   return res.json();
 }
 
-export async function acceptApplication(applicationId: string) {
+export async function acceptApplication(applicationId: string, ownerNote?: string) {
   const res = await fetch(`/api/applications/${applicationId}/accept`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ownerNote }),
   });
   if (!res.ok) {
     const error = await res.json();
@@ -24,10 +32,11 @@ export async function acceptApplication(applicationId: string) {
   return res.json();
 }
 
-export async function rejectApplication(applicationId: string) {
+export async function rejectApplication(applicationId: string, ownerNote?: string) {
   const res = await fetch(`/api/applications/${applicationId}/reject`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ownerNote }),
   });
   if (!res.ok) {
     const error = await res.json();
@@ -36,12 +45,16 @@ export async function rejectApplication(applicationId: string) {
   return res.json();
 }
 
+export async function fetchApplicationById(applicationId: string) {
+    const res = await fetch(`/api/applications/${applicationId}`, { cache: "no-store" });
+    if (!res.ok) throw new Error("Erreur lors de la récupération de la candidature");
+    return (await res.json()).application;
+}
+
 export async function getProjectApplications(projectId: string) {
   const res = await fetch(`/api/projects/${projectId}/applications`, {
     cache: "no-store",
   });
-  if (!res.ok) {
-    throw new Error("Failed to fetch applications");
-  }
+  if (!res.ok) throw new Error("Failed to fetch applications");
   return res.json();
 }

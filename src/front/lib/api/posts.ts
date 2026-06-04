@@ -188,6 +188,12 @@ export async function fetchPostsByAuthor(authorId: string): Promise<PostWithUser
     return data.posts
 }
 
+export async function fetchMyDraftPosts(): Promise<PostWithUserState[]> {
+    const response = await fetch("/api/posts/drafts", { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur lors de la récupération des brouillons");
+    return (await response.json()).posts;
+}
+
 export async function fetchSavedPosts(): Promise<PostWithUserState[]> {
     const response = await fetch("/api/posts/saved", { method: "GET", cache: "no-store" });
     if (!response.ok) throw new Error("Erreur lors de la récupération des posts enregistrés");

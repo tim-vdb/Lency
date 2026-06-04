@@ -2,29 +2,12 @@
 
 import { Badge } from "@/front/components/ui/badge";
 import { Card } from "@/front/components/ui/card";
-import { cn } from "@/front/lib/utils";
 import { ResourceWithUserState } from "@/front/types/resource.schema";
 import { Heart, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const BADGE_PALETTE = [
-    "bg-blue-100 text-blue-700",
-    "bg-pink-100 text-pink-700",
-    "bg-emerald-100 text-emerald-700",
-    "bg-amber-100 text-amber-700",
-    "bg-violet-100 text-violet-700",
-    "bg-rose-100 text-rose-700",
-    "bg-sky-100 text-sky-700",
-    "bg-lime-100 text-lime-700",
-];
-
-function colorForSlug(slug: string) {
-    let hash = 0;
-    for (let i = 0; i < slug.length; i++) hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
-    return BADGE_PALETTE[hash % BADGE_PALETTE.length];
-}
 
 interface ResourceCardProps {
     resource: ResourceWithUserState;
@@ -36,7 +19,6 @@ export default function ResourceCard({ resource, variant = "grid" }: ResourceCar
     const router = useRouter();
     const href = `/community/${resource.category.slug}/resources/${resource.id}`;
     const categoryHref = `/community/${resource.category.slug}`;
-    const badgeClass = colorForSlug(resource.category.slug);
 
     if (variant === "large") {
         return (
@@ -122,7 +104,7 @@ export default function ResourceCard({ resource, variant = "grid" }: ResourceCar
                         onClick={(e) => e.stopPropagation()}
                         className="hover:underline"
                     >
-                        <Badge variant="secondary" className={cn("text-[10px] font-medium rounded-sm p-1.5", badgeClass)}>
+                        <Badge variant="secondary" className="text-[10px] font-medium rounded-sm p-1.5">
                             {resource.category.name}
                         </Badge>
                     </Link>

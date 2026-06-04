@@ -5,7 +5,8 @@ import { Badge } from "@/front/components/ui/badge";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { useUser } from "@/front/context/UserContext";
 import { useResources } from "@/front/hooks/queries/use-resources";
-import { Link } from "lucide-react";
+import Link from "next/link";
+import { cn } from "@/front/lib/utils";
 
 function ResourceListSkeleton() {
     return (
@@ -50,19 +51,28 @@ export default function CommunityResourcesPage() {
                     {resources.map((resource, idx) => (
                         <div key={idx} className="relative">
                             <ResourceCard resource={resource} variant="grid" />
-                            <Badge className="absolute top-3 left-3 bg-black/70 rounded-tl-lg rounded-bl-none rounded-r-sm text-white text-[10px] pointer-events-none">
-                                {resource.author.id === user?.id ? (
-                                    <span>
-                                        Par vous
-                                    </span>
-                                ) : resource.author.name ? (
-                                    <Link href={`/user/${resource.author.username}`}>
-                                        Par {resource.author.name}
-                                    </Link>
-                                ) : (
-                                    <span>Par [Auteur inconnu]</span>
-                                )}
-                            </Badge>
+                            {(() => {
+                                const isLinkable = resource.author.id !== user?.id && !!resource.author.username;
+                                return (
+                                    <Badge className={cn(
+                                        "absolute top-0 left-0 bg-black/70 rounded-tl-lg rounded-bl-none rounded-r-sm text-white text-[10px] transition-colors",
+                                        isLinkable ? "hover:bg-black/40 cursor-pointer" : "pointer-events-none"
+                                    )}>
+                                        {resource.author.id === user?.id ? (
+                                            <span>Par vous</span>
+                                        ) : resource.author.username ? (
+                                            <Link
+                                                href={`/user/${resource.author.username}`}
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                Par {resource.author.name ?? resource.author.username}
+                                            </Link>
+                                        ) : (
+                                            <span>Par [Auteur inconnu]</span>
+                                        )}
+                                    </Badge>
+                                );
+                            })()}
                         </div>
                     ))}
                 </div>

@@ -49,7 +49,10 @@ export async function PATCH(
             if (error.message === "No data to update") {
                 return NextResponse.json({ error: error.message }, { status: 400 });
             }
+            console.error("[PATCH /api/users] Unhandled error:", error.message, error.stack);
+            return NextResponse.json({ error: error.message }, { status: 500 });
         }
+        console.error("[PATCH /api/users] Unknown error:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

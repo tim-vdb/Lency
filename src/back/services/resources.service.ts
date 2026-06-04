@@ -1,4 +1,7 @@
 import { ResourcesAction } from "../repositories/resources.action";
+import { CategoryNotificationsAction } from "../repositories/category-notifications.action";
+import { notifyCategoryNewContent } from "../lib/ably";
+import { NotificationService } from "./notifications.service";
 import { getUser } from "../lib/auth-session";
 
 export const ResourcesService = {
@@ -37,7 +40,37 @@ export const ResourcesService = {
         if (!data.type) throw new Error("Type is required");
         if (!data.categoryId) throw new Error("Category is required");
 
-        return ResourcesAction.create(user.id, data);
+        const resource = await ResourcesAction.create(user.id, data);
+
+        // Fire-and-forget : n'échoue jamais la création de la ressource
+        (async () => {
+            try {
+                const subscriberIds = await CategoryNotificationsAction.findSubscriberIds(data.categoryId);
+                const eligible = subscriberIds.filter((id) => id !== user.id);
+                if (eligible.length === 0) return;
+                const authorName = user.firstname && user.lastname
+                    ? `${user.firstname} ${user.lastname}`
+                    : user.username ?? "Quelqu'un";
+                const categoryName = resource.category?.name ?? "";
+                const categorySlug = resource.category?.slug ?? "";
+                await Promise.all([
+                    notifyCategoryNewContent(eligible, data.categoryId, categoryName, "resource", resource.id, authorName),
+                    ...eligible.map((uid) =>
+                        NotificationService.createForUser(
+                            uid,
+                            "category_new_resource",
+                            `Nouvelle ressource dans ${categoryName}`,
+                            `${authorName} a ajouté une ressource : ${data.title}.`,
+                            { resourceId: resource.id, categoryId: data.categoryId, categoryName, categorySlug }
+                        )
+                    ),
+                ]);
+            } catch (err) {
+                console.error("[CategoryNotify] resource:", err);
+            }
+        })();
+
+        return resource;
     },
 
     updateResource: async (id: string, data: {

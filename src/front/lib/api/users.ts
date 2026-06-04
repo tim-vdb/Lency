@@ -69,6 +69,7 @@ export interface UpdateUserInput {
     portfolio?: string;
     cv?: string;
     isMarketplaceTalent?: boolean;
+    readyToStart?: boolean;
 }
 
 /**
@@ -111,7 +112,7 @@ export async function fetchUserById(userId: string): Promise<User> {
  * Récupère un utilisateur par son username (profil complet)
  */
 export async function fetchUserByUsername(username: string): Promise<UserProfile> {
-    const response = await fetch(`/api/users/username/${encodeURIComponent(username)}`, {
+    const response = await fetch(`/api/users/username/${username}`, {
         method: 'GET',
         cache: 'no-store',
     })

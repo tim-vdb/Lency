@@ -20,6 +20,9 @@ interface PostAudioProps {
     post: PostWithUserState;
     audioUrl?: string;
     className?: string;
+    defaultOpenComments?: boolean;
+    lockOpenComments?: boolean;
+    viewDelay?: number;
 }
 
 function formatTime(seconds: number): string {
@@ -117,11 +120,11 @@ function AudioPlayer({ audioUrl }: { audioUrl?: string }) {
     );
 }
 
-export default function PostAudio({ post, audioUrl, className }: PostAudioProps) {
+export default function PostAudio({ post, audioUrl, className, defaultOpenComments, lockOpenComments, viewDelay = 10_000 }: PostAudioProps) {
     const { category } = post;
-    const postState = usePostState(post);
+    const postState = usePostState(post, { initialOpenComments: defaultOpenComments, lockOpenComments });
     const { openComments } = postState;
-    const cardRef = useViewportRecentlyViewed(post, 10_000);
+    const cardRef = useViewportRecentlyViewed(post, viewDelay);
 
     return (
         <Card ref={cardRef} className={cn("relative p-12", className)}>

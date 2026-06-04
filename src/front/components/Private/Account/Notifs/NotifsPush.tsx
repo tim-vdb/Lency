@@ -1,10 +1,15 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { Field, FieldDescription, FieldLabel } from "@/front/components/ui/field";
 import { Separator } from "@/front/components/ui/separator";
 import { Switch } from "@/front/components/ui/switch";
 import { Bell } from "lucide-react";
+import { useNotifPreferences } from "@/front/hooks/queries/use-notif-preferences";
 
 export default function NotifsPush() {
+    const { prefs, updatePref, isSaving } = useNotifPreferences();
+
     return (
         <Card>
             <CardHeader>
@@ -25,7 +30,11 @@ export default function NotifsPush() {
                                 Recevez des alertes en temps réel sur votre appareil.
                             </FieldDescription>
                         </div>
-                        <Switch defaultChecked />
+                        <Switch
+                            checked={prefs.push_enabled}
+                            disabled={isSaving}
+                            onCheckedChange={(v) => updatePref("push_enabled", v)}
+                        />
                     </Field>
 
                     <Separator />
@@ -37,7 +46,11 @@ export default function NotifsPush() {
                                 Quand quelqu&apos;un vous mentionne ou commente vos projets.
                             </FieldDescription>
                         </div>
-                        <Switch defaultChecked />
+                        <Switch
+                            checked={prefs.push_mentions}
+                            disabled={isSaving || !prefs.push_enabled}
+                            onCheckedChange={(v) => updatePref("push_mentions", v)}
+                        />
                     </Field>
 
                     <Separator />
@@ -49,7 +62,11 @@ export default function NotifsPush() {
                                 Changements sur les projets que vous suivez.
                             </FieldDescription>
                         </div>
-                        <Switch />
+                        <Switch
+                            checked={prefs.push_project_updates}
+                            disabled={isSaving || !prefs.push_enabled}
+                            onCheckedChange={(v) => updatePref("push_project_updates", v)}
+                        />
                     </Field>
                 </div>
             </CardContent>

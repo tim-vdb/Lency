@@ -19,7 +19,11 @@ export const TalentsAction = {
                     select: { category: { select: { id: true, name: true } } },
                     take: 4,
                 },
-                _count: { select: { followers: true } },
+                configs: {
+                    where: { title: { in: ["roles", "audiovisual", "preferences"] } },
+                    select: { title: true, content: true },
+                },
+                _count: { select: { followers: true, participants: true, projects: true } },
             },
             orderBy: { createdAt: "desc" },
         }),

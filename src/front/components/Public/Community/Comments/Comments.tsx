@@ -29,7 +29,7 @@ export default function Comments({ target }: CommentsProps) {
     const resourceQuery = useResourceComments(target.type === "resource" ? target.id : "");
     const projectQuery = useProjectComments(target.type === "project" ? target.id : "");
 
-    const { data: comments, isLoading } =
+    const { data: comments, isLoading, isError } =
         target.type === "post" ? postQuery : target.type === "resource" ? resourceQuery : projectQuery;
 
     if (isLoading) {
@@ -39,6 +39,14 @@ export default function Comments({ target }: CommentsProps) {
                 <CommentSkeleton />
                 <CommentSkeleton />
             </div>
+        );
+    }
+
+    if (isError) {
+        return (
+            <p className="text-sm text-neutral-400 text-center py-2">
+                Impossible de charger les commentaires.
+            </p>
         );
     }
 

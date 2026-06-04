@@ -90,3 +90,9 @@ enum ProjectApplicationStatus {
   ACCEPTED
   REJECTED
 }
+
+enum ProjectInvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}

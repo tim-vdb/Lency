@@ -32,6 +32,7 @@ export const ProjectsAction = {
 
     findAll: async () => {
         return prisma.project.findMany({
+            where: { visibility: { not: "PRIVATE" } },
             include: { owner: true, participants: true, mapLocation: true },
             orderBy: { createdAt: "desc" },
         });
@@ -106,6 +107,20 @@ export const ProjectsAction = {
             where: { userId_projectId: { userId, projectId } },
             create: { userId, projectId, reason },
             update: { reason },
+        });
+    },
+
+    findByUser: async (userId: string) => {
+        return prisma.project.findMany({
+            where: {
+                OR: [
+                    { ownerId: userId },
+                    { participants: { some: { id: userId } } },
+                ],
+                status: { not: "ARCHIVED" },
+            },
+            select: { id: true, title: true, ownerId: true },
+            orderBy: { updatedAt: "desc" },
         });
     },
 

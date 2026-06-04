@@ -30,8 +30,24 @@ import { useMyConfigs, useCreateUserConfig, useUpdateUserConfig } from "@/front/
 
 const STEPS = [
     { id: "profil", title: "Profil" },
+    { id: "disponibilite", title: "Disponibilité" },
     { id: "roles", title: "Rôles" },
     { id: "equipements", title: "Équipements" },
+]
+
+const WORKMODE_OPTIONS = [
+    { value: "PRESENTIEL", label: "Présentiel" },
+    { value: "DISTANCIEL", label: "Distanciel" },
+    { value: "HYBRIDE", label: "Hybride" },
+]
+const LEVEL_OPTIONS = [
+    { value: "DEBUTANT", label: "Débutant" },
+    { value: "INTERMEDIAIRE", label: "Intermédiaire" },
+    { value: "AVANCE", label: "Avancé" },
+]
+const REMU_OPTIONS = [
+    { value: "REMUNERE", label: "Rémunéré" },
+    { value: "NON_REMUNERE", label: "Non rémunéré" },
 ]
 
 const ROLE_SUGGESTIONS = [
@@ -92,7 +108,7 @@ const SUGGESTIONS: Record<string, string[]> = {
         "Westcott Flex", "Quasar Science Q-LED", "Litepanels Astra 6X Bi",
     ],
     software: [
-        "Adobe Premiere Pro", "Adobe After Effects", "Adobe Audition", "Adobe Photoshop", "Adobe Lightroom",
+        "Adobe Premiere Pro", "Adobe After Effects", "Adobe Audition", "Adobe Photoshop", "Adobe Lightroom", "Adobe Illustrator", "Adobe Media Encoder", "Adobe Character Animator", "Adobe InDesign",
         "DaVinci Resolve", "DaVinci Resolve Studio",
         "Final Cut Pro", "Motion",
         "Avid Media Composer",
@@ -127,6 +143,9 @@ const ProfileSchema = z.object({
     portfolio: z.string().url("URL invalide").or(z.literal("")).optional(),
     cv: z.string().url("URL invalide").or(z.literal("")).optional(),
     isMarketplaceTalent: z.boolean(),
+    workMode: z.string().optional(),
+    level: z.string().optional(),
+    remunerationType: z.string().optional(),
 })
 
 type ProfileValues = z.infer<typeof ProfileSchema>
@@ -386,11 +405,17 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
         const avConfig = configs?.find((c) => c.title === "audiovisual")
         setAvContent(avConfig ? (avConfig.content as AudiContent) : {})
 
+        const prefsConfig = configs?.find((c) => c.title === "preferences")
+        const prefs = prefsConfig ? (prefsConfig.content as { workMode?: string; level?: string; remunerationType?: string }) : {}
+
         form.reset({
             bio: user?.bio ?? "",
             portfolio: user?.portfolio ?? "",
             cv: user?.cv ?? "",
             isMarketplaceTalent: user?.isMarketplaceTalent ?? false,
+            workMode: prefs.workMode ?? "",
+            level: prefs.level ?? "",
+            remunerationType: prefs.remunerationType ?? "",
         })
     }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -430,6 +455,18 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
                 await createConfigAsync({ title: "audiovisual", content: avContent })
             }
 
+            const prefsContent = {
+                workMode: values.workMode || null,
+                level: values.level || null,
+                remunerationType: values.remunerationType || null,
+            }
+            const prefsConfig = configs?.find((c) => c.title === "preferences")
+            if (prefsConfig) {
+                await updateConfigAsync({ id: prefsConfig.id, data: { content: prefsContent } })
+            } else if (values.workMode || values.level || values.remunerationType) {
+                await createConfigAsync({ title: "preferences", content: prefsContent })
+            }
+
             toast.success("Profil talent mis à jour !")
             onOpenChange(false)
         } catch {
@@ -457,6 +494,7 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
                                 <MultistepNavigation
                                     onNext={async (step) => {
                                         if (step === 0) return form.trigger(["bio", "portfolio", "cv"])
+                                        if (step === 1) return form.trigger(["workMode", "level", "remunerationType"])
                                         return true
                                     }}
                                     isPending={isPending}
@@ -534,7 +572,79 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
                                 </div>
                             </MultistepStep>
 
-                            {/* ── Étape 2 : Rôles ── */}
+                            {/* ── Étape 2 : Disponibilité ── */}
+                            <MultistepStep title="Disponibilité" description="Ces informations apparaissent sur votre carte dans la marketplace, elles permettent aux recruteurs de savoir si vous correspondez à leurs besoins.">
+                                <div className="grid grid-cols-1 gap-5">
+                                    <FormField
+                                        control={form.control}
+                                        name="workMode"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Mode de travail</FormLabel>
+                                                <FormControl>
+                                                    <select
+                                                        value={field.value ?? ""}
+                                                        onChange={field.onChange}
+                                                        className="w-full h-10 px-3 border border-input rounded-md bg-background text-sm outline-none focus:ring-2 focus:ring-ring"
+                                                    >
+                                                        <option value="">Non spécifié</option>
+                                                        {WORKMODE_OPTIONS.map((o) => (
+                                                            <option key={o.value} value={o.value}>{o.label}</option>
+                                                        ))}
+                                                    </select>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="level"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Niveau d'expérience</FormLabel>
+                                                <FormControl>
+                                                    <select
+                                                        value={field.value ?? ""}
+                                                        onChange={field.onChange}
+                                                        className="w-full h-10 px-3 border border-input rounded-md bg-background text-sm outline-none focus:ring-2 focus:ring-ring"
+                                                    >
+                                                        <option value="">Non spécifié</option>
+                                                        {LEVEL_OPTIONS.map((o) => (
+                                                            <option key={o.value} value={o.value}>{o.label}</option>
+                                                        ))}
+                                                    </select>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="remunerationType"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Type de rémunération</FormLabel>
+                                                <FormControl>
+                                                    <select
+                                                        value={field.value ?? ""}
+                                                        onChange={field.onChange}
+                                                        className="w-full h-10 px-3 border border-input rounded-md bg-background text-sm outline-none focus:ring-2 focus:ring-ring"
+                                                    >
+                                                        <option value="">Non spécifié</option>
+                                                        {REMU_OPTIONS.map((o) => (
+                                                            <option key={o.value} value={o.value}>{o.label}</option>
+                                                        ))}
+                                                    </select>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </MultistepStep>
+
+                            {/* ── Étape 3 : Rôles ── */}
                             <MultistepStep title="Rôles" description="Sélectionnez ou ajoutez vos rôles dans la production audiovisuelle.">
                                 <TagSearchInput
                                     suggestions={ROLE_SUGGESTIONS}
@@ -544,7 +654,7 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
                                 />
                             </MultistepStep>
 
-                            {/* ── Étape 3 : Équipements ── */}
+                            {/* ── Étape 4 : Équipements ── */}
                             <MultistepStep title="Équipements" description="Renseignez votre matériel et logiciels audiovisuels.">
                                 <div className="flex flex-col gap-5">
                                     {AV_SECTIONS.map(({ key, label, placeholder }) => (

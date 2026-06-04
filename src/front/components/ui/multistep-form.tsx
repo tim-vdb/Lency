@@ -218,7 +218,7 @@ export function MultistepNavigation({ onNext, isPending, submitLabel = "Valider"
     const goPrev      = useMultistep((s) => s.goPrev);
 
     const isFirst = currentStep === 0;
-    const isLast  = isLastOverride ?? (currentStep === totalSteps - 1);
+    const isLast  = isLastOverride || (currentStep === totalSteps - 1);
 
     async function handleNext() {
         if (onNext) {

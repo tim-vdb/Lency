@@ -19,12 +19,15 @@ import MediaLightbox, { MediaExpandOverlay } from "@/front/components/Public/Com
 interface PostImageProps {
     post: PostWithUserState;
     className?: string;
+    defaultOpenComments?: boolean;
+    lockOpenComments?: boolean;
+    viewDelay?: number;
 }
 
-export default function PostImage({ post, className }: PostImageProps) {
-    const postState = usePostState(post);
+export default function PostImage({ post, className, defaultOpenComments, lockOpenComments, viewDelay = 60_000 }: PostImageProps) {
+    const postState = usePostState(post, { initialOpenComments: defaultOpenComments, lockOpenComments });
     const { openComments } = postState;
-    const cardRef = useViewportRecentlyViewed(post, 60_000);
+    const cardRef = useViewportRecentlyViewed(post, viewDelay);
 
     const imageSrc = post.imageUrl ?? "/images/blog/img1.jpg";
     const isPortrait = post.orientation === "PORTRAIT";

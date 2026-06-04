@@ -7,8 +7,10 @@ export async function PUT(
 ) {
   try {
     const { id: applicationId } = await params;
+    const body = await req.json().catch(() => ({}));
+    const { ownerNote } = body;
 
-    const application = await ProjectApplicationService.reject(applicationId);
+    const application = await ProjectApplicationService.reject(applicationId, ownerNote);
 
     return NextResponse.json(
       { application, message: "Application rejected" },

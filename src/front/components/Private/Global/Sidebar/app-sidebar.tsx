@@ -14,7 +14,7 @@ import {
 } from "@/front/components/ui/sidebar"
 import Link from "next/link"
 import * as React from "react"
-import NotificationsSheet from "../NotificationsSheet"
+import NotificationsSheet from "@/front/components/Private/Notifications/NotificationsSheet"
 import { NavMain } from "./nav-main"
 import { NavProjects } from "./nav-projects"
 import { NavPublic } from "./nav-public"

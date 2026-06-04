@@ -26,6 +26,24 @@ model Project {
   comments      Comment[]
   reports       ProjectReport[]
   applications  ProjectApplication[]
+  invitations   ProjectInvitation[]
+  chatMessages  ProjectMessage[]
+}
+
+model ProjectInvitation {
+  id          String                  @id @default(cuid())
+  projectId   String
+  userId      String
+  status      ProjectInvitationStatus @default(PENDING)
+  sentAt      DateTime                @default(now())
+  respondedAt DateTime?
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
 }
 
 model ProjectReport {
@@ -43,12 +61,16 @@ model ProjectReport {
 }
 
 model ProjectApplication {
-  id          String                     @id @default(cuid())
-  projectId   String
-  userId      String
-  status      ProjectApplicationStatus   @default(PENDING)
-  appliedAt   DateTime                   @default(now())
-  respondedAt DateTime?
+  id            String                     @id @default(cuid())
+  projectId     String
+  userId        String
+  status        ProjectApplicationStatus   @default(PENDING)
+  appliedAt     DateTime                   @default(now())
+  respondedAt   DateTime?
+  applicantNote String?
+  portfolioUrl  String?
+  cvUrl         String?
+  ownerNote     String?
 
   project     Project                    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   user        User                       @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -5,6 +5,7 @@ import {
     deletePost,
     fetchCommentsByPostId,
     fetchFollowedCategoryPosts,
+    fetchMyDraftPosts,
     fetchPostById,
     fetchPosts,
     fetchPostsByAuthor,
@@ -19,6 +20,7 @@ import {
     type VoteCommentInput,
 } from "@/front/lib/api/posts"
 import { CommentWithChildren, PostWithUserState } from "@/front/types/post.schema"
+import { SEARCH_ROOT } from "@/front/lib/api/search"
 
 // Parcourt l'arbre récursivement et met à jour les compteurs du commentaire ciblé
 function applyVoteInTree(
@@ -93,7 +95,12 @@ export const useCreatePost = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: createPost,
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "list"] }),
+        onSuccess: (_data, variables) => {
+            // Invalide tous les contextes où les posts apparaissent (liste, auteur, catégorie, followed…)
+            queryClient.invalidateQueries({ queryKey: POST_ROOT })
+            queryClient.invalidateQueries({ queryKey: ["categories", variables.categoryId, "posts"] })
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })
+        },
     })
 }
 
@@ -101,7 +108,10 @@ export const useUpdatePost = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({ id, data }: { id: string; data: Partial<CreatePostInput> }) => updatePost(id, data),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: POST_ROOT }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: POST_ROOT })
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })
+        },
     })
 }
 
@@ -177,7 +187,10 @@ export const useDeletePost = () => {
                 queryClient.setQueryData(postQueries.lists().queryKey, context.previousPosts)
             }
         },
-        onSettled: () => queryClient.invalidateQueries({ queryKey: [...POST_ROOT, "list"] }),
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: POST_ROOT })
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })
+        },
     })
 }
 
@@ -247,4 +260,11 @@ export const useSavedPosts = () =>
         queryKey: [...POST_ROOT, "saved"] as const,
         queryFn: fetchSavedPosts,
         staleTime: 1000 * 60 * 5,
+    })
+
+export const useMyDraftPosts = () =>
+    useQuery({
+        queryKey: [...POST_ROOT, "drafts"] as const,
+        queryFn: fetchMyDraftPosts,
+        staleTime: 0,
     })

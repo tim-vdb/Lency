@@ -42,7 +42,7 @@ const EditProjectSchema = z.object({
     workMode: z.enum(["PRESENTIEL", "DISTANCIEL", "HYBRIDE"]).optional(),
     city: z.string().max(100).optional(),
     startDate: z.string().optional(),
-    visibility: z.enum(["PUBLIC", "PRIVATE", "MEMBERS_ONLY"]),
+    visibility: z.enum(["PUBLIC", "PRIVATE"]),
     bannerUrl: z.string().optional(),
     roles: z.array(z.string()),
 })
@@ -78,7 +78,6 @@ const REMUNERATION_OPTIONS = [
 
 const VISIBILITY_OPTIONS = [
     { value: "PUBLIC", label: "Public" },
-    { value: "MEMBERS_ONLY", label: "Membres uniquement" },
     { value: "PRIVATE", label: "Privé" },
 ]
 
@@ -154,7 +153,7 @@ export function EditProjectForm({ project, onSuccess }: EditProjectFormProps) {
             workMode: (project.workMode as EditProjectValues["workMode"]) ?? undefined,
             city: project.mapLocation?.name ?? "",
             startDate: startDateStr,
-            visibility: (project.visibility as EditProjectValues["visibility"]) ?? "PUBLIC",
+            visibility: (project.visibility === "MEMBERS_ONLY" ? "PUBLIC" : project.visibility as EditProjectValues["visibility"]) ?? "PUBLIC",
             bannerUrl: project.bannerUrl ?? "",
             roles: Array.isArray(project.roles) ? (project.roles as string[]) : [],
         },

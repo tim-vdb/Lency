@@ -18,6 +18,7 @@ import {
     type VoteResourceCommentInput,
 } from "@/front/lib/api/resources";
 import { CommentWithChildren } from "@/front/types/post.schema";
+import { SEARCH_ROOT } from "@/front/lib/api/search";
 import { ResourceWithUserState } from "@/front/types/resource.schema";
 
 function applyVoteInTree(
@@ -210,32 +211,33 @@ export const useCreateResource = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (input: CreateResourceInput) => createResource(input),
-        onSuccess: (_data, variables) => {
-            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", variables.categoryId] });
-            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", "all"] });
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: RESOURCE_ROOT });
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT });
         },
     });
 };
 
 export const useUpdateResource = (resourceId: string, categoryId?: string) => {
     const queryClient = useQueryClient();
+    void categoryId;
     return useMutation({
         mutationFn: (input: UpdateResourceInput) => updateResource(resourceId, input),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "detail", resourceId] });
-            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", categoryId ?? "all"] });
-            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", "all"] });
+            queryClient.invalidateQueries({ queryKey: RESOURCE_ROOT });
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT });
         },
     });
 };
 
 export const useDeleteResource = (resourceId: string, categoryId?: string) => {
     const queryClient = useQueryClient();
+    void categoryId;
     return useMutation({
         mutationFn: () => deleteResource(resourceId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", categoryId ?? "all"] });
-            queryClient.invalidateQueries({ queryKey: [...RESOURCE_ROOT, "list", "all"] });
+            queryClient.invalidateQueries({ queryKey: RESOURCE_ROOT });
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT });
         },
     });
 };

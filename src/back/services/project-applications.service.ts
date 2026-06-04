@@ -1,15 +1,17 @@
 import { ProjectApplicationAction } from "@/back/repositories/project-applications.action";
+import { NotificationService } from "@/back/services/notifications.service";
 import { getUser } from "@/back/lib/auth-session";
 import { prisma } from "@/back/lib/prisma";
 import {
   notifyProjectOwnerNewApplication,
   notifyUserApplicationStatus,
+  notifyAddedToProject,
 } from "@/back/lib/ably";
 import { getDisplayName } from "@/front/lib/utils";
 
 export const ProjectApplicationService = {
   // Candidater à un projet
-  apply: async (projectId: string) => {
+  apply: async (projectId: string, data?: { applicantNote?: string; portfolioUrl?: string; cvUrl?: string }) => {
     const user = await getUser();
     if (!user) throw new Error("Unauthorized");
 
@@ -34,18 +36,21 @@ export const ProjectApplicationService = {
     const application = await ProjectApplicationAction.create({
       projectId,
       userId: user.id,
+      applicantNote: data?.applicantNote,
+      portfolioUrl: data?.portfolioUrl,
+      cvUrl: data?.cvUrl,
     });
 
-    // 📢 Envoyer une notification au propriétaire du projet
     const applicantName = getDisplayName(user);
 
-    console.error("[ProjectApplicationService] Notifying owner:", {
-      ownerId: project.ownerId,
-      projectId,
-      applicantName,
-      userId: user.id,
-      applicationId: application.id,
-    });
+    // Persister en DB + livrer en temps réel via Ably
+    await NotificationService.createForUser(
+      project.ownerId,
+      "new_application",
+      `${applicantName} a demandé à rejoindre votre projet`,
+      `Nouveau membre souhaitant rejoindre "${project.title}"`,
+      { applicationId: application.id, projectId, projectTitle: project.title, applicantId: user.id, applicantName }
+    );
 
     await notifyProjectOwnerNewApplication(
       project.ownerId,
@@ -55,13 +60,11 @@ export const ProjectApplicationService = {
       application.id
     );
 
-    console.error("[ProjectApplicationService] Notification sent successfully");
-
     return application;
   },
 
   // Accepter une candidature (propriétaire du projet)
-  accept: async (applicationId: string) => {
+  accept: async (applicationId: string, ownerNote?: string) => {
     const user = await getUser();
     if (!user) throw new Error("Unauthorized");
 
@@ -79,7 +82,8 @@ export const ProjectApplicationService = {
     // Accepter et ajouter aux participants
     const updated = await ProjectApplicationAction.updateStatus(
       applicationId,
-      "ACCEPTED"
+      "ACCEPTED",
+      ownerNote
     );
 
     // Ajouter l'utilisateur aux participants du projet
@@ -88,19 +92,41 @@ export const ProjectApplicationService = {
       data: { participants: { connect: { id: app.userId } } },
     });
 
-    // 📢 Envoyer une notification au candidat
-    await notifyUserApplicationStatus(
+    // Récupérer le nom du propriétaire pour la notification
+    const projectOwner = await prisma.user.findUnique({ where: { id: user.id } });
+    const ownerName = projectOwner?.firstname && projectOwner?.lastname
+      ? `${projectOwner.firstname} ${projectOwner.lastname}`
+      : projectOwner?.username || "Propriétaire";
+
+    // Retirer la notification "new_application" du propriétaire
+    await NotificationService.dismissApplicationNotification(user.id, applicationId);
+
+    await NotificationService.createForUser(
       app.userId,
-      project.title,
-      "ACCEPTED",
-      applicationId
+      "application_status",
+      `Candidature acceptée ✅`,
+      ownerNote
+        ? `${ownerName} : "${ownerNote}"`
+        : `Votre candidature au projet "${project.title}" a été acceptée`,
+      { applicationId, projectId: app.projectId, projectTitle: project.title, status: "ACCEPTED", ownerNote }
     );
+
+    await notifyUserApplicationStatus(app.userId, project.title, "ACCEPTED", applicationId);
+
+    // Notifier que l'utilisateur a été ajouté au projet
+    await NotificationService.createForUser(
+      app.userId, "added_to_project",
+      `Vous avez été ajouté au projet "${project.title}"`,
+      `${ownerName} vous a accepté en tant que participant`,
+      { projectId: app.projectId, projectTitle: project.title, addedByName: ownerName }
+    );
+    await notifyAddedToProject(app.userId, project.title, app.projectId, ownerName);
 
     return updated;
   },
 
   // Refuser une candidature (propriétaire du projet)
-  reject: async (applicationId: string) => {
+  reject: async (applicationId: string, ownerNote?: string) => {
     const user = await getUser();
     if (!user) throw new Error("Unauthorized");
 
@@ -115,18 +141,30 @@ export const ProjectApplicationService = {
       throw new Error("You are not the project owner");
     }
 
+    const ownerName = user.firstname && user.lastname
+      ? `${user.firstname} ${user.lastname}`
+      : user.username || "Propriétaire";
+
     const updated = await ProjectApplicationAction.updateStatus(
       applicationId,
-      "REJECTED"
+      "REJECTED",
+      ownerNote
     );
 
-    // 📢 Envoyer une notification au candidat
-    await notifyUserApplicationStatus(
+    // Retirer la notification "new_application" du propriétaire
+    await NotificationService.dismissApplicationNotification(user.id, applicationId);
+
+    await NotificationService.createForUser(
       app.userId,
-      project.title,
-      "REJECTED",
-      applicationId
+      "application_status",
+      `Candidature refusée`,
+      ownerNote
+        ? `${ownerName} : "${ownerNote}"`
+        : `Votre candidature au projet "${project.title}" n'a pas été retenue`,
+      { applicationId, projectId: app.projectId, projectTitle: project.title, status: "REJECTED", ownerNote }
     );
+
+    await notifyUserApplicationStatus(app.userId, project.title, "REJECTED", applicationId);
 
     return updated;
   },

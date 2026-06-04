@@ -30,6 +30,16 @@ export const UsersAction = {
                     orderBy: { createdAt: "desc" },
                 },
                 projects: { include: { mapLocation: true }, orderBy: { createdAt: "desc" } },
+                participants: {
+                    where: { visibility: "PUBLIC", status: "PUBLISHED" },
+                    select: { id: true, title: true },
+                    orderBy: { createdAt: "desc" },
+                    take: 10,
+                },
+                configs: {
+                    where: { title: { in: ["roles", "audiovisual", "preferences"] } },
+                    select: { title: true, content: true },
+                },
                 badges: true,
                 categoryFollows: { include: { category: true } },
                 followers: {
@@ -45,6 +55,21 @@ export const UsersAction = {
                         },
                     },
                     orderBy: { createdAt: "desc" },
+                },
+                following: {
+                    include: {
+                        following: {
+                            select: {
+                                id: true,
+                                username: true,
+                                firstname: true,
+                                lastname: true,
+                                image: true,
+                            },
+                        },
+                    },
+                    orderBy: { createdAt: "desc" },
+                    take: 12,
                 },
                 _count: {
                     select: {
@@ -123,6 +148,7 @@ export const UsersAction = {
             role?: "ADMIN" | "MEMBER";
             isPremium?: boolean;
             isMarketplaceTalent?: boolean;
+            readyToStart?: boolean;
         }
     ) => {
         return prisma.user.update({ where: { id }, data });

@@ -3,9 +3,11 @@ import {
     createProject,
     createProjectComment,
     deleteProject,
+    fetchMyDraftProjects,
     fetchProjectById,
     fetchProjectComments,
     fetchProjects,
+    fetchMyProjects,
     reportProject,
     updateProject,
     type CreateProjectCommentInput,
@@ -13,6 +15,7 @@ import {
     type UpdateProjectInput,
 } from "@/front/lib/api/projects";
 import { CommentWithChildren } from "@/front/types/post.schema";
+import { SEARCH_ROOT } from "@/front/lib/api/search";
 
 const PROJECT_ROOT = ["projects"] as const;
 
@@ -24,6 +27,13 @@ export const projectQueries = {
             queryKey: [...PROJECT_ROOT, "list"] as const,
             queryFn: fetchProjects,
             staleTime: 1000 * 60 * 5,
+        }),
+
+    mine: () =>
+        queryOptions({
+            queryKey: [...PROJECT_ROOT, "mine"] as const,
+            queryFn: fetchMyProjects,
+            staleTime: 1000 * 60 * 2,
         }),
 
     detail: (id: string) =>
@@ -44,6 +54,14 @@ export const projectQueries = {
 };
 
 export const useProjects = () => useQuery(projectQueries.lists());
+export const useMyProjects = () => useQuery(projectQueries.mine());
+
+export const useMyDraftProjects = () =>
+    useQuery({
+        queryKey: [...PROJECT_ROOT, "drafts"] as const,
+        queryFn: fetchMyDraftProjects,
+        staleTime: 0,
+    });
 
 export const useProjectById = (id: string) => useQuery(projectQueries.detail(id));
 
@@ -51,7 +69,10 @@ export const useCreateProject = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (input: CreateProjectInput) => createProject(input),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: PROJECT_ROOT }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: PROJECT_ROOT });
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT });
+        },
     });
 };
 
@@ -73,7 +94,10 @@ export const useUpdateProject = (projectId: string) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (input: UpdateProjectInput) => updateProject(projectId, input),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: PROJECT_ROOT }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: PROJECT_ROOT });
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT });
+        },
     });
 };
 
@@ -81,7 +105,10 @@ export const useDeleteProject = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: string) => deleteProject(id),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: PROJECT_ROOT }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: PROJECT_ROOT });
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT });
+        },
     });
 };
 

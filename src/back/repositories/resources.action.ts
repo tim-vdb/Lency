@@ -74,7 +74,7 @@ export const ResourcesAction = {
         audioUrls?: string[];
         categoryId: string;
     }) => {
-        return prisma.resource.create({ data: { ...data, authorId } });
+        return prisma.resource.create({ data: { ...data, authorId }, include: { category: true } });
     },
 
     update: async (id: string, data: Prisma.ResourceUncheckedUpdateInput) => {

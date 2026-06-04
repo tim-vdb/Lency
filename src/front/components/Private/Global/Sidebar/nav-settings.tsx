@@ -1,6 +1,6 @@
 "use client"
 
-import { Bell, ChevronRight, CreditCard, Settings2, Shield, User2 } from "lucide-react"
+import { Bell, ChevronRight, Settings2, Shield, User2 } from "lucide-react"
 import Link from "next/link"
 import {
   Collapsible,
@@ -20,7 +20,6 @@ const settingsItems = [
   { title: "Compte", url: "/account/settings/profile", icon: User2 },
   { title: "Notifications", url: "/account/settings/notifs", icon: Bell },
   { title: "Sécurité", url: "/account/settings/security", icon: Shield },
-  { title: "Facturation", url: "/account/settings/billing", icon: CreditCard },
 ]
 
 export function NavSettings() {

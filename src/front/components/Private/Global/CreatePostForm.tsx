@@ -36,9 +36,10 @@ import {
 import { Switch } from "@/front/components/ui/switch"
 import { Textarea } from "@/front/components/ui/textarea"
 import { useCategories } from "@/front/hooks/queries/use-categories"
-import { useCreatePost } from "@/front/hooks/queries/use-posts"
+import { useCreatePost, useUpdatePost } from "@/front/hooks/queries/use-posts"
 import { uploadToImageKit } from "@/front/lib/upload"
 import { cn } from "@/front/lib/utils"
+import { PostWithUserState } from "@/front/types/post.schema"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -85,24 +86,39 @@ type CreatePostValues = z.infer<typeof CreatePostSchema>
 
 interface CreatePostFormProps {
     onSuccess: () => void
+    initialData?: PostWithUserState
+    mode?: "create" | "edit"
 }
 
-export function CreatePostForm({ onSuccess }: CreatePostFormProps) {
-    const { mutate, isPending } = useCreatePost()
+export function CreatePostForm({ onSuccess, initialData, mode = "create" }: CreatePostFormProps) {
+    const isEdit = mode === "edit"
+    const { mutate: mutateCreate, isPending: isCreating } = useCreatePost()
+    const { mutate: mutateUpdate, isPending: isUpdating } = useUpdatePost()
+    const isPending = isEdit ? isUpdating : isCreating
     const { data: categories, isLoading: categoriesLoading } = useCategories()
 
-    const [contentType, setContentType] = useState<ContentType>("TEXT")
-    const [isMobile, setIsMobile] = useState(false)
+    const initialFormat = (initialData?.format as ContentType | undefined) ?? "TEXT"
+    const [contentType, setContentType] = useState<ContentType>(initialFormat)
+    const [isMobile, setIsMobile] = useState(initialData?.orientation === "PORTRAIT")
     const [uploading, setUploading] = useState(false)
-    const [mediaPreview, setMediaPreview] = useState<string | null>(null)
-    const [mediaName, setMediaName] = useState<string | null>(null)
+    const [mediaPreview, setMediaPreview] = useState<string | null>(initialData?.imageUrl ?? null)
+    const [mediaName, setMediaName] = useState<string | null>(initialData?.imageUrl ? "Fichier existant" : null)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     const config = CONTENT_CONFIG[contentType]
 
     const form = useForm<CreatePostValues>({
         resolver: zodResolver(CreatePostSchema),
-        defaultValues: {
+        defaultValues: isEdit && initialData ? {
+            content: initialData.content,
+            categoryId: initialData.categoryId,
+            format: initialData.format as ContentType,
+            orientation: initialData.orientation as "LANDSCAPE" | "PORTRAIT" | undefined,
+            isPublished: initialData.isPublished,
+            imageUrl: initialData.imageUrl ?? undefined,
+            videoUrl: initialData.videoUrl ?? undefined,
+            audioUrl: initialData.audioUrl ?? undefined,
+        } : {
             content: "",
             categoryId: "",
             format: "TEXT",
@@ -151,13 +167,18 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps) {
     // ── Submit ────────────────────────────────────────────────────────────────
 
     function onSubmit(values: CreatePostValues) {
-        mutate(values, {
+        const callbacks = {
             onSuccess: () => {
                 toast.success(values.isPublished ? "Post publié !" : "Post sauvegardé en brouillon.")
                 onSuccess()
             },
-            onError: (err) => toast.error(err.message),
-        })
+            onError: (err: Error) => toast.error(err.message),
+        }
+        if (isEdit && initialData) {
+            mutateUpdate({ id: initialData.id, data: values }, callbacks)
+        } else {
+            mutateCreate(values, callbacks)
+        }
     }
 
     const isPublished = form.watch("isPublished")
@@ -175,7 +196,10 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps) {
                         }}
                         isPending={isPending}
                         disabled={uploading}
-                        submitLabel={isPublished ? "Publier le post" : "Sauvegarder en brouillon"}
+                        submitLabel={isEdit
+                            ? (isPublished ? "Mettre à jour et publier" : "Enregistrer les modifications")
+                            : (isPublished ? "Publier le post" : "Sauvegarder en brouillon")
+                        }
                     />
                 }
             >

@@ -12,9 +12,10 @@ export async function GET(
         return NextResponse.json({ project: data });
     } catch (error) {
         if (error instanceof Error) {
-            if (error.message === "Project not found") {
+            if (error.message === "Project not found")
                 return NextResponse.json({ error: error.message }, { status: 404 });
-            }
+            if (error.message === "Forbidden")
+                return NextResponse.json({ error: error.message }, { status: 403 });
         }
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }

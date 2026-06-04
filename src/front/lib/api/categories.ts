@@ -135,6 +135,18 @@ export async function toggleFollowCategory(categoryId: string): Promise<{ follow
     return response.json()
 }
 
+export async function getCategoryNotifyStatus(categoryId: string): Promise<{ subscribed: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/notify`, { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur statut notification catégorie");
+    return response.json();
+}
+
+export async function toggleCategoryNotify(categoryId: string): Promise<{ subscribed: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/notify`, { method: "POST" });
+    if (!response.ok) throw new Error("Erreur toggle notification catégorie");
+    return response.json();
+}
+
 export async function getFollowStatus(categoryId: string): Promise<{ following: boolean }> {
     const response = await fetch(`/api/categories/${categoryId}/follow`, {
         method: 'GET',

@@ -2,8 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2, Plus, Upload, X } from "lucide-react"
+import { Switch } from "@/front/components/ui/switch"
 import { useRef, useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -27,23 +28,25 @@ import {
 import { Textarea } from "@/front/components/ui/textarea"
 import { Badge } from "@/front/components/ui/badge"
 import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/components/ui/multistep-form"
-import { useCreateProject } from "@/front/hooks/queries/use-projects"
+import { useCreateProject, useUpdateProject } from "@/front/hooks/queries/use-projects"
 import { uploadToImageKit } from "@/front/lib/upload"
+import { ProjectWithOwner } from "@/front/types/project.schema"
 
 // ─── Schema ────────────────────────────────────────────────────────────────────
 
 const CreateProjectSchema = z.object({
     title: z.string().min(1, "Le titre est requis").max(150, "Maximum 150 caractères"),
     description: z.string().min(1, "La description est requise").max(2000, "Maximum 2000 caractères"),
-    projectType: z.string().optional(),
+    projectType: z.preprocess((v) => v ?? "", z.string().min(1, "Le type de projet est requis")),
     level: z.enum(["DEBUTANT", "INTERMEDIAIRE", "AVANCE"]).optional(),
     remunerationType: z.enum(["NON_REMUNERE", "REMUNERE"]).optional(),
     workMode: z.enum(["PRESENTIEL", "DISTANCIEL", "HYBRIDE"]).optional(),
     city: z.string().max(100).optional(),
     startDate: z.string().optional(),
-    visibility: z.enum(["PUBLIC", "PRIVATE", "MEMBERS_ONLY"]),
+    visibility: z.enum(["PUBLIC", "PRIVATE"]),
     bannerUrl: z.string().optional(),
     roles: z.array(z.string()),
+    isPublished: z.boolean(),
 })
 
 type CreateProjectValues = z.infer<typeof CreateProjectSchema>
@@ -77,7 +80,6 @@ const REMUNERATION_OPTIONS = [
 
 const VISIBILITY_OPTIONS = [
     { value: "PUBLIC", label: "Public" },
-    { value: "MEMBERS_ONLY", label: "Membres uniquement" },
     { value: "PRIVATE", label: "Privé" },
 ]
 
@@ -131,17 +133,35 @@ function RolesInput({ value, onChange }: { value: string[]; onChange: (v: string
 
 interface CreateProjectFormProps {
     onSuccess?: () => void
+    initialData?: ProjectWithOwner
+    mode?: "create" | "edit"
 }
 
-export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
-    const { mutate, isPending } = useCreateProject()
-    const [bannerPrev, setBannerPrev] = useState<string | null>(null)
+export function CreateProjectForm({ onSuccess, initialData, mode = "create" }: CreateProjectFormProps) {
+    const isEdit = mode === "edit"
+    const { mutate: mutateCreate, isPending: isCreating } = useCreateProject()
+    const { mutate: mutateUpdate, isPending: isUpdating } = useUpdateProject(initialData?.id ?? "")
+    const isPending = isEdit ? isUpdating : isCreating
+    const [bannerPrev, setBannerPrev] = useState<string | null>(initialData?.bannerUrl ?? null)
     const [uploading, setUploading] = useState(false)
     const bannerRef = useRef<HTMLInputElement>(null)
 
     const form = useForm<CreateProjectValues>({
-        resolver: zodResolver(CreateProjectSchema),
-        defaultValues: {
+        resolver: zodResolver(CreateProjectSchema) as Resolver<CreateProjectValues>,
+        defaultValues: isEdit && initialData ? {
+            title: initialData.title,
+            description: initialData.description ?? "",
+            projectType: initialData.projectType ?? undefined,
+            level: (initialData.level as "DEBUTANT" | "INTERMEDIAIRE" | "AVANCE" | undefined) ?? undefined,
+            remunerationType: (initialData.remunerationType as "NON_REMUNERE" | "REMUNERE" | undefined) ?? undefined,
+            workMode: (initialData.workMode as "PRESENTIEL" | "DISTANCIEL" | "HYBRIDE" | undefined) ?? undefined,
+            city: initialData.mapLocation?.name ?? "",
+            startDate: initialData.startDate ? new Date(initialData.startDate).toISOString().split("T")[0] : "",
+            visibility: (initialData.visibility === "MEMBERS_ONLY" ? "PUBLIC" : (initialData.visibility as "PUBLIC" | "PRIVATE")) ?? "PUBLIC",
+            bannerUrl: initialData.bannerUrl ?? "",
+            roles: initialData.roles ?? [],
+            isPublished: initialData.status === "PUBLISHED",
+        } : {
             title: "",
             description: "",
             projectType: undefined,
@@ -153,10 +173,12 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
             visibility: "PUBLIC",
             bannerUrl: "",
             roles: [],
+            isPublished: true,
         },
     })
 
     const descriptionLength = form.watch("description")?.length ?? 0
+    const isPublished = form.watch("isPublished")
 
     async function handleBannerUpload(file: File) {
         setUploading(true)
@@ -177,30 +199,33 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
     }
 
     function onSubmit(values: CreateProjectValues) {
-        mutate(
-            {
-                title: values.title,
-                description: values.description,
-                bannerUrl: values.bannerUrl || undefined,
-                projectType: values.projectType || undefined,
-                remunerationType: values.remunerationType,
-                level: values.level,
-                workMode: values.workMode,
-                city: values.city || undefined,
-                startDate: values.startDate || undefined,
-                roles: values.roles,
-                visibility: values.visibility,
+        const payload = {
+            title: values.title,
+            description: values.description,
+            bannerUrl: values.bannerUrl || undefined,
+            projectType: values.projectType || undefined,
+            remunerationType: values.remunerationType,
+            level: values.level,
+            workMode: values.workMode,
+            city: values.city || undefined,
+            startDate: values.startDate || undefined,
+            roles: values.roles,
+            visibility: values.visibility,
+            status: values.isPublished ? "PUBLISHED" as const : "DRAFT" as const,
+        }
+        const callbacks = {
+            onSuccess: () => {
+                toast.success(values.isPublished ? "Projet publié !" : "Projet sauvegardé en brouillon.")
+                if (!isEdit) { form.reset(); setBannerPrev(null) }
+                onSuccess?.()
             },
-            {
-                onSuccess: () => {
-                    toast.success("Projet publié !")
-                    form.reset()
-                    setBannerPrev(null)
-                    onSuccess?.()
-                },
-                onError: (err) => toast.error(err.message),
-            }
-        )
+            onError: (err: Error) => toast.error(err.message),
+        }
+        if (isEdit) {
+            mutateUpdate(payload, callbacks)
+        } else {
+            mutateCreate(payload, callbacks)
+        }
     }
 
     return (
@@ -212,11 +237,15 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
                     <MultistepNavigation
                         onNext={async (step) => {
                             if (step === 0) return form.trigger(["title", "description"])
+                            if (step === 1) return form.trigger(["projectType"])
                             return true
                         }}
                         isPending={isPending}
                         disabled={uploading}
-                        submitLabel="Publier le projet"
+                        submitLabel={isEdit
+                            ? (isPublished ? "Mettre à jour et publier" : "Enregistrer les modifications")
+                            : (isPublished ? "Publier le projet" : "Sauvegarder en brouillon")
+                        }
                     />
                 }
             >
@@ -297,7 +326,7 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
                 </MultistepStep>
 
                 {/* ── Étape 2 : Caractéristiques ── */}
-                <MultistepStep title="Caractéristiques" description="Tous les champs sont optionnels.">
+                <MultistepStep title="Caractéristiques" description="Le type de projet est obligatoire.">
                     <div className="grid grid-cols-2 gap-3">
                         <FormField
                             control={form.control}
@@ -444,6 +473,26 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
                                     <RolesInput value={field.value} onChange={field.onChange} />
                                 </FormControl>
                                 <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="isPublished"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center gap-3 rounded-lg border px-4 py-3">
+                                <FormControl>
+                                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                </FormControl>
+                                <div className="flex flex-col gap-0.5">
+                                    <FormLabel className="text-sm cursor-pointer leading-none mb-0">
+                                        {field.value ? "Publier maintenant" : "Sauvegarder en brouillon"}
+                                    </FormLabel>
+                                    <p className="text-xs text-muted-foreground">
+                                        {field.value ? "Visible dans le marketplace." : "Vous pourrez le publier plus tard."}
+                                    </p>
+                                </div>
                             </FormItem>
                         )}
                     />

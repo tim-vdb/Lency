@@ -1,6 +1,8 @@
 import { UsersAction } from "../repositories/users.action";
 import { PostsAction } from "../repositories/posts.action";
 import { getUser } from "../lib/auth-session";
+import { notifyNewFollower, notifyUserReadyStatusChanged } from "../lib/ably";
+import { NotificationService } from "./notifications.service";
 import crypto from "crypto";
 
 export const UsersService = {
@@ -46,7 +48,25 @@ export const UsersService = {
         if (currentUser.id === targetUserId) throw new Error("Cannot follow yourself");
         const target = await UsersAction.findById(targetUserId);
         if (!target) throw new Error("User not found");
-        return UsersAction.toggleFollowUser(currentUser.id, targetUserId);
+
+        const result = await UsersAction.toggleFollowUser(currentUser.id, targetUserId);
+
+        // Notifier si c'est un nouveau follow (et non un unfollow)
+        const isFollowing = result && typeof result === 'object' && 'follower' in result;
+        if (isFollowing) {
+            const followerName = currentUser.firstname && currentUser.lastname
+                ? `${currentUser.firstname} ${currentUser.lastname}`
+                : currentUser.username || "Utilisateur";
+            await NotificationService.createForUser(
+                targetUserId, "new_follower",
+                `${followerName} vous suit maintenant`,
+                `Vous avez un nouvel abonné`,
+                { followerId: currentUser.id, followerName }
+            );
+            await notifyNewFollower(targetUserId, followerName, currentUser.id);
+        }
+
+        return result;
     },
 
     getFollowStatus: async (targetUserId: string) => {
@@ -111,6 +131,7 @@ export const UsersService = {
             cv?: string;
             portfolio?: string;
             isMarketplaceTalent?: boolean;
+            readyToStart?: boolean;
         }
     ) => {
         if (!data || Object.keys(data).length === 0) {
@@ -136,7 +157,14 @@ export const UsersService = {
             };
         }
 
-        return UsersAction.update(id, finalData);
+        const result = await UsersAction.update(id, finalData);
+
+        // Notifier si le statut readyToStart change
+        if (typeof data.readyToStart === "boolean") {
+            await notifyUserReadyStatusChanged(id, data.readyToStart);
+        }
+
+        return result;
     },
 
     updateUserRole: async (id: string, role: "ADMIN" | "MEMBER") => {

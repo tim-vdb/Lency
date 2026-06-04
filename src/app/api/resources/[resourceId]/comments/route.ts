@@ -29,6 +29,9 @@ export async function POST(
             if (error.message === "Unauthorized") {
                 return NextResponse.json({ error: error.message }, { status: 401 });
             }
+            if (error.message === "Resource not found") {
+                return NextResponse.json({ error: error.message }, { status: 404 });
+            }
             if (["Content is required", "Target is required"].includes(error.message)) {
                 return NextResponse.json({ error: error.message }, { status: 400 });
             }

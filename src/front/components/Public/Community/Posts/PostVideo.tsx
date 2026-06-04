@@ -20,13 +20,16 @@ import { FaPlay } from "react-icons/fa";
 interface PostVideoProps {
     post: PostWithUserState;
     className?: string;
+    defaultOpenComments?: boolean;
+    lockOpenComments?: boolean;
+    viewDelay?: number;
 }
 
-export default function PostVideo({ post, className }: PostVideoProps) {
+export default function PostVideo({ post, className, defaultOpenComments, lockOpenComments, viewDelay = 10_000 }: PostVideoProps) {
     const { category } = post;
-    const postState = usePostState(post);
+    const postState = usePostState(post, { initialOpenComments: defaultOpenComments, lockOpenComments });
     const { openComments } = postState;
-    const cardRef = useViewportRecentlyViewed(post, 10_000);
+    const cardRef = useViewportRecentlyViewed(post, viewDelay);
 
     const videoSrc = post.videoUrl;
     const isPortrait = post.orientation === "PORTRAIT";

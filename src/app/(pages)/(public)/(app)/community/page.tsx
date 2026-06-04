@@ -5,13 +5,10 @@ import PostImage from "@/front/components/Public/Community/Posts/PostImage";
 import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
 import PostSkeleton, { PostImageSkeleton } from "@/front/components/Public/Community/Posts/PostSkeleton";
-import RecentlyViewed, { RecentlyViewedSkeleton } from "@/front/components/Public/Community/Sidebar/RecentlyViewed";
-import { Button } from "@/front/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card";
+import RecentlyViewedSidebar from "@/front/components/Public/Community/Sidebar/RecentlyViewedSidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
-import { useRecentlyViewed } from "@/front/stores/use-recently-viewed.store";
 import { useFollowedCategoryPosts, usePosts } from "@/front/hooks/queries/use-posts"
-import { useMemo, useState, useEffect } from "react";
+import { useMemo } from "react";
 import type { PostWithUserState } from "@/front/types/post.schema";
 
 function PostListSkeleton() {
@@ -42,14 +39,6 @@ function PostList({ posts }: { posts: PostWithUserState[] }) {
 export default function CommunityPage() {
     const { data: posts, isPending } = usePosts()
     const { data: followedPosts, isPending: followedPending } = useFollowedCategoryPosts()
-    const entries = useRecentlyViewed((s) => s.entries)
-    const clearViewed = useRecentlyViewed((s) => s.clear)
-    const purgeInvalid = useRecentlyViewed((s) => s.purgeInvalid)
-    const [mounted, setMounted] = useState(false)
-    useEffect(() => {
-        setMounted(true);
-        purgeInvalid();
-    }, [])
 
     const popularPosts = useMemo(() => {
         if (!posts) return [];
@@ -58,14 +47,15 @@ export default function CommunityPage() {
 
     return (
         <div className="max-w-5xl mx-auto">
+            <h1 className="text-2xl font-semibold mb-4">Communauté</h1>
             <Tabs defaultValue="general" className="flex flex-col gap-4 w-full">
                 <TabsList className="w-fit justify-start p-0">
                     <TabsTrigger value="general">Général</TabsTrigger>
                     <TabsTrigger value="popular">Populaire</TabsTrigger>
                     <TabsTrigger value="following">Suivis</TabsTrigger>
                 </TabsList>
-                <div className="lg:flex lg:gap-4 items-start justify-center w-full">
-                    <div className="">
+                <div className="lg:flex lg:gap-4 items-start w-full">
+                    <div className="flex-1 min-w-0">
                         <TabsContent value="general" className="flex flex-col gap-4 mt-0">
                             {isPending && <PostListSkeleton />}
                             {!isPending && posts?.length === 0 && <p>Aucun post trouvé.</p>}
@@ -87,22 +77,7 @@ export default function CommunityPage() {
                         </TabsContent>
                     </div>
 
-                    <div className="sticky top-0.5 w-60 p-4 bg-white rounded-xl">
-                        <Card className="hidden lg:block shrink-0 shadow-none">
-                            <CardHeader className="flex items-center justify-between gap-2 px-2">
-                                <CardTitle className="text-sm">Récemment vu</CardTitle>
-                                <Button variant="ghost" size="sm" onClick={clearViewed} className="text-[#F79478] px-0">
-                                    Nettoyer
-                                </Button>
-                            </CardHeader>
-                            <CardContent className="px-2">
-                                {!mounted
-                                    ? <RecentlyViewedSkeleton />
-                                    : <RecentlyViewed entries={entries} />
-                                }
-                            </CardContent>
-                        </Card>
-                    </div>
+                    <RecentlyViewedSidebar />
                 </div>
             </Tabs>
         </div>

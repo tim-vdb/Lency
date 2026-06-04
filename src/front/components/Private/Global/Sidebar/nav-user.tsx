@@ -6,7 +6,6 @@ import {
   Bell,
   ChevronRight,
   ChevronsUpDown,
-  CreditCard,
   LogOutIcon,
   MessageSquare,
   Settings,
@@ -50,7 +49,6 @@ const settingsItems = [
   { title: "Compte", url: "/account/settings/profile", icon: User2 },
   { title: "Notifications", url: "/account/settings/notifs", icon: Bell },
   { title: "Sécurité", url: "/account/settings/security", icon: Shield },
-  { title: "Facturation", url: "/account/settings/billing", icon: CreditCard },
 ]
 
 export function NavUser() {

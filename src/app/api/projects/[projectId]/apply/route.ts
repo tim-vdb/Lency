@@ -7,8 +7,10 @@ export async function POST(
 ) {
   try {
     const { projectId } = await params;
+    const body = await req.json().catch(() => ({}));
+    const { applicantNote, portfolioUrl, cvUrl } = body;
 
-    const application = await ProjectApplicationService.apply(projectId);
+    const application = await ProjectApplicationService.apply(projectId, { applicantNote, portfolioUrl, cvUrl });
 
     return NextResponse.json(
       { application, message: "Application submitted successfully" },

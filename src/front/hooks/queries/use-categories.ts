@@ -1,4 +1,5 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { SEARCH_ROOT } from "@/front/lib/api/search"
 import {
     createCategory,
     deleteCategory,
@@ -6,7 +7,9 @@ import {
     fetchCategoryById,
     fetchCategoryBySlug,
     fetchPostsByCategory,
+    getCategoryNotifyStatus,
     getFollowStatus,
+    toggleCategoryNotify,
     toggleFollowCategory,
     updateCategory,
     type Category,
@@ -47,7 +50,10 @@ export const useCreateCategory = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: createCategory,
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "list"] }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "list"] })
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })
+        },
     })
 }
 
@@ -55,7 +61,10 @@ export const useUpdateCategory = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({ id, data }: { id: string; data: Partial<CreateCategoryInput> }) => updateCategory(id, data),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: CATEGORY_ROOT }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: CATEGORY_ROOT })
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })
+        },
     })
 }
 
@@ -82,6 +91,34 @@ export const useFollowStatus = (categoryId: string) =>
         staleTime: 0,
         enabled: !!categoryId,
     })
+
+export const useCategoryNotifyStatus = (categoryId: string) =>
+    useQuery({
+        queryKey: [...CATEGORY_ROOT, categoryId, "notify"] as const,
+        queryFn: () => getCategoryNotifyStatus(categoryId),
+        staleTime: 0,
+        enabled: !!categoryId,
+    })
+
+export const useToggleCategoryNotify = (categoryId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => toggleCategoryNotify(categoryId),
+        onMutate: async () => {
+            const key = [...CATEGORY_ROOT, categoryId, "notify"]
+            await queryClient.cancelQueries({ queryKey: key })
+            const prev = queryClient.getQueryData<{ subscribed: boolean }>(key)
+            queryClient.setQueryData(key, { subscribed: !prev?.subscribed })
+            return { prev }
+        },
+        onError: (_err, _vars, context) => {
+            if (context?.prev !== undefined)
+                queryClient.setQueryData([...CATEGORY_ROOT, categoryId, "notify"], context.prev)
+        },
+        onSettled: () =>
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, categoryId, "notify"] }),
+    })
+}
 
 export const useToggleFollowCategory = (categoryId: string) => {
     const queryClient = useQueryClient()
@@ -128,6 +165,9 @@ export const useDeleteCategory = () => {
                 queryClient.setQueryData(categoryQueries.lists().queryKey, context.previousCategories)
             }
         },
-        onSettled: () => queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "list"] }),
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "list"] })
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })
+        },
     })
 }

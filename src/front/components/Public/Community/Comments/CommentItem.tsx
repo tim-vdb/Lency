@@ -4,6 +4,7 @@ import ImageKitUploader from "@/front/components/common/ImageKitUploader";
 import { useRequireAuth } from "@/front/hooks/use-modals";
 import { useCreateComment, useVoteComment } from "@/front/hooks/queries/use-posts";
 import { useCreateResourceComment, useVoteResourceComment } from "@/front/hooks/queries/use-resources";
+import { useCreateProjectComment } from "@/front/hooks/queries/use-projects";
 import { timeAgo } from "@/front/lib/utils";
 import { CommentTarget } from "@/front/types/comment-target";
 import { CreateCommentSchema, type CreateCommentFormValues } from "@/front/types/comment.schema";
@@ -14,6 +15,7 @@ import Image from "next/image";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import Link from "next/link";
 
 function CommentRow({ comment, target }: { comment: CommentBase; target: CommentTarget }) {
     const requireAuth = useRequireAuth();
@@ -22,10 +24,14 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
 
     const postCreate = useCreateComment(target.type === "post" ? target.id : "");
     const resourceCreate = useCreateResourceComment(target.type === "resource" ? target.id : "");
+    const projectCreate = useCreateProjectComment(target.type === "project" ? target.id : "");
     const postVote = useVoteComment(target.type === "post" ? target.id : "");
     const resourceVote = useVoteResourceComment(target.type === "resource" ? target.id : "");
 
-    const isPending = target.type === "post" ? postCreate.isPending : resourceCreate.isPending;
+    const isPending =
+        target.type === "post" ? postCreate.isPending :
+        target.type === "resource" ? resourceCreate.isPending :
+        projectCreate.isPending;
 
     function handleVote(type: "upvote" | "downvote") {
         requireAuth(() => {
@@ -80,24 +86,17 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
 
             if (target.type === "post") {
                 postCreate.mutate(
-                    {
-                        content: values.content,
-                        postId: target.id,
-                        parentId: comment.id,
-                        imageUrl: values.imageUrl,
-                        videoUrl: values.videoUrl,
-                    },
+                    { content: values.content, postId: target.id, parentId: comment.id, imageUrl: values.imageUrl, videoUrl: values.videoUrl },
+                    { onSuccess, onError }
+                );
+            } else if (target.type === "resource") {
+                resourceCreate.mutate(
+                    { content: values.content, resourceId: target.id, parentId: comment.id, imageUrl: values.imageUrl, videoUrl: values.videoUrl },
                     { onSuccess, onError }
                 );
             } else {
-                resourceCreate.mutate(
-                    {
-                        content: values.content,
-                        resourceId: target.id,
-                        parentId: comment.id,
-                        imageUrl: values.imageUrl,
-                        videoUrl: values.videoUrl,
-                    },
+                projectCreate.mutate(
+                    { content: values.content, projectId: target.id, parentId: comment.id, imageUrl: values.imageUrl, videoUrl: values.videoUrl },
                     { onSuccess, onError }
                 );
             }
@@ -106,20 +105,24 @@ function CommentRow({ comment, target }: { comment: CommentBase; target: Comment
 
     return (
         <div className="flex gap-3">
-            <div className="shrink-0">
-                {author.image ? (
-                    <Image src={author.image} alt={displayName} width={32} height={32} className="w-8 h-8 rounded-full" />
-                ) : (
-                    <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-medium text-white">
-                        {initials}
-                    </div>
-                )}
-            </div>
-            <div className="flex flex-col gap-1 flex-1">
-                <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">{displayName}</span>
-                    <span className="text-xs text-neutral-400">{timeAgo(comment.createdAt)}</span>
+            <Link href={`/user/${author.username}`}>
+                <div className="shrink-0">
+                    {author.image ? (
+                        <Image src={author.image} alt={displayName} width={32} height={32} className="w-8 h-8 rounded-full" />
+                    ) : (
+                        <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-medium text-white">
+                            {initials}
+                        </div>
+                    )}
                 </div>
+            </Link>
+            <div className="flex flex-col gap-1 flex-1">
+                <Link href={`/user/${author.username}`}>
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">{displayName}</span>
+                        <span className="text-xs text-neutral-400">{timeAgo(comment.createdAt)}</span>
+                    </div>
+                </Link>
                 {comment.content && (
                     <p className="text-sm text-neutral-700">{comment.content}</p>
                 )}

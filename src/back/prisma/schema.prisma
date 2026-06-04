@@ -22,6 +22,7 @@ model User {
   role                      Role                   @default(MEMBER)
   isPremium                 Boolean                @default(false)
   isMarketplaceTalent       Boolean                @default(false)
+  readyToStart              Boolean                @default(false)
   cv                        String?
   portfolio                 String?
   eventId                   String?
@@ -64,6 +65,12 @@ model User {
   socialLinks               UserSocialLink[]
   feedbacks                 Feedback[]
   projectApplications       ProjectApplication[]
+  projectInvitations        ProjectInvitation[]
+  notifications             Notification[]
+  categoryNotifications     CategoryNotificationSubscription[]
+  projectMessages           ProjectMessage[]
+  directMessages            DirectMessage[]
+  conversations             Conversation[]     @relation("ConversationParticipants")
 }
 
 model UserSocialLink {

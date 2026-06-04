@@ -14,6 +14,7 @@ interface PostActionsProps {
     isVoted: boolean;
     isSaved: boolean;
     openComments: boolean;
+    lockComments?: boolean;
     upvoteCount: number;
     setIsVoted: (value: boolean) => void;
     setUpvoteCount: (value: number | ((prev: number) => number)) => void;
@@ -27,6 +28,7 @@ export default function PostActions({
     isVoted,
     isSaved,
     openComments,
+    lockComments = false,
     upvoteCount,
     setIsVoted,
     setUpvoteCount,
@@ -93,13 +95,18 @@ export default function PostActions({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <button
-                            onClick={() => { if (!openComments) markViewed(); setOpenComments(!openComments); }}
-                            className="transition-transform hover:scale-110"
+                            onClick={() => {
+                                if (lockComments) return;
+                                if (!openComments) markViewed();
+                                setOpenComments(!openComments);
+                            }}
+                            className={cn("transition-transform", !lockComments && "hover:scale-110")}
                         >
                             <MessageCircleMore
                                 className={cn(
-                                    "w-7 h-7 cursor-pointer transition-colors",
-                                    openComments ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-500 dark:text-neutral-400"
+                                    "w-7 h-7 transition-colors",
+                                    lockComments ? "cursor-default text-neutral-900 dark:text-neutral-100" : "cursor-pointer",
+                                    !lockComments && (openComments ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-500 dark:text-neutral-400")
                                 )}
                             />
                         </button>

@@ -1,36 +1,40 @@
 import prisma from "../lib/prisma"
 
+
+async function findCommentsByEntity(filter: {
+    postId?: string;
+    resourceId?: string;
+    projectId?: string;
+}): Promise<ReturnType<typeof buildTree>> {
+    const { postId, resourceId, projectId } = filter;
+
+    const where = postId ? { postId } : resourceId ? { resourceId } : projectId ? { projectId } : null;
+    if (!where) return [];
+
+    const comments = await prisma.comment.findMany({
+        where,
+        include: { author: true },
+        orderBy: { createdAt: "asc" },
+    });
+
+    if (comments.length === 0) return [];
+
+    return buildTree(comments);
+}
+
 export const CommentsAction = {
     findById: async (id: string) => {
         return prisma.comment.findUnique({ where: { id } });
     },
 
-    findByPostId: async (postId: string) => {
-        const flat = await prisma.comment.findMany({
-            where: { postId },
-            include: { author: true },
-            orderBy: { createdAt: "asc" },
-        });
-        return buildTree(flat);
-    },
+    findByPostId: (postId: string) =>
+        findCommentsByEntity({ postId }),
 
-    findByResourceId: async (resourceId: string) => {
-        const flat = await prisma.comment.findMany({
-            where: { resourceId },
-            include: { author: true },
-            orderBy: { createdAt: "asc" },
-        });
-        return buildTree(flat);
-    },
+    findByResourceId: (resourceId: string) =>
+        findCommentsByEntity({ resourceId }),
 
-    findByProjectId: async (projectId: string) => {
-        const flat = await prisma.comment.findMany({
-            where: { projectId },
-            include: { author: true },
-            orderBy: { createdAt: "asc" },
-        });
-        return buildTree(flat);
-    },
+    findByProjectId: (projectId: string) =>
+        findCommentsByEntity({ projectId }),
 
     create: async (userId: string, data: {
         content: string;
@@ -90,9 +94,7 @@ export const CommentsAction = {
         return prisma.comment.update({ where: { id }, data });
     },
 
-    update: async (id: string, data: {
-        content: string;
-    }) => {
+    update: async (id: string, data: { content: string }) => {
         return prisma.comment.update({
             where: { id },
             data: { content: data.content },
@@ -100,10 +102,7 @@ export const CommentsAction = {
     },
 
     delete: async (id: string) => {
-        const comment = await prisma.comment.findUnique({
-            where: { id },
-        });
-
+        const comment = await prisma.comment.findUnique({ where: { id } });
         if (!comment) throw new Error("Comment not found");
 
         await prisma.comment.delete({ where: { id } });
