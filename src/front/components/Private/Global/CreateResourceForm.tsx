@@ -26,10 +26,10 @@ import {
 import { Textarea } from "@/front/components/ui/textarea"
 import { Button } from "@/front/components/ui/button"
 import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/components/ui/multistep-form"
-import { useCategories } from "@/front/hooks/queries/use-categories"
-import { useCreateResource, useUpdateResource } from "@/front/hooks/queries/use-resources"
+import { useCategories } from "@/front/queries/categories"
+import { useCreateResource, useUpdateResource } from "@/front/queries/resources"
 import { uploadToImageKit } from "@/front/lib/upload"
-import { ResourceWithUserState } from "@/front/types/resource.schema"
+import { ResourceWithUserState } from "@/front/schemas/types/resource.type"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 

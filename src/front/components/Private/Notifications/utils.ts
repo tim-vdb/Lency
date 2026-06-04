@@ -1,4 +1,4 @@
-import type { DBNotification } from "@/front/hooks/queries/use-notifications";
+import type { DBNotification } from "@/front/queries/notifications";
 import { PROJECT_NOTIF_TYPES, type ProjectGroup } from "./types";
 
 export function groupProjectNotifications(notifications: DBNotification[]): ProjectGroup[] {

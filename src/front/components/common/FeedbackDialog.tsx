@@ -23,7 +23,7 @@ import {
 } from "@/front/components/ui/form";
 import { Textarea } from "@/front/components/ui/textarea";
 import ImageKitUploader from "@/front/components/common/ImageKitUploader";
-import { useCreateFeedback } from "@/front/hooks/queries/use-feedback";
+import { useCreateFeedback } from "@/front/queries/feedback";
 
 const schema = z.object({
     description: z.string().min(10, "Décris le feedback en au moins 10 caractères."),

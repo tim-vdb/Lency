@@ -2,7 +2,7 @@
 
 import { Button } from "@/front/components/ui/button";
 import PostAvatar from "../Posts/PostAvatar";
-import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
+import { PostWithAuthorAndCategory } from "@/front/schemas/types/post.type";
 import { Flag, MessageCircleMore, UserRoundPlus } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/front/components/ui/card";
 import {

@@ -14,7 +14,7 @@ import {
 } from "@/front/components/ui/form";
 import { Input } from "@/front/components/ui/input";
 import { Textarea } from "@/front/components/ui/textarea";
-import { useApplyToProject } from "@/front/hooks/queries/use-applications";
+import { useApplyToProject } from "@/front/queries/applications";
 
 const schema = z.object({
     applicantNote: z.string().max(1000, "Maximum 1000 caractères").optional(),

@@ -1,9 +1,9 @@
 export const SEARCH_ROOT = ["search"] as const;
 
 import { Category } from "./categories";
-import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
-import { ProjectWithOwner } from "@/front/types/project.schema";
-import { ResourceWithAuthorAndCategory } from "@/front/types/resource.schema";
+import { PostWithAuthorAndCategory } from "@/front/schemas/types/post.type";
+import { ProjectWithOwner } from "@/front/schemas/types/project.type";
+import { ResourceWithAuthorAndCategory } from "@/front/schemas/types/resource.type";
 
 // L'excerpt est généré par ts_headline côté PostgreSQL :
 // extrait contextuel de 8-20 mots avec les termes recherchés entre «»

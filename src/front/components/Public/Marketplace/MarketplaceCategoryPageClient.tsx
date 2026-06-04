@@ -2,7 +2,7 @@
 
 import { Button } from "@/front/components/ui/button";
 import { Skeleton } from "@/front/components/ui/skeleton";
-import { useProjects } from "@/front/hooks/queries/use-projects";
+import { useProjects } from "@/front/queries/projects";
 import { Briefcase, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";

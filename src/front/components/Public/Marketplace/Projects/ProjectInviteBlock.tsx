@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avata
 import { Button } from "@/front/components/ui/button";
 import { Badge } from "@/front/components/ui/badge";
 import { getDisplayName, getInitialName } from "@/front/lib/utils";
-import { useReadyUsers, useSendInvitation, useProjectInvitations } from "@/front/hooks/queries/use-invitations";
+import { useReadyUsers, useSendInvitation, useProjectInvitations } from "@/front/queries/invitations";
 import { Search, Send, Clock, CheckCircle, XCircle } from "lucide-react";
 import { useDebounce } from "@/front/hooks/use-debounce";
 

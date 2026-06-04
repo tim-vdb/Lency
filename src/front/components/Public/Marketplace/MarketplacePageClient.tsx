@@ -3,8 +3,8 @@
 import { CreateProjectForm } from "@/front/components/Private/Global/CreateProjectForm";
 import { TalentProfileModal } from "@/front/components/Private/Global/TalentProfileModal";
 import { Dialog, DialogContent, DialogDescription, DialogOverlay, DialogPortal, DialogTitle } from "@/front/components/ui/dialog";
-import { useUser } from "@/front/context/UserContext";
-import { useMarketplaceStore } from "@/front/stores/marketplace.store";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useMarketplaceStore } from "@/front/states/stores/marketplace.store";
 import { cn } from "@/front/lib/utils";
 import { Filter } from "lucide-react";
 import { useQueryStates } from "nuqs";

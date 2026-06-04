@@ -10,12 +10,12 @@ import {
     DialogFooter,
 } from "@/front/components/ui/dialog";
 import { Button } from "@/front/components/ui/button";
-import { useRespondToInvitation } from "@/front/hooks/queries/use-invitations";
-import { useDismissNotification } from "@/front/hooks/queries/use-notifications";
+import { useRespondToInvitation } from "@/front/queries/invitations";
+import { useDismissNotification } from "@/front/queries/notifications";
 import { CheckCircle2, XCircle, ExternalLink, Briefcase, UserCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import type { DBNotification } from "@/front/hooks/queries/use-notifications";
+import type { DBNotification } from "@/front/queries/notifications";
 
 interface NotificationDetailModalProps {
     notification: DBNotification | null;

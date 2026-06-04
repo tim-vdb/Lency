@@ -8,7 +8,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/front/components/ui/breadcrumb";
-import { useBreadcrumbOverrides } from "@/front/stores/use-breadcrumb-overrides.store";
+import { useBreadcrumbOverrides } from "@/front/states/stores/breadcrumb-overrides.store";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 

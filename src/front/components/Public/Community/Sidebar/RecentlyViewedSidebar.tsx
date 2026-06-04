@@ -4,7 +4,7 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card";
 import RecentlyViewed, { RecentlyViewedSkeleton } from "./RecentlyViewed";
-import { useRecentlyViewed } from "@/front/stores/use-recently-viewed.store";
+import { useRecentlyViewed } from "@/front/states/stores/recently-viewed.store";
 import { useEffect, useState } from "react";
 
 export default function RecentlyViewedSidebar() {

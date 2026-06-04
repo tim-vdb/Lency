@@ -1,4 +1,4 @@
-import type { DBNotification } from "@/front/hooks/queries/use-notifications";
+import type { DBNotification } from "@/front/queries/notifications";
 import type { ConversationParticipant } from "@/front/lib/api/conversations";
 
 export type TabType = "all" | "projects" | "messages" | "community";

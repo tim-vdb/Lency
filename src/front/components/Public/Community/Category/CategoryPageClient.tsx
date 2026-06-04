@@ -10,8 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avata
 import { Button } from "@/front/components/ui/button";
 import { Card } from "@/front/components/ui/card";
 import { Separator } from "@/front/components/ui/separator";
-import { useCategoryBySlug, useCategoryNotifyStatus, useFollowStatus, usePostsByCategory, useToggleCategoryNotify, useToggleFollowCategory } from "@/front/hooks/queries/use-categories";
-import { useResources } from "@/front/hooks/queries/use-resources";
+import { useCategoryBySlug, useCategoryNotifyStatus, useFollowStatus, usePostsByCategory, useToggleCategoryNotify, useToggleFollowCategory } from "@/front/queries/categories";
+import { useResources } from "@/front/queries/resources";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { Bell, CalendarCheck, Check, Ellipsis } from "lucide-react";

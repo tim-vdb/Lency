@@ -29,7 +29,7 @@ import {
     InputGroupText,
     InputGroupTextarea,
 } from "@/front/components/ui/input-group"
-import { useCreateCategory } from "@/front/hooks/queries/use-categories"
+import { useCreateCategory } from "@/front/queries/categories"
 
 // Schéma de validation pour le formulaire
 const formSchema = z.object({

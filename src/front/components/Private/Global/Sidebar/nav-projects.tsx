@@ -29,8 +29,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/front/components/ui/sidebar"
-import { useMyProjects, useDeleteProject } from "@/front/hooks/queries/use-projects"
-import { useUser } from "@/front/context/UserContext"
+import { useMyProjects, useDeleteProject } from "@/front/queries/projects"
+import { useUser } from "@/front/states/contexts/user.context"
 import NotebookPen from "@/front/assets/icons/notebook-pen.svg"
 import { Skeleton } from "@/front/components/ui/skeleton"
 import { toast } from "sonner"

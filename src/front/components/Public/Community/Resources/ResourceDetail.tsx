@@ -27,12 +27,12 @@ import {
     DropdownMenuTrigger,
 } from "@/front/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/front/components/ui/tooltip";
-import { useUser } from "@/front/context/UserContext";
-import { useDeleteResource, useToggleSaveResource, useToggleVoteResource } from "@/front/hooks/queries/use-resources";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useDeleteResource, useToggleSaveResource, useToggleVoteResource } from "@/front/queries/resources";
 import { useRequireAuth } from "@/front/hooks/use-modals";
 import { useShare } from "@/front/hooks/use-share";
 import { cn, timeAgo } from "@/front/lib/utils";
-import { ResourceWithUserState } from "@/front/types/resource.schema";
+import { ResourceWithUserState } from "@/front/schemas/types/resource.type";
 import { Bookmark, ExternalLink, Heart, MessageCircleMore, MoreHorizontal, Music, Pencil, Play, Share, Trash2 } from "lucide-react";
 import MediaLightbox, { MediaExpandOverlay } from "@/front/components/Public/Community/MediaLightbox";
 import Image from "next/image";

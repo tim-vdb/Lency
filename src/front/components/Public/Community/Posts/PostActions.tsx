@@ -4,10 +4,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/front/components/ui/t
 import { cn } from "@/front/lib/utils";
 import { Bookmark, Heart, MessageCircleMore } from "lucide-react";
 import { IoArrowRedoOutline } from "react-icons/io5";
-import { PostWithUserState } from "@/front/types/post.schema";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
 import { useRequireAuth } from "@/front/hooks/use-modals";
 import { useShare } from "@/front/hooks/use-share";
-import { useToggleSavePost, useToggleVotePost } from "@/front/hooks/queries/use-posts";
+import { useToggleSavePost, useToggleVotePost } from "@/front/queries/posts";
 
 interface PostActionsProps {
     post: PostWithUserState;

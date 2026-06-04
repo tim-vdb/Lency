@@ -9,11 +9,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/front/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/front/components/ui/select";
 import { Textarea } from "@/front/components/ui/textarea";
-import { useUser } from "@/front/context/UserContext";
-import { useDeleteSocialLink, useReportUser, useToggleFollowUser, useUpdateUser, useUpsertSocialLink } from "@/front/hooks/queries/use-users";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useDeleteSocialLink, useReportUser, useToggleFollowUser, useUpdateUser, useUpsertSocialLink } from "@/front/queries/users";
 import { useRequireAuth } from "@/front/hooks/use-modals";
 import { cn, getDisplayName, getInitialName } from "@/front/lib/utils";
-import { UserProfile } from "@/front/types/user.schema";
+import { UserProfile } from "@/front/schemas/types/user.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Briefcase, Flag, MessageCircleMore, Pencil, Plus, Trash2, UserRoundCheck, UserRoundPlus } from "lucide-react";
 

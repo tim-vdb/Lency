@@ -3,7 +3,7 @@
 import { AppSidebar } from "@/front/components/Private/Global/Sidebar/app-sidebar"
 import { Sheet } from "@/front/components/ui/sheet"
 import { SidebarInset, SidebarProvider } from "@/front/components/ui/sidebar"
-import { UserProvider } from "@/front/context/UserContext"
+import { UserProvider } from "@/front/states/contexts/user.context"
 import { ModalRenderer } from "@/front/components/Modals/ModalRenderer"
 import type { User } from "@/back/generated/prisma_client"
 import Header from "../../../../front/components/Private/Global/Header"

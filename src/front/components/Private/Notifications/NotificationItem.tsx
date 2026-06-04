@@ -4,7 +4,7 @@ import { Trash2, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/front/components/ui/button";
 import { SheetClose } from "@/front/components/ui/sheet";
-import type { DBNotification } from "@/front/hooks/queries/use-notifications";
+import type { DBNotification } from "@/front/queries/notifications";
 
 interface NotificationItemProps {
     notification: DBNotification;

@@ -1,6 +1,6 @@
 "use client"
 
-import { useUser } from "@/front/context/UserContext"
+import { useUser } from "@/front/states/contexts/user.context"
 import {
   BadgeCheck,
   Bell,

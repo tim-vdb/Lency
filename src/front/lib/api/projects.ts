@@ -1,5 +1,5 @@
-import { CommentWithChildren } from "@/front/types/post.schema";
-import { ProjectWithOwner } from "@/front/types/project.schema";
+import { CommentWithChildren } from "@/front/schemas/types/post.type";
+import { ProjectWithOwner } from "@/front/schemas/types/project.type";
 
 export interface CreateProjectInput {
     title: string;

@@ -11,14 +11,14 @@ import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/front/components/ui/select";
 import { getDisplayName, getInitialName } from "@/front/lib/utils";
-import { useProjectApplications, useAcceptApplication, useRejectApplication } from "@/front/hooks/queries/use-applications";
-import { useProjectById } from "@/front/hooks/queries/use-projects";
-import { useUser } from "@/front/context/UserContext";
+import { useProjectApplications, useAcceptApplication, useRejectApplication } from "@/front/queries/applications";
+import { useProjectById } from "@/front/queries/projects";
+import { useUser } from "@/front/states/contexts/user.context";
 import {
     ApplicationResponseModal,
     type ApplicationForModal,
 } from "@/front/components/Public/Marketplace/Projects/ApplicationResponseModal";
-import { notificationQueries } from "@/front/hooks/queries/use-notifications";
+import { notificationQueries } from "@/front/queries/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 
 const STATUS_LABELS: Record<string, string> = {

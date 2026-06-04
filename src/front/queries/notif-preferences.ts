@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useMyConfigs, useCreateUserConfig, useUpdateUserConfig } from "./use-userConfigs";
+import { useMyConfigs, useCreateUserConfig, useUpdateUserConfig } from "./user-configs";
 
 const CONFIG_TITLE = "notif_preferences";
 

@@ -6,7 +6,7 @@ import {
   sendProjectMessage,
   type ProjectMessage,
 } from "@/front/lib/api/project-messages";
-import { useUser } from "@/front/context/UserContext";
+import { useUser } from "@/front/states/contexts/user.context";
 
 const ROOT = ["project-messages"] as const;
 

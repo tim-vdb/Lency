@@ -31,15 +31,15 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/front/components/ui/dropdown-menu";
-import { useUser } from "@/front/context/UserContext";
-import { useDeleteProject, useReportProject } from "@/front/hooks/queries/use-projects";
-import { useProjectApplications } from "@/front/hooks/queries/use-applications";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useDeleteProject, useReportProject } from "@/front/queries/projects";
+import { useProjectApplications } from "@/front/queries/applications";
 import { ApplyToProjectModal } from "@/front/components/Public/Marketplace/Projects/ApplyToProjectModal";
 import { ProjectInviteBlock } from "@/front/components/Public/Marketplace/Projects/ProjectInviteBlock";
 import { ProjectMembersCard } from "@/front/components/Public/Marketplace/Projects/ProjectMembersCard";
 import { useShare } from "@/front/hooks/use-share";
 import { cn, getDisplayName, getInitialName, timeAgo } from "@/front/lib/utils";
-import { ProjectAttachment, ProjectWithOwner } from "@/front/types/project.schema";
+import { ProjectAttachment, ProjectWithOwner } from "@/front/schemas/types/project.type";
 import {
     Briefcase,
     CalendarDays,

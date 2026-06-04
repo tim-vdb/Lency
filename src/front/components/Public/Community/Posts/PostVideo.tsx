@@ -3,7 +3,7 @@
 import { Card, CardContent, CardFooter } from "@/front/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/front/lib/utils";
-import { PostWithUserState } from "@/front/types/post.schema";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
 import { usePostState } from "@/front/hooks/use-post-state";
 import CommentRoot from "../Comments/CommentRoot";
 import Comments from "../Comments/Comments";

@@ -1,8 +1,8 @@
 "use client";
 
-import { useTalents } from "@/front/hooks/queries/use-talents";
+import { useTalents } from "@/front/queries/talents";
 import { getTalentPreferences, getTalentRoles, type Talent } from "@/front/lib/api/talents";
-import { useMarketplaceStore } from "@/front/stores/marketplace.store";
+import { useMarketplaceStore } from "@/front/states/stores/marketplace.store";
 import { Users } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { useMemo } from "react";

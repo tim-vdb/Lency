@@ -18,7 +18,7 @@ import {
 } from "@/front/components/ui/dropdown-menu"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
 import { cn } from "@/front/lib/utils"
-import { useUser } from "@/front/context/UserContext"
+import { useUser } from "@/front/states/contexts/user.context"
 import { FileText, FolderKanban, Link2, Plus, Tag, NotebookText } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"

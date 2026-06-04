@@ -2,7 +2,7 @@
 
 import { Badge } from "@/front/components/ui/badge";
 import { Card } from "@/front/components/ui/card";
-import { ResourceWithUserState } from "@/front/types/resource.schema";
+import { ResourceWithUserState } from "@/front/schemas/types/resource.type";
 import { Heart, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

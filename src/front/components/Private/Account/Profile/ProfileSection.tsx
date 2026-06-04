@@ -12,9 +12,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/fro
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/front/components/ui/form"
 import { Input } from "@/front/components/ui/input"
 import { Separator } from "@/front/components/ui/separator"
-import { useUser } from "@/front/context/UserContext"
-import { useUpdateUser } from "@/front/hooks/queries/use-users"
-import { UpdateProfileSchema, type UpdateProfileFormValues } from "@/front/types/profile.schema"
+import { useUser } from "@/front/states/contexts/user.context"
+import { useUpdateUser } from "@/front/queries/users"
+import { UpdateProfileSchema, type UpdateProfileFormValues } from "@/front/schemas/zod/profile.zod"
 import { VerifyEmailChangeModal } from "./VerifyEmailChangeModal"
 import { useRouter } from "next/navigation"
 

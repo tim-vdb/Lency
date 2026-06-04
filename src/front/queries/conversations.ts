@@ -9,8 +9,8 @@ import {
   type DirectMessage,
   type Conversation,
 } from "@/front/lib/api/conversations";
-import { useActiveChat } from "@/front/context/ActiveChatContext";
-import { useUser } from "@/front/context/UserContext";
+import { useActiveChat } from "@/front/states/contexts/active-chat.context";
+import { useUser } from "@/front/states/contexts/user.context";
 
 const ROOT = ["conversations"] as const;
 

@@ -2,13 +2,13 @@
 
 import ImageKitUploader from "@/front/components/common/ImageKitUploader";
 import { useRequireAuth } from "@/front/hooks/use-modals";
-import { useCreateComment, useVoteComment } from "@/front/hooks/queries/use-posts";
-import { useCreateResourceComment, useVoteResourceComment } from "@/front/hooks/queries/use-resources";
-import { useCreateProjectComment } from "@/front/hooks/queries/use-projects";
+import { useCreateComment, useVoteComment } from "@/front/queries/posts";
+import { useCreateResourceComment, useVoteResourceComment } from "@/front/queries/resources";
+import { useCreateProjectComment } from "@/front/queries/projects";
 import { timeAgo } from "@/front/lib/utils";
-import { CommentTarget } from "@/front/types/comment-target";
-import { CreateCommentSchema, type CreateCommentFormValues } from "@/front/types/comment.schema";
-import { CommentBase, CommentWithChildren } from "@/front/types/post.schema";
+import { CommentTarget } from "@/front/schemas/types/comment-target.type";
+import { CreateCommentSchema, type CreateCommentFormValues } from "@/front/schemas/zod/comment.zod";
+import { CommentBase, CommentWithChildren } from "@/front/schemas/types/post.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, ThumbsDown, ThumbsUp } from "lucide-react";
 import Image from "next/image";

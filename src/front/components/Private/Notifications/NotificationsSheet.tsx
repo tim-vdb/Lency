@@ -13,11 +13,11 @@ import {
     useDismissNotification,
     notificationQueries,
     type DBNotification,
-} from "@/front/hooks/queries/use-notifications";
-import { useAcceptApplication, useRejectApplication } from "@/front/hooks/queries/use-applications";
-import { useConversations } from "@/front/hooks/queries/use-conversations";
-import { useUser } from "@/front/context/UserContext";
-import { useNotifPreferences } from "@/front/hooks/queries/use-notif-preferences";
+} from "@/front/queries/notifications";
+import { useAcceptApplication, useRejectApplication } from "@/front/queries/applications";
+import { useConversations } from "@/front/queries/conversations";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useNotifPreferences } from "@/front/queries/notif-preferences";
 import { fetchApplicationById } from "@/front/lib/api/applications";
 import type { ConversationParticipant } from "@/front/lib/api/conversations";
 import { DirectMessageChat } from "@/front/components/Private/Chat/DirectMessageChat";

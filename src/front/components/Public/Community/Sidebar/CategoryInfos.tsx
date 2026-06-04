@@ -1,6 +1,6 @@
 "use client";
 
-import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
+import { PostWithAuthorAndCategory } from "@/front/schemas/types/post.type";
 import { PencilRuler } from "lucide-react";
 import dayjs from "dayjs";
 import "dayjs/locale/fr";

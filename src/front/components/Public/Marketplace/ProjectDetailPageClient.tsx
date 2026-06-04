@@ -2,11 +2,11 @@
 
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { Separator } from "@/front/components/ui/separator";
-import { useProjectById } from "@/front/hooks/queries/use-projects";
+import { useProjectById } from "@/front/queries/projects";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 import ProjectDetail from "./Projects/ProjectDetail";
 import ProjectCard from "./Projects/ProjectCard";
-import { useProjects } from "@/front/hooks/queries/use-projects";
+import { useProjects } from "@/front/queries/projects";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

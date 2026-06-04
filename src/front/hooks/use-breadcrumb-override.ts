@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useBreadcrumbOverrides } from "@/front/stores/use-breadcrumb-overrides.store";
+import { useBreadcrumbOverrides } from "@/front/states/stores/breadcrumb-overrides.store";
 
 export function useBreadcrumbOverride(
     segment: string | undefined | null,

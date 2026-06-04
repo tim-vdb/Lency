@@ -1,4 +1,4 @@
-import type { DBNotification } from "@/front/hooks/queries/use-notifications";
+import type { DBNotification } from "@/front/queries/notifications";
 import { EmptyState } from "./EmptyState";
 import { ProjectGroupRow } from "./ProjectGroupRow";
 import type { ProjectGroup } from "./types";

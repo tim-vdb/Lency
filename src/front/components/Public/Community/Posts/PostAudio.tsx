@@ -5,7 +5,7 @@ import { cn } from "@/front/lib/utils";
 import { Play, Pause } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { PostWithUserState } from "@/front/types/post.schema";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
 import { usePostState } from "@/front/hooks/use-post-state";
 import CommentRoot from "../Comments/CommentRoot";
 import Comments from "../Comments/Comments";

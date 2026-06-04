@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useRecentlyViewed } from "@/front/stores/use-recently-viewed.store";
-import type { PostWithUserState } from "@/front/types/post.schema";
+import { useRecentlyViewed } from "@/front/states/stores/recently-viewed.store";
+import type { PostWithUserState } from "@/front/schemas/types/post.type";
 
 export function useViewportRecentlyViewed(post: PostWithUserState, delayMs: number) {
     const add = useRecentlyViewed((s) => s.add);

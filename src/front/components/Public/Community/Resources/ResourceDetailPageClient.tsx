@@ -5,8 +5,8 @@ import ResourceDetail from "@/front/components/Public/Community/Resources/Resour
 import ResourceFiltersTabs from "@/front/components/Public/Community/Resources/ResourceFiltersTabs";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { Separator } from "@/front/components/ui/separator";
-import { useCategoryBySlug } from "@/front/hooks/queries/use-categories";
-import { useResourceById, useResources } from "@/front/hooks/queries/use-resources";
+import { useCategoryBySlug } from "@/front/queries/categories";
+import { useResourceById, useResources } from "@/front/queries/resources";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 
 function ResourceDetailSkeleton() {

@@ -1,14 +1,14 @@
 "use client"
 
-import { useMyDraftPosts, useDeletePost, useUpdatePost } from "@/front/hooks/queries/use-posts"
-import { useMyDraftProjects, useDeleteProject, useUpdateProject } from "@/front/hooks/queries/use-projects"
+import { useMyDraftPosts, useDeletePost, useUpdatePost } from "@/front/queries/posts"
+import { useMyDraftProjects, useDeleteProject, useUpdateProject } from "@/front/queries/projects"
 import { cn } from "@/front/lib/utils"
 import { FileText, FolderKanban, Loader2, Globe, Trash2, Pencil, NotebookText } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/front/components/ui/button"
 import { Badge } from "@/front/components/ui/badge"
-import { PostWithUserState } from "@/front/types/post.schema"
-import { ProjectWithOwner } from "@/front/types/project.schema"
+import { PostWithUserState } from "@/front/schemas/types/post.type"
+import { ProjectWithOwner } from "@/front/schemas/types/project.type"
 
 const FORMAT_LABELS: Record<string, string> = {
     TEXT: "Texte", IMAGE: "Image", VIDEO: "Vidéo", AUDIO: "Audio",

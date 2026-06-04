@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Users } from "lucide-react";
 import { Button } from "@/front/components/ui/button";
 import { ProjectChat } from "@/front/components/Private/Chat/ProjectChat";
-import { useProjectById } from "@/front/hooks/queries/use-projects";
-import { useUser } from "@/front/context/UserContext";
+import { useProjectById } from "@/front/queries/projects";
+import { useUser } from "@/front/states/contexts/user.context";
 
 interface Props { projectId: string }
 

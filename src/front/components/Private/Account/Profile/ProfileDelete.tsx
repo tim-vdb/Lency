@@ -2,9 +2,9 @@
 import { AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
 import { Button } from "../../../ui/button";
-import { useDeleteUser } from '@/front/hooks/queries/use-users';
+import { useDeleteUser } from '@/front/queries/users';
 import { useRouter } from 'next/navigation';
-import { useUser } from "@/front/context/UserContext";
+import { useUser } from "@/front/states/contexts/user.context";
 
 export default function ProfileDelete() {
     const user = useUser()

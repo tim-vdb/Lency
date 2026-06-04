@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/front/components/ui/switch";
 import { Separator } from "@/front/components/ui/separator";
 import { MessageSquare } from "lucide-react";
-import { useNotifPreferences } from "@/front/hooks/queries/use-notif-preferences";
+import { useNotifPreferences } from "@/front/queries/notif-preferences";
 
 export default function NotifsPreference() {
     const { prefs, updatePref, isSaving } = useNotifPreferences();

@@ -1,4 +1,4 @@
-import { UserProfile } from "@/front/types/user.schema";
+import { UserProfile } from "@/front/schemas/types/user.type";
 
 function formatStat(n: number): string {
     if (n >= 1000) return `${Math.floor(n / 1000)}K`;

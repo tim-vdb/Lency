@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
 import { getDisplayName, getInitialName } from "@/front/lib/utils";
-import type { DBNotification } from "@/front/hooks/queries/use-notifications";
+import type { DBNotification } from "@/front/queries/notifications";
 import type { ConversationParticipant } from "@/front/lib/api/conversations";
 import { EmptyState } from "./EmptyState";
 import { formatDate } from "./utils";

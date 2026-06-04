@@ -8,9 +8,9 @@ import PostSkeleton, { PostImageSkeleton } from "@/front/components/Public/Commu
 import ResourceCard from "@/front/components/Public/Community/Resources/ResourceCard";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs";
-import { useSavedPosts } from "@/front/hooks/queries/use-posts";
-import { useSavedResources } from "@/front/hooks/queries/use-resources";
-import type { PostWithUserState } from "@/front/types/post.schema";
+import { useSavedPosts } from "@/front/queries/posts";
+import { useSavedResources } from "@/front/queries/resources";
+import type { PostWithUserState } from "@/front/schemas/types/post.type";
 
 function PostListSkeleton() {
     return (

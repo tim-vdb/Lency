@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { PostWithUserState } from "@/front/types/post.schema";
+import type { PostWithUserState } from "@/front/schemas/types/post.type";
 
 export interface RecentlyViewedEntry {
     id: string;

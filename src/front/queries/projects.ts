@@ -14,7 +14,7 @@ import {
     type CreateProjectInput,
     type UpdateProjectInput,
 } from "@/front/lib/api/projects";
-import { CommentWithChildren } from "@/front/types/post.schema";
+import { CommentWithChildren } from "@/front/schemas/types/post.type";
 import { SEARCH_ROOT } from "@/front/lib/api/search";
 
 const PROJECT_ROOT = ["projects"] as const;

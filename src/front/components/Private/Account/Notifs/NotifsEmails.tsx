@@ -5,7 +5,7 @@ import { Field, FieldDescription, FieldLabel } from "@/front/components/ui/field
 import { Separator } from "@/front/components/ui/separator";
 import { Switch } from "@/front/components/ui/switch";
 import { Mail } from "lucide-react";
-import { useNotifPreferences } from "@/front/hooks/queries/use-notif-preferences";
+import { useNotifPreferences } from "@/front/queries/notif-preferences";
 
 export default function NotifsEmails() {
     const { prefs, updatePref, isSaving } = useNotifPreferences();

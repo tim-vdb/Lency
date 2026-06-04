@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUser } from "@/front/context/UserContext";
-import { useAblyClient } from "@/front/context/AblyContext";
-import { useActiveChat } from "@/front/context/ActiveChatContext";
-import { useProjectMessages, useSendProjectMessage, projectMessageQueries } from "@/front/hooks/queries/use-project-messages";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useAblyClient } from "@/front/states/contexts/ably.context";
+import { useActiveChat } from "@/front/states/contexts/active-chat.context";
+import { useProjectMessages, useSendProjectMessage, projectMessageQueries } from "@/front/queries/project-messages";
 import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
 import { getDisplayName, getInitialName } from "@/front/lib/utils";
 import { ChatInput, type ChatMedia } from "@/front/components/Private/Chat/ChatInput";

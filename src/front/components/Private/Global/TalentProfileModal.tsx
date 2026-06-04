@@ -22,9 +22,9 @@ import { Switch } from "@/front/components/ui/switch"
 import { Button } from "@/front/components/ui/button"
 import { Badge } from "@/front/components/ui/badge"
 import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/components/ui/multistep-form"
-import { useUser } from "@/front/context/UserContext"
-import { useUpdateUser } from "@/front/hooks/queries/use-users"
-import { useMyConfigs, useCreateUserConfig, useUpdateUserConfig } from "@/front/hooks/queries/use-userConfigs"
+import { useUser } from "@/front/states/contexts/user.context"
+import { useUpdateUser } from "@/front/queries/users"
+import { useMyConfigs, useCreateUserConfig, useUpdateUserConfig } from "@/front/queries/user-configs"
 
 // ─── Constantes ────────────────────────────────────────────────────────────────
 

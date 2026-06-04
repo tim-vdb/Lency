@@ -114,7 +114,7 @@ export async function fetchCategoryBySlug(slug: string): Promise<Category> {
     return data.category
 }
 
-export async function fetchPostsByCategory(categoryId: string): Promise<import('@/front/types/post.schema').PostWithUserState[]> {
+export async function fetchPostsByCategory(categoryId: string): Promise<import('@/front/schemas/types/post.type').PostWithUserState[]> {
     const response = await fetch(`/api/categories/${categoryId}/posts`, {
         method: 'GET',
         cache: 'no-store',

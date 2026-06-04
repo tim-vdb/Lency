@@ -1,5 +1,5 @@
 "use client"
-import { UserProvider } from "@/front/context/UserContext";
+import { UserProvider } from "@/front/states/contexts/user.context";
 import { ModalRenderer } from "@/front/components/Modals/ModalRenderer";
 import Footer from "@/front/components/Public/Global/Footer/Footer";
 import { User } from "@/back/generated/prisma_client";

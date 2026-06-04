@@ -17,9 +17,9 @@ import {
     type UpdateResourceInput,
     type VoteResourceCommentInput,
 } from "@/front/lib/api/resources";
-import { CommentWithChildren } from "@/front/types/post.schema";
+import { CommentWithChildren } from "@/front/schemas/types/post.type";
 import { SEARCH_ROOT } from "@/front/lib/api/search";
-import { ResourceWithUserState } from "@/front/types/resource.schema";
+import { ResourceWithUserState } from "@/front/schemas/types/resource.type";
 
 function applyVoteInTree(
     comments: CommentWithChildren[],

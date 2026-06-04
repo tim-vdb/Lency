@@ -28,9 +28,9 @@ import {
 import { Textarea } from "@/front/components/ui/textarea"
 import { Badge } from "@/front/components/ui/badge"
 import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/components/ui/multistep-form"
-import { useCreateProject, useUpdateProject } from "@/front/hooks/queries/use-projects"
+import { useCreateProject, useUpdateProject } from "@/front/queries/projects"
 import { uploadToImageKit } from "@/front/lib/upload"
-import { ProjectWithOwner } from "@/front/types/project.schema"
+import { ProjectWithOwner } from "@/front/schemas/types/project.type"
 
 // ─── Schema ────────────────────────────────────────────────────────────────────
 

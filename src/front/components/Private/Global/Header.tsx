@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 import { CreateDropdown } from "./CreateDropdown";
 import BreadcrumbAuto from "./BreadcrumbAuto";
 import SearchBar from "../../Filter/SearchBar";
-import { useNotificationsQuery } from "@/front/hooks/queries/use-notifications";
+import { useNotificationsQuery } from "@/front/queries/notifications";
 
 export default function Header({ className }: { className?: string }) {
     const [isScrolled, setIsScrolled] = useState(false)

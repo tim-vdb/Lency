@@ -3,14 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import * as Ably from "ably";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUser } from "@/front/context/UserContext";
-import { useActiveChat } from "@/front/context/ActiveChatContext";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useActiveChat } from "@/front/states/contexts/active-chat.context";
 import {
   useConversationMessages,
   useSendDirectMessage,
   useGetOrCreateConversation,
   conversationQueries,
-} from "@/front/hooks/queries/use-conversations";
+} from "@/front/queries/conversations";
 import { MessageBubble } from "./MessageBubble";
 import { ChatInput } from "./ChatInput";
 import { getDisplayName, getInitialName } from "@/front/lib/utils";

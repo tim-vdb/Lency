@@ -19,7 +19,7 @@ import {
     type CreatePostInput,
     type VoteCommentInput,
 } from "@/front/lib/api/posts"
-import { CommentWithChildren, PostWithUserState } from "@/front/types/post.schema"
+import { CommentWithChildren, PostWithUserState } from "@/front/schemas/types/post.type"
 import { SEARCH_ROOT } from "@/front/lib/api/search"
 
 // Parcourt l'arbre récursivement et met à jour les compteurs du commentaire ciblé

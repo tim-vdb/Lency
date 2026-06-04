@@ -4,7 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import { Toaster } from 'sonner';
 import { QueryProvider } from '@/front/components/providers/QueryProvider';
-import { NotificationsProvider } from '@/front/context/NotificationsContext';
+import { NotificationsProvider } from '@/front/states/contexts/notifications.context';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

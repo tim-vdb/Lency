@@ -1,9 +1,9 @@
 "use client";
 
-import { useCommentsByPostId } from "@/front/hooks/queries/use-posts";
-import { useResourceComments } from "@/front/hooks/queries/use-resources";
-import { useProjectComments } from "@/front/hooks/queries/use-projects";
-import { CommentTarget } from "@/front/types/comment-target";
+import { useCommentsByPostId } from "@/front/queries/posts";
+import { useResourceComments } from "@/front/queries/resources";
+import { useProjectComments } from "@/front/queries/projects";
+import { CommentTarget } from "@/front/schemas/types/comment-target.type";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { CommentItem } from "./CommentItem";
 

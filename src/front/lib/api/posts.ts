@@ -1,4 +1,4 @@
-import { CommentWithChildren, PostWithAuthorAndCategory, PostWithUserState } from "@/front/types/post.schema";
+import { CommentWithChildren, PostWithAuthorAndCategory, PostWithUserState } from "@/front/schemas/types/post.type";
 
 export interface CreatePostInput {
     title?: string

@@ -3,7 +3,7 @@
 import { Heart, MessageCircleMore } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { RecentlyViewedEntry } from "@/front/stores/use-recently-viewed.store";
+import type { RecentlyViewedEntry } from "@/front/states/stores/recently-viewed.store";
 import Image from "next/image";
 import { Button } from "@/front/components/ui/button";
 import PostAvatar from "../Posts/PostAvatar";

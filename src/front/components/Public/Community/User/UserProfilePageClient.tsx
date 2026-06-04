@@ -14,13 +14,13 @@ import { Button } from "@/front/components/ui/button";
 import { Card, CardContent } from "@/front/components/ui/card";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs";
-import { useUserByUsername } from "@/front/hooks/queries/use-users";
-import { usePostsByAuthor } from "@/front/hooks/queries/use-posts";
-import { useResourcesByAuthor } from "@/front/hooks/queries/use-resources";
+import { useUserByUsername } from "@/front/queries/users";
+import { usePostsByAuthor } from "@/front/queries/posts";
+import { useResourcesByAuthor } from "@/front/queries/resources";
 import ResourceCard from "@/front/components/Public/Community/Resources/ResourceCard";
 import { TalentProfileModal } from "@/front/components/Private/Global/TalentProfileModal";
-import { useUser } from "@/front/context/UserContext";
-import { useUpdateUser } from "@/front/hooks/queries/use-users";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useUpdateUser } from "@/front/queries/users";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
 import { Camera, ExternalLink, FileText, FolderOpen, Lightbulb, MapPin, Mic, Monitor, Sparkles, TrendingUp, UserCog, Wallet, Wrench, Zap } from "lucide-react";
@@ -29,7 +29,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { getDisplayName } from "@/front/lib/utils";
 import Link from "next/link";
-import { UserProfile } from "@/front/types/user.schema";
+import { UserProfile } from "@/front/schemas/types/user.type";
 
 const AV_SECTION_META: Record<string, { label: string; icon: React.ElementType }> = {
     cameras: { label: "Caméras", icon: Camera },

@@ -2,7 +2,7 @@
 
 import { Button } from '@/front/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/front/components/ui/card'
-import { useFollowedCategoryPosts } from '@/front/hooks/queries/use-posts';
+import { useFollowedCategoryPosts } from '@/front/queries/posts';
 import { Compass } from 'lucide-react';
 import Image from 'next/image'
 import Link from 'next/link';

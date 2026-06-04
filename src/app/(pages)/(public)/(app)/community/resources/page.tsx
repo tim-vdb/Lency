@@ -3,8 +3,8 @@
 import ResourceCard from "@/front/components/Public/Community/Resources/ResourceCard";
 import { Badge } from "@/front/components/ui/badge";
 import { Skeleton } from "@/front/components/ui/skeleton";
-import { useUser } from "@/front/context/UserContext";
-import { useResources } from "@/front/hooks/queries/use-resources";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useResources } from "@/front/queries/resources";
 import Link from "next/link";
 import { cn } from "@/front/lib/utils";
 

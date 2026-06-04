@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardFooter } from "@/front/components/ui/card";
 import { cn } from "@/front/lib/utils";
-import { PostWithUserState } from "@/front/types/post.schema";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
 import { usePostState } from "@/front/hooks/use-post-state";
 import Image from "next/image";
 import Link from "next/link";

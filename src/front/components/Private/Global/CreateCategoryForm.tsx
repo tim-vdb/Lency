@@ -19,7 +19,7 @@ import {
 import { Input } from "@/front/components/ui/input"
 import { Textarea } from "@/front/components/ui/textarea"
 import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/components/ui/multistep-form"
-import { useCreateCategory } from "@/front/hooks/queries/use-categories"
+import { useCreateCategory } from "@/front/queries/categories"
 import { uploadToImageKit } from "@/front/lib/upload"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────

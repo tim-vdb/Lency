@@ -1,8 +1,8 @@
 "use client";
 
-import { useProjects } from "@/front/hooks/queries/use-projects";
-import { useMarketplaceStore } from "@/front/stores/marketplace.store";
-import { ProjectWithOwner } from "@/front/types/project.schema";
+import { useProjects } from "@/front/queries/projects";
+import { useMarketplaceStore } from "@/front/states/stores/marketplace.store";
+import { ProjectWithOwner } from "@/front/schemas/types/project.type";
 import { Briefcase } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { useMemo } from "react";

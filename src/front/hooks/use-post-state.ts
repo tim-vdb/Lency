@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { PostWithUserState } from "@/front/types/post.schema";
-import { useRecentlyViewed } from "@/front/stores/use-recently-viewed.store";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
+import { useRecentlyViewed } from "@/front/states/stores/recently-viewed.store";
 
 export function usePostState(post: PostWithUserState, options?: { initialOpenComments?: boolean; lockOpenComments?: boolean }) {
     const [expanded, setExpanded] = useState(false);

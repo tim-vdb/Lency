@@ -1,4 +1,4 @@
-import { UserProfile } from "@/front/types/user.schema";
+import { UserProfile } from "@/front/schemas/types/user.type";
 
 /**
  * Helpers API pour gérer les utilisateurs

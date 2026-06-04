@@ -1,5 +1,5 @@
 "use client"
-import { UserProvider } from "@/front/context/UserContext";
+import { UserProvider } from "@/front/states/contexts/user.context";
 import { User } from "@/back/generated/prisma_client";
 import HeaderPublic from "@/front/components/Public/Global/Header/HeaderPublic";
 

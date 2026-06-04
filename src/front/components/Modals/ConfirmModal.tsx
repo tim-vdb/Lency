@@ -1,6 +1,6 @@
 "use client";
 
-import { useModalStore } from "@/front/stores/use-modal.store";
+import { useModalStore } from "@/front/states/stores/modal.store";
 import { Button } from "../ui/button";
 import {
     Dialog,

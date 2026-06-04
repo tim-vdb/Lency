@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/front/components/ui/badge";
-import { useCategories } from "@/front/hooks/queries/use-categories";
+import { useCategories } from "@/front/queries/categories";
 import { cn } from "@/front/lib/utils";
 import Link from "next/link";
 

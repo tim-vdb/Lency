@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from "react";
 import * as Ably from "ably";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUser } from "@/front/context/UserContext";
-import { useNotifications } from "@/front/context/NotificationsContext";
-import { AblyContext } from "@/front/context/AblyContext";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useNotifications } from "@/front/states/contexts/notifications.context";
+import { AblyContext } from "@/front/states/contexts/ably.context";
 import {
   notificationQueries,
   useNotificationsQuery,
-} from "@/front/hooks/queries/use-notifications";
+} from "@/front/queries/notifications";
 
 export function AblyInitializer({ children }: { children?: React.ReactNode }) {
   const user = useUser();

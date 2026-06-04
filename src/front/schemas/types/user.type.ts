@@ -1,5 +1,5 @@
 import { Prisma } from "@/back/generated/prisma_client";
-import { PostWithUserState } from "./post.schema";
+import { PostWithUserState } from "./post.type";
 
 export type UserProfileBase = Prisma.UserGetPayload<{
     include: {

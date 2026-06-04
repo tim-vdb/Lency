@@ -1,5 +1,5 @@
-import { CommentWithChildren } from "@/front/types/post.schema";
-import { ResourceWithUserState } from "@/front/types/resource.schema";
+import { CommentWithChildren } from "@/front/schemas/types/post.type";
+import { ResourceWithUserState } from "@/front/schemas/types/resource.type";
 
 export async function fetchSavedResources(): Promise<ResourceWithUserState[]> {
     const response = await fetch("/api/resources/saved", { method: "GET", cache: "no-store" });
