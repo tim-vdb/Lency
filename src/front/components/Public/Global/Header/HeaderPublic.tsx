@@ -2,10 +2,8 @@
 
 import Link from 'next/link';
 import { FaBars, FaTimes } from 'react-icons/fa';
-// import ThemeSelector from './ThemeSelector';
 import DesktopNavbar from '@/front/components/Public/Global/Navbar/DesktopNavbar';
 import MobileNavbar from '@/front/components/Public/Global/Navbar/MobileNavbar';
-import Image from 'next/image';
 import { useState } from 'react';
 import { useUser } from '@/front/states/contexts/user.context';
 import { Button } from '@/front/components/ui/button';
@@ -13,6 +11,7 @@ import { usePathname } from 'next/navigation';
 import { ToggleDarkMode } from '@/front/components/DarkMode/ToggleDarkMode';
 import { NavUser } from '@/front/components/Private/Global/Sidebar/nav-user';
 import { SidebarProvider } from '@/front/components/ui/sidebar';
+import LencyLogo from '@/front/components/ui/lency-logo';
 
 export default function HeaderPublic() {
   const user = useUser();
@@ -30,13 +29,7 @@ export default function HeaderPublic() {
       <div className="left-0 right-0 shadow-sm top-0 z-50 bg-white text- dark:bg-neutral-900 fixed transition-all duration-200 ease-in-out h-20">
         <div className="mx-8 flex justify-between items-center h-full">
           <Link href="/" className="shrink-0">
-            <Image
-              src="/images/cassetete.jpg"
-              alt="Boilerplate Logo"
-              width={100}
-              height={100}
-              className="w-auto transition-all duration-200 h-15"
-            />
+            <LencyLogo className="w-auto h-10" />
           </Link>
 
           <DesktopNavbar />

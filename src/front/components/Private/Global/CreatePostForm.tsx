@@ -15,7 +15,7 @@ import {
 import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
+import { CreatePostSchema, type CreatePostValues } from "@/front/schemas/zod/post.zod"
 
 import {
     Form,
@@ -66,21 +66,6 @@ const STEPS = [
     { id: "contenu", title: "Contenu" },
     { id: "publication", title: "Publication" },
 ]
-
-// ─── Schema ───────────────────────────────────────────────────────────────────
-
-const CreatePostSchema = z.object({
-    content: z.string().min(1, "Le contenu est requis"),
-    categoryId: z.string().min(1, "Choisissez une catégorie"),
-    format: z.enum(["TEXT", "IMAGE", "VIDEO", "AUDIO"]),
-    orientation: z.enum(["LANDSCAPE", "PORTRAIT"]).optional(),
-    isPublished: z.boolean(),
-    imageUrl: z.string().optional(),
-    videoUrl: z.string().optional(),
-    audioUrl: z.string().optional(),
-})
-
-type CreatePostValues = z.infer<typeof CreatePostSchema>
 
 // ─── Component ────────────────────────────────────────────────────────────────
 

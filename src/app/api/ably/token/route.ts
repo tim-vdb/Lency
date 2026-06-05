@@ -6,7 +6,7 @@ import { ably } from "@/back/lib/ably";
  * Générer un token Ably pour le client
  * Le client peut ensuite s'authentifier sans exposer la clé API
  */
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   try {
     const user = await getUser();
     if (!user) {

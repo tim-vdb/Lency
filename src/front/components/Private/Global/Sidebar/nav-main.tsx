@@ -1,6 +1,6 @@
 "use client"
 
-import DashboardIcon from "@/front/assets/icons/dashboard-icon.svg"
+import DashboardIcon from "@/front/components/ui/dashboard-icon"
 import {
   Collapsible,
   CollapsibleContent,

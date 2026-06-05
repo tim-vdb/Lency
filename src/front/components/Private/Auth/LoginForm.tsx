@@ -1,11 +1,11 @@
 "use client";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useTransition } from "react";
+import { LoginFormSchema, type LoginFormValues } from "@/front/schemas/zod/auth/login.zod";
 import {
   Form,
   FormField,
@@ -22,20 +22,13 @@ import { CardFooter } from "@/front/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/front/lib/utils";
 
-const LoginFormSchema = z.object({
-  email: z.string().email("Email invalide"),
-  password: z
-    .string()
-    .min(6, "The password must contain at least 6 characters."),
-});
-
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof LoginFormSchema>>({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       email: "",
@@ -43,9 +36,8 @@ export default function LoginForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-    setLoading(true);
-    try {
+  function onSubmit(values: LoginFormValues) {
+    startTransition(async () => {
       const { error } = await signIn.email({
         email: values.email,
         password: values.password,
@@ -57,11 +49,7 @@ export default function LoginForm() {
       toast.success('Utilisateur connecté');
       router.push(callbackUrl ?? '/account');
       router.refresh();
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Une erreur est survenue');
-    } finally {
-      setLoading(false);
-    }
+    });
   }
 
   return (
@@ -132,9 +120,9 @@ export default function LoginForm() {
               <Button
                 type="submit"
                 className="rounded-md dark:bg-background text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition"
-                disabled={loading}
+                disabled={isPending}
               >
-                {loading ? (
+                {isPending ? (
                   <Loader2 size={16} className="animate-spin" />
                 ) : (
                   "log in"
@@ -144,23 +132,15 @@ export default function LoginForm() {
               <Button
                 variant="outline"
                 className={cn("w-full gap-2 border-zinc-300 dark:border-zinc-300 text-zinc-800 dark:text-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-100")}
-                disabled={loading}
-                onClick={async () => {
-                  await signIn.social(
-                    {
+                disabled={isPending}
+                onClick={() => {
+                  startTransition(async () => {
+                    await signIn.social({
                       provider: "google",
                       callbackURL: callbackUrl ?? "/account",
                       newUserCallbackURL: `/account`,
-                    },
-                    {
-                      onRequest: () => {
-                        setLoading(true);
-                      },
-                      onResponse: () => {
-                        setLoading(false);
-                      },
-                    }
-                  );
+                    });
+                  });
                 }}
               >
                 <svg

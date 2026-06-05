@@ -17,8 +17,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Boilerplate',
-  description: '',
+  title: {
+    default: 'Lency',
+    template: '%s',
+  },
+  description: 'Lency — La plateforme créative pour trouver des collaborateurs et partager des ressources.',
+  openGraph: {
+    siteName: 'Lency',
+    locale: 'fr_FR',
+  },
 };
 
 export default function RootLayout({

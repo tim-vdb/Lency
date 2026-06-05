@@ -5,7 +5,7 @@ import { Loader2, Plus, Upload, X } from "lucide-react"
 import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
+import { EditProjectSchema, type EditProjectValues } from "@/front/schemas/zod/project.zod"
 
 import { Button } from "@/front/components/ui/button"
 import {
@@ -30,24 +30,6 @@ import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/compo
 import { useUpdateProject } from "@/front/queries/projects"
 import { uploadToImageKit } from "@/front/lib/upload"
 import { ProjectWithOwner } from "@/front/schemas/types/project.type"
-
-// ─── Schema ────────────────────────────────────────────────────────────────────
-
-const EditProjectSchema = z.object({
-    title: z.string().min(1, "Le titre est requis").max(150, "Maximum 150 caractères"),
-    description: z.string().min(1, "La description est requise").max(2000, "Maximum 2000 caractères"),
-    projectType: z.string().optional(),
-    level: z.enum(["DEBUTANT", "INTERMEDIAIRE", "AVANCE"]).optional(),
-    remunerationType: z.enum(["NON_REMUNERE", "REMUNERE"]).optional(),
-    workMode: z.enum(["PRESENTIEL", "DISTANCIEL", "HYBRIDE"]).optional(),
-    city: z.string().max(100).optional(),
-    startDate: z.string().optional(),
-    visibility: z.enum(["PUBLIC", "PRIVATE"]),
-    bannerUrl: z.string().optional(),
-    roles: z.array(z.string()),
-})
-
-type EditProjectValues = z.infer<typeof EditProjectSchema>
 
 // ─── Constantes ────────────────────────────────────────────────────────────────
 

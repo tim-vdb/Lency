@@ -1,22 +1,12 @@
 import { getUser } from '@/back/lib/auth-session';
 import type { Metadata } from 'next';
-
-export const dynamic = 'force-dynamic';
 import { AccountShell } from './AccountShell';
 
-// const geistSans = Geist({
-//   variable: '--font-geist-sans',
-//   subsets: ['latin'],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: '--font-geist-mono',
-//   subsets: ['latin'],
-// });
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Boilerplate',
-  description: 'Boilerplate Next.js 16',
+  title: 'Mon espace — Lency',
+  robots: { index: false, follow: false },
 };
 
 export default async function AccountLayout({

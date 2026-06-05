@@ -67,7 +67,7 @@ export function MessageBubble({ content, createdAt, sender, isMe, imageUrls = []
                 key={i}
                 src={url}
                 controls
-                className="rounded-xl max-h-48 w-full object-cover border border-neutral-200"
+                className="rounded-xl max-h-48 min-w-full w-full object-cover border border-neutral-200"
               />
             ))}
 
@@ -96,8 +96,8 @@ function MediaImage({ url }: { url: string }) {
     <>
       <img
         src={url}
-        alt=""
-        className="rounded-xl max-h-48 w-full object-cover border border-neutral-200 cursor-zoom-in"
+        alt={url}
+        className="rounded-xl max-h-48 min-w-full w-full object-cover border border-neutral-200 cursor-zoom-in"
         onClick={() => setOpen(true)}
       />
       {open && (
@@ -105,7 +105,7 @@ function MediaImage({ url }: { url: string }) {
           className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
           onClick={() => setOpen(false)}
         >
-          <img src={url} alt="" className="max-h-[90vh] max-w-[90vw] rounded-xl object-contain" />
+          <img src={url} alt={url} className="max-h-[90vh] max-w-[90vw] rounded-xl object-contain" />
         </div>
       )}
     </>

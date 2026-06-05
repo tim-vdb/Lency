@@ -1,7 +1,5 @@
 "use client"
 
-import LencyLogo from "@/front/assets/logo/lency.svg"
-import LencyIcon from "@/front/assets/logo/lency_icon.svg"
 import { ToggleDarkMode } from "@/front/components/DarkMode/ToggleDarkMode"
 import { Separator } from "@/front/components/ui/separator"
 import {
@@ -19,6 +17,8 @@ import { NavMain } from "./nav-main"
 import { NavProjects } from "./nav-projects"
 import { NavPublic } from "./nav-public"
 import { cn } from "@/front/lib/utils"
+import LencyLogo from "@/front/components/ui/lency-logo"
+import LencyIcon from "@/front/components/ui/lency-icon"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state, toggleSidebar } = useSidebar()

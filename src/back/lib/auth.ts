@@ -46,7 +46,6 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    nextCookies(),
     emailOTP({
       overrideDefaultEmailVerification: true,
       sendVerificationOnSignUp: false,
@@ -57,6 +56,7 @@ export const auth = betterAuth({
         await sendAuthOtpEmail({ email, otp, type });
       },
     }),
+    nextCookies(),
   ],
   user: {
     additionalFields: {

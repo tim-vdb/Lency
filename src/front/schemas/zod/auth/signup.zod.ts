@@ -1,14 +1,16 @@
-import z from 'zod';
+import { z } from "zod";
 
-export const SignUpFormSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, { message: "Le prénom est requis d'au moins 2 caractères" })
-    .max(50, { message: 'Le prénom ne doit pas dépasser 50 caractères' }),
-  lastName: z
-    .string()
-    .min(2, { message: "Le nom est requis d'au moins 2 caractères" })
-    .max(50, { message: 'Le nom ne doit pas dépasser 50 caractères' }),
-  email: z.string().email(),
-  password: z.string(),
-});
+export const SignUpFormSchema = z
+    .object({
+        firstName: z.string().min(1, "The first name is required"),
+        lastName: z.string().min(1, "The last name is required"),
+        email: z.string().email("Email invalide"),
+        password: z.string().min(12, "The password must contain at least 12 characters"),
+        passwordConfirmation: z.string().min(12, "La confirmation est obligatoire"),
+    })
+    .refine((data) => data.password === data.passwordConfirmation, {
+        message: "The passwords do not match",
+        path: ["passwordConfirmation"],
+    });
+
+export type SignUpFormValues = z.infer<typeof SignUpFormSchema>;

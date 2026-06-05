@@ -11,20 +11,11 @@ import { useUser } from "@/front/states/contexts/user.context";
 import { useCreateUserConfig, useDeleteUserConfig, useMyConfigs } from "@/front/queries/user-configs";
 import { useUpdateUser } from "@/front/queries/users";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { TalentProfileSchema, type TalentProfileValues } from "@/front/schemas/zod/talent.zod";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
-
-const TalentProfileSchema = z.object({
-    bio: z.string().max(500, "Max 500 caractères").optional(),
-    portfolio: z.string().url("URL invalide").or(z.literal("")).optional(),
-    cv: z.string().url("URL invalide").or(z.literal("")).optional(),
-    isMarketplaceTalent: z.boolean(),
-});
-
-type TalentProfileValues = z.infer<typeof TalentProfileSchema>;
 
 export function TalentProfileForm() {
     const user = useUser();

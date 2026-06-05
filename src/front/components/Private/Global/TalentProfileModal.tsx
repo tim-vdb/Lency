@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
+import { TalentProfileModalSchema, type TalentProfileModalValues } from "@/front/schemas/zod/talent.zod"
 import { toast } from "sonner"
 import { Plus, X } from "lucide-react"
 
@@ -135,20 +135,6 @@ const AV_SECTIONS: { key: string; label: string; placeholder: string }[] = [
     { key: "software", label: "Logiciels", placeholder: "Ex: Premiere Pro, DaVinci…" },
     { key: "audio", label: "Audio", placeholder: "Ex: Rode NTG5, Zoom H6…" },
 ]
-
-// ─── Schema ────────────────────────────────────────────────────────────────────
-
-const ProfileSchema = z.object({
-    bio: z.string().max(500, "Maximum 500 caractères").optional(),
-    portfolio: z.string().url("URL invalide").or(z.literal("")).optional(),
-    cv: z.string().url("URL invalide").or(z.literal("")).optional(),
-    isMarketplaceTalent: z.boolean(),
-    workMode: z.string().optional(),
-    level: z.string().optional(),
-    remunerationType: z.string().optional(),
-})
-
-type ProfileValues = z.infer<typeof ProfileSchema>
 
 type AudiContent = Record<string, string[]>
 
@@ -386,8 +372,8 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
     const [avContent, setAvContent] = useState<AudiContent>({})
     const [isPending, setIsPending] = useState(false)
 
-    const form = useForm<ProfileValues>({
-        resolver: zodResolver(ProfileSchema),
+    const form = useForm<TalentProfileModalValues>({
+        resolver: zodResolver(TalentProfileModalSchema),
         defaultValues: {
             bio: user?.bio ?? "",
             portfolio: user?.portfolio ?? "",
@@ -427,7 +413,7 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
         setAvContent((prev) => ({ ...prev, [key]: (prev[key] ?? []).filter((v) => v !== value) }))
     }
 
-    async function onSubmit(values: ProfileValues) {
+    async function onSubmit(values: TalentProfileModalValues) {
         if (!user?.id) return
         setIsPending(true)
         try {

@@ -9,8 +9,7 @@ import { Textarea } from "@/front/components/ui/textarea"
 import { useCreateMail } from "@/front/queries/mails"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
-
+import { ContactFormSchema, type ContactFormValues } from "@/front/schemas/zod/contact.zod"
 
 const TYPE_LABELS: Record<ContactType, string> = {
   CONTACT_GENERAL: "Contact général",
@@ -20,22 +19,11 @@ const TYPE_LABELS: Record<ContactType, string> = {
   AUTRE: "Autre",
 }
 
-const formSchema = z.object({
-  prenom: z.string().min(1, "Prénom requis"),
-  nom: z.string().min(1, "Nom requis"),
-  email: z.string().email("Email invalide"),
-  sujet: z.string().min(1, "Sujet requis"),
-  message: z.string().min(1, "Message requis"),
-  type: z.nativeEnum(ContactType),
-})
-
-type FormValues = z.infer<typeof formSchema>
-
 export default function ContactForm() {
   const { mutate: createMail, isPending, isSuccess, reset: resetMutation } = useCreateMail()
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(ContactFormSchema),
     defaultValues: {
       prenom: "",
       nom: "",
@@ -46,7 +34,7 @@ export default function ContactForm() {
     },
   })
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit = (values: ContactFormValues) => {
     createMail(values, {
       onSuccess: () => form.reset(),
     })

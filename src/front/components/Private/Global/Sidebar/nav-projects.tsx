@@ -31,7 +31,7 @@ import {
 } from "@/front/components/ui/sidebar"
 import { useMyProjects, useDeleteProject } from "@/front/queries/projects"
 import { useUser } from "@/front/states/contexts/user.context"
-import NotebookPen from "@/front/assets/icons/notebook-pen.svg"
+import NotebookPen from "@/front/components/ui/notebook-pen-icon"
 import { Skeleton } from "@/front/components/ui/skeleton"
 import { toast } from "sonner"
 

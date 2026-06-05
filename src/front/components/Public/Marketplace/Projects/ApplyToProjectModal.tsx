@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { ApplyToProjectSchema, type ApplyToProjectFormValues } from "@/front/schemas/zod/application.zod";
 import { toast } from "sonner";
 import { Loader2, Send, Link, FileText } from "lucide-react";
 import {
@@ -16,14 +16,6 @@ import { Input } from "@/front/components/ui/input";
 import { Textarea } from "@/front/components/ui/textarea";
 import { useApplyToProject } from "@/front/queries/applications";
 
-const schema = z.object({
-    applicantNote: z.string().max(1000, "Maximum 1000 caractères").optional(),
-    portfolioUrl: z.string().url("URL invalide").optional().or(z.literal("")),
-    cvUrl: z.string().url("URL invalide").optional().or(z.literal("")),
-});
-
-type FormValues = z.infer<typeof schema>;
-
 interface ApplyToProjectModalProps {
     open: boolean;
     onClose: () => void;
@@ -34,12 +26,12 @@ interface ApplyToProjectModalProps {
 export function ApplyToProjectModal({ open, onClose, projectId, projectTitle }: ApplyToProjectModalProps) {
     const { mutate: apply, isPending } = useApplyToProject(projectId);
 
-    const form = useForm<FormValues>({
-        resolver: zodResolver(schema),
+    const form = useForm<ApplyToProjectFormValues>({
+        resolver: zodResolver(ApplyToProjectSchema),
         defaultValues: { applicantNote: "", portfolioUrl: "", cvUrl: "" },
     });
 
-    function onSubmit(values: FormValues) {
+    function onSubmit(values: ApplyToProjectFormValues) {
         apply(
             {
                 applicantNote: values.applicantNote || undefined,

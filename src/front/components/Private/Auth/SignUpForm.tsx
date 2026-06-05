@@ -1,11 +1,11 @@
 "use client";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { SignUpFormSchema, type SignUpFormValues } from "@/front/schemas/zod/auth/signup.zod";
 import {
     Form,
     FormField,
@@ -22,29 +22,14 @@ import Link from "next/link";
 import useEmailOtp from "@/front/hooks/use-email-otp";
 import { signUp } from "@/back/lib/auth-client";
 
-const SignUpFormSchema = z
-    .object({
-        firstName: z.string().min(1, "The first name is required"),
-        lastName: z.string().min(1, "The last name is required"),
-        email: z.string().email("Email invalide"),
-        password: z
-            .string()
-            .min(12, "The password must contain at least 12 characters"),
-        passwordConfirmation: z.string().min(12, "La confirmation est obligatoire"),
-    })
-    .refine((data) => data.password === data.passwordConfirmation, {
-        message: "The passwords do not match",
-        path: ["passwordConfirmation"],
-    });
-
 export default function SignUpForm() {
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
+    const [isPending, startTransition] = useTransition();
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const { sendVerificationOtp } = useEmailOtp();
 
-    const form = useForm<z.infer<typeof SignUpFormSchema>>({
+    const form = useForm<SignUpFormValues>({
         resolver: zodResolver(SignUpFormSchema),
         defaultValues: {
             firstName: "",
@@ -74,9 +59,8 @@ export default function SignUpForm() {
         });
     }
 
-    async function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
-        setLoading(true);
-        try {
+    function onSubmit(values: SignUpFormValues) {
+        startTransition(async () => {
             const { error } = await signUp.email({
                 name: `${values.firstName} ${values.lastName}`,
                 email: values.email,
@@ -98,11 +82,7 @@ export default function SignUpForm() {
             toast.success('Account created. Verify your email with the OTP code.');
             router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
             router.refresh();
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : 'An error occurred');
-        } finally {
-            setLoading(false);
-        }
+        });
     }
 
     return (
@@ -270,9 +250,9 @@ export default function SignUpForm() {
                         <Button
                             type="submit"
                             className="rounded-md dark:bg-background text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold  transition"
-                            disabled={loading}
+                            disabled={isPending}
                         >
-                            {loading ? (
+                            {isPending ? (
                                 <Loader2 size={16} className="animate-spin" />
                             ) : (
                                 "Sign up"

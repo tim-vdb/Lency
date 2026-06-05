@@ -5,7 +5,7 @@ import { Loader2, Upload, X } from "lucide-react"
 import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
+import { CreateCategorySchema, type CreateCategoryValues } from "@/front/schemas/zod/category.zod"
 
 import {
     Form,
@@ -21,23 +21,6 @@ import { Textarea } from "@/front/components/ui/textarea"
 import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/components/ui/multistep-form"
 import { useCreateCategory } from "@/front/queries/categories"
 import { uploadToImageKit } from "@/front/lib/upload"
-
-// ─── Schema ───────────────────────────────────────────────────────────────────
-
-const CreateCategorySchema = z.object({
-    name: z.string().min(3, "Minimum 3 caractères").max(50, "Maximum 50 caractères"),
-    slug: z
-        .string()
-        .min(3, "Minimum 3 caractères")
-        .max(50, "Maximum 50 caractères")
-        .regex(/^[a-z0-9-]+$/, "Lettres minuscules, chiffres et tirets uniquement"),
-    description: z.string().max(500, "Maximum 500 caractères").optional().or(z.literal("")),
-    rules: z.string().max(1000, "Maximum 1000 caractères").optional().or(z.literal("")),
-    iconUrl: z.string().optional(),
-    bannerUrl: z.string().optional(),
-})
-
-type CreateCategoryValues = z.infer<typeof CreateCategorySchema>
 
 const STEPS = [
     { id: "identite", title: "Identité" },

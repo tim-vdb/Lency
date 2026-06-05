@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import { DirectMessageChat } from "@/front/components/Private/Chat/DirectMessageChat";
 import { FaBehance, FaBluesky, FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaTiktok, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { toast } from "sonner";
-import { z } from "zod";
+import { EditBioSchema, type EditBioFormValues, SocialLinkSchema, type SocialLinkFormValues } from "@/front/schemas/zod/user.zod";
 
 const PLATFORMS = [
     { value: "instagram", label: "Instagram", icon: FaInstagram },
@@ -44,28 +44,16 @@ function getPlatformLabel(value: string) {
     return PLATFORMS.find((p) => p.value === value)?.label ?? value;
 }
 
-const profileSchema = z.object({
-    bio: z.string().max(300, "300 caractères max").optional(),
-});
-
-const socialLinkSchema = z.object({
-    platform: z.string().min(1, "Choisis un réseau"),
-    url: z.string().regex(/^https?:\/\/.+/, "URL invalide (commence par http:// ou https://)"),
-});
-
-type ProfileFormValues = z.infer<typeof profileSchema>;
-type SocialLinkFormValues = z.infer<typeof socialLinkSchema>;
-
 function EditBioDialog({ user, children }: { user: UserProfile; children: React.ReactNode }) {
     const [open, setOpen] = useState(false);
     const { mutate: updateUser, isPending } = useUpdateUser();
 
-    const form = useForm<ProfileFormValues>({
-        resolver: zodResolver(profileSchema),
+    const form = useForm<EditBioFormValues>({
+        resolver: zodResolver(EditBioSchema),
         defaultValues: { bio: user.bio ?? "" },
     });
 
-    function onSubmit(values: ProfileFormValues) {
+    function onSubmit(values: EditBioFormValues) {
         updateUser(
             { id: user.id, data: { bio: values.bio || undefined } },
             {
@@ -113,7 +101,7 @@ function AddSocialLinkDialog({ user, children }: { user: UserProfile; children: 
     const availablePlatforms = PLATFORMS.filter((p) => !existingPlatforms.has(p.value));
 
     const form = useForm<SocialLinkFormValues>({
-        resolver: zodResolver(socialLinkSchema),
+        resolver: zodResolver(SocialLinkSchema),
         defaultValues: { platform: "", url: "" },
     });
 
