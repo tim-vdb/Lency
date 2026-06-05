@@ -41,11 +41,10 @@ export function MessageBubble({ content, createdAt, sender, isMe, imageUrls = []
 
         {/* Bulle texte */}
         {content && (
-          <div className={`px-3 py-2 rounded-2xl text-sm leading-relaxed ${
-            isMe
-              ? "bg-amber-500 text-white rounded-tr-sm"
-              : "bg-neutral-100 text-neutral-900 rounded-tl-sm"
-          }`}>
+          <div className={`px-3 py-2 rounded-2xl text-sm leading-relaxed ${isMe
+            ? "bg-amber-500 text-white rounded-tr-sm"
+            : "bg-neutral-100 text-neutral-900 rounded-tl-sm"
+            }`}>
             {content}
           </div>
         )}
@@ -78,7 +77,7 @@ export function MessageBubble({ content, createdAt, sender, isMe, imageUrls = []
                 key={i}
                 src={url}
                 controls
-                className="w-full max-w-60"
+                className="w-full min-w-60 max-w-60"
               />
             ))}
           </div>
@@ -95,7 +94,6 @@ function MediaImage({ url }: { url: string }) {
 
   return (
     <>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={url}
         alt=""
@@ -107,7 +105,6 @@ function MediaImage({ url }: { url: string }) {
           className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
           onClick={() => setOpen(false)}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={url} alt="" className="max-h-[90vh] max-w-[90vw] rounded-xl object-contain" />
         </div>
       )}

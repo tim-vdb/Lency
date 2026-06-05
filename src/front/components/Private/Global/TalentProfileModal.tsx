@@ -417,7 +417,7 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
             level: prefs.level ?? "",
             remunerationType: prefs.remunerationType ?? "",
         })
-    }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [open])
 
     function handleAvAdd(key: string, value: string) {
         setAvContent((prev) => ({ ...prev, [key]: [...(prev[key] ?? []), value] }))

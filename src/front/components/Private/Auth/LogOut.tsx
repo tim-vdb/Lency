@@ -4,6 +4,7 @@ import { cn } from '@/front/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { toast } from 'sonner';
+import { signOut } from '@/back/lib/auth-client';
 
 export default function LogOut({ className }: { className?: string }) {
   const pathname = usePathname()
@@ -14,24 +15,15 @@ export default function LogOut({ className }: { className?: string }) {
     e.preventDefault();
     startTransition(async () => {
       try {
-        const res = await fetch('/api/auth/sign-out', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({}),
-          credentials: 'include',
-        });
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          toast.error(data?.message || 'Erreur lors de la déconnexion');
+        const { error } = await signOut();
+        if (error) {
+          toast.error(error.message || 'Erreur lors de la déconnexion');
           return;
         }
-
-        pathname.startsWith("/account") ? router.push("/login") : router.push("/")
-
+        pathname.startsWith("/account") || pathname.startsWith("/admin") ? router.push("/login") : router.push("/");
         router.refresh();
       } catch (err) {
-        const message = err instanceof Error ? err.message : 'Erreur lors de la déconnexion';
-        toast.error(message);
+        toast.error(err instanceof Error ? err.message : 'Erreur lors de la déconnexion');
       }
     });
   }

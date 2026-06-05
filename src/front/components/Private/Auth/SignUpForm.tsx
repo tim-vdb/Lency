@@ -20,6 +20,7 @@ import { Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import useEmailOtp from "@/front/hooks/use-email-otp";
+import { signUp } from "@/back/lib/auth-client";
 
 const SignUpFormSchema = z
     .object({
@@ -76,27 +77,15 @@ export default function SignUpForm() {
     async function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
         setLoading(true);
         try {
-            const payload = {
+            const { error } = await signUp.email({
                 name: `${values.firstName} ${values.lastName}`,
-                firstname: values.firstName,
-                lastname: values.lastName,
                 email: values.email,
                 password: values.password,
                 image: image ? await convertImageToBase64(image) : "",
-                callbackURL: "/",
-            };
-
-            const res = await fetch('/api/auth/sign-up/email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-                credentials: 'include',
+                callbackURL: "/account",
             });
-
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) {
-                const message = data?.message || data?.error || 'An error occurred';
-                toast.error(message);
+            if (error) {
+                toast.error(error.message || 'An error occurred');
                 return;
             }
 
@@ -109,9 +98,8 @@ export default function SignUpForm() {
             toast.success('Account created. Verify your email with the OTP code.');
             router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
             router.refresh();
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'An error occurred';
-            toast.error(errorMessage);
+        } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'An error occurred');
         } finally {
             setLoading(false);
         }

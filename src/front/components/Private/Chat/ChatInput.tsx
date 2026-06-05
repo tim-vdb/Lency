@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useRef, KeyboardEvent } from "react";
-import { upload } from "@imagekit/next";
 import { Button } from "@/front/components/ui/button";
 import { Textarea } from "@/front/components/ui/textarea";
 import { Send, ImageIcon, Music, Video, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { uploadToImageKit } from "@/front/lib/upload";
 
 export interface ChatMedia {
   imageUrls: string[];
@@ -23,15 +23,6 @@ interface PendingFile {
   kind: "image" | "audio" | "video";
   file: File;
   localUrl: string;
-}
-
-async function uploadToImageKit(file: File, folder: string): Promise<string> {
-  const authRes = await fetch("/api/imagekit/auth");
-  if (!authRes.ok) throw new Error("Auth upload échouée");
-  const { signature, expire, token, publicKey } = await authRes.json();
-  const result = await upload({ file, fileName: file.name, folder, signature, expire, token, publicKey });
-  if (!result.url) throw new Error("URL manquante après upload");
-  return result.url;
 }
 
 export function ChatInput({ onSend, isPending, placeholder = "Écrivez un message..." }: ChatInputProps) {

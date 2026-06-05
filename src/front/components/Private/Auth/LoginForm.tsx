@@ -46,31 +46,19 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/sign-in/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: values.email, password: values.password, callbackURL: callbackUrl ?? '/' }),
-        credentials: 'include',
+      const { error } = await signIn.email({
+        email: values.email,
+        password: values.password,
       });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        const message = data?.message || data?.error || 'Une erreur est survenue';
-        toast.error(message);
+      if (error) {
+        toast.error(error.message || 'Une erreur est survenue');
         return;
       }
-
       toast.success('Utilisateur connecté');
-      if (callbackUrl) {
-        router.push(callbackUrl);
-      } else {
-        router.push('/');
-      }
+      router.push(callbackUrl ?? '/account');
       router.refresh();
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue';
-      toast.error(errorMessage);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Une erreur est survenue');
     } finally {
       setLoading(false);
     }
@@ -161,8 +149,8 @@ export default function LoginForm() {
                   await signIn.social(
                     {
                       provider: "google",
-                      callbackURL: callbackUrl ?? "/",
-                      newUserCallbackURL: `/${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`,
+                      callbackURL: callbackUrl ?? "/account",
+                      newUserCallbackURL: `/account`,
                     },
                     {
                       onRequest: () => {

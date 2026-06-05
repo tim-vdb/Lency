@@ -1,8 +1,8 @@
 "use client";
 
-import { upload } from "@imagekit/next";
 import { ImageIcon, Loader2, Video, X } from "lucide-react";
 import Image from "next/image";
+import { uploadToImageKit } from "@/front/lib/upload";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -82,22 +82,8 @@ export default function ImageKitUploader({
 
         setIsUploading(true);
         try {
-            const authRes = await fetch("/api/imagekit/auth");
-            if (!authRes.ok) throw new Error("Authentification upload échouée");
-            const { signature, expire, token, publicKey } = await authRes.json();
-
-            const uploaded = await upload({
-                file,
-                fileName: file.name,
-                folder,
-                signature,
-                expire,
-                token,
-                publicKey,
-            });
-
-            if (!uploaded.url) throw new Error("URL manquante après upload");
-            onChange(uploaded.url);
+            const url = await uploadToImageKit(file, folder);
+            onChange(url);
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Échec de l'upload");
         } finally {
