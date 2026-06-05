@@ -1,7 +1,7 @@
 "use client"
 
 import { BLOG_TAGS, type Blog } from "@/front/lib/api/blogs"
-import { useDeleteBlog } from "@/front/hooks/queries/use-blogs"
+import { useDeleteBlog } from "@/front/queries/blogs"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Pencil, Trash2 } from "lucide-react"

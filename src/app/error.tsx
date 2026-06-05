@@ -9,7 +9,7 @@ type Props = {
     reset: () => void;
 };
 
-export default function GlobalError({ error, reset }: Props) {
+export default function GlobalError({ error: _error, reset }: Props) {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
             <div className="max-w-md w-full">

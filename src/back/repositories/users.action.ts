@@ -20,9 +20,14 @@ export const UsersAction = {
         }).catch(() => null);
     },
 
-    findByUsername: async (username: string) => {
-        return prisma.user.findUnique({
-            where: { username },
+    findByUsername: async (usernameOrId: string) => {
+        return prisma.user.findFirst({
+            where: {
+                OR: [
+                    { username: { equals: usernameOrId, mode: "insensitive" } },
+                    { id: usernameOrId },
+                ],
+            },
             include: {
                 Posts: {
                     where: { isPublished: true },
@@ -155,8 +160,14 @@ export const UsersAction = {
     },
 
     generateUniqueUsername: async (base: string): Promise<string> => {
-        const slug = base.toLowerCase().replace(/\s+/g, "");
-        let candidate = slug;
+        const slug = base
+            .normalize("NFD").replace(/[̀-ͯ]/g, "")
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^a-z0-9-]/g, "")
+            .replace(/-{2,}/g, "-")
+            .replace(/^-|-$/g, "");
+        let candidate = slug || "user";
         let suffix = 1;
         while (await prisma.user.findUnique({ where: { username: candidate } })) {
             candidate = `${slug}${suffix++}`;

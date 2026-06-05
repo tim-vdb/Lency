@@ -11,6 +11,7 @@ import UserFollowingCommunities from "@/front/components/Public/Community/User/U
 import UserProfileHeader from "@/front/components/Public/Community/User/UserProfileHeader";
 import UserStats from "@/front/components/Public/Community/User/UserStats";
 import { Button } from "@/front/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/front/components/ui/tooltip";
 import { Card, CardContent } from "@/front/components/ui/card";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs";
@@ -186,7 +187,7 @@ function ParticipatedProjectsCard({ projects }: { projects: { id: string; title:
     );
 }
 
-function UserProfileSkeleton() {
+export function UserProfileSkeleton() {
     return (
         <div className="max-w-5xl mx-auto flex flex-col gap-6">
             {/* Header : card gauche + stats droite */}
@@ -419,17 +420,26 @@ export default function UserProfilePageClient({ username }: { username: string }
 
                     <div className="w-60 shrink-0 flex flex-col gap-3 sticky top-2 self-start">
                         {isOwnProfile && (
-                            <Button
-                                variant="outline"
-                                disabled={updatingReady}
-                                onClick={handleToggleReady}
-                                className={`w-full gap-2 transition-colors ${readyToStart
-                                    ? "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100"
-                                    : ""}`}
-                            >
-                                <Zap className={`w-4 h-4 ${readyToStart ? "fill-emerald-500" : ""}`} />
-                                {readyToStart ? "Prêt à démarrer ✓" : "Se marquer disponible"}
-                            </Button>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            disabled={updatingReady}
+                                            onClick={handleToggleReady}
+                                            className={`w-full gap-2 transition-colors ${readyToStart
+                                                ? "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100"
+                                                : ""}`}
+                                        >
+                                            <Zap className={`w-4 h-4 ${readyToStart ? "fill-emerald-500" : ""}`} />
+                                            {readyToStart ? "Prêt à démarrer ✓" : "Se marquer disponible"}
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="bottom" className="max-w-56 text-center">
+                                        Les autres membres vous verront comme disponible et pourront vous inviter à rejoindre leurs projets.
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         )}
                         <Button
                             variant="outline"

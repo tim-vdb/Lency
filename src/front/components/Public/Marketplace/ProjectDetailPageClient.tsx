@@ -10,7 +10,7 @@ import { useProjects } from "@/front/queries/projects";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-function ProjectDetailSkeleton() {
+export function ProjectDetailSkeleton() {
     return (
         <div className="flex flex-col xl:flex-row gap-6">
             <div className="flex-1 flex flex-col gap-5">

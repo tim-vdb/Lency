@@ -59,7 +59,7 @@ export default function MapFilters({
                     const data = await response.json()
 
                     // Fonction pour construire une adresse à partir de l'objet address de Nominatim
-                    const buildAddressString = (addressObj: any): string => {
+                    const buildAddressString = (addressObj: Record<string, string> | string | null | undefined): string => {
                         if (typeof addressObj === 'string') return addressObj
                         if (!addressObj) return ''
                         
@@ -78,7 +78,7 @@ export default function MapFilters({
                     // Filtrer les résultats pour éviter les doublons
                     const suggestions: AddressSuggestion[] = data
                         .slice(0, 8) // Limiter à 8 résultats
-                        .map((item: any, idx: number) => ({
+                        .map((item: Record<string, unknown>, idx: number) => ({
                             id: `${item.lat}-${item.lon}-${idx}`,
                             name: item.name || buildAddressString(item.address) || 'Adresse',
                             address: item.display_name || buildAddressString(item.address),

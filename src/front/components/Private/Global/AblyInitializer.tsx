@@ -38,6 +38,9 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
       console.warn("[Ably] ❌ Failed:", err);
       setConnected(false);
     });
+    client.connection.on("error", () => {
+      // swallow connection errors during StrictMode cleanup
+    });
 
     const ownerChannelName = `owner-applications-${user.id}`;
     console.warn("[Ably] Subscribing to:", ownerChannelName);
@@ -198,8 +201,11 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
     return () => {
       setAblyClient(null);
       try {
+        [ownerChannelName, userChannelName, "projects-feed", "users-feed", dmChannelName, "community-feed"].forEach((ch) => {
+          try { client.channels.release(ch); } catch { /* already released */ }
+        });
         const state = client.connection.state;
-        if (state !== "closed" && state !== "failed") {
+        if (state !== "closed" && state !== "failed" && state !== "closing") {
           client.connection.off();
           client.close();
         }

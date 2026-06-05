@@ -27,8 +27,8 @@ import {
 import { Switch } from "@/front/components/ui/switch"
 import { Textarea } from "@/front/components/ui/textarea"
 import { BLOG_TAGS, type Blog } from "@/front/lib/api/blogs"
-import { useUpdateBlog } from "@/front/hooks/queries/use-blogs"
-import { uploadToImageKit } from "@/front/lib/api/upload"
+import { useUpdateBlog } from "@/front/queries/blogs"
+import { uploadToImageKit } from "@/front/lib/upload"
 import { useRouter } from "next/navigation"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
@@ -193,7 +193,7 @@ export default function EditBlogForm({ blog, onSuccess }: EditBlogFormProps) {
                     <FormField
                         control={form.control}
                         name="coverUrl"
-                        render={({ field }) => (
+                        render={({ field: _field }) => (
                             <FormItem>
                                 <FormLabel className="text-base font-semibold">
                                     Image de couverture

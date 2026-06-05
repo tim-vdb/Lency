@@ -13,7 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const EMPTY_MEDIA: CommentMedia = { imageUrls: [], videoUrls: [], audioUrls: [] };
 
 export default function CommentRoot({ target }: { target: CommentTarget }) {
     const requireAuth = useRequireAuth();

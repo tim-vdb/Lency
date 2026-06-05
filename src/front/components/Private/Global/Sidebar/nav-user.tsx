@@ -44,6 +44,7 @@ import {
 } from "@/front/components/ui/sidebar"
 import LogOut from "../../Auth/LogOut"
 import FeedbackDialog from "@/front/components/common/FeedbackDialog"
+import { toast } from "sonner"
 
 const settingsItems = [
   { title: "Compte", url: "/account/settings/profile", icon: User2 },
@@ -67,7 +68,7 @@ export function NavUser() {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-1 rounded-lg px-2 py-1 text-sm outline-none hover:bg-neutral-150 hover:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer">
                 <Avatar className="h-8 w-8 rounded-full">
-                  <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
+                  <AvatarImage src={(user?.avatarUrl || user?.image) ?? undefined} alt={user?.name ?? ""} />
                   <AvatarFallback className="rounded-full text-xs bg-black dark:bg-white text-white dark:text-black">{initials}</AvatarFallback>
                 </Avatar>
                 <ChevronsUpDown className="ml-1 size-4 text-muted-foreground" />
@@ -82,7 +83,7 @@ export function NavUser() {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-full">
-                    <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
+                    <AvatarImage src={(user?.avatarUrl || user?.image) ?? undefined} alt={user?.name ?? ""} />
                     <AvatarFallback className="rounded-full text-xs">{initials}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
@@ -94,16 +95,16 @@ export function NavUser() {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link href={`/user/${user.username ?? user.firstname}`}>
+                  <Link href={`/user/${user.username ?? user.id}`}>
                     <UserRound className="size-4" />
                     Mon profil
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link href="/account/badges">
-                    <BadgeCheck className="size-4" />
-                    Badges
-                  </Link>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => { toast.info("En développement") }}>
+                  {/* <Link href="/account/badges"> */}
+                  <BadgeCheck className="size-4" />
+                  Badges
+                  {/* </Link> */}
                 </DropdownMenuItem>
                 <DropdownMenuGroup>
                   <DropdownMenuItem onSelect={() => setFeedbackOpen(true)} className="cursor-pointer">

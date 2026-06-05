@@ -4,12 +4,11 @@ import { useState, useMemo } from "react"
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { cn } from "@/front/lib/utils";
-import { useProjects } from "@/front/hooks/queries/use-projects"
+import { useProjects } from "@/front/queries/projects"
 import ExploreMarketPlace from "./ExploreMarketPlace";
-import ExplorePhysicPlace from "./ExplorePhysicPlace";
 import MapFilters from "./MapFilters"
 import type { ProjectSubject } from "@/front/lib/api/projects"
-import { Maximize2, Minimize2, X } from "lucide-react"
+import { Maximize2, X } from "lucide-react"
 
 export default function ExploreBlock({ className }: { className?: string }) {
     const { data: projects = [] } = useProjects()

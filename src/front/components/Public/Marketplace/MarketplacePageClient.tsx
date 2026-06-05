@@ -14,7 +14,7 @@ import { TalentsTab } from "./Talents/TalentsTab";
 
 export default function MarketplacePageClient() {
     const user = useUser();
-    const { toggleFilters, setFiltersOpen, projectModalOpen, setProjectModalOpen, talentModalOpen, setTalentModalOpen } = useMarketplaceStore();
+    const { filtersOpen, toggleFilters, setFiltersOpen, projectModalOpen, setProjectModalOpen, talentModalOpen, setTalentModalOpen } = useMarketplaceStore();
 
     const [{ tab, pType, pWorkMode, pLevel, pRemu, pCity, pDate, tRole, tWorkMode, tLevel, tRemu }, setParams] = useQueryStates(allMarketplaceParsers, { shallow: true, scroll: false });
 
@@ -53,28 +53,35 @@ export default function MarketplacePageClient() {
 
                 <button
                     onClick={toggleFilters}
-                    className="relative flex items-center gap-2 font-['Poppins',sans-serif] font-medium text-[16px] text-black"
+                    className={cn(
+                        "relative flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer",
+                        filtersOpen || hasActiveFilters
+                            ? "border-orange bg-orange text-white"
+                            : "border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50"
+                    )}
                 >
                     <Filter className="w-4 h-4" />
-                    Filtre
-                    {hasActiveFilters && (
-                        <span className="absolute -top-1 -right-2.5 w-2.5 h-2.5 rounded-full bg-orange" />
+                    Filtres
+                    {hasActiveFilters && !filtersOpen && (
+                        <span className="w-2 h-2 rounded-full bg-white" />
                     )}
                 </button>
             </div>
 
-            {activeTab === "projets" ? (
-                <ProjectsTab
-                    isNewUser={isNewUser}
-                    onOpenProjectModal={() => setProjectModalOpen(true)}
-                />
-            ) : (
-                <TalentsTab
-                    isNewUser={isNewUser}
-                    isTalent={isTalent}
-                    onOpenTalentModal={() => setTalentModalOpen(true)}
-                />
-            )}
+            {
+                activeTab === "projets" ? (
+                    <ProjectsTab
+                        isNewUser={isNewUser}
+                        onOpenProjectModal={() => setProjectModalOpen(true)}
+                    />
+                ) : (
+                    <TalentsTab
+                        isNewUser={isNewUser}
+                        isTalent={isTalent}
+                        onOpenTalentModal={() => setTalentModalOpen(true)}
+                    />
+                )
+            }
 
             <Dialog open={projectModalOpen} onOpenChange={setProjectModalOpen}>
                 <DialogPortal>
@@ -90,6 +97,6 @@ export default function MarketplacePageClient() {
             </Dialog>
 
             <TalentProfileModal open={talentModalOpen} onOpenChange={setTalentModalOpen} />
-        </div>
+        </div >
     );
 }

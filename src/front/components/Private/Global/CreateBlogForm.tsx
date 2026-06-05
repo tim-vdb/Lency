@@ -26,9 +26,9 @@ import {
 } from "@/front/components/ui/select"
 import { Switch } from "@/front/components/ui/switch"
 import { Textarea } from "@/front/components/ui/textarea"
-import { useCreateBlog } from "@/front/hooks/queries/use-blogs"
-import { BLOG_TAGS, type BlogStatus } from "@/front/lib/api/blogs"
-import { uploadToImageKit } from "@/front/lib/api/upload"
+import { useCreateBlog } from "@/front/queries/blogs"
+import { BLOG_TAGS } from "@/front/lib/api/blogs"
+import { uploadToImageKit } from "@/front/lib/upload"
 import { cn } from "@/front/lib/utils"
 
 // ─── Schema ───────────────────────────────────────────────────────────────────

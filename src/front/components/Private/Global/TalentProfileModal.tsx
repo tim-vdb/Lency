@@ -57,6 +57,7 @@ const ROLE_SUGGESTIONS = [
     "DOP - Directeur de la photographie",
     "Ingénieur du son",
     "Chef opérateur son",
+    "Perchman",
     "Scripte",
     "Scénariste",
     "Producteur / Productrice",
@@ -71,6 +72,7 @@ const ROLE_SUGGESTIONS = [
     "Régisseur / Régisseuse",
     "Électricien de plateau",
     "Machiniste",
+    "Photographe",
     "Photographe de plateau",
     "Compositeur / Compositrice",
     "Vidéaste",
@@ -81,6 +83,8 @@ const ROLE_SUGGESTIONS = [
     "Étalonnage / Coloriste",
     "Caméraman / Camérwoman",
     "Drone Operator",
+    "Assistant réalisation",
+    "Directeur artistique",
 ]
 
 const SUGGESTIONS: Record<string, string[]> = {
@@ -159,7 +163,7 @@ function TagSearchInput({
         ? suggestions.filter(
             (s) => s.toLowerCase().includes(input.toLowerCase()) && !value.includes(s)
         )
-        : suggestions.filter((s) => !value.includes(s)).slice(0, 8)
+        : suggestions.filter((s) => !value.includes(s))
 
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) {

@@ -134,7 +134,7 @@ export function ProjectApplicationsPageClient({ projectId }: Props) {
                     <ArrowLeft className="w-4 h-4" />
                 </Button>
                 <div>
-                    <h1 className="text-xl font-bold">Candidatures</h1>
+                    <h1 className="text-xl font-bold text-left">Candidatures</h1>
                     {project && (
                         <p className="text-sm text-neutral-500">{project.title}</p>
                     )}
@@ -149,7 +149,7 @@ export function ProjectApplicationsPageClient({ projectId }: Props) {
                 <Filter className="w-4 h-4 text-neutral-400 shrink-0" />
 
                 <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as ApplicationStatus)}>
-                    <SelectTrigger className="h-8 text-xs w-[130px]">
+                    <SelectTrigger className="h-8 text-xs w-auto min-w-[100px]">
                         <SelectValue placeholder="Statut" />
                     </SelectTrigger>
                     <SelectContent>
@@ -176,18 +176,16 @@ export function ProjectApplicationsPageClient({ projectId }: Props) {
 
                 <button
                     onClick={() => setPortfolioOnly(v => !v)}
-                    className={`h-8 px-3 text-xs rounded-md border transition-colors ${
-                        portfolioOnly ? "bg-black text-white border-black" : "border-neutral-200 text-neutral-600 hover:bg-neutral-100"
-                    }`}
+                    className={`h-8 px-3 text-xs rounded-md border transition-colors ${portfolioOnly ? "bg-black text-white border-black" : "border-neutral-200 text-neutral-600 hover:bg-neutral-100"
+                        }`}
                 >
                     Portfolio
                 </button>
 
                 <button
                     onClick={() => setTalentOnly(v => !v)}
-                    className={`h-8 px-3 text-xs rounded-md border transition-colors ${
-                        talentOnly ? "bg-black text-white border-black" : "border-neutral-200 text-neutral-600 hover:bg-neutral-100"
-                    }`}
+                    className={`h-8 px-3 text-xs rounded-md border transition-colors ${talentOnly ? "bg-black text-white border-black" : "border-neutral-200 text-neutral-600 hover:bg-neutral-100"
+                        }`}
                 >
                     Talent marketplace
                 </button>

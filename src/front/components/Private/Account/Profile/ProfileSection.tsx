@@ -67,7 +67,7 @@ export function ProfileSection() {
                         {/* Avatar */}
                         <div className="flex items-center gap-4">
                             <Avatar className="size-20">
-                                <AvatarImage src={user?.image ?? ""} alt="Photo de profil" />
+                                <AvatarImage src={(user?.avatarUrl || user?.image) ?? ""} alt="Photo de profil" />
                                 <AvatarFallback className="text-lg bg-primary/10 text-primary">
                                     {initials}
                                 </AvatarFallback>

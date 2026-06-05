@@ -230,7 +230,7 @@ export default function UserProfileHeader({ user }: { user: UserProfile }) {
                 <div className="flex items-center gap-3">
                     <div className="relative shrink-0">
                         <Avatar className="w-20 h-20">
-                            <AvatarImage src={user.image ?? undefined} alt={displayName} />
+                            <AvatarImage src={(user.avatarUrl || user.image) ?? undefined} alt={displayName} />
                             <AvatarFallback className="text-lg bg-pink-100 text-pink-700">{initials}</AvatarFallback>
                         </Avatar>
                         <Badge className="absolute top-0 right-1 bg-linear-to-br from-amber-400 to-orange border-0 shadow text-base px-1.5 py-0">

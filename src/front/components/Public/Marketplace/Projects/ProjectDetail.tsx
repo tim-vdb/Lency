@@ -134,13 +134,13 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                         {/* Titre + badge visibilité + menu */}
                         <div className="flex items-start justify-between gap-4">
                             <div className="flex items-center gap-3 flex-wrap min-w-0">
-                                <h1 className="font-['Poppins',sans-serif] font-bold text-[30px] leading-[36px] text-black">
+                                <h1 className=" font-bold text-[30px] leading-[36px] text-black">
                                     {project.title}
                                 </h1>
                                 {project.visibility !== "PUBLIC" && (
                                     <div className="flex items-center gap-1.5 px-3 h-[33px] border border-black rounded-[5px] shrink-0">
                                         <MessageCircle className="w-[18px] h-[18px] text-black" />
-                                        <span className="font-['Poppins',sans-serif] text-[16px] text-black">
+                                        <span className=" text-[16px] text-black">
                                             {project.visibility === "PRIVATE" ? "Privé" : "Membres"}
                                         </span>
                                     </div>
@@ -208,10 +208,10 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col min-w-0">
-                                    <span className="font-['Poppins',sans-serif] text-sm font-medium text-[#4c4a43] truncate">
+                                    <span className=" text-sm font-medium text-[#4c4a43] truncate">
                                         {getDisplayName(project.owner)}
                                     </span>
-                                    <span className="font-['Poppins',sans-serif] text-xs text-gray">
+                                    <span className=" text-xs text-gray">
                                         {timeAgo(project.createdAt)}
                                     </span>
                                 </div>
@@ -219,14 +219,14 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                         </Link>
 
                         {/* Description */}
-                        <p className="font-['Poppins',sans-serif] text-[16px] leading-6 text-black whitespace-pre-line">
+                        <p className=" text-[16px] leading-6 text-black whitespace-pre-line">
                             {project.description}
                         </p>
 
                         {/* Pièces jointes */}
                         {attachments.length > 0 && (
                             <div className="flex flex-col gap-3">
-                                <p className="font-['Poppins',sans-serif] font-medium text-[20px] leading-[28px] text-black">
+                                <p className=" font-medium text-[20px] leading-[28px] text-black">
                                     Pièces jointes
                                 </p>
                                 <div className="flex flex-wrap gap-2">
@@ -236,7 +236,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                                             href={att.url}
                                             target="_blank"
                                             rel="noreferrer noopener"
-                                            className="inline-flex items-center gap-1.5 px-3 h-[33px] border border-black rounded-[5px] font-['Poppins',sans-serif] text-[12px] text-black hover:bg-neutral-50 transition-colors"
+                                            className="inline-flex items-center gap-1.5 px-3 h-[33px] border border-black rounded-[5px]  text-[12px] text-black hover:bg-neutral-50 transition-colors"
                                         >
                                             {att.name}
                                             <ExternalLink className="w-[17px] h-[17px] text-black" />
@@ -249,7 +249,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                         {/* Commentaires */}
                         <div className="flex flex-col gap-4 pt-2">
                             <CommentRoot target={{ type: "project", id: project.id }} />
-                            <p className="font-['Poppins',sans-serif] text-[16px] text-black text-center">
+                            <p className=" text-[16px] text-black text-center">
                                 {project.commentCount} commentaire{project.commentCount !== 1 ? "s" : ""}
                             </p>
                             <Comments target={{ type: "project", id: project.id }} />
@@ -261,7 +261,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                         {/* Bouton Postuler — masqué pour le créateur et pour les projets privés */}
                         {!isOwner && project.visibility !== "PRIVATE" && (
                             <Button
-                                className="w-full h-[55px] bg-orange hover:bg-orange/50 text-white font-['Poppins',sans-serif] font-bold text-[20px] leading-[24px] rounded-[5px] border-0"
+                                className="w-full h-[55px] bg-orange hover:bg-orange/50 border-transparent text-white font-bold text-[20px] leading-6 rounded-[5px] border-0"
                                 onClick={() => setApplyModalOpen(true)}
                             >
                                 Postuler au projet
@@ -272,7 +272,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                         {isOwner && (
                             <Button
                                 variant="outline"
-                                className="w-full h-[55px] font-['Poppins',sans-serif] font-semibold text-[18px] leading-6 rounded-[5px] gap-2"
+                                className="w-full h-[55px]  font-semibold text-[18px] leading-6 rounded-[5px] gap-2 border-neutral-100 hover:border-neutral-200"
                                 onClick={() => setEditOpen(true)}
                             >
                                 <Pencil className="w-5 h-5" />
@@ -282,7 +282,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
 
                         {/* Card Infos pratiques */}
                         <div className="bg-white rounded-[10px] p-[27px] flex flex-col gap-0">
-                            <h2 className="font-['Poppins',sans-serif] font-semibold text-[24px] leading-8 text-black mb-4">
+                            <h2 className=" font-semibold text-[24px] leading-8 text-black mb-4">
                                 Infos pratiques
                             </h2>
                             <div className="w-full h-px bg-gray-light rounded-full mb-6" />
@@ -336,14 +336,14 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
 
                                     {roles.length > 0 && (
                                         <div className="flex flex-col gap-3">
-                                            <p className="font-['Poppins',sans-serif] font-medium text-[16px] leading-[24px] text-black">
+                                            <p className=" font-medium text-[16px] leading-[24px] text-black">
                                                 Rôles recherchés
                                             </p>
                                             <div className="flex flex-wrap gap-2">
                                                 {roles.map((role, i) => (
                                                     <span
                                                         key={i}
-                                                        className="inline-flex items-center h-[25px] px-4 bg-[#e8e8e1] rounded-[4px] font-['Poppins',sans-serif] text-[12px] text-black"
+                                                        className="inline-flex items-center h-[25px] px-4 bg-[#e8e8e1] rounded-[4px]  text-[12px] text-black"
                                                     >
                                                         {role}
                                                     </span>
@@ -353,7 +353,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                                     )}
                                 </div>
                             ) : (
-                                <p className="font-['Poppins',sans-serif] text-sm text-[#8c8a85] italic">
+                                <p className=" text-sm text-[#8c8a85] italic">
                                     Aucune information renseignée.
                                 </p>
                             )}
@@ -466,10 +466,10 @@ function InfoBlock({
     return (
         <div className="grid grid-cols-[24px_1fr] gap-x-3 gap-y-1">
             <div className="row-start-1 col-start-1 mt-0.5">{icon}</div>
-            <p className="row-start-1 col-start-2 font-['Poppins',sans-serif] font-medium text-[16px] leading-[24px] text-black">
+            <p className="row-start-1 col-start-2  font-medium text-[16px] leading-[24px] text-black">
                 {label}
             </p>
-            <p className={cn("row-start-2 col-start-2 font-['Poppins',sans-serif] text-[16px] leading-[24px] text-[#4c4a43]", valueClassName)}>
+            <p className={cn("row-start-2 col-start-2  text-[16px] leading-[24px] text-[#4c4a43]", valueClassName)}>
                 {value}
             </p>
         </div>
