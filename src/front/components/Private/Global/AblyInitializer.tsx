@@ -38,7 +38,7 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
       console.warn("[Ably] ❌ Failed:", err);
       setConnected(false);
     });
-    client.connection.on("error", () => {
+    client.connection.on(["error"] as any, () => {
       // swallow connection errors during StrictMode cleanup
     });
 
@@ -128,7 +128,7 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
       queryClient.invalidateQueries({ queryKey: notificationQueries.list().queryKey });
     });
 
-// Global community feed
+    // Global community feed
     const communityFeedChannel = client.channels.get("community-feed");
     communityFeedChannel.subscribe("new_follower", (msg) => {
       if (msg.data.followerId === user.id) return;
