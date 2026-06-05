@@ -1,33 +1,38 @@
-import { CardDescription, CardTitle } from "@/front/components/ui/card";
 import Image from "next/image";
-import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
+import type { PostWithAuthorAndCategory } from "@/front/schemas/types/post.type";
+import { useRouter } from "next/navigation";
+import { Item } from "@/front/components/ui/item";
+import { cn, getDisplayName, getInitialName } from "@/front/lib/utils";
 
-export default function PostAvatar({ post }: { post: PostWithAuthorAndCategory }) {
-    const { author } = post;
-    const displayName = author.firstname && author.lastname
-        ? `${author.firstname} ${author.lastname}`
-        : author.username ?? "Anonyme";
+type AuthorFields = Pick<PostWithAuthorAndCategory["author"], "image" | "firstname" | "lastname" | "username">;
 
-    const initialName = [
-        author.firstname?.[0]?.toUpperCase(),
-        author.lastname?.[0]?.toUpperCase()
-    ].filter(Boolean).join("") || "?"
+export default function PostAvatar({ author, className }: { author: AuthorFields, className?: string }) {
+    const router = useRouter()
+    const displayName = getDisplayName(author);
+    const initialName = getInitialName(author);
+    const userHref = author.username ? `/user/${author.username}` : null;
 
     return (
-        <>
-            <div className="flex">
-                {author.avatarUrl ? (
-                    <Image src={author.avatarUrl} alt={displayName} width={100} height={100} className="w-8 h-8 rounded-full mr-2" />
+        <Item
+            className={cn("flex flex-nowrap items-center group hover:bg-neutral-300/20 p-1 pl-0 rounded-md transition-colors cursor-pointer gap-2 min-w-0", className)}
+            onClick={(e) => { e.stopPropagation(); router.push(userHref ?? "#"); }}
+        >
+            <div className="shrink-0">
+                {author.image ? (
+                    <Image
+                        src={author.image}
+                        alt={displayName}
+                        width={100}
+                        height={100}
+                        className="w-8 h-8 min-w-8 min-h-8 rounded-full transition-all"
+                    />
                 ) : (
-                    <div className="w-8 h-8 rounded-full mr-2 bg-neutral-200 flex items-center justify-center text-xs font-medium">
+                    <div className="w-8 h-8 min-w-8 min-h-8 rounded-full bg-neutral-200 flex items-center justify-center text-xs font-medium transition-all">
                         {initialName}
                     </div>
                 )}
-                <div>
-                    <CardTitle className="text-sm">{displayName}</CardTitle>
-                    <CardDescription className="text-[10px] text-neutral-700">@{author.username ?? "inconnu"}</CardDescription>
-                </div>
             </div>
-        </>
+            <span className="text-base font-medium truncate min-w-0 overflow-hidden">{displayName}</span>
+        </Item>
     );
 }

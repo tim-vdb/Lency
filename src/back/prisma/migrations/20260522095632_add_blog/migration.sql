@@ -1,0 +1,1 @@
+-- Blog tables and enums are included in 20260522102443_init_db/migration.sql

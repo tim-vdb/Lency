@@ -42,8 +42,15 @@ enum TypeEvent {
 enum PostFormat {
   DESKTOP
   MOBILE
-  AUDIO
   TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+enum PostOrientation {
+  LANDSCAPE
+  PORTRAIT
 }
 
 enum ContactType {
@@ -59,4 +66,53 @@ enum ContactStatus {
   EN_COURS
   RESOLU
   FERME
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum BlogTag {
+  VIDEO
+  MOTION
+  OUTILS
+}
+
+enum ProjectSubject {
+  Tout
+  Vidéo
+  Motion
+  Photo
+  Outils
+}
+
+enum ProjectLevel {
+  DEBUTANT
+  INTERMEDIAIRE
+  AVANCE
+}
+
+enum WorkMode {
+  PRESENTIEL
+  DISTANCIEL
+  HYBRIDE
+}
+
+enum RemunerationType {
+  NON_REMUNERE
+  REMUNERE
+}
+
+enum ProjectApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ProjectInvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }

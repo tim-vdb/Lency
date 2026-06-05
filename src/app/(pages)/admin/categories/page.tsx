@@ -4,7 +4,7 @@ import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import * as z from "zod"
+import { AdminCreateCategorySchema, type AdminCreateCategoryValues } from "@/front/schemas/zod/category.zod"
 
 import { Button } from "@/front/components/ui/button"
 import {
@@ -29,33 +29,15 @@ import {
     InputGroupText,
     InputGroupTextarea,
 } from "@/front/components/ui/input-group"
-import { useCreateCategory } from "@/front/hooks/querys/use-categories"
-
-// Schéma de validation pour le formulaire
-const formSchema = z.object({
-    name: z
-        .string()
-        .min(3, "Le nom doit contenir au moins 3 caractères.")
-        .max(50, "Le nom doit contenir au maximum 50 caractères."),
-    slug: z
-        .string()
-        .min(3, "Le slug doit contenir au moins 3 caractères.")
-        .max(50, "Le slug doit contenir au maximum 50 caractères.")
-        .regex(/^[a-z0-9-]+$/, "Le slug ne peut contenir que des lettres minuscules, chiffres et tirets."),
-    description: z
-        .string()
-        .min(20, "La description doit contenir au moins 20 caractères.")
-        .max(500, "La description doit contenir au maximum 500 caractères.")
-        .optional(),
-})
+import { useCreateCategory } from "@/front/queries/categories"
 
 export default function CreateCategoryForm(): React.ReactElement {
     // Hook React Query pour créer une catégorie
     // Gère automatiquement: loading state, erreurs, cache invalidation
     const createCategoryMutation = useCreateCategory()
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<AdminCreateCategoryValues>({
+        resolver: zodResolver(AdminCreateCategorySchema),
         defaultValues: {
             name: "",
             slug: "",
@@ -64,7 +46,7 @@ export default function CreateCategoryForm(): React.ReactElement {
     })
 
     // Fonction appelée à la soumission du formulaire
-    function onSubmit(data: z.infer<typeof formSchema>) {
+    function onSubmit(data: AdminCreateCategoryValues) {
         // Appelle la mutation React Query
         createCategoryMutation.mutate(
             {

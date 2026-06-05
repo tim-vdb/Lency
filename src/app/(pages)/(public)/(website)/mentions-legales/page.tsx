@@ -1,4 +1,10 @@
+import type { Metadata } from 'next';
 import React from 'react';
+
+export const metadata: Metadata = {
+    title: 'Mentions légales — Lency',
+    description: 'Mentions légales et informations juridiques du site Lency.',
+};
 
 export default function MentionsLegalesPage() {
   return (

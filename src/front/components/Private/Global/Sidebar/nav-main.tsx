@@ -1,5 +1,6 @@
 "use client"
 
+import DashboardIcon from "@/front/components/ui/dashboard-icon"
 import {
   Collapsible,
   CollapsibleContent,
@@ -21,8 +22,9 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/front/components/ui/sidebar"
-import { Bell, ChevronRight, CreditCard, Settings2, Shield, User2, Users2Icon, type LucideIcon } from "lucide-react"
+import { Briefcase, ChevronRight, Store, Users, Rss, BookOpen, Bookmark, type LucideIcon } from "lucide-react"
 import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
 import React from "react"
 
 type NavSubItem = {
@@ -41,48 +43,30 @@ type NavMainItem = {
 
 const navMain: NavMainItem[] = [
   {
-    title: "Settings",
-    url: "#",
-    icon: Settings2,
+    title: "Communauté",
+    url: "/community",
+    icon: Users,
     items: [
-      {
-        title: "Compte",
-        url: "/account/profile",
-        icon: User2,
-      },
-      {
-        title: "Notifications",
-        url: "/account/notifs",
-        icon: Bell,
-      },
-      {
-        title: "Sécurité",
-        url: "/account/security",
-        icon: Shield,
-      },
-      {
-        title: "Facturation",
-        url: "/account/billing",
-        icon: CreditCard,
-      },
+      { title: "Fil d'actualité", url: "/community", icon: Rss },
+      { title: "Ressources", url: "/community/resources", icon: BookOpen },
+      { title: "Enregistrés", url: "/community/saved", icon: Bookmark },
     ],
   },
   {
-    title: "Community",
-    url: "/community",
-    icon: User2,
+    title: "Marketplace",
+    url: "/marketplace",
+    icon: Store,
     items: [
-      {
-        title: "Fil d'actualité",
-        url: "/community",
-        icon: Users2Icon,
-      }
+      { title: "Projets", url: "/marketplace", icon: Briefcase },
+      { title: "Talents", url: "/marketplace?tab=talents", icon: Users },
     ],
   }
 ]
 
 export function NavMain() {
   const { state } = useSidebar()
+  const pathname = usePathname()
+  const router = useRouter()
   const [openPopoverId, setOpenPopoverId] = React.useState<string | null>(null)
   const [openCollapsibleId, setOpenCollapsibleId] = React.useState<string | null>(null)
   const [isHydrated, setIsHydrated] = React.useState(false)
@@ -142,8 +126,14 @@ export function NavMain() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>Fonctionnalités</SidebarGroupLabel>
       <SidebarMenu>
+        <SidebarMenuButton asChild tooltip="Dashboard">
+          <Link href="/account">
+            <DashboardIcon />
+            <span className="items_sidebar">Dashboard</span>
+          </Link>
+        </SidebarMenuButton>
         {isHydrated && navMain.map((item) => (
           <Collapsible
             key={item.title}
@@ -183,38 +173,58 @@ export function NavMain() {
                     onClick={() => setOpenPopoverId(null)}
                   >
                     <div className="flex flex-col gap-1">
-                      {item.items.map((subItem) => (
-                        <Link
-                          key={subItem.title}
-                          href={subItem.url}
-                          className="flex h-8 items-center gap-2 rounded-md px-2 text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors cursor-pointer"
-                        >
-                          {subItem.icon && (
-                            <subItem.icon className="size-4 shrink-0" />
-                          )}
-                          <span>{subItem.title}</span>
-                        </Link>
-                      ))}
+                      {item.items.map((subItem) => {
+                        const isCurrentPage = pathname === item.url
+                        const sharedClass = "flex h-8 items-center gap-2 rounded-md px-2 text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors cursor-pointer w-full text-left"
+                        return isCurrentPage ? (
+                          <button
+                            key={subItem.title}
+                            onClick={() => router.replace(subItem.url, { scroll: false })}
+                            className={sharedClass}
+                          >
+                            {subItem.icon && <subItem.icon className="size-4 shrink-0" />}
+                            <span>{subItem.title}</span>
+                          </button>
+                        ) : (
+                          <Link
+                            key={subItem.title}
+                            href={subItem.url}
+                            className={sharedClass}
+                          >
+                            {subItem.icon && <subItem.icon className="size-4 shrink-0" />}
+                            <span>{subItem.title}</span>
+                          </Link>
+                        )
+                      })}
                     </div>
                   </PopoverContent>
                 )}
               </Popover>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <Link href={subItem.url}>
-                          {subItem.icon && (
-                            <subItem.icon className="size-4" />
+                  {item.items?.map((subItem) => {
+                    const isCurrentPage = pathname === item.url
+                    return (
+                      <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubButton asChild={!isCurrentPage}>
+                          {isCurrentPage ? (
+                            <button
+                              onClick={() => router.replace(subItem.url, { scroll: false })}
+                              className="flex w-full items-center gap-2 cursor-pointer"
+                            >
+                              {subItem.icon && <subItem.icon className="size-4" />}
+                              <span className="items_sidebar">{subItem.title}</span>
+                            </button>
+                          ) : (
+                            <Link href={subItem.url}>
+                              {subItem.icon && <subItem.icon className="size-4" />}
+                              <span className="items_sidebar">{subItem.title}</span>
+                            </Link>
                           )}
-                          <span className="items_sidebar">
-                            {subItem.title}
-                          </span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    )
+                  })}
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>

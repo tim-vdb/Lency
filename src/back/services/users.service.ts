@@ -1,5 +1,8 @@
 import { UsersAction } from "../repositories/users.action";
+import { PostsAction } from "../repositories/posts.action";
 import { getUser } from "../lib/auth-session";
+import { notifyNewFollower, notifyUserReadyStatusChanged } from "../lib/ably";
+import { NotificationService } from "./notifications.service";
 import crypto from "crypto";
 
 export const UsersService = {
@@ -7,6 +10,79 @@ export const UsersService = {
         const user = await UsersAction.findById(id);
         if (!user) throw new Error("User not found");
         return user;
+    },
+
+    findByUsername: async (username: string) => {
+        const user = await UsersAction.findByUsername(username);
+        if (!user) throw new Error("User not found");
+        const currentUser = await getUser();
+        const postIds = user.Posts.map((p) => p.id);
+
+        const [postStates, isFollowed, isReported] = await Promise.all([
+            currentUser && postIds.length > 0
+                ? PostsAction.getUserStates(currentUser.id, postIds)
+                : Promise.resolve(null),
+            currentUser && currentUser.id !== user.id
+                ? UsersAction.isFollowing(currentUser.id, user.id)
+                : Promise.resolve(false),
+            currentUser
+                ? UsersAction.isReported(currentUser.id, user.id)
+                : Promise.resolve(false),
+        ]);
+
+        return {
+            ...user,
+            Posts: user.Posts.map((p) => ({
+                ...p,
+                isSaved: postStates ? postStates.savedIds.has(p.id) : false,
+                isVoted: postStates ? postStates.votedIds.has(p.id) : false,
+            })),
+            isFollowed,
+            isReported,
+        };
+    },
+
+    toggleFollowUser: async (targetUserId: string) => {
+        const currentUser = await getUser();
+        if (!currentUser) throw new Error("Unauthorized");
+        if (currentUser.id === targetUserId) throw new Error("Cannot follow yourself");
+        const target = await UsersAction.findById(targetUserId);
+        if (!target) throw new Error("User not found");
+
+        const result = await UsersAction.toggleFollowUser(currentUser.id, targetUserId);
+
+        // Notifier si c'est un nouveau follow (et non un unfollow)
+        const isFollowing = result && typeof result === 'object' && 'follower' in result;
+        if (isFollowing) {
+            const followerName = currentUser.firstname && currentUser.lastname
+                ? `${currentUser.firstname} ${currentUser.lastname}`
+                : currentUser.username || "Utilisateur";
+            await NotificationService.createForUser(
+                targetUserId, "new_follower",
+                `${followerName} vous suit maintenant`,
+                `Vous avez un nouvel abonné`,
+                { followerId: currentUser.id, followerName }
+            );
+            await notifyNewFollower(targetUserId, followerName, currentUser.id);
+        }
+
+        return result;
+    },
+
+    getFollowStatus: async (targetUserId: string) => {
+        const currentUser = await getUser();
+        if (!currentUser) return { following: false };
+        const following = await UsersAction.isFollowing(currentUser.id, targetUserId);
+        return { following };
+    },
+
+    reportUser: async (targetUserId: string, reason?: string) => {
+        const currentUser = await getUser();
+        if (!currentUser) throw new Error("Unauthorized");
+        if (currentUser.id === targetUserId) throw new Error("Cannot report yourself");
+        const target = await UsersAction.findById(targetUserId);
+        if (!target) throw new Error("User not found");
+        return UsersAction.reportUser(currentUser.id, targetUserId, reason);
     },
 
     findAllUsers: async () => {
@@ -51,9 +127,11 @@ export const UsersService = {
             username?: string;
             phone?: string;
             bio?: string;
-            avatarUrl?: string;
+            image?: string;
             cv?: string;
             portfolio?: string;
+            isMarketplaceTalent?: boolean;
+            readyToStart?: boolean;
         }
     ) => {
         if (!data || Object.keys(data).length === 0) {
@@ -67,9 +145,26 @@ export const UsersService = {
             throw new Error("Forbidden");
         }
 
-        await UsersService.findByIdUser(id);
+        const existing = await UsersService.findByIdUser(id);
 
-        return UsersAction.update(id, data);
+        let finalData = { ...data };
+
+        // Si le firstname change et que l'user n'a pas encore de username, en générer un
+        if (data.firstname && !existing.username && !data.username) {
+            finalData = {
+                ...finalData,
+                username: await UsersAction.generateUniqueUsername(data.firstname),
+            };
+        }
+
+        const result = await UsersAction.update(id, finalData);
+
+        // Notifier si le statut readyToStart change
+        if (typeof data.readyToStart === "boolean") {
+            await notifyUserReadyStatusChanged(id, data.readyToStart);
+        }
+
+        return result;
     },
 
     updateUserRole: async (id: string, role: "ADMIN" | "MEMBER") => {
@@ -132,5 +227,23 @@ export const UsersService = {
     hasCredentialAccount: async (userId: string) => {
         const account = await UsersAction.findCredentialAccount(userId);
         return !!account?.password;
+    },
+
+    upsertSocialLink: async (platform: string, url: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        return UsersAction.upsertSocialLink(user.id, platform, url);
+    },
+
+    deleteSocialLink: async (platform: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        return UsersAction.deleteSocialLink(user.id, platform);
+    },
+
+    search: async (q: string) => {
+        const currentUser = await getUser();
+        if (!currentUser) throw new Error("Unauthorized");
+        return UsersAction.search(q, currentUser.id);
     },
 };

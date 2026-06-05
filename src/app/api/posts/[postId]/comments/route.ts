@@ -17,9 +17,13 @@ export async function POST(req: NextRequest) {
         const newComment = await CommentsService.createComment(data);
         return NextResponse.json({ comment: newComment }, { status: 201 });
     } catch (error) {
+        console.error("[POST /api/posts/:postId/comments]", error);
         if (error instanceof Error) {
             if (error.message === "Unauthorized") {
                 return NextResponse.json({ error: error.message }, { status: 401 });
+            }
+            if (error.message === "Post not found") {
+                return NextResponse.json({ error: error.message }, { status: 404 });
             }
             if (error.message === "Content is required" || error.message === "Post is required") {
                 return NextResponse.json({ error: error.message }, { status: 400 });

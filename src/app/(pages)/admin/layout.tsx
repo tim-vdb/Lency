@@ -1,6 +1,9 @@
 import { getUser } from '@/back/lib/auth-session';
 import { AdminShell } from '@/app/(pages)/admin/AdminShell';
 
+export const dynamic = 'force-dynamic';
+import { redirect, unauthorized } from 'next/navigation';
+
 export default async function AdminLayout({
   children,
 }: {
@@ -8,9 +11,8 @@ export default async function AdminLayout({
 }) {
   const user = await getUser();
 
-  if (user?.role !== 'ADMIN') {
-    return <div>{children}</div>;
-  }
+  if (!user) redirect('/login');
+  if (user.role !== 'ADMIN') unauthorized();
 
   return (
     <AdminShell user={user}>

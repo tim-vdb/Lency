@@ -1,11 +1,11 @@
 "use client";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { SignUpFormSchema, type SignUpFormValues } from "@/front/schemas/zod/auth/signup.zod";
 import {
     Form,
     FormField,
@@ -15,35 +15,22 @@ import {
     FormMessage,
 } from "@/front/components/ui/form";
 import { Input } from "@/front/components/ui/input";
+import { PasswordInput } from "@/front/components/ui/password-input";
 import { Button } from "@/front/components/ui/button";
 import { Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import useEmailOtp from "@/front/hooks/use-email-otp";
-
-const SignUpFormSchema = z
-    .object({
-        firstName: z.string().min(1, "The first name is required"),
-        lastName: z.string().min(1, "The last name is required"),
-        email: z.string().email("Email invalide"),
-        password: z
-            .string()
-            .min(12, "The password must contain at least 12 characters"),
-        passwordConfirmation: z.string().min(12, "La confirmation est obligatoire"),
-    })
-    .refine((data) => data.password === data.passwordConfirmation, {
-        message: "The passwords do not match",
-        path: ["passwordConfirmation"],
-    });
+import { signUp } from "@/back/lib/auth-client";
 
 export default function SignUpForm() {
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
+    const [isPending, startTransition] = useTransition();
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const { sendVerificationOtp } = useEmailOtp();
 
-    const form = useForm<z.infer<typeof SignUpFormSchema>>({
+    const form = useForm<SignUpFormValues>({
         resolver: zodResolver(SignUpFormSchema),
         defaultValues: {
             firstName: "",
@@ -73,28 +60,19 @@ export default function SignUpForm() {
         });
     }
 
-    async function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
-        setLoading(true);
-        try {
-            const payload = {
+    function onSubmit(values: SignUpFormValues) {
+        startTransition(async () => {
+            const { error } = await signUp.email({
                 name: `${values.firstName} ${values.lastName}`,
                 email: values.email,
                 password: values.password,
                 image: image ? await convertImageToBase64(image) : "",
-                callbackURL: "/",
-            };
-
-            const res = await fetch('/api/auth/sign-up/email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-                credentials: 'include',
+                callbackURL: "/account",
+                firstname: values.firstName,
+                lastname: values.lastName,
             });
-
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) {
-                const message = data?.message || data?.error || 'An error occurred';
-                toast.error(message);
+            if (error) {
+                toast.error(error.message || 'An error occurred');
                 return;
             }
 
@@ -107,12 +85,7 @@ export default function SignUpForm() {
             toast.success('Account created. Verify your email with the OTP code.');
             router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
             router.refresh();
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'An error occurred';
-            toast.error(errorMessage);
-        } finally {
-            setLoading(false);
-        }
+        });
     }
 
     return (
@@ -207,8 +180,7 @@ export default function SignUpForm() {
                                 <FormItem>
                                     <FormLabel className="text-zinc-800 dark:text-zinc-900">Password</FormLabel>
                                     <FormControl>
-                                        <Input
-                                            type="password"
+                                        <PasswordInput
                                             placeholder="••••••••"
                                             {...field}
                                             className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
@@ -227,8 +199,7 @@ export default function SignUpForm() {
                                 <FormItem>
                                     <FormLabel className="text-zinc-800 dark:text-zinc-900">Confirm password</FormLabel>
                                     <FormControl>
-                                        <Input
-                                            type="password"
+                                        <PasswordInput
                                             placeholder="••••••••"
                                             {...field}
                                             className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
@@ -280,9 +251,9 @@ export default function SignUpForm() {
                         <Button
                             type="submit"
                             className="rounded-md dark:bg-background text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold  transition"
-                            disabled={loading}
+                            disabled={isPending}
                         >
-                            {loading ? (
+                            {isPending ? (
                                 <Loader2 size={16} className="animate-spin" />
                             ) : (
                                 "Sign up"

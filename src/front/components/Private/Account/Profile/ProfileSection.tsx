@@ -12,13 +12,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/fro
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/front/components/ui/form"
 import { Input } from "@/front/components/ui/input"
 import { Separator } from "@/front/components/ui/separator"
-import { useUser } from "@/front/context/UserContext"
-import { useUpdateUser } from "@/front/hooks/querys/use-users"
-import { UpdateProfileSchema, type UpdateProfileFormValues } from "@/front/types/profile.schema"
+import { useUser } from "@/front/states/contexts/user.context"
+import { useUpdateUser } from "@/front/queries/users"
+import { UpdateProfileSchema, type UpdateProfileFormValues } from "@/front/schemas/zod/profile.zod"
 import { VerifyEmailChangeModal } from "./VerifyEmailChangeModal"
+import { useRouter } from "next/navigation"
 
 export function ProfileSection() {
     const user = useUser()
+    const router = useRouter()
     const { mutate: updateUser, isPending } = useUpdateUser()
     const [showEmailModal, setShowEmailModal] = useState(false)
 
@@ -40,6 +42,7 @@ export function ProfileSection() {
             {
                 onSuccess: () => {
                     toast.success("Profil mis à jour avec succès.")
+                    router.refresh()
                 },
                 onError: (error) => {
                     toast.error(error instanceof Error ? error.message : "Une erreur est survenue")
@@ -64,7 +67,7 @@ export function ProfileSection() {
                         {/* Avatar */}
                         <div className="flex items-center gap-4">
                             <Avatar className="size-20">
-                                <AvatarImage src={user?.image ?? ""} alt="Photo de profil" />
+                                <AvatarImage src={(user?.avatarUrl || user?.image) ?? ""} alt="Photo de profil" />
                                 <AvatarFallback className="text-lg bg-primary/10 text-primary">
                                     {initials}
                                 </AvatarFallback>
