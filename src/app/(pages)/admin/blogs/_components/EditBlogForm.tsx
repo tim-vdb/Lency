@@ -63,7 +63,7 @@ export default function EditBlogForm({ blog, onSuccess }: EditBlogFormProps) {
             title: blog.title,
             content: blog.content,
             tag: blog.tag,
-            coverUrl: blog.coverUrl,
+            coverUrl: blog.coverUrl ?? undefined,
             isPublished: blog.status === "PUBLISHED",
         },
     })
@@ -288,8 +288,8 @@ export default function EditBlogForm({ blog, onSuccess }: EditBlogFormProps) {
                             {isPending
                                 ? "Modification en cours..."
                                 : isPublished
-                                  ? "✨ Publier l'article"
-                                  : "💾 Sauvegarder"}
+                                    ? "✨ Publier l'article"
+                                    : "💾 Sauvegarder"}
                         </Button>
                         <Button
                             type="button"

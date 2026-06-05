@@ -51,7 +51,7 @@ export default function MapFilters({
                 setLoadingAddress(true)
                 try {
                     const response = await fetch(`/api/geocode?q=${encodeURIComponent(addressInput)}`)
-                    
+
                     if (!response.ok) {
                         throw new Error(`API returned ${response.status}`)
                     }
@@ -62,7 +62,7 @@ export default function MapFilters({
                     const buildAddressString = (addressObj: Record<string, string> | string | null | undefined): string => {
                         if (typeof addressObj === 'string') return addressObj
                         if (!addressObj) return ''
-                        
+
                         // Construire à partir des propriétés principales
                         const parts = []
                         if (addressObj.house_number) parts.push(addressObj.house_number)
@@ -71,7 +71,7 @@ export default function MapFilters({
                         if (addressObj.city) parts.push(addressObj.city)
                         if (addressObj.postcode) parts.push(addressObj.postcode)
                         if (addressObj.country) parts.push(addressObj.country)
-                        
+
                         return parts.filter(Boolean).join(', ')
                     }
 
@@ -79,11 +79,11 @@ export default function MapFilters({
                     const suggestions: AddressSuggestion[] = data
                         .slice(0, 8) // Limiter à 8 résultats
                         .map((item: Record<string, unknown>, idx: number) => ({
-                            id: `${item.lat}-${item.lon}-${idx}`,
-                            name: item.name || buildAddressString(item.address) || 'Adresse',
-                            address: item.display_name || buildAddressString(item.address),
-                            lat: parseFloat(item.lat),
-                            lon: parseFloat(item.lon),
+                            id: `${item.lat as string}-${item.lon as string}-${idx}`,
+                            name: item.name || buildAddressString(item.address as Record<string, string> | null | undefined) || 'Adresse',
+                            address: item.display_name || buildAddressString(item.address as Record<string, string> | null | undefined),
+                            lat: parseFloat(item.lat as string),
+                            lon: parseFloat(item.lon as string),
                         }))
 
                     setAddressSuggestions(suggestions)
