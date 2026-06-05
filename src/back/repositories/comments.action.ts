@@ -1,43 +1,60 @@
 import prisma from "../lib/prisma"
 
+
+async function findCommentsByEntity(filter: {
+    postId?: string;
+    resourceId?: string;
+    projectId?: string;
+}): Promise<ReturnType<typeof buildTree>> {
+    const { postId, resourceId, projectId } = filter;
+
+    const where = postId ? { postId } : resourceId ? { resourceId } : projectId ? { projectId } : null;
+    if (!where) return [];
+
+    const comments = await prisma.comment.findMany({
+        where,
+        include: { author: true },
+        orderBy: { createdAt: "asc" },
+    });
+
+    if (comments.length === 0) return [];
+
+    return buildTree(comments);
+}
+
 export const CommentsAction = {
     findById: async (id: string) => {
         return prisma.comment.findUnique({ where: { id } });
     },
 
-    findByPostId: async (postId: string) => {
-        const flat = await prisma.comment.findMany({
-            where: { postId },
-            include: { author: true },
-            orderBy: { createdAt: "asc" },
-        });
-        return buildTree(flat);
-    },
+    findByPostId: (postId: string) =>
+        findCommentsByEntity({ postId }),
 
-    findByResourceId: async (resourceId: string) => {
-        const flat = await prisma.comment.findMany({
-            where: { resourceId },
-            include: { author: true },
-            orderBy: { createdAt: "asc" },
-        });
-        return buildTree(flat);
-    },
+    findByResourceId: (resourceId: string) =>
+        findCommentsByEntity({ resourceId }),
+
+    findByProjectId: (projectId: string) =>
+        findCommentsByEntity({ projectId }),
 
     create: async (userId: string, data: {
         content: string;
-        imageUrl?: string | null;
-        videoUrl?: string | null;
+        imageUrls?: string[];
+        videoUrls?: string[];
+        audioUrls?: string[];
         postId?: string;
         resourceId?: string;
+        projectId?: string;
         parentId?: string;
     }) => {
         const comment = await prisma.comment.create({
             data: {
                 content: data.content,
-                imageUrl: data.imageUrl ?? null,
-                videoUrl: data.videoUrl ?? null,
+                imageUrls: data.imageUrls ?? [],
+                videoUrls: data.videoUrls ?? [],
+                audioUrls: data.audioUrls ?? [],
                 postId: data.postId,
                 resourceId: data.resourceId,
+                projectId: data.projectId,
                 authorId: userId,
                 parentId: data.parentId,
             },
@@ -51,6 +68,11 @@ export const CommentsAction = {
         } else if (data.resourceId) {
             await prisma.resource.update({
                 where: { id: data.resourceId },
+                data: { commentCount: { increment: 1 } },
+            });
+        } else if (data.projectId) {
+            await prisma.project.update({
+                where: { id: data.projectId },
                 data: { commentCount: { increment: 1 } },
             });
         }
@@ -74,9 +96,7 @@ export const CommentsAction = {
         return prisma.comment.update({ where: { id }, data });
     },
 
-    update: async (id: string, data: {
-        content: string;
-    }) => {
+    update: async (id: string, data: { content: string }) => {
         return prisma.comment.update({
             where: { id },
             data: { content: data.content },
@@ -84,10 +104,7 @@ export const CommentsAction = {
     },
 
     delete: async (id: string) => {
-        const comment = await prisma.comment.findUnique({
-            where: { id },
-        });
-
+        const comment = await prisma.comment.findUnique({ where: { id } });
         if (!comment) throw new Error("Comment not found");
 
         await prisma.comment.delete({ where: { id } });
@@ -100,6 +117,11 @@ export const CommentsAction = {
         } else if (comment.resourceId) {
             await prisma.resource.update({
                 where: { id: comment.resourceId },
+                data: { commentCount: { decrement: 1 } },
+            });
+        } else if (comment.projectId) {
+            await prisma.project.update({
+                where: { id: comment.projectId },
                 data: { commentCount: { decrement: 1 } },
             });
         }

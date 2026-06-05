@@ -29,7 +29,17 @@ export const UsersAction = {
                     include: { author: true, category: true },
                     orderBy: { createdAt: "desc" },
                 },
-                projects: { orderBy: { createdAt: "desc" } },
+                projects: { include: { mapLocation: true }, orderBy: { createdAt: "desc" } },
+                participants: {
+                    where: { visibility: "PUBLIC", status: "PUBLISHED" },
+                    select: { id: true, title: true },
+                    orderBy: { createdAt: "desc" },
+                    take: 10,
+                },
+                configs: {
+                    where: { title: { in: ["roles", "audiovisual", "preferences"] } },
+                    select: { title: true, content: true },
+                },
                 badges: true,
                 categoryFollows: { include: { category: true } },
                 followers: {
@@ -45,6 +55,21 @@ export const UsersAction = {
                         },
                     },
                     orderBy: { createdAt: "desc" },
+                },
+                following: {
+                    include: {
+                        following: {
+                            select: {
+                                id: true,
+                                username: true,
+                                firstname: true,
+                                lastname: true,
+                                image: true,
+                            },
+                        },
+                    },
+                    orderBy: { createdAt: "desc" },
+                    take: 12,
                 },
                 _count: {
                     select: {
@@ -122,9 +147,21 @@ export const UsersAction = {
             portfolio?: string;
             role?: "ADMIN" | "MEMBER";
             isPremium?: boolean;
+            isMarketplaceTalent?: boolean;
+            readyToStart?: boolean;
         }
     ) => {
         return prisma.user.update({ where: { id }, data });
+    },
+
+    generateUniqueUsername: async (base: string): Promise<string> => {
+        const slug = base.toLowerCase().replace(/\s+/g, "");
+        let candidate = slug;
+        let suffix = 1;
+        while (await prisma.user.findUnique({ where: { username: candidate } })) {
+            candidate = `${slug}${suffix++}`;
+        }
+        return candidate;
     },
 
     delete: async (id: string) => {
@@ -178,6 +215,38 @@ export const UsersAction = {
     deleteSocialLink: async (userId: string, platform: string) => {
         return prisma.userSocialLink.delete({
             where: { userId_platform: { userId, platform } },
+        });
+    },
+
+    search: async (q: string, excludeId: string) => {
+        return prisma.user.findMany({
+            where: {
+                readyToStart: true,
+                id: { not: excludeId },
+                ...(q && {
+                    OR: [
+                        { firstname: { contains: q, mode: "insensitive" } },
+                        { lastname: { contains: q, mode: "insensitive" } },
+                        { username: { contains: q, mode: "insensitive" } },
+                    ],
+                }),
+            },
+            select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                username: true,
+                image: true,
+                avatarUrl: true,
+                bio: true,
+                configs: {
+                    where: { title: "roles" },
+                    select: { content: true },
+                    take: 1,
+                },
+            },
+            take: 20,
+            orderBy: { createdAt: "desc" },
         });
     },
 };

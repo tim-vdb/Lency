@@ -1,6 +1,8 @@
 import { getUser } from '@/back/lib/auth-session';
 import { AppShell } from '@/app/(pages)/(public)/(app)/AppShell';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AppLayout({
   children,
 }: Readonly<{

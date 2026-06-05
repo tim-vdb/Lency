@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+    title: 'Contact — Lency',
+    description: 'Contactez l\'équipe Lency pour toute question ou demande de partenariat.',
+};
 
 export default function ContactPage() {
   return (

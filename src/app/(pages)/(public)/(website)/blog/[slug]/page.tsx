@@ -5,17 +5,31 @@ import { fr } from "date-fns/locale"
 import { getUser } from "@/back/lib/auth-session"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
+import type { Metadata } from 'next';
+
+interface Props {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const title = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  return {
+    title: `${title} — Blog Lency`,
+    description: `Lisez l'article "${title}" sur le blog Lency.`,
+  };
+}
 
 export default async function BlogDetailPage({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>;
 }) {
   const { slug: blogId } = await params
 
   try {
     const blog = await BlogsAction.findById(blogId)
-    
+
     if (!blog) {
       notFound()
     }
@@ -32,11 +46,12 @@ export default async function BlogDetailPage({
       locale: fr,
     })
 
-    const tagLabel = {
+    const tagLabel: Record<"VIDEO" | "MOTION" | "OUTILS", string> = {
       VIDEO: "Vidéo",
       MOTION: "Motion",
       OUTILS: "Outils",
-    }[blog.tag] || blog.tag
+    }
+    const tagDisplay = tagLabel[blog.tag as "VIDEO" | "MOTION" | "OUTILS"] ?? blog.tag
 
     return (
       <main className="min-h-screen bg-white">
@@ -70,7 +85,7 @@ export default async function BlogDetailPage({
 
             <div className="flex flex-wrap items-center gap-4 text-gray-600">
               <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                {tagLabel}
+                {tagDisplay}
               </span>
               <span className="text-sm">{formattedDate}</span>
               {blog.status === "DRAFT" && (
@@ -83,7 +98,7 @@ export default async function BlogDetailPage({
 
           {/* Contenu */}
           <div className="prose prose-lg max-w-none">
-            {blog.content.split("\n").map((paragraph, index) => (
+            {blog.content.split("\n").map((paragraph: string, index: number) => (
               <p key={index} className="text-gray-700 leading-relaxed whitespace-pre-wrap mb-4">
                 {paragraph}
               </p>

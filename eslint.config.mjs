@@ -75,6 +75,13 @@ export default [
         HTMLTextAreaElement: 'readonly',
         HTMLSelectElement: 'readonly',
         HTMLAudioElement: 'readonly',
+        // DOM Types - Interfaces
+        Node: 'readonly',
+        SVGSVGElement: 'readonly',
+        IntersectionObserver: 'readonly',
+        IntersectionObserverEntry: 'readonly',
+        MutationObserver: 'readonly',
+        ResizeObserver: 'readonly',
         // Web Storage
         sessionStorage: 'readonly',
         localStorage: 'readonly',

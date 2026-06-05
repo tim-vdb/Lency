@@ -3,10 +3,10 @@
 import ResourceCard from "@/front/components/Public/Community/Resources/ResourceCard";
 import ResourceFiltersTabs from "@/front/components/Public/Community/Resources/ResourceFiltersTabs";
 import { Badge } from "@/front/components/ui/badge";
-import { useCategoryBySlug } from "@/front/hooks/queries/use-categories";
-import { useResources } from "@/front/hooks/queries/use-resources";
+import { useCategoryBySlug } from "@/front/queries/categories";
+import { useResources } from "@/front/queries/resources";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
-import { useUser } from "@/front/context/UserContext";
+import { useUser } from "@/front/states/contexts/user.context";
 import { Link } from "lucide-react";
 
 export default function CategoryResourcesPageClient({ slug }: { slug: string }) {
@@ -46,7 +46,7 @@ export default function CategoryResourcesPageClient({ slug }: { slug: string }) 
                 {resources?.map((resource) => (
                     <div key={resource.id} className="relative">
                         <ResourceCard resource={resource} variant="grid" />
-                        <Badge className="absolute top-3 left-3 bg-black/70 rounded-tl-lg rounded-bl-none rounded-r-sm text-white text-[10px] pointer-events-none">
+                        <Badge className="absolute top-0 left-0 bg-black/70 rounded-tl-lg rounded-bl-none rounded-r-sm text-white text-[10px] pointer-events-none">
                             {resource.author.id === user?.id ? (
                                 <span>
                                     Par vous

@@ -1,7 +1,7 @@
 "use client";
 
-import { useUser } from "@/front/context/UserContext";
-import { useModalStore } from "@/front/stores/use-modal.store";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useModalStore } from "@/front/states/stores/modal.store";
 
 export function useRequireAuth() {
     const user = useUser();

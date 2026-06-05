@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { PostWithUserState } from "@/front/types/post.schema";
-import { useRecentlyViewed } from "@/front/stores/use-recently-viewed.store";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
+import { useRecentlyViewed } from "@/front/states/stores/recently-viewed.store";
 
-export function usePostState(post: PostWithUserState) {
+export function usePostState(post: PostWithUserState, options?: { initialOpenComments?: boolean; lockOpenComments?: boolean }) {
     const [expanded, setExpanded] = useState(false);
-    const [openComments, setOpenComments] = useState(false);
+    const [openComments, setOpenComments] = useState(options?.initialOpenComments ?? false);
+    const lockComments = options?.lockOpenComments ?? false;
     const [isVoted, setIsVoted] = useState(post.isVoted ?? false);
     const [isSaved, setIsSaved] = useState(post.isSaved ?? false);
     const [upvoteCount, setUpvoteCount] = useState(post.upvoteCount);
@@ -34,6 +35,7 @@ export function usePostState(post: PostWithUserState) {
         setExpanded,
         openComments,
         setOpenComments,
+        lockComments,
         isVoted,
         setIsVoted,
         isSaved,

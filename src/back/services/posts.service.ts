@@ -1,4 +1,7 @@
 import { PostsAction } from "../repositories/posts.action";
+import { CategoryNotificationsAction } from "../repositories/category-notifications.action";
+import { notifyCategoryFeedUpdate, notifyCategoryNewContent } from "../lib/ably";
+import { NotificationService } from "./notifications.service";
 import { getUser } from "../lib/auth-session";
 
 export const PostsService = {
@@ -36,7 +39,42 @@ export const PostsService = {
         if (!data.content) throw new Error("Content is required");
         if (!data.categoryId) throw new Error("Category is required");
 
-        return PostsAction.create(user.id, data);
+        const post = await PostsAction.create(user.id, data);
+
+        if (data.isPublished) {
+            // Invalide le cache de tous les viewers de la catégorie, pas seulement les abonnés notifs
+            notifyCategoryFeedUpdate(data.categoryId, post.id).catch(() => {});
+
+            // Fire-and-forget : notifs DB + Ably pour les abonnés bell uniquement
+            (async () => {
+                try {
+                    const subscriberIds = await CategoryNotificationsAction.findSubscriberIds(data.categoryId);
+                    const eligible = subscriberIds.filter((id) => id !== user.id);
+                    if (eligible.length === 0) return;
+                    const authorName = user.firstname && user.lastname
+                        ? `${user.firstname} ${user.lastname}`
+                        : user.username ?? "Quelqu'un";
+                    const categoryName = post.category?.name ?? "";
+                    const categorySlug = post.category?.slug ?? "";
+                    await Promise.all([
+                        notifyCategoryNewContent(eligible, data.categoryId, categoryName, "post", post.id, authorName),
+                        ...eligible.map((uid) =>
+                            NotificationService.createForUser(
+                                uid,
+                                "category_new_post",
+                                `Nouveau post dans ${categoryName}`,
+                                `${authorName} a publié un nouveau post.`,
+                                { postId: post.id, categoryId: data.categoryId, categoryName, categorySlug }
+                            )
+                        ),
+                    ]);
+                } catch (err) {
+                    console.error("[CategoryNotify] post:", err);
+                }
+            })();
+        }
+
+        return post;
     },
 
     updatePost: async (id: string, data: {
@@ -94,5 +132,17 @@ export const PostsService = {
         if (!user) throw new Error("Unauthorized");
         await PostsService.findByIdPost(postId);
         return PostsAction.reportPost(user.id, postId, reason);
+    },
+
+    findDrafts: async () => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        const posts = await PostsAction.findDrafts(user.id);
+        return posts.map((p) => ({ ...p, isSaved: false, isVoted: false }));
+    },
+
+    validateIds: async (ids: string[]): Promise<string[]> => {
+        if (!Array.isArray(ids) || ids.length === 0) return [];
+        return PostsAction.findExistingIds(ids);
     },
 };

@@ -5,8 +5,8 @@ import ResourceDetail from "@/front/components/Public/Community/Resources/Resour
 import ResourceFiltersTabs from "@/front/components/Public/Community/Resources/ResourceFiltersTabs";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { Separator } from "@/front/components/ui/separator";
-import { useCategoryBySlug } from "@/front/hooks/queries/use-categories";
-import { useResourceById, useResources } from "@/front/hooks/queries/use-resources";
+import { useCategoryBySlug } from "@/front/queries/categories";
+import { useResourceById, useResources } from "@/front/queries/resources";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 
 function ResourceDetailSkeleton() {
@@ -80,7 +80,7 @@ export default function ResourceDetailPageClient({
 
             <div className="block xl:flex gap-4">
                 {/* Colonne gauche — stable entre les navigations */}
-                <div className="w-1/3 flex-col gap-2 max-h-[calc(100vh-10rem)] overflow-y-auto pr-1 hidden xl:flex">
+                <div className="w-1/3 flex-col gap-2 overflow-y-auto pr-1 hidden xl:flex">
                     {siblingsPending
                         ? <SidebarSkeleton />
                         : siblings?.map((r) => (

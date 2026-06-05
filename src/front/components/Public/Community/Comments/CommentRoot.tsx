@@ -1,67 +1,67 @@
 "use client";
 
-import ImageKitUploader from "@/front/components/common/ImageKitUploader";
+import { CommentMediaUploader, type CommentMedia } from "@/front/components/common/CommentMediaUploader";
 import { Form, FormControl, FormField, FormItem } from "@/front/components/ui/form";
 import { Item, ItemContent } from "@/front/components/ui/item";
 import { useRequireAuth } from "@/front/hooks/use-modals";
-import { useCreateComment } from "@/front/hooks/queries/use-posts";
-import { useCreateResourceComment } from "@/front/hooks/queries/use-resources";
-import { CommentTarget } from "@/front/types/comment-target";
-import { CreateCommentFormValues, CreateCommentSchema } from "@/front/types/comment.schema";
+import { useCreateComment } from "@/front/queries/posts";
+import { useCreateResourceComment } from "@/front/queries/resources";
+import { useCreateProjectComment } from "@/front/queries/projects";
+import { CommentTarget } from "@/front/schemas/types/comment-target.type";
+import { CreateCommentFormValues, CreateCommentSchema } from "@/front/schemas/zod/comment.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+
+const EMPTY_MEDIA: CommentMedia = { imageUrls: [], videoUrls: [], audioUrls: [] };
 
 export default function CommentRoot({ target }: { target: CommentTarget }) {
     const requireAuth = useRequireAuth();
     const postMutation = useCreateComment(target.type === "post" ? target.id : "");
     const resourceMutation = useCreateResourceComment(target.type === "resource" ? target.id : "");
-    const { mutate: createPostComment, isPending: postPending } = postMutation;
-    const { mutate: createResourceComment, isPending: resourcePending } = resourceMutation;
-    const isPending = target.type === "post" ? postPending : resourcePending;
+    const projectMutation = useCreateProjectComment(target.type === "project" ? target.id : "");
+    const isPending =
+        target.type === "post" ? postMutation.isPending :
+        target.type === "resource" ? resourceMutation.isPending :
+        projectMutation.isPending;
 
     const form = useForm<CreateCommentFormValues>({
         resolver: zodResolver(CreateCommentSchema),
-        defaultValues: { content: "", imageUrl: null, videoUrl: null },
+        defaultValues: { content: "", imageUrls: [], videoUrls: [], audioUrls: [] },
     });
-
-    const imageUrl = form.watch("imageUrl") ?? null;
-    const videoUrl = form.watch("videoUrl") ?? null;
 
     function onSubmit(values: CreateCommentFormValues) {
         requireAuth(() => {
             const onSuccess = () => {
                 toast.success("Commentaire publié.");
-                form.reset({ content: "", imageUrl: null, videoUrl: null });
+                form.reset({ content: "", imageUrls: [], videoUrls: [], audioUrls: [] });
             };
             const onError = (error: unknown) => {
                 toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
             };
 
+            const payload = {
+                content: values.content,
+                imageUrls: values.imageUrls,
+                videoUrls: values.videoUrls,
+                audioUrls: values.audioUrls,
+            };
+
             if (target.type === "post") {
-                createPostComment(
-                    {
-                        content: values.content,
-                        postId: target.id,
-                        imageUrl: values.imageUrl,
-                        videoUrl: values.videoUrl,
-                    },
-                    { onSuccess, onError }
-                );
+                postMutation.mutate({ ...payload, postId: target.id }, { onSuccess, onError });
+            } else if (target.type === "resource") {
+                resourceMutation.mutate({ ...payload, resourceId: target.id }, { onSuccess, onError });
             } else {
-                createResourceComment(
-                    {
-                        content: values.content,
-                        resourceId: target.id,
-                        imageUrl: values.imageUrl,
-                        videoUrl: values.videoUrl,
-                    },
-                    { onSuccess, onError }
-                );
+                projectMutation.mutate({ ...payload, projectId: target.id }, { onSuccess, onError });
             }
         });
     }
+
+    const media: CommentMedia = {
+        imageUrls: form.watch("imageUrls"),
+        videoUrls: form.watch("videoUrls"),
+        audioUrls: form.watch("audioUrls"),
+    };
 
     return (
         <Item variant={"outline"} className="w-full text-md border-2 px-3 py-2">
@@ -85,30 +85,22 @@ export default function CommentRoot({ target }: { target: CommentTarget }) {
                                     </FormItem>
                                 )}
                             />
-                            <button
-                                type="submit"
-                                disabled={isPending}
-                                className="flex items-center gap-1 text-xs font-medium bg-neutral-900 text-white px-3 py-2 rounded-md hover:bg-neutral-700 transition-colors disabled:opacity-50 cursor-pointer"
-                                hidden
-                            >
-                                {isPending && <Loader2 className="w-3 h-3 animate-spin" />}
-                                Envoyer
-                            </button>
                         </div>
-                        <div className="flex items-center gap-3">
-                            <ImageKitUploader
-                                kind="image"
-                                value={imageUrl}
-                                onChange={(url) => form.setValue("imageUrl", url, { shouldValidate: true })}
-                                disabled={isPending}
-                            />
-                            <ImageKitUploader
-                                kind="video"
-                                value={videoUrl}
-                                onChange={(url) => form.setValue("videoUrl", url, { shouldValidate: true })}
-                                disabled={isPending}
-                            />
-                        </div>
+                        <Controller
+                            control={form.control}
+                            name="imageUrls"
+                            render={() => (
+                                <CommentMediaUploader
+                                    value={media}
+                                    onChange={(val) => {
+                                        form.setValue("imageUrls", val.imageUrls, { shouldValidate: true });
+                                        form.setValue("videoUrls", val.videoUrls, { shouldValidate: true });
+                                        form.setValue("audioUrls", val.audioUrls, { shouldValidate: true });
+                                    }}
+                                    disabled={isPending}
+                                />
+                            )}
+                        />
                     </form>
                 </Form>
             </ItemContent>

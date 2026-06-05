@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { PostWithAuthorAndCategory } from "@/front/types/post.schema";
+import type { PostWithAuthorAndCategory } from "@/front/schemas/types/post.type";
 import { useRouter } from "next/navigation";
 import { Item } from "@/front/components/ui/item";
 import { cn, getDisplayName, getInitialName } from "@/front/lib/utils";

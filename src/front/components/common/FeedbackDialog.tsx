@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import { CreateFeedbackSchema, type CreateFeedbackFormValues } from "@/front/schemas/zod/feedback.zod";
 
 import { Button } from "@/front/components/ui/button";
 import {
@@ -23,14 +23,7 @@ import {
 } from "@/front/components/ui/form";
 import { Textarea } from "@/front/components/ui/textarea";
 import ImageKitUploader from "@/front/components/common/ImageKitUploader";
-import { useCreateFeedback } from "@/front/hooks/queries/use-feedback";
-
-const schema = z.object({
-    description: z.string().min(10, "Décris le feedback en au moins 10 caractères."),
-    imageUrl: z.string().nullable().optional(),
-});
-
-type FeedbackFormValues = z.infer<typeof schema>;
+import { useCreateFeedback } from "@/front/queries/feedback";
 
 interface FeedbackDialogProps {
     open: boolean;
@@ -40,12 +33,12 @@ interface FeedbackDialogProps {
 export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogProps) {
     const { mutate, isPending } = useCreateFeedback();
 
-    const form = useForm<FeedbackFormValues>({
-        resolver: zodResolver(schema),
+    const form = useForm<CreateFeedbackFormValues>({
+        resolver: zodResolver(CreateFeedbackSchema),
         defaultValues: { description: "", imageUrl: null },
     });
 
-    function onSubmit(values: FeedbackFormValues) {
+    function onSubmit(values: CreateFeedbackFormValues) {
         mutate(
             {
                 description: values.description,

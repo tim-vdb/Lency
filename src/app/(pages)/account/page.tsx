@@ -1,6 +1,12 @@
 import ExploreBlock from "@/front/components/Private/Account/Dashboard/Explore/ExploreBlock";
 import MarketplaceBlock from "@/front/components/Private/Account/Dashboard/Marketplace/MarketplaceBlock";
 import CommunityBlock from "@/front/components/Private/Account/Dashboard/Community/CommunityBlock";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'Dashboard — Lency',
+    robots: { index: false, follow: false },
+};
 
 export default function DashboardAccount() {
     return (

@@ -5,7 +5,7 @@ import { cn } from "@/front/lib/utils";
 import { Play, Pause } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { PostWithUserState } from "@/front/types/post.schema";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
 import { usePostState } from "@/front/hooks/use-post-state";
 import CommentRoot from "../Comments/CommentRoot";
 import Comments from "../Comments/Comments";
@@ -13,13 +13,14 @@ import PostActionsPopup from "./PostActionsPopup";
 import PostActions from "./PostActions";
 import PostAvatar from "./PostAvatar";
 import ExpandableText from "./ExpandableText";
-import { useViewportRecentlyViewed } from "@/front/hooks/use-viewport-recently-viewed";
 import { Button } from "@/front/components/ui/button";
 
 interface PostAudioProps {
     post: PostWithUserState;
     audioUrl?: string;
     className?: string;
+    defaultOpenComments?: boolean;
+    lockOpenComments?: boolean;
 }
 
 function formatTime(seconds: number): string {
@@ -117,14 +118,13 @@ function AudioPlayer({ audioUrl }: { audioUrl?: string }) {
     );
 }
 
-export default function PostAudio({ post, audioUrl, className }: PostAudioProps) {
+export default function PostAudio({ post, audioUrl, className, defaultOpenComments, lockOpenComments }: PostAudioProps) {
     const { category } = post;
-    const postState = usePostState(post);
+    const postState = usePostState(post, { initialOpenComments: defaultOpenComments, lockOpenComments });
     const { openComments } = postState;
-    const cardRef = useViewportRecentlyViewed(post, 10_000);
 
     return (
-        <Card ref={cardRef} className={cn("relative p-12", className)}>
+        <Card className={cn("relative p-12", className)}>
             <CardContent className="flex flex-col gap-4 px-0">
                 {/* Avatar + username */}
                 <div className="flex items-center justify-between">

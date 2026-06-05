@@ -1,8 +1,9 @@
 "use client";
 
-import { useCommentsByPostId } from "@/front/hooks/queries/use-posts";
-import { useResourceComments } from "@/front/hooks/queries/use-resources";
-import { CommentTarget } from "@/front/types/comment-target";
+import { useCommentsByPostId } from "@/front/queries/posts";
+import { useResourceComments } from "@/front/queries/resources";
+import { useProjectComments } from "@/front/queries/projects";
+import { CommentTarget } from "@/front/schemas/types/comment-target.type";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { CommentItem } from "./CommentItem";
 
@@ -26,9 +27,10 @@ function CommentSkeleton() {
 export default function Comments({ target }: CommentsProps) {
     const postQuery = useCommentsByPostId(target.type === "post" ? target.id : "");
     const resourceQuery = useResourceComments(target.type === "resource" ? target.id : "");
+    const projectQuery = useProjectComments(target.type === "project" ? target.id : "");
 
-    const { data: comments, isLoading } =
-        target.type === "post" ? postQuery : resourceQuery;
+    const { data: comments, isLoading, isError } =
+        target.type === "post" ? postQuery : target.type === "resource" ? resourceQuery : projectQuery;
 
     if (isLoading) {
         return (
@@ -37,6 +39,14 @@ export default function Comments({ target }: CommentsProps) {
                 <CommentSkeleton />
                 <CommentSkeleton />
             </div>
+        );
+    }
+
+    if (isError) {
+        return (
+            <p className="text-sm text-neutral-400 text-center py-2">
+                Impossible de charger les commentaires.
+            </p>
         );
     }
 

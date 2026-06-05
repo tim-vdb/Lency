@@ -1,5 +1,6 @@
 // lib/auth.ts
 
+import { UsersAction } from '@/back/repositories/users.action';
 import { prisma } from '@/back/lib/prisma';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
@@ -32,8 +33,22 @@ export const auth = betterAuth({
   trustedOrigins: [
     process.env.BASE_URL ?? 'http://localhost:3000',
   ],
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          if (!user.username) {
+            const firstName = (user.firstname as string | null) ?? (user.name as string | null)?.split(' ')[0];
+            if (firstName) {
+              const username = await UsersAction.generateUniqueUsername(firstName);
+              await UsersAction.update(user.id, { username });
+            }
+          }
+        },
+      },
+    },
+  },
   plugins: [
-    nextCookies(),
     emailOTP({
       overrideDefaultEmailVerification: true,
       sendVerificationOnSignUp: false,
@@ -44,6 +59,7 @@ export const auth = betterAuth({
         await sendAuthOtpEmail({ email, otp, type });
       },
     }),
+    nextCookies(),
   ],
   user: {
     additionalFields: {

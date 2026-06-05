@@ -1,10 +1,11 @@
-import { CommentWithChildren, PostWithAuthorAndCategory, PostWithUserState } from "@/front/types/post.schema";
+import { CommentWithChildren, PostWithAuthorAndCategory, PostWithUserState } from "@/front/schemas/types/post.type";
 
 export interface CreatePostInput {
-    title: string
+    title?: string
     content: string
     categoryId: string
     format?: "DESKTOP" | "MOBILE" | "TEXT" | "IMAGE" | "VIDEO" | "AUDIO"
+    orientation?: "LANDSCAPE" | "PORTRAIT"
     imageUrl?: string
     videoUrl?: string
     audioUrl?: string
@@ -96,8 +97,9 @@ export interface CreateCommentInput {
     content: string;
     postId: string;
     parentId?: string;
-    imageUrl?: string | null;
-    videoUrl?: string | null;
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
 }
 
 export async function createComment(input: CreateCommentInput): Promise<CommentWithChildren> {
@@ -185,6 +187,12 @@ export async function fetchPostsByAuthor(authorId: string): Promise<PostWithUser
     }
     const data = await response.json()
     return data.posts
+}
+
+export async function fetchMyDraftPosts(): Promise<PostWithUserState[]> {
+    const response = await fetch("/api/posts/drafts", { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur lors de la récupération des brouillons");
+    return (await response.json()).posts;
 }
 
 export async function fetchSavedPosts(): Promise<PostWithUserState[]> {

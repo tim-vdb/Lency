@@ -1,12 +1,12 @@
 "use client";
 
-import { upload } from "@imagekit/next";
-import { ImageIcon, Loader2, Video, X } from "lucide-react";
+import { ImageIcon, Loader2, Music, Video, X } from "lucide-react";
 import Image from "next/image";
+import { uploadToImageKit } from "@/front/lib/upload";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
-type MediaKind = "image" | "video";
+type MediaKind = "image" | "video" | "audio";
 
 interface MediaKitUploaderProps {
     value: string | null;
@@ -49,6 +49,17 @@ const CONFIG: Record<MediaKind, {
         previewAlt: "Vidéo du commentaire",
         Icon: Video,
     },
+    audio: {
+        accept: "audio/*,video/webm",
+        mimePrefix: "audio/",
+        maxBytes: 20 * 1024 * 1024,
+        maxLabel: "20 Mo",
+        addLabel: "Ajouter un audio",
+        sendingLabel: "Envoi...",
+        removeLabel: "Retirer l'audio",
+        previewAlt: "Audio du commentaire",
+        Icon: Music,
+    },
 };
 
 export default function ImageKitUploader({
@@ -67,11 +78,13 @@ export default function ImageKitUploader({
         e.target.value = "";
         if (!file) return;
 
-        if (!file.type.startsWith(config.mimePrefix)) {
+        const isValidMime = file.type.startsWith(config.mimePrefix)
+            || (kind === "audio" && file.type === "video/webm");
+        if (!isValidMime) {
             toast.error(
-                kind === "image"
-                    ? "Seules les images sont acceptées."
-                    : "Seules les vidéos sont acceptées."
+                kind === "image" ? "Seules les images sont acceptées."
+                : kind === "video" ? "Seules les vidéos sont acceptées."
+                : "Seuls les fichiers audio sont acceptés (MP3, WAV, OGG, WebM…)."
             );
             return;
         }
@@ -82,22 +95,8 @@ export default function ImageKitUploader({
 
         setIsUploading(true);
         try {
-            const authRes = await fetch("/api/imagekit/auth");
-            if (!authRes.ok) throw new Error("Authentification upload échouée");
-            const { signature, expire, token, publicKey } = await authRes.json();
-
-            const uploaded = await upload({
-                file,
-                fileName: file.name,
-                folder,
-                signature,
-                expire,
-                token,
-                publicKey,
-            });
-
-            if (!uploaded.url) throw new Error("URL manquante après upload");
-            onChange(uploaded.url);
+            const url = await uploadToImageKit(file, folder);
+            onChange(url);
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Échec de l'upload");
         } finally {
@@ -116,11 +115,17 @@ export default function ImageKitUploader({
                         height={120}
                         className="rounded-md object-cover border border-neutral-200"
                     />
-                ) : (
+                ) : kind === "video" ? (
                     <video
                         src={value}
                         controls
                         className="rounded-md border border-neutral-200 max-h-32"
+                    />
+                ) : (
+                    <audio
+                        src={value}
+                        controls
+                        className="rounded-md border border-neutral-200 h-10 max-w-[200px]"
                     />
                 )}
                 <button

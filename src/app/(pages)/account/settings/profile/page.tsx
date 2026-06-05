@@ -6,7 +6,7 @@ import ProfileDelete from '@/front/components/Private/Account/Profile/ProfileDel
 export default function ProfilePage() {
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-6">
       <ProfileSection />
       <ProfileDelete />
     </div>

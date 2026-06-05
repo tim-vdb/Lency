@@ -134,4 +134,20 @@ export const PostsAction = {
             update: { reason },
         });
     },
+
+    findDrafts: async (userId: string) => {
+        return prisma.post.findMany({
+            where: { authorId: userId, isPublished: false },
+            include: { author: true, category: true },
+            orderBy: { updatedAt: "desc" },
+        });
+    },
+
+    findExistingIds: async (ids: string[]): Promise<string[]> => {
+        const posts = await prisma.post.findMany({
+            where: { id: { in: ids } },
+            select: { id: true },
+        });
+        return posts.map((p) => p.id);
+    },
 };

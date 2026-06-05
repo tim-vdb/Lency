@@ -1,6 +1,6 @@
 "use client";
 
-import { useModalStore } from "@/front/stores/use-modal.store";
+import { useModalStore } from "@/front/states/stores/modal.store";
 import { AuthPromptModal } from "./AuthPromptModal";
 import { ConfirmModal } from "./ConfirmModal";
 import { AlertModal } from "./AlertModal";

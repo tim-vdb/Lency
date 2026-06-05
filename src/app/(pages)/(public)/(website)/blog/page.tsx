@@ -1,6 +1,19 @@
 import { BlogsAction } from "@/back/repositories/blogs.action"
+import { Prisma } from "@/back/generated/prisma_client"
 import { getUser } from "@/back/lib/auth-session"
 import BlogList from "./_components/BlogList"
+import type { Metadata } from 'next';
+
+type BlogWithAuthor = Prisma.BlogGetPayload<{
+    include: { author: { select: { id: true; name: true; image: true } } }
+}>;
+
+
+export const metadata: Metadata = {
+    title: 'Blog — Lency',
+    description: 'Actualités, conseils et inspirations pour les créatifs audiovisuels sur le blog Lency.',
+};
+
 
 export default async function BlogPage() {
     const [blogs, user] = await Promise.all([
@@ -11,7 +24,7 @@ export default async function BlogPage() {
     const isAdmin = user?.role === "ADMIN"
 
     // Filtrer les blogs : admins voient tout, sinon seulement les PUBLISHED
-    const filteredBlogs = isAdmin ? blogs : blogs.filter((b) => b.status === "PUBLISHED")
+    const filteredBlogs = isAdmin ? blogs : blogs.filter((b: BlogWithAuthor) => b.status === "PUBLISHED")
 
     return (
         <main className="min-h-screen bg-white">

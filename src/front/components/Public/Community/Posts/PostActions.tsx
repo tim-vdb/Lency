@@ -4,16 +4,17 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/front/components/ui/t
 import { cn } from "@/front/lib/utils";
 import { Bookmark, Heart, MessageCircleMore } from "lucide-react";
 import { IoArrowRedoOutline } from "react-icons/io5";
-import { PostWithUserState } from "@/front/types/post.schema";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
 import { useRequireAuth } from "@/front/hooks/use-modals";
 import { useShare } from "@/front/hooks/use-share";
-import { useToggleSavePost, useToggleVotePost } from "@/front/hooks/queries/use-posts";
+import { useToggleSavePost, useToggleVotePost } from "@/front/queries/posts";
 
 interface PostActionsProps {
     post: PostWithUserState;
     isVoted: boolean;
     isSaved: boolean;
     openComments: boolean;
+    lockComments?: boolean;
     upvoteCount: number;
     setIsVoted: (value: boolean) => void;
     setUpvoteCount: (value: number | ((prev: number) => number)) => void;
@@ -27,6 +28,7 @@ export default function PostActions({
     isVoted,
     isSaved,
     openComments,
+    lockComments = false,
     upvoteCount,
     setIsVoted,
     setUpvoteCount,
@@ -93,13 +95,18 @@ export default function PostActions({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <button
-                            onClick={() => { if (!openComments) markViewed(); setOpenComments(!openComments); }}
-                            className="transition-transform hover:scale-110"
+                            onClick={() => {
+                                if (lockComments) return;
+                                if (!openComments) markViewed();
+                                setOpenComments(!openComments);
+                            }}
+                            className={cn("transition-transform", !lockComments && "hover:scale-110")}
                         >
                             <MessageCircleMore
                                 className={cn(
-                                    "w-7 h-7 cursor-pointer transition-colors",
-                                    openComments ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-500 dark:text-neutral-400"
+                                    "w-7 h-7 transition-colors",
+                                    lockComments ? "cursor-default text-neutral-900 dark:text-neutral-100" : "cursor-pointer",
+                                    !lockComments && (openComments ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-500 dark:text-neutral-400")
                                 )}
                             />
                         </button>

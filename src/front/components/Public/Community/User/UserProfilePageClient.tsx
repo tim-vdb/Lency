@@ -5,7 +5,7 @@ import PostImage from "@/front/components/Public/Community/Posts/PostImage";
 import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
 import PostSkeleton, { PostImageSkeleton } from "@/front/components/Public/Community/Posts/PostSkeleton";
-import ProjectCard from "@/front/components/Public/Community/Projects/ProjectCard";
+import ProjectCard from "@/front/components/Public/Marketplace/Projects/ProjectCard";
 import UserAchievementsCard from "@/front/components/Public/Community/User/UserAchievementsCard";
 import UserFollowingCommunities from "@/front/components/Public/Community/User/UserFollowingCommunities";
 import UserProfileHeader from "@/front/components/Public/Community/User/UserProfileHeader";
@@ -14,14 +14,177 @@ import { Button } from "@/front/components/ui/button";
 import { Card, CardContent } from "@/front/components/ui/card";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs";
-import { useUserByUsername } from "@/front/hooks/queries/use-users";
-import { usePostsByAuthor } from "@/front/hooks/queries/use-posts";
-import { useResourcesByAuthor } from "@/front/hooks/queries/use-resources";
+import { useUserByUsername } from "@/front/queries/users";
+import { usePostsByAuthor } from "@/front/queries/posts";
+import { useResourcesByAuthor } from "@/front/queries/resources";
 import ResourceCard from "@/front/components/Public/Community/Resources/ResourceCard";
+import { TalentProfileModal } from "@/front/components/Private/Global/TalentProfileModal";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useUpdateUser } from "@/front/queries/users";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
-import { MapPin } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
+import { Camera, ExternalLink, FileText, FolderOpen, Lightbulb, MapPin, Mic, Monitor, Sparkles, TrendingUp, UserCog, Wallet, Wrench, Zap } from "lucide-react";
+import { getInitialName } from "@/front/lib/utils";
+import { useState } from "react";
 import { toast } from "sonner";
 import { getDisplayName } from "@/front/lib/utils";
+import Link from "next/link";
+import { UserProfile } from "@/front/schemas/types/user.type";
+
+const AV_SECTION_META: Record<string, { label: string; icon: React.ElementType }> = {
+    cameras: { label: "Caméras", icon: Camera },
+    lenses: { label: "Objectifs", icon: Wrench },
+    lights: { label: "Lumières", icon: Lightbulb },
+    software: { label: "Logiciels", icon: Monitor },
+    audio: { label: "Audio", icon: Mic },
+};
+
+const WORKMODE_LABEL: Record<string, string> = { PRESENTIEL: "Présentiel", DISTANCIEL: "Distanciel", HYBRIDE: "Hybride" };
+const LEVEL_LABEL: Record<string, string> = { DEBUTANT: "Débutant", INTERMEDIAIRE: "Intermédiaire", AVANCE: "Avancé" };
+const REMU_LABEL: Record<string, string> = { REMUNERE: "Rémunéré", NON_REMUNERE: "Non rémunéré" };
+
+function TalentProfileCard({ user }: { user: UserProfile }) {
+    if (!user.isMarketplaceTalent) return null;
+
+    const rolesConfig = user.configs?.find((c) => c.title === "roles");
+    const roles: string[] = rolesConfig ? ((rolesConfig.content as { roles?: string[] }).roles ?? []) : [];
+
+    const avConfig = user.configs?.find((c) => c.title === "audiovisual");
+    const av: Record<string, string[]> = avConfig ? (avConfig.content as Record<string, string[]>) : {};
+    const avSections = Object.entries(AV_SECTION_META)
+        .map(([key, meta]) => ({ key, ...meta, items: av[key] ?? [] }))
+        .filter((s) => s.items.length > 0);
+
+    const prefsConfig = user.configs?.find((c) => c.title === "preferences");
+    const prefs = prefsConfig ? (prefsConfig.content as { workMode?: string; level?: string; remunerationType?: string }) : {};
+    const workModeLabel = prefs.workMode ? WORKMODE_LABEL[prefs.workMode] : null;
+    const levelLabel = prefs.level ? LEVEL_LABEL[prefs.level] : null;
+    const remuLabel = prefs.remunerationType ? REMU_LABEL[prefs.remunerationType] : null;
+
+    return (
+        <Card className="border-orange/30 bg-orange/5">
+            <CardContent className="p-4 flex flex-col gap-4">
+                {/* Header */}
+                <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-orange shrink-0" />
+                    <span className="text-sm font-semibold text-foreground">Talent disponible</span>
+                    <span className="ml-auto w-2 h-2 rounded-full bg-green-500 shrink-0" title="Disponible" />
+                </div>
+
+                {/* Disponibilité (workMode / level / remu) */}
+                {(workModeLabel || levelLabel || remuLabel) && (
+                    <div className="flex flex-col gap-1.5">
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Disponibilité</span>
+                        <div className="flex flex-wrap gap-x-3 gap-y-1">
+                            {workModeLabel && (
+                                <div className="flex items-center gap-1.5 text-xs text-foreground">
+                                    <Zap className="w-3 h-3 text-orange shrink-0" />
+                                    {workModeLabel}
+                                </div>
+                            )}
+                            {levelLabel && (
+                                <div className="flex items-center gap-1.5 text-xs text-foreground">
+                                    <TrendingUp className="w-3 h-3 text-orange shrink-0" />
+                                    {levelLabel}
+                                </div>
+                            )}
+                            {remuLabel && (
+                                <div className="flex items-center gap-1.5 text-xs text-foreground">
+                                    <Wallet className="w-3 h-3 text-orange shrink-0" />
+                                    {remuLabel}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {/* Rôles (UserConfig) */}
+                {roles.length > 0 && (
+                    <div className="flex flex-col gap-1.5">
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Rôles</span>
+                        <div className="flex flex-wrap gap-1">
+                            {roles.map((role) => (
+                                <span key={role} className="inline-flex items-center h-5 px-2 bg-orange/10 border border-orange/30 rounded text-[11px] text-orange font-medium">
+                                    {role}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Équipements audiovisuels */}
+                {avSections.length > 0 && (
+                    <div className="flex flex-col gap-2.5 pt-1 border-t border-orange/20">
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Équipements</span>
+                        {avSections.map(({ key, label, icon: Icon, items }) => (
+                            <div key={key} className="flex flex-col gap-1">
+                                <div className="flex items-center gap-1.5">
+                                    <Icon className="w-3 h-3 text-muted-foreground shrink-0" />
+                                    <span className="text-[11px] font-medium text-muted-foreground">{label}</span>
+                                </div>
+                                <div className="flex flex-wrap gap-1 pl-4">
+                                    {items.map((item) => (
+                                        <span key={item} className="text-[11px] text-foreground bg-muted px-1.5 py-0.5 rounded">
+                                            {item}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* Portfolio + CV */}
+                {(user.portfolio || user.cv) && (
+                    <div className="flex flex-col gap-1.5 pt-1 border-t border-orange/20">
+                        {user.portfolio && (
+                            <a href={user.portfolio} target="_blank" rel="noreferrer noopener"
+                                className="flex items-center gap-2 text-xs text-foreground hover:text-orange transition-colors">
+                                <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                                <span className="truncate">Portfolio</span>
+                            </a>
+                        )}
+                        {user.cv && (
+                            <a href={user.cv} target="_blank" rel="noreferrer noopener"
+                                className="flex items-center gap-2 text-xs text-foreground hover:text-orange transition-colors">
+                                <FileText className="w-3.5 h-3.5 shrink-0" />
+                                <span className="truncate">Voir le CV</span>
+                            </a>
+                        )}
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
+
+function ParticipatedProjectsCard({ projects }: { projects: { id: string; title: string }[] }) {
+    if (projects.length === 0) return null;
+    return (
+        <Card>
+            <CardContent className="p-4 flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                    <FolderOpen className="w-4 h-4 text-muted-foreground shrink-0" />
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        Projets rejoints
+                    </span>
+                    <span className="ml-auto text-[11px] text-muted-foreground">{projects.length}</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                    {projects.map((p) => (
+                        <Link
+                            key={p.id}
+                            href={`/marketplace/${p.id}`}
+                            className="text-xs text-foreground hover:text-orange transition-colors truncate"
+                        >
+                            {p.title}
+                        </Link>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
 
 function UserProfileSkeleton() {
     return (
@@ -126,6 +289,25 @@ export default function UserProfilePageClient({ username }: { username: string }
     const displayName = user ? getDisplayName(user) : undefined;
     useBreadcrumbOverride(username, displayName);
 
+    const currentUser = useUser();
+    const isOwnProfile = !!currentUser && !!user && currentUser.id === user.id;
+    const [talentModalOpen, setTalentModalOpen] = useState(false);
+    const [readyToStart, setReadyToStart] = useState(user?.readyToStart ?? false);
+    const { mutate: updateUser, isPending: updatingReady } = useUpdateUser();
+
+    function handleToggleReady() {
+        if (!user) return;
+        const next = !readyToStart;
+        setReadyToStart(next);
+        updateUser(
+            { id: user.id, data: { readyToStart: next } },
+            {
+                onSuccess: () => toast.success(next ? "Statut « Prêt à démarrer » activé." : "Statut désactivé."),
+                onError: () => { setReadyToStart(!next); toast.error("Une erreur est survenue."); },
+            }
+        );
+    }
+
     if (isPending) return <UserProfileSkeleton />;
 
     if (error || !user) {
@@ -223,17 +405,32 @@ export default function UserProfilePageClient({ username }: { username: string }
                             )}
                         </TabsContent>
 
-                        <TabsContent value="projects" className="mt-0 flex flex-col gap-4">
+                        <TabsContent value="projects" className="mt-0">
                             {user.projects.length === 0 && (
                                 <p className="text-sm text-neutral-500">Aucun projet.</p>
                             )}
-                            {user.projects.map((project) => (
-                                <ProjectCard key={project.id} project={project} />
-                            ))}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {user.projects.map((project) => (
+                                    <ProjectCard key={project.id} project={project} showProjectType />
+                                ))}
+                            </div>
                         </TabsContent>
                     </div>
 
                     <div className="w-60 shrink-0 flex flex-col gap-3 sticky top-2 self-start">
+                        {isOwnProfile && (
+                            <Button
+                                variant="outline"
+                                disabled={updatingReady}
+                                onClick={handleToggleReady}
+                                className={`w-full gap-2 transition-colors ${readyToStart
+                                    ? "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100"
+                                    : ""}`}
+                            >
+                                <Zap className={`w-4 h-4 ${readyToStart ? "fill-emerald-500" : ""}`} />
+                                {readyToStart ? "Prêt à démarrer ✓" : "Se marquer disponible"}
+                            </Button>
+                        )}
                         <Button
                             variant="outline"
                             className="w-full gap-2"
@@ -242,9 +439,66 @@ export default function UserProfilePageClient({ username }: { username: string }
                             <MapPin className="w-4 h-4" />
                             Voir la localisation
                         </Button>
+                        {isOwnProfile && (
+                            <Button
+                                variant="outline"
+                                className="w-full gap-2"
+                                onClick={() => setTalentModalOpen(true)}
+                            >
+                                <UserCog className="w-4 h-4" />
+                                {user.isMarketplaceTalent ? "Modifier le profil talent" : "Créer le profil talent"}
+                            </Button>
+                        )}
+                        {/* readyToStart — visible par tous, une seule fois ici */}
+                        {!isOwnProfile && user.readyToStart && (
+                            <div className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-xs font-medium border bg-emerald-50 border-emerald-200 text-emerald-700">
+                                <Zap className="w-3.5 h-3.5 shrink-0 fill-emerald-500" />
+                                Prêt à démarrer
+                            </div>
+                        )}
+                        <TalentProfileCard user={user} />
+                        <ParticipatedProjectsCard projects={[
+                            ...user.projects.filter((p) => p.visibility === "PUBLIC" && p.status === "PUBLISHED").map((p) => ({ id: p.id, title: p.title })),
+                            ...(user.participants ?? []),
+                        ]} />
                         <UserFollowingCommunities follows={user.categoryFollows} />
                         <UserAchievementsCard badges={user.badges} userId={user.id} />
+
+                        {isOwnProfile && user.following && user.following.length > 0 && (
+                            <Card>
+                                <CardContent className="p-4 flex flex-col gap-3">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                                            Suivi(e)s
+                                        </p>
+                                        <span className="text-xs text-neutral-400">
+                                            {user.following.length}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {user.following.map(({ following: followed }) => (
+                                            <Link
+                                                key={followed.id}
+                                                href={`/user/${followed.username ?? followed.id}`}
+                                                title={followed.firstname && followed.lastname
+                                                    ? `${followed.firstname} ${followed.lastname}`
+                                                    : followed.username ?? "Utilisateur"}
+                                            >
+                                                <Avatar className="w-7 h-7 ring-2 ring-background hover:ring-primary transition-all">
+                                                    <AvatarImage src={followed.image ?? undefined} />
+                                                    <AvatarFallback className="text-[10px] bg-pink-100 text-pink-700">
+                                                        {getInitialName(followed)}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
                     </div>
+
+                    <TalentProfileModal open={talentModalOpen} onOpenChange={setTalentModalOpen} />
                 </div>
             </Tabs>
         </div>

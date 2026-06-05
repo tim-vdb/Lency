@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/front/components/ui/card";
 import { cn } from "@/front/lib/utils";
 import Link from "next/link";
-import { PostWithUserState } from "@/front/types/post.schema";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
 import { usePostState } from "@/front/hooks/use-post-state";
 import CommentRoot from "../Comments/CommentRoot";
 import Comments from "../Comments/Comments";
@@ -11,22 +11,22 @@ import PostActions from "./PostActions";
 import PostActionsPopup from "./PostActionsPopup";
 import PostAvatar from "./PostAvatar";
 import ExpandableText from "./ExpandableText";
-import { useViewportRecentlyViewed } from "@/front/hooks/use-viewport-recently-viewed";
 import { Button } from "@/front/components/ui/button";
 
 interface PostTextProps {
     post: PostWithUserState;
     className?: string;
+    defaultOpenComments?: boolean;
+    lockOpenComments?: boolean;
 }
 
-export default function PostText({ post, className }: PostTextProps) {
+export default function PostText({ post, className, defaultOpenComments, lockOpenComments }: PostTextProps) {
     const { category } = post;
-    const postState = usePostState(post);
+    const postState = usePostState(post, { initialOpenComments: defaultOpenComments, lockOpenComments });
     const { openComments } = postState;
-    const cardRef = useViewportRecentlyViewed(post, 60_000);
 
     return (
-        <Card ref={cardRef} className={cn("relative p-12", className)}>
+        <Card className={cn("relative p-12", className)}>
             <CardContent className="flex flex-col gap-3 px-0">
                 <div className="flex items-center justify-between">
                     <PostAvatar author={post.author} className="pl-0 py-0" />

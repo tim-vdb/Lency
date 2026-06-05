@@ -1,5 +1,5 @@
-import { CommentWithChildren } from "@/front/types/post.schema";
-import { ResourceWithUserState } from "@/front/types/resource.schema";
+import { CommentWithChildren } from "@/front/schemas/types/post.type";
+import { ResourceWithUserState } from "@/front/schemas/types/resource.type";
 
 export async function fetchSavedResources(): Promise<ResourceWithUserState[]> {
     const response = await fetch("/api/resources/saved", { method: "GET", cache: "no-store" });
@@ -97,18 +97,19 @@ export interface CreateResourceCommentInput {
     resourceId: string;
     content: string;
     parentId?: string;
-    imageUrl?: string | null;
-    videoUrl?: string | null;
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
 }
 
 export interface CreateResourceInput {
     title: string;
     description?: string;
     type: "ASSET" | "TUTORIAL" | "LINK";
-    url?: string;
-    imageUrl?: string;
-    videoUrl?: string;
-    audioUrl?: string;
+    urls?: string[];
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
     categoryId: string;
 }
 
@@ -126,6 +127,39 @@ export async function createResource(input: CreateResourceInput): Promise<Resour
     return data.resource;
 }
 
+export interface UpdateResourceInput {
+    title?: string;
+    description?: string;
+    type?: "ASSET" | "TUTORIAL" | "LINK";
+    urls?: string[];
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
+    categoryId?: string;
+}
+
+export async function updateResource(resourceId: string, input: UpdateResourceInput): Promise<ResourceWithUserState> {
+    const response = await fetch(`/api/resources/${resourceId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+    });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la modification de la ressource");
+    }
+    const data = await response.json();
+    return data.resource;
+}
+
+export async function deleteResource(resourceId: string): Promise<void> {
+    const response = await fetch(`/api/resources/${resourceId}`, { method: "DELETE" });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la suppression de la ressource");
+    }
+}
+
 export async function createResourceComment(
     input: CreateResourceCommentInput
 ): Promise<CommentWithChildren> {
@@ -135,8 +169,9 @@ export async function createResourceComment(
         body: JSON.stringify({
             content: input.content,
             parentId: input.parentId,
-            imageUrl: input.imageUrl,
-            videoUrl: input.videoUrl,
+            imageUrls: input.imageUrls,
+            videoUrls: input.videoUrls,
+            audioUrls: input.audioUrls,
         }),
     });
     if (!response.ok) {

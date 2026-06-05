@@ -2,7 +2,7 @@
 
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card";
-import { UserProfile } from "@/front/types/user.schema";
+import { UserProfile } from "@/front/schemas/types/user.type";
 import Link from "next/link";
 
 export default function UserFollowingCommunities({ follows }: { follows: UserProfile["categoryFollows"] }) {

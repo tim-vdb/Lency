@@ -10,16 +10,21 @@ import { useSidebar } from "../../ui/sidebar";
 import { usePathname } from "next/navigation";
 import { CreateDropdown } from "./CreateDropdown";
 import BreadcrumbAuto from "./BreadcrumbAuto";
-import SearchBar from "../../Filter/SearchBar";
+import SearchBar from "../../SearchBar/SearchBar";
+import { useNotificationsQuery } from "@/front/queries/notifications";
+import { toast } from "sonner";
 
 export default function Header({ className }: { className?: string }) {
-    const [isNotifs,] = useState(true)
     const [isScrolled, setIsScrolled] = useState(false)
     const { state } = useSidebar()
     const pathname = usePathname()
 
+    const { data: notifications = [] } = useNotificationsQuery();
+    const unreadCount = notifications.filter((n) => !n.read).length;
+
     const isFixedLayout = pathname !== "/account" && pathname !== "/admin"
     const isDashboard = pathname === "/account"
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -36,7 +41,7 @@ export default function Header({ className }: { className?: string }) {
 
     return (
         <header className={cn(
-            "flex h-14 shrink-0 mr-1 items-center gap-2 border dark:border-white backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-black/40 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14",
+            "flex h-14 shrink-0 mr-1 items-center gap-2 border dark:border-neutral-400 backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-black/40 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14",
             isDashboard && "mr-2",
             isScrolled && "rounded-t-none",
             isFixedLayout && "md:fixed top-2 z-40",
@@ -51,13 +56,15 @@ export default function Header({ className }: { className?: string }) {
                     <SearchBar />
                     <CreateDropdown />
                     <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
-                    <BadgeCheck className="cursor-pointer w-6 h-6 min-w-6 min-h-6" />
+                    <BadgeCheck className="cursor-pointer w-6 h-6 min-w-6 min-h-6" onClick={() => toast.info("En développement")} />
                     <SheetTrigger className="cursor-pointer relative flex">
                         <Bell className="w-6 h-6 min-w-6 min-h-6 fill-white text-black dark:fill-black/20 dark:text-white" />
-                        {isNotifs && (
+                        {unreadCount > 0 && (
                             <span className="absolute -top-1 left-3 flex h-4 w-4">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange opacity-75" />
-                                <span className="relative inline-flex h-4 w-4 rounded-full bg-red-600 text-white text-xs justify-center items-center">2</span>
+                                <span className="relative inline-flex h-4 w-4 rounded-full bg-red-600 text-white text-xs justify-center items-center">
+                                    {unreadCount > 9 ? "9+" : unreadCount}
+                                </span>
                             </span>
                         )}
                     </SheetTrigger>

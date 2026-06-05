@@ -68,13 +68,13 @@ export const ResourcesAction = {
         title: string;
         description?: string | null;
         type: "ASSET" | "TUTORIAL" | "LINK";
-        url?: string | null;
-        imageUrl?: string | null;
-        videoUrl?: string | null;
-        audioUrl?: string | null;
+        urls?: string[];
+        imageUrls?: string[];
+        videoUrls?: string[];
+        audioUrls?: string[];
         categoryId: string;
     }) => {
-        return prisma.resource.create({ data: { ...data, authorId } });
+        return prisma.resource.create({ data: { ...data, authorId }, include: { category: true } });
     },
 
     update: async (id: string, data: Prisma.ResourceUncheckedUpdateInput) => {

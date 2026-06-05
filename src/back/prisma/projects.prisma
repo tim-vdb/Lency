@@ -6,13 +6,79 @@ model Project {
   description   String
   status        ProjectStatus @default(PUBLISHED)
   subject       ProjectSubject @default(Tout)
+  visibility    Visibility    @default(PUBLIC)
   ownerId       String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   mapLocationId String?
+  // Marketplace fields
+  bannerUrl         String?
+  projectType       String?
+  remunerationType  RemunerationType?
+  level             ProjectLevel?
+  workMode          WorkMode?
+  startDate         DateTime?
+  roles             Json?
+  attachments   Json?
+  commentCount  Int           @default(0)
   mapLocation   MapLocation?  @relation(fields: [mapLocationId], references: [id])
   owner         User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   participants  User[]        @relation("Participants")
+  comments      Comment[]
+  reports       ProjectReport[]
+  applications  ProjectApplication[]
+  invitations   ProjectInvitation[]
+  chatMessages  ProjectMessage[]
+}
+
+model ProjectInvitation {
+  id          String                  @id @default(cuid())
+  projectId   String
+  userId      String
+  status      ProjectInvitationStatus @default(PENDING)
+  sentAt      DateTime                @default(now())
+  respondedAt DateTime?
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
+}
+
+model ProjectReport {
+  id        String   @id @default(cuid())
+  userId    String
+  projectId String
+  reason    String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+  @@index([userId])
+  @@index([projectId])
+}
+
+model ProjectApplication {
+  id            String                     @id @default(cuid())
+  projectId     String
+  userId        String
+  status        ProjectApplicationStatus   @default(PENDING)
+  appliedAt     DateTime                   @default(now())
+  respondedAt   DateTime?
+  applicantNote String?
+  portfolioUrl  String?
+  cvUrl         String?
+  ownerNote     String?
+
+  project     Project                    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user        User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
 }
 
 model Event {

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import ExpandableText from "@/front/components/Public/Community/Posts/ExpandableText";
 import PostSkeleton, { PostImageSkeleton } from "@/front/components/Public/Community/Posts/PostSkeleton";
@@ -10,8 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avata
 import { Button } from "@/front/components/ui/button";
 import { Card } from "@/front/components/ui/card";
 import { Separator } from "@/front/components/ui/separator";
-import { useCategoryBySlug, useFollowStatus, usePostsByCategory, useToggleFollowCategory } from "@/front/hooks/queries/use-categories";
-import { useResources } from "@/front/hooks/queries/use-resources";
+import { useCategoryBySlug, useCategoryNotifyStatus, useFollowStatus, usePostsByCategory, useToggleCategoryNotify, useToggleFollowCategory } from "@/front/queries/categories";
+import { useResources } from "@/front/queries/resources";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 import { Skeleton } from "@/front/components/ui/skeleton";
 import { Bell, CalendarCheck, Check, Ellipsis } from "lucide-react";
@@ -25,8 +25,23 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
     const { data: followData } = useFollowStatus(category?.id ?? "");
     const { mutate: toggleFollow, isPending: followPending } = useToggleFollowCategory(category?.id ?? "");
     const { data: resources, isPending: resourcesPending } = useResources(category?.id);
+    const { data: notifyData } = useCategoryNotifyStatus(category?.id ?? "");
+    const { mutate: toggleNotify, isPending: notifyPending } = useToggleCategoryNotify(category?.id ?? "");
     const isFollowing = followData?.following ?? false;
+    const isNotifying = notifyData?.subscribed ?? false;
     useBreadcrumbOverride(slug, category?.name, "category");
+
+    function handleToggleNotify() {
+        if (!category) return;
+        toggleNotify(undefined, {
+            onSuccess: (data) => {
+                toast.success(data.subscribed
+                    ? `Vous recevrez les notifications pour ${category.name}.`
+                    : `Notifications désactivées pour ${category.name}.`
+                );
+            },
+        });
+    }
 
     function handleFollow() {
         if (!category) return;
@@ -36,8 +51,6 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
             },
         });
     }
-
-    const creatorInitials = category?.name?.slice(0, 2).toUpperCase() ?? "?";
 
     if (categoryPending) {
         return (
@@ -133,8 +146,15 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
-                        <Button variant="ghost" size="icon" className="w-8 h-8 bg-white rounded-full border border-neutral-200" onClick={() => { toast.info("En développement") }}>
-                            <Bell className="w-4 h-4" />
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className={`w-8 h-8 rounded-full border transition-colors ${isNotifying ? "bg-orange/10 border-orange text-orange hover:bg-orange/20" : "bg-white border-neutral-200 hover:bg-neutral-50"}`}
+                            onClick={handleToggleNotify}
+                            disabled={notifyPending}
+                            title={isNotifying ? "Désactiver les notifications" : "Activer les notifications"}
+                        >
+                            <Bell className={`w-4 h-4 ${isNotifying ? "fill-orange stroke-orange" : ""}`} />
                         </Button>
                         <Button
                             variant={isFollowing ? "outline" : "default"}
@@ -177,9 +197,6 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                     <div className="p-4 flex flex-col gap-3">
                         <div className="flex items-center justify-between gap-2">
                             <p className="font-semibold text-sm truncate">{category.name}</p>
-                            <Button variant="outline" size="sm" onClick={() => toast.info("En développement")}>
-                                Contacter
-                            </Button>
                         </div>
                         {category.description && (
                             <ExpandableText content={category.description} lineClamp={3} className="text-xs" />
@@ -190,13 +207,12 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                         </div>
                         <div className="flex items-center gap-1 text-sm">
                             <span className="font-semibold">{category.subscriberCount}</span>
-                            <span className="text-neutral-500">Membres</span>
+                            <span className="text-neutral-500">{category.subscriberCount > 1 ? "Membres" : "Membre"}</span>
                         </div>
                     </div>
 
                     <Separator />
 
-                    {/* Ressources */}
                     <div className="p-4 flex flex-col gap-3">
                         <p className="font-semibold text-sm">Vos ressources</p>
                         {resourcesPending && (
@@ -214,9 +230,9 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                                 {resources.slice(0, 4).map((resource) => (
                                     <Link key={resource.id} href={`/community/${slug}/resources/${resource.id}`} className="flex flex-col gap-1 group">
                                         <div className="w-full aspect-video rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-                                            {resource.imageUrl ? (
+                                            {resource.imageUrls?.[0] ? (
                                                 <Image
-                                                    src={resource.imageUrl}
+                                                    src={resource.imageUrls[0]}
                                                     alt={resource.title}
                                                     width={120}
                                                     height={68}
@@ -242,23 +258,21 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
 
                     <Separator />
 
-                    {/* Modérateur */}
                     <div className="p-4 flex flex-col gap-3">
                         <p className="font-semibold text-sm">Modérateur</p>
                         <div className="flex items-center gap-2">
                             <Avatar className="w-8 h-8">
-                                <AvatarImage src={category.iconUrl} alt={category.name} />
-                                <AvatarFallback className="text-xs bg-neutral-100 dark:bg-neutral-800">
-                                    {creatorInitials}
+                                <AvatarImage src={"/logo/lency_icon.svg"} alt={category.name} />
+                                <AvatarFallback className="text-[10px] font-semibold bg-neutral-100 dark:bg-neutral-800 text-orange">
+                                    LC
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col min-w-0">
-                                <span className="text-xs font-medium truncate">Anonyme</span>
+                                <span className="text-xs font-medium truncate">Lency Bot</span>
                                 <span className="text-[10px] text-neutral-400">Créateur</span>
                             </div>
                         </div>
                     </div>
-
                 </Card>
             </div>
         </div >

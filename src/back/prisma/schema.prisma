@@ -21,6 +21,8 @@ model User {
   bio                       String?
   role                      Role                   @default(MEMBER)
   isPremium                 Boolean                @default(false)
+  isMarketplaceTalent       Boolean                @default(false)
+  readyToStart              Boolean                @default(false)
   cv                        String?
   portfolio                 String?
   eventId                   String?
@@ -51,6 +53,7 @@ model User {
   savedPosts                PostSave[]
   postVotes                 PostVote[]
   reportedPosts             PostReport[]
+  reportedProjects          ProjectReport[]
   categoryFollows           CategoryFollow[]
   resources                 Resource[]             @relation("UserResources")
   resourceVotes             ResourceVote[]
@@ -61,7 +64,14 @@ model User {
   reportsReceived           UserReport[]           @relation("ReportedUsers")
   socialLinks               UserSocialLink[]
   feedbacks                 Feedback[]
-  blogs Blog[]
+  blogs                     Blog[]
+  projectApplications       ProjectApplication[]
+  projectInvitations        ProjectInvitation[]
+  notifications             Notification[]
+  categoryNotifications     CategoryNotificationSubscription[]
+  projectMessages           ProjectMessage[]
+  directMessages            DirectMessage[]
+  conversations             Conversation[]     @relation("ConversationParticipants")
 }
 
 model UserSocialLink {

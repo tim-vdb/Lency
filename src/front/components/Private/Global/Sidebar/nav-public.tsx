@@ -7,12 +7,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/front/components/ui/sidebar"
-import { CreditCard, Home, Info, MessagesSquare, NotebookText, type LucideIcon } from "lucide-react"
+import { Home, Info, MessagesSquare, NotebookText, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 
 const publicLinks: { title: string; url: string; icon: LucideIcon }[] = [
   { title: "Accueil", url: "/", icon: Home },
-  { title: "Tarifs", url: "/pricing", icon: CreditCard },
   { title: "À propos", url: "/about", icon: Info },
   { title: "Support", url: "/support", icon: MessagesSquare },
   { title: "Blog", url: "/blog", icon: NotebookText },

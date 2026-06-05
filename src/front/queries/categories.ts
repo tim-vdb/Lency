@@ -1,0 +1,173 @@
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { SEARCH_ROOT } from "@/front/lib/api/search"
+import {
+    createCategory,
+    deleteCategory,
+    fetchCategories,
+    fetchCategoryById,
+    fetchCategoryBySlug,
+    fetchPostsByCategory,
+    getCategoryNotifyStatus,
+    getFollowStatus,
+    toggleCategoryNotify,
+    toggleFollowCategory,
+    updateCategory,
+    type Category,
+    type CreateCategoryInput,
+} from "@/front/lib/api/categories"
+
+const CATEGORY_ROOT = ["categories"] as const
+
+// ─── Query options (exportés pour le prefetch SSR) ────────────────────────────
+
+export const categoryQueries = {
+    all: CATEGORY_ROOT,
+
+    lists: () =>
+        queryOptions({
+            queryKey: [...CATEGORY_ROOT, "list"] as const,
+            queryFn: fetchCategories,
+            staleTime: 1000 * 60 * 5,
+        }),
+
+    detail: (id: string) =>
+        queryOptions({
+            queryKey: [...CATEGORY_ROOT, "detail", id] as const,
+            queryFn: () => fetchCategoryById(id),
+            staleTime: 1000 * 60 * 5,
+        }),
+}
+
+// ─── Queries ──────────────────────────────────────────────────────────────────
+
+export const useCategories = () => useQuery(categoryQueries.lists())
+
+export const useCategoryById = (id: string) => useQuery(categoryQueries.detail(id))
+
+// ─── Mutations ────────────────────────────────────────────────────────────────
+
+export const useCreateCategory = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: createCategory,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "list"] })
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })
+        },
+    })
+}
+
+export const useUpdateCategory = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: ({ id, data }: { id: string; data: Partial<CreateCategoryInput> }) => updateCategory(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: CATEGORY_ROOT })
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })
+        },
+    })
+}
+
+export const useCategoryBySlug = (slug: string) =>
+    useQuery({
+        queryKey: [...CATEGORY_ROOT, "slug", slug] as const,
+        queryFn: () => fetchCategoryBySlug(slug),
+        staleTime: 1000 * 60 * 5,
+        enabled: !!slug,
+    })
+
+export const usePostsByCategory = (categoryId: string) =>
+    useQuery({
+        queryKey: [...CATEGORY_ROOT, categoryId, "posts"] as const,
+        queryFn: () => fetchPostsByCategory(categoryId),
+        staleTime: 1000 * 60,
+        enabled: !!categoryId,
+    })
+
+export const useFollowStatus = (categoryId: string) =>
+    useQuery({
+        queryKey: [...CATEGORY_ROOT, categoryId, "follow"] as const,
+        queryFn: () => getFollowStatus(categoryId),
+        staleTime: 0,
+        enabled: !!categoryId,
+    })
+
+export const useCategoryNotifyStatus = (categoryId: string) =>
+    useQuery({
+        queryKey: [...CATEGORY_ROOT, categoryId, "notify"] as const,
+        queryFn: () => getCategoryNotifyStatus(categoryId),
+        staleTime: 0,
+        enabled: !!categoryId,
+    })
+
+export const useToggleCategoryNotify = (categoryId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => toggleCategoryNotify(categoryId),
+        onMutate: async () => {
+            const key = [...CATEGORY_ROOT, categoryId, "notify"]
+            await queryClient.cancelQueries({ queryKey: key })
+            const prev = queryClient.getQueryData<{ subscribed: boolean }>(key)
+            queryClient.setQueryData(key, { subscribed: !prev?.subscribed })
+            return { prev }
+        },
+        onError: (_err, _vars, context) => {
+            if (context?.prev !== undefined)
+                queryClient.setQueryData([...CATEGORY_ROOT, categoryId, "notify"], context.prev)
+        },
+        onSettled: () =>
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, categoryId, "notify"] }),
+    })
+}
+
+export const useToggleFollowCategory = (categoryId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => toggleFollowCategory(categoryId),
+        onMutate: async () => {
+            const followKey = [...CATEGORY_ROOT, categoryId, "follow"]
+            await queryClient.cancelQueries({ queryKey: followKey })
+            const previous = queryClient.getQueryData<{ following: boolean }>(followKey)
+            queryClient.setQueryData(followKey, { following: !previous?.following })
+            return { previous }
+        },
+        onError: (_err, _vars, context) => {
+            if (context?.previous !== undefined) {
+                queryClient.setQueryData([...CATEGORY_ROOT, categoryId, "follow"], context.previous)
+            }
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, categoryId, "follow"] })
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "slug"] })
+        },
+    })
+}
+
+export const useDeleteCategory = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: deleteCategory,
+        onMutate: async (categoryId: string) => {
+            const listKey = categoryQueries.lists().queryKey
+            await queryClient.cancelQueries({ queryKey: listKey })
+            const previousCategories = queryClient.getQueryData<Category[]>(listKey)
+            queryClient.setQueryData<Category[]>(listKey, (old = []) =>
+                old.filter((cat) => cat.id !== categoryId)
+            )
+            return { previousCategories }
+        },
+        onError: (
+            _err: unknown,
+            _categoryId: string,
+            context: { previousCategories: Category[] | undefined } | undefined
+        ) => {
+            if (context?.previousCategories !== undefined) {
+                queryClient.setQueryData(categoryQueries.lists().queryKey, context.previousCategories)
+            }
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: [...CATEGORY_ROOT, "list"] })
+            queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })
+        },
+    })
+}

@@ -114,7 +114,7 @@ export async function fetchCategoryBySlug(slug: string): Promise<Category> {
     return data.category
 }
 
-export async function fetchPostsByCategory(categoryId: string): Promise<import('@/front/types/post.schema').PostWithUserState[]> {
+export async function fetchPostsByCategory(categoryId: string): Promise<import('@/front/schemas/types/post.type').PostWithUserState[]> {
     const response = await fetch(`/api/categories/${categoryId}/posts`, {
         method: 'GET',
         cache: 'no-store',
@@ -133,6 +133,18 @@ export async function toggleFollowCategory(categoryId: string): Promise<{ follow
         throw new Error(error.error || 'Erreur lors du suivi de la catégorie')
     }
     return response.json()
+}
+
+export async function getCategoryNotifyStatus(categoryId: string): Promise<{ subscribed: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/notify`, { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur statut notification catégorie");
+    return response.json();
+}
+
+export async function toggleCategoryNotify(categoryId: string): Promise<{ subscribed: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/notify`, { method: "POST" });
+    if (!response.ok) throw new Error("Erreur toggle notification catégorie");
+    return response.json();
 }
 
 export async function getFollowStatus(categoryId: string): Promise<{ following: boolean }> {

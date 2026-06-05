@@ -87,3 +87,32 @@ enum ProjectSubject {
   Photo
   Outils
 }
+
+enum ProjectLevel {
+  DEBUTANT
+  INTERMEDIAIRE
+  AVANCE
+}
+
+enum WorkMode {
+  PRESENTIEL
+  DISTANCIEL
+  HYBRIDE
+}
+
+enum RemunerationType {
+  NON_REMUNERE
+  REMUNERE
+}
+
+enum ProjectApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ProjectInvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}

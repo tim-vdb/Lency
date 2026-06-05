@@ -1,12 +1,11 @@
 "use client"
 
-import { useUser } from "@/front/context/UserContext"
+import { useUser } from "@/front/states/contexts/user.context"
 import {
   BadgeCheck,
   Bell,
   ChevronRight,
   ChevronsUpDown,
-  CreditCard,
   LogOutIcon,
   MessageSquare,
   Settings,
@@ -50,7 +49,6 @@ const settingsItems = [
   { title: "Compte", url: "/account/settings/profile", icon: User2 },
   { title: "Notifications", url: "/account/settings/notifs", icon: Bell },
   { title: "Sécurité", url: "/account/settings/security", icon: Shield },
-  { title: "Facturation", url: "/account/settings/billing", icon: CreditCard },
 ]
 
 export function NavUser() {
@@ -95,14 +93,12 @@ export function NavUser() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                {user?.username && (
-                  <DropdownMenuItem asChild className="cursor-pointer">
-                    <Link href={`/user/${user.username}`}>
-                      <UserRound className="size-4" />
-                      Compte
-                    </Link>
-                  </DropdownMenuItem>
-                )}
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href={`/user/${user.username ?? user.firstname}`}>
+                    <UserRound className="size-4" />
+                    Mon profil
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild className="cursor-pointer">
                   <Link href="/account/badges">
                     <BadgeCheck className="size-4" />

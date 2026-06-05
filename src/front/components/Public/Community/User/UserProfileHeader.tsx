@@ -4,26 +4,27 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avata
 import { Badge } from "@/front/components/ui/badge";
 import { Button } from "@/front/components/ui/button";
 import { Card, CardContent } from "@/front/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/front/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/front/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/front/components/ui/form";
 import { Input } from "@/front/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/front/components/ui/select";
 import { Textarea } from "@/front/components/ui/textarea";
-import { useUser } from "@/front/context/UserContext";
-import { useDeleteSocialLink, useReportUser, useToggleFollowUser, useUpdateUser, useUpsertSocialLink } from "@/front/hooks/queries/use-users";
+import { useUser } from "@/front/states/contexts/user.context";
+import { useDeleteSocialLink, useReportUser, useToggleFollowUser, useUpdateUser, useUpsertSocialLink } from "@/front/queries/users";
 import { useRequireAuth } from "@/front/hooks/use-modals";
 import { cn, getDisplayName, getInitialName } from "@/front/lib/utils";
-import { UserProfile } from "@/front/types/user.schema";
+import { UserProfile } from "@/front/schemas/types/user.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Briefcase, Flag, MessageCircleMore, Pencil, Plus, Trash2, UserRoundCheck, UserRoundPlus } from "lucide-react";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { DirectMessageChat } from "@/front/components/Private/Chat/DirectMessageChat";
 import { FaBehance, FaBluesky, FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaTiktok, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { toast } from "sonner";
-import { z } from "zod";
+import { EditBioSchema, type EditBioFormValues, SocialLinkSchema, type SocialLinkFormValues } from "@/front/schemas/zod/user.zod";
 
 const PLATFORMS = [
-    { value: "portfolio", label: "Portfolio", icon: Briefcase },
     { value: "instagram", label: "Instagram", icon: FaInstagram },
     { value: "behance", label: "Behance", icon: FaBehance },
     { value: "tiktok", label: "TikTok", icon: FaTiktok },
@@ -43,28 +44,16 @@ function getPlatformLabel(value: string) {
     return PLATFORMS.find((p) => p.value === value)?.label ?? value;
 }
 
-const profileSchema = z.object({
-    bio: z.string().max(300, "300 caractères max").optional(),
-});
-
-const socialLinkSchema = z.object({
-    platform: z.string().min(1, "Choisis un réseau"),
-    url: z.string().regex(/^https?:\/\/.+/, "URL invalide (commence par http:// ou https://)"),
-});
-
-type ProfileFormValues = z.infer<typeof profileSchema>;
-type SocialLinkFormValues = z.infer<typeof socialLinkSchema>;
-
 function EditBioDialog({ user, children }: { user: UserProfile; children: React.ReactNode }) {
     const [open, setOpen] = useState(false);
     const { mutate: updateUser, isPending } = useUpdateUser();
 
-    const form = useForm<ProfileFormValues>({
-        resolver: zodResolver(profileSchema),
+    const form = useForm<EditBioFormValues>({
+        resolver: zodResolver(EditBioSchema),
         defaultValues: { bio: user.bio ?? "" },
     });
 
-    function onSubmit(values: ProfileFormValues) {
+    function onSubmit(values: EditBioFormValues) {
         updateUser(
             { id: user.id, data: { bio: values.bio || undefined } },
             {
@@ -112,7 +101,7 @@ function AddSocialLinkDialog({ user, children }: { user: UserProfile; children: 
     const availablePlatforms = PLATFORMS.filter((p) => !existingPlatforms.has(p.value));
 
     const form = useForm<SocialLinkFormValues>({
-        resolver: zodResolver(socialLinkSchema),
+        resolver: zodResolver(SocialLinkSchema),
         defaultValues: { platform: "", url: "" },
     });
 
@@ -192,6 +181,9 @@ export default function UserProfileHeader({ user }: { user: UserProfile }) {
 
     const [isFollowed, setIsFollowed] = useState(user.isFollowed);
     const [isReported, setIsReported] = useState(user.isReported);
+    const [dmOpen, setDmOpen] = useState(false);
+    const [reportOpen, setReportOpen] = useState(false);
+    const [reportReason, setReportReason] = useState("");
 
     const { mutate: toggleFollow, isPending: followPending } = useToggleFollowUser(user.id, user.username ?? "");
     const { mutate: report, isPending: reportPending } = useReportUser(user.id);
@@ -200,6 +192,7 @@ export default function UserProfileHeader({ user }: { user: UserProfile }) {
     const displayName = getDisplayName(user);
     const initials = getInitialName(user);
     const level = user._count.Posts + user._count.projects * 5;
+
 
     function handleFollow() {
         requireAuth(() => {
@@ -211,13 +204,15 @@ export default function UserProfileHeader({ user }: { user: UserProfile }) {
         });
     }
 
-    function handleReport() {
-        requireAuth(() => {
-            const next = !isReported;
-            report(undefined, {
-                onSuccess: () => { setIsReported(next); toast.success(next ? "Utilisateur signalé." : "Signalement retiré."); },
-                onError: (error) => { setIsReported(isReported); toast.error(error.message || "Une erreur est survenue."); },
-            });
+    function handleReportSubmit() {
+        report(reportReason.trim() || undefined, {
+            onSuccess: () => {
+                setIsReported(true);
+                setReportOpen(false);
+                setReportReason("");
+                toast.success("Utilisateur signalé.");
+            },
+            onError: (error) => toast.error(error.message || "Une erreur est survenue."),
         });
     }
 
@@ -251,14 +246,28 @@ export default function UserProfileHeader({ user }: { user: UserProfile }) {
                                     {isFollowed ? <UserRoundCheck className="h-3 w-3" /> : <UserRoundPlus className="h-3 w-3" />}
                                     {isFollowed ? "Suivi" : "Suivre"}
                                 </Button>
-                                <Button variant={isReported ? "destructive" : "outline"} size="sm" className="h-7 text-xs px-2.5 gap-1" onClick={handleReport} disabled={reportPending}>
-                                    <Flag className={cn("h-3 w-3", isReported && "fill-white")} />
-                                    Signaler
-                                </Button>
-                                <Button variant="outline" size="sm" className="h-7 text-xs px-2.5 gap-1" onClick={() => toast.info("Bientôt disponible")}>
+                                <Button variant="outline" size="sm" className="h-7 text-xs px-2.5 gap-1" onClick={() => requireAuth(() => setDmOpen(true))}>
                                     <MessageCircleMore className="h-3 w-3" />
                                     Discuter
                                 </Button>
+                                <Button
+                                    variant={isReported ? "destructive" : "outline"}
+                                    size="sm"
+                                    className="h-7 text-xs px-2.5 gap-1"
+                                    onClick={() => requireAuth(() => setReportOpen(true))}
+                                    disabled={isReported}
+                                >
+                                    <Flag className={cn("h-3 w-3", isReported && "fill-white")} />
+                                    <span className={cn(isReported ? "text-white" : "")}>
+                                        {isReported ? "Signalé" : "Signaler"}
+                                    </span>
+                                </Button>
+                                {dmOpen && (
+                                    <DirectMessageChat
+                                        otherUser={{ id: user.id, firstname: user.firstname ?? null, lastname: user.lastname ?? null, username: user.username ?? null, image: user.image ?? null }}
+                                        onClose={() => setDmOpen(false)}
+                                    />
+                                )}
                             </div>
                         )}
                     </div>
@@ -322,7 +331,41 @@ export default function UserProfileHeader({ user }: { user: UserProfile }) {
                         )}
                     </div>
                 )}
+
             </CardContent>
+
+            <Dialog open={reportOpen} onOpenChange={(o) => { setReportOpen(o); if (!o) setReportReason(""); }}>
+                <DialogContent className="max-w-sm">
+                    <DialogHeader>
+                        <DialogTitle>Signaler cet utilisateur</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col gap-3 py-1">
+                        <p className="text-sm text-neutral-500">
+                            Décris brièvement la raison de ton signalement. Cette information sera transmise aux modérateurs.
+                        </p>
+                        <Textarea
+                            placeholder="Ex : comportement abusif, contenu inapproprié…"
+                            className="resize-none"
+                            rows={3}
+                            value={reportReason}
+                            onChange={(e) => setReportReason(e.target.value)}
+                        />
+                    </div>
+                    <DialogFooter className="flex gap-2 sm:justify-end">
+                        <Button variant="outline" onClick={() => setReportOpen(false)}>
+                            Annuler
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={handleReportSubmit}
+                            disabled={reportPending}
+                            className="text-white"
+                        >
+                            Signaler
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 }

@@ -1,6 +1,8 @@
 import { UsersAction } from "../repositories/users.action";
 import { PostsAction } from "../repositories/posts.action";
 import { getUser } from "../lib/auth-session";
+import { notifyNewFollower, notifyUserReadyStatusChanged } from "../lib/ably";
+import { NotificationService } from "./notifications.service";
 import crypto from "crypto";
 
 export const UsersService = {
@@ -46,7 +48,25 @@ export const UsersService = {
         if (currentUser.id === targetUserId) throw new Error("Cannot follow yourself");
         const target = await UsersAction.findById(targetUserId);
         if (!target) throw new Error("User not found");
-        return UsersAction.toggleFollowUser(currentUser.id, targetUserId);
+
+        const result = await UsersAction.toggleFollowUser(currentUser.id, targetUserId);
+
+        // Notifier si c'est un nouveau follow (et non un unfollow)
+        const isFollowing = result && typeof result === 'object' && 'follower' in result;
+        if (isFollowing) {
+            const followerName = currentUser.firstname && currentUser.lastname
+                ? `${currentUser.firstname} ${currentUser.lastname}`
+                : currentUser.username || "Utilisateur";
+            await NotificationService.createForUser(
+                targetUserId, "new_follower",
+                `${followerName} vous suit maintenant`,
+                `Vous avez un nouvel abonné`,
+                { followerId: currentUser.id, followerName }
+            );
+            await notifyNewFollower(targetUserId, followerName, currentUser.id);
+        }
+
+        return result;
     },
 
     getFollowStatus: async (targetUserId: string) => {
@@ -110,6 +130,8 @@ export const UsersService = {
             image?: string;
             cv?: string;
             portfolio?: string;
+            isMarketplaceTalent?: boolean;
+            readyToStart?: boolean;
         }
     ) => {
         if (!data || Object.keys(data).length === 0) {
@@ -123,9 +145,26 @@ export const UsersService = {
             throw new Error("Forbidden");
         }
 
-        await UsersService.findByIdUser(id);
+        const existing = await UsersService.findByIdUser(id);
 
-        return UsersAction.update(id, data);
+        let finalData = { ...data };
+
+        // Si le firstname change et que l'user n'a pas encore de username, en générer un
+        if (data.firstname && !existing.username && !data.username) {
+            finalData = {
+                ...finalData,
+                username: await UsersAction.generateUniqueUsername(data.firstname),
+            };
+        }
+
+        const result = await UsersAction.update(id, finalData);
+
+        // Notifier si le statut readyToStart change
+        if (typeof data.readyToStart === "boolean") {
+            await notifyUserReadyStatusChanged(id, data.readyToStart);
+        }
+
+        return result;
     },
 
     updateUserRole: async (id: string, role: "ADMIN" | "MEMBER") => {
@@ -200,5 +239,11 @@ export const UsersService = {
         const user = await getUser();
         if (!user) throw new Error("Unauthorized");
         return UsersAction.deleteSocialLink(user.id, platform);
+    },
+
+    search: async (q: string) => {
+        const currentUser = await getUser();
+        if (!currentUser) throw new Error("Unauthorized");
+        return UsersAction.search(q, currentUser.id);
     },
 };

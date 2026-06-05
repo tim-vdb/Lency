@@ -4,10 +4,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/front/components/ui/p
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/front/components/ui/tooltip";
 import { cn } from "@/front/lib/utils";
 import { Bookmark, Flag, Ellipsis, Share } from "lucide-react";
-import { PostWithUserState } from "@/front/types/post.schema";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
 import { useRequireAuth } from "@/front/hooks/use-modals";
 import { useShare } from "@/front/hooks/use-share";
-import { useReportPost, useToggleSavePost } from "@/front/hooks/queries/use-posts";
+import { useReportPost, useToggleSavePost } from "@/front/queries/posts";
 import { toast } from "sonner";
 
 interface PostActionsPopupProps {

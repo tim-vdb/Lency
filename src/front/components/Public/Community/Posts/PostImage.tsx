@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardFooter } from "@/front/components/ui/card";
 import { cn } from "@/front/lib/utils";
-import { PostWithUserState } from "@/front/types/post.schema";
+import { PostWithUserState } from "@/front/schemas/types/post.type";
 import { usePostState } from "@/front/hooks/use-post-state";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,26 +12,26 @@ import PostAvatar from "./PostAvatar";
 import PostActionsPopup from "./PostActionsPopup";
 import PostActions from "./PostActions";
 import ExpandableText from "./ExpandableText";
-import { useViewportRecentlyViewed } from "@/front/hooks/use-viewport-recently-viewed";
 import { Button } from "@/front/components/ui/button";
 import MediaLightbox, { MediaExpandOverlay } from "@/front/components/Public/Community/MediaLightbox";
 
 interface PostImageProps {
     post: PostWithUserState;
     className?: string;
+    defaultOpenComments?: boolean;
+    lockOpenComments?: boolean;
 }
 
-export default function PostImage({ post, className }: PostImageProps) {
-    const postState = usePostState(post);
+export default function PostImage({ post, className, defaultOpenComments, lockOpenComments }: PostImageProps) {
+    const postState = usePostState(post, { initialOpenComments: defaultOpenComments, lockOpenComments });
     const { openComments } = postState;
-    const cardRef = useViewportRecentlyViewed(post, 60_000);
 
     const imageSrc = post.imageUrl ?? "/images/blog/img1.jpg";
     const isPortrait = post.orientation === "PORTRAIT";
 
     if (isPortrait) {
         return (
-            <Card ref={cardRef} className={cn("overflow-hidden p-6 md:p-12", className)}>
+            <Card className={cn("overflow-hidden p-6 md:p-12", className)}>
                 <CardContent className="p-0 flex flex-col gap-4">
                     <div className="flex items-center justify-between md:hidden">
                         <PostAvatar author={post.author} className="pl-0 py-0" />
@@ -96,7 +96,7 @@ export default function PostImage({ post, className }: PostImageProps) {
 
     /* Landscape: image top, footer below */
     return (
-        <Card ref={cardRef} className={cn("gap-4 p-12 flex-1", className)}>
+        <Card className={cn("gap-4 p-12 flex-1", className)}>
             <CardContent className="flex flex-col relative px-0 gap-2">
                 <div className="flex items-center justify-between bg-transparent z-10">
                     <PostAvatar author={post.author} className="pl-0" />

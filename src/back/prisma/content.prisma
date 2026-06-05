@@ -37,7 +37,8 @@ model Category {
   user            User?            @relation(fields: [userId], references: [id])
   posts           Post[]
   ressources      Resource[]
-  followers       CategoryFollow[]
+  followers                CategoryFollow[]
+  notificationSubscriptions CategoryNotificationSubscription[]
 
   @@index([slug])
   @@index([visibility])
@@ -77,10 +78,12 @@ model Post {
 model Comment {
   id            String    @id @default(cuid())
   content       String
-  imageUrl      String?
-  videoUrl      String?
+  imageUrls     String[]
+  videoUrls     String[]
+  audioUrls     String[]
   postId        String?
   resourceId    String?
+  projectId     String?
   authorId      String
   parentId      String?
   upvoteCount   Int       @default(0)
@@ -92,9 +95,11 @@ model Comment {
   children      Comment[] @relation("CommentReplies")
   post          Post?     @relation(fields: [postId], references: [id])
   resource      Resource? @relation(fields: [resourceId], references: [id])
+  project       Project?  @relation(fields: [projectId], references: [id])
 
   @@index([postId])
   @@index([resourceId])
+  @@index([projectId])
   @@index([authorId])
   @@index([parentId])
 }
