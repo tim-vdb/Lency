@@ -38,7 +38,8 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
       console.warn("[Ably] ❌ Failed:", err);
       setConnected(false);
     });
-    client.connection.on(["error"] as any, () => {
+    // @ts-expect-error Ably doesn't expose 'error' event type
+    client.connection.on("error", () => {
       // swallow connection errors during StrictMode cleanup
     });
 
