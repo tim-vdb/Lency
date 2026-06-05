@@ -11,7 +11,6 @@ import PostAvatar from "./PostAvatar";
 import PostActionsPopup from "./PostActionsPopup";
 import PostActions from "./PostActions";
 import ExpandableText from "./ExpandableText";
-import { useViewportRecentlyViewed } from "@/front/hooks/use-viewport-recently-viewed";
 import { useVideoThumbnail } from "@/front/hooks/use-video-thumbnail";
 import { Button } from "@/front/components/ui/button";
 import { useRef, useState } from "react";
@@ -22,14 +21,12 @@ interface PostVideoProps {
     className?: string;
     defaultOpenComments?: boolean;
     lockOpenComments?: boolean;
-    viewDelay?: number;
 }
 
-export default function PostVideo({ post, className, defaultOpenComments, lockOpenComments, viewDelay = 10_000 }: PostVideoProps) {
+export default function PostVideo({ post, className, defaultOpenComments, lockOpenComments }: PostVideoProps) {
     const { category } = post;
     const postState = usePostState(post, { initialOpenComments: defaultOpenComments, lockOpenComments });
     const { openComments } = postState;
-    const cardRef = useViewportRecentlyViewed(post, viewDelay);
 
     const videoSrc = post.videoUrl;
     const isPortrait = post.orientation === "PORTRAIT";
@@ -44,7 +41,7 @@ export default function PostVideo({ post, className, defaultOpenComments, lockOp
     /* Portrait: 2-col grid on md+, vertical stack below md */
     if (isPortrait) {
         return (
-            <Card ref={cardRef} className={cn("overflow-hidden p-6 md:p-12", className)}>
+            <Card className={cn("overflow-hidden p-6 md:p-12", className)}>
                 <CardContent className="p-0 flex flex-col gap-4">
                     {/* Avatar row — mobile only (above video) */}
                     <div className="flex items-center justify-between md:hidden">
@@ -127,7 +124,7 @@ export default function PostVideo({ post, className, defaultOpenComments, lockOp
 
     /* Landscape: video top, footer below */
     return (
-        <Card ref={cardRef} className={cn("p-6 sm:p-12", className)}>
+        <Card className={cn("p-6 sm:p-12", className)}>
             <CardContent className="flex flex-col relative gap-2 px-0">
                 <div className="flex items-center justify-between bg-transparent z-10">
                     <PostAvatar author={post.author} className="pl-0" />

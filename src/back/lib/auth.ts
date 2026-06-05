@@ -37,9 +37,12 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          if (!user.username && user.firstname) {
-            const username = await UsersAction.generateUniqueUsername(user.firstname as string);
-            await UsersAction.update(user.id, { username });
+          if (!user.username) {
+            const firstName = (user.firstname as string | null) ?? (user.name as string | null)?.split(' ')[0];
+            if (firstName) {
+              const username = await UsersAction.generateUniqueUsername(firstName);
+              await UsersAction.update(user.id, { username });
+            }
           }
         },
       },

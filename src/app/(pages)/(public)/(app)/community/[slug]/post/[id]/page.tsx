@@ -4,7 +4,7 @@ import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostAudio from "@/front/components/Public/Community/Posts/PostAudio";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
 import { PostsService } from "@/back/services/posts.service";
-import RecentlyViewedSidebar from "@/front/components/Public/Community/Sidebar/RecentlyViewedSidebar";
+import RecentlyViewedSidebar from "@/front/components/Public/Community/Sidebar/RecentlyViewed/RecentlyViewedSidebar";
 import BreadcrumbOverride from "@/front/components/Private/Global/BreadcrumbOverride";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";

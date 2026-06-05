@@ -13,7 +13,6 @@ import PostActionsPopup from "./PostActionsPopup";
 import PostActions from "./PostActions";
 import PostAvatar from "./PostAvatar";
 import ExpandableText from "./ExpandableText";
-import { useViewportRecentlyViewed } from "@/front/hooks/use-viewport-recently-viewed";
 import { Button } from "@/front/components/ui/button";
 
 interface PostAudioProps {
@@ -22,7 +21,6 @@ interface PostAudioProps {
     className?: string;
     defaultOpenComments?: boolean;
     lockOpenComments?: boolean;
-    viewDelay?: number;
 }
 
 function formatTime(seconds: number): string {
@@ -120,14 +118,13 @@ function AudioPlayer({ audioUrl }: { audioUrl?: string }) {
     );
 }
 
-export default function PostAudio({ post, audioUrl, className, defaultOpenComments, lockOpenComments, viewDelay = 10_000 }: PostAudioProps) {
+export default function PostAudio({ post, audioUrl, className, defaultOpenComments, lockOpenComments }: PostAudioProps) {
     const { category } = post;
     const postState = usePostState(post, { initialOpenComments: defaultOpenComments, lockOpenComments });
     const { openComments } = postState;
-    const cardRef = useViewportRecentlyViewed(post, viewDelay);
 
     return (
-        <Card ref={cardRef} className={cn("relative p-12", className)}>
+        <Card className={cn("relative p-12", className)}>
             <CardContent className="flex flex-col gap-4 px-0">
                 {/* Avatar + username */}
                 <div className="flex items-center justify-between">

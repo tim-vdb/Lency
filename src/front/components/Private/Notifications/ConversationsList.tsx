@@ -6,7 +6,6 @@ import type { ConversationParticipant } from "@/front/lib/api/conversations";
 import { EmptyState } from "./EmptyState";
 import { formatDate } from "./utils";
 import type { Conversation } from "./types";
-import Link from "next/link";
 
 interface ConversationsListProps {
     conversations: Conversation[];
@@ -53,23 +52,19 @@ export function ConversationsList({
                             }`}
                     >
                         <div className="relative shrink-0">
-                            <Link href={`/user/${other.username}`} target="_blank">
-                                <Avatar className="h-10 w-10">
-                                    <AvatarImage src={other.image ?? undefined} />
-                                    <AvatarFallback className="text-xs">{getInitialName(other)}</AvatarFallback>
-                                </Avatar>
-                            </Link>
+                            <Avatar className="h-10 w-10">
+                                <AvatarImage src={other.image ?? undefined} />
+                                <AvatarFallback className="text-xs">{getInitialName(other)}</AvatarFallback>
+                            </Avatar>
                             {hasUnread && (
                                 <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-orange border-2 border-white" />
                             )}
                         </div>
 
                         <div className="flex-1 min-w-0">
-                            <Link href={`/user/${other.username}`} target="_blank">
-                                <p className={`text-sm truncate ${hasUnread ? "font-bold text-black" : "font-semibold text-black"}`}>
-                                    {getDisplayName(other)}
-                                </p>
-                            </Link>
+                            <p className={`text-sm truncate ${hasUnread ? "font-bold text-black" : "font-semibold text-black"}`}>
+                                {getDisplayName(other)}
+                            </p>
                             {lastMsg ? (
                                 <p className={`text-xs truncate ${hasUnread ? "text-neutral-600 font-medium" : "text-neutral-400"}`}>
                                     {lastMsg.senderId === currentUserId ? "Vous : " : ""}

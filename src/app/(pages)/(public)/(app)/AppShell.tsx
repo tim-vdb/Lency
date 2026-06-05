@@ -9,11 +9,13 @@ import type { User } from "@/back/generated/prisma_client"
 import Header from "../../../../front/components/Private/Global/Header"
 import { AblyInitializer } from "@/front/components/Private/Global/AblyInitializer"
 import { QueryProvider } from "@/front/components/providers/QueryProvider"
+import { RecentlyViewedUserSync } from "@/front/components/providers/RecentlyViewedUserSync"
 
 export function AppShell({ user, children }: { user: User | null; children: React.ReactNode }) {
     return (
         <QueryProvider>
         <UserProvider user={user}>
+            <RecentlyViewedUserSync />
             <AblyInitializer>
                 <div className="bg-gray-lighter dark:bg-gray-dark min-h-screen">
                     <SidebarProvider className="gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">

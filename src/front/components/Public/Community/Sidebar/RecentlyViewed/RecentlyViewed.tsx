@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import type { RecentlyViewedEntry } from "@/front/states/stores/recently-viewed.store";
 import Image from "next/image";
 import { Button } from "@/front/components/ui/button";
-import PostAvatar from "../Posts/PostAvatar";
+import PostAvatar from "../../Posts/PostAvatar";
 import { formatCount, timeAgo } from "@/front/lib/utils";
 
 function RecentlyViewedItem({ entry }: { entry: RecentlyViewedEntry }) {

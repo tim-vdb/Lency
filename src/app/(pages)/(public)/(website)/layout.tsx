@@ -1,5 +1,8 @@
 import { getUser } from '@/back/lib/auth-session';
-import WebsiteShell from '@/app/(pages)/(public)/(website)/WebsiteShell';
+import { UserProvider } from '@/front/states/contexts/user.context';
+import { ModalRenderer } from '@/front/components/Modals/ModalRenderer';
+import Footer from '@/front/components/Public/Global/Footer/Footer';
+import HeaderPublic from '@/front/components/Public/Global/Header/HeaderPublic';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,8 +14,11 @@ export default async function WebsiteLayout({
   const user = await getUser();
 
   return (
-    <WebsiteShell user={user}>
-      {children}
-    </WebsiteShell>
+    <UserProvider user={user}>
+      <HeaderPublic />
+      <main>{children}</main>
+      <Footer />
+      <ModalRenderer />
+    </UserProvider>
   );
 }

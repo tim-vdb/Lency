@@ -1,8 +1,30 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 import type { PostWithUserState } from "@/front/schemas/types/post.type";
+
+let currentUserId: string | null = null;
+
+export function setRecentlyViewedUser(userId: string | null) {
+    currentUserId = userId;
+    useRecentlyViewed.persist.rehydrate();
+}
+
+const userScopedStorage = createJSONStorage(() => ({
+    getItem: (name: string) => {
+        const key = currentUserId ? `${name}:${currentUserId}` : `${name}:guest`;
+        return localStorage.getItem(key);
+    },
+    setItem: (name: string, value: string) => {
+        const key = currentUserId ? `${name}:${currentUserId}` : `${name}:guest`;
+        localStorage.setItem(key, value);
+    },
+    removeItem: (name: string) => {
+        const key = currentUserId ? `${name}:${currentUserId}` : `${name}:guest`;
+        localStorage.removeItem(key);
+    },
+}));
 
 export interface RecentlyViewedEntry {
     id: string;
@@ -84,6 +106,6 @@ export const useRecentlyViewed = create<RecentlyViewedStore>()(
                 }
             },
         }),
-        { name: "lency:recently-viewed" }
+        { name: "lency:recently-viewed", storage: userScopedStorage }
     )
 );

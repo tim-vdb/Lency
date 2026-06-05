@@ -78,8 +78,8 @@ export function DirectMessageChat({ otherUser, onClose }: DirectMessageChatProps
 
   return (
     <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent className="sm:max-w-[440px] p-0 gap-0 overflow-hidden h-[600px] flex flex-col">
-        <DialogHeader className="px-4 py-3 border-b border-neutral-200 bg-neutral-50 flex-shrink-0">
+      <DialogContent className="w-[calc(100vw-2rem)] h-[85svh] sm:w-[90vw] sm:h-[75vh] lg:w-[700px] lg:h-[600px] xl:w-[800px] xl:h-[650px] 2xl:w-[960px] 2xl:h-[700px] max-w-none p-0 gap-0 overflow-hidden flex flex-col">
+        <DialogHeader className="px-4 py-3 border-b border-neutral-200 bg-neutral-50 shrink-0">
           <div className="flex items-center gap-3">
             <Link href={`/user/${otherUser.username}`}>
               <Avatar className="h-8 w-8">

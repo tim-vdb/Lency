@@ -67,6 +67,8 @@ export default function SignUpForm() {
                 password: values.password,
                 image: image ? await convertImageToBase64(image) : "",
                 callbackURL: "/account",
+                firstname: values.firstName,
+                lastname: values.lastName,
             });
             if (error) {
                 toast.error(error.message || 'An error occurred');

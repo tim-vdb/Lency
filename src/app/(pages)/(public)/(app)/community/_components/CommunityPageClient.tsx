@@ -5,7 +5,7 @@ import PostImage from "@/front/components/Public/Community/Posts/PostImage";
 import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
 import PostSkeleton, { PostImageSkeleton } from "@/front/components/Public/Community/Posts/PostSkeleton";
-import RecentlyViewedSidebar from "@/front/components/Public/Community/Sidebar/RecentlyViewedSidebar";
+import RecentlyViewedSidebar from "@/front/components/Public/Community/Sidebar/RecentlyViewed/RecentlyViewedSidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs";
 import { useFollowedCategoryPosts, usePosts } from "@/front/queries/posts";
 import { useMemo } from "react";

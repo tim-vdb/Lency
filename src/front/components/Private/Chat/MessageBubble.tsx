@@ -29,7 +29,7 @@ export function MessageBubble({ content, createdAt, sender, isMe, imageUrls = []
   return (
     <div className={`flex gap-2 ${isMe ? "flex-row-reverse" : "flex-row"}`}>
       {!isMe && (
-        <Avatar className="h-7 w-7 flex-shrink-0 mt-1">
+        <Avatar className="h-7 w-7 shrink-0 mt-1">
           <AvatarImage src={sender.image ?? undefined} />
           <AvatarFallback className="text-[10px]">{getInitialName(sender)}</AvatarFallback>
         </Avatar>
