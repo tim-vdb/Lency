@@ -197,12 +197,14 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
 
     return () => {
       setAblyClient(null);
-      // Détacher tous les listeners de connexion avant de fermer pour éviter
-      // des appels de state setters sur un composant démonté (StrictMode inclus).
-      client.connection.off();
-      const state = client.connection.state;
-      if (state !== "closed" && state !== "failed") {
-        client.close();
+      try {
+        const state = client.connection.state;
+        if (state !== "closed" && state !== "failed") {
+          client.connection.off();
+          client.close();
+        }
+      } catch {
+        // connexion déjà fermée (StrictMode double-invoke ou échec auth)
       }
     };
   }, [user?.id, setConnected, queryClient]);

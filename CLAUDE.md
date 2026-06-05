@@ -898,6 +898,42 @@ Réutiliser les skeletons existants dans `front/components/` comme fallback — 
 
 ---
 
+### 32. Fichiers spéciaux — carte par section
+
+Chaque section qui charge des données doit avoir ses trois fichiers Next.js. Règle : si une page fait un `await`, son segment a besoin des trois.
+
+**Carte des fichiers en place dans ce projet :**
+
+| Segment | `loading.tsx` | `error.tsx` | `not-found.tsx` |
+|---|---|---|---|
+| `src/app/` | — | ✅ (catch-all) | ✅ (catch-all) |
+| `(app)/marketplace/` | ✅ | ✅ | ✅ |
+| `(app)/marketplace/[projectId]/` | ✅ | — (hérite) | ✅ |
+| `(app)/community/` | ✅ | ✅ | ✅ |
+| `(app)/community/[slug]/post/[id]/` | ✅ | — (hérite) | ✅ |
+| `(app)/community/[slug]/resources/[resourceId]/` | — | — (hérite) | ✅ |
+| `(app)/user/[userName]/` | ✅ | — (hérite) | ✅ |
+| `account/` | ✅ | ✅ | — |
+| `admin/` | — | ✅ | — |
+
+**Règles :**
+- `not-found.tsx` → toujours dans le segment **le plus proche** de la route dynamique. Le message doit nommer la ressource ("Ce projet n'existe pas", pas "Page introuvable").
+- `error.tsx` → **ne pas dupliquer** par route dynamique : le segment parent capture les enfants. Un `error.tsx` par section suffit.
+- `loading.tsx` → **ne pas créer** sur les pages auth ou les pages website statiques (pas d'`await` = pas d'intérêt).
+- `unauthorized.tsx` → un seul à la racine `src/app/`, appelé via `unauthorized()` de `next/navigation`.
+
+**Protection serveur sur `/account/` :**
+
+Le layout `/account/layout.tsx` doit rediriger côté serveur si l'utilisateur n'est pas connecté, comme le fait `/admin/layout.tsx`. Ne pas déléguer cette protection au composant client.
+
+```typescript
+// account/layout.tsx
+const user = await getUser();
+if (!user) redirect("/login");
+```
+
+---
+
 ## Commandes utiles
 
 ### Prisma (migrations, db push, studio...)

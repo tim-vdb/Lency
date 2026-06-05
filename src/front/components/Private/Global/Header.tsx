@@ -10,8 +10,9 @@ import { useSidebar } from "../../ui/sidebar";
 import { usePathname } from "next/navigation";
 import { CreateDropdown } from "./CreateDropdown";
 import BreadcrumbAuto from "./BreadcrumbAuto";
-import SearchBar from "../../Filter/SearchBar";
+import SearchBar from "../../SearchBar/SearchBar";
 import { useNotificationsQuery } from "@/front/queries/notifications";
+import { toast } from "sonner";
 
 export default function Header({ className }: { className?: string }) {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -55,7 +56,7 @@ export default function Header({ className }: { className?: string }) {
                     <SearchBar />
                     <CreateDropdown />
                     <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
-                    <BadgeCheck className="cursor-pointer w-6 h-6 min-w-6 min-h-6" />
+                    <BadgeCheck className="cursor-pointer w-6 h-6 min-w-6 min-h-6" onClick={() => toast.info("En développement")} />
                     <SheetTrigger className="cursor-pointer relative flex">
                         <Bell className="w-6 h-6 min-w-6 min-h-6 fill-white text-black dark:fill-black/20 dark:text-white" />
                         {unreadCount > 0 && (

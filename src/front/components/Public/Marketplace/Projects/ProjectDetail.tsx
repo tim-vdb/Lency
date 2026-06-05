@@ -363,7 +363,7 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
                         {isOwner && project.visibility !== "PRIVATE" && (
                             <button
                                 onClick={() => router.push(`/marketplace/${project.id}/candidature`)}
-                                className="w-full bg-white rounded-[10px] p-4 flex items-center gap-3 hover:bg-neutral-50 transition-colors text-left border border-neutral-100 hover:border-neutral-200"
+                                className="w-full bg-white rounded-[10px] p-4 flex items-center gap-3 cursor-pointer hover:bg-neutral-50 transition-colors text-left border border-neutral-100 hover:border-neutral-200"
                             >
                                 <div className="h-10 w-10 rounded-lg bg-neutral-100 flex items-center justify-center shrink-0">
                                     <MessageCircle className="w-5 h-5 text-neutral-500" />

@@ -38,8 +38,9 @@ export const CommentsAction = {
 
     create: async (userId: string, data: {
         content: string;
-        imageUrl?: string | null;
-        videoUrl?: string | null;
+        imageUrls?: string[];
+        videoUrls?: string[];
+        audioUrls?: string[];
         postId?: string;
         resourceId?: string;
         projectId?: string;
@@ -48,8 +49,9 @@ export const CommentsAction = {
         const comment = await prisma.comment.create({
             data: {
                 content: data.content,
-                imageUrl: data.imageUrl ?? null,
-                videoUrl: data.videoUrl ?? null,
+                imageUrls: data.imageUrls ?? [],
+                videoUrls: data.videoUrls ?? [],
+                audioUrls: data.audioUrls ?? [],
                 postId: data.postId,
                 resourceId: data.resourceId,
                 projectId: data.projectId,

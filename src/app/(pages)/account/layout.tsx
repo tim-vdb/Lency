@@ -1,4 +1,5 @@
 import { getUser } from '@/back/lib/auth-session';
+import { redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { AccountShell } from './AccountShell';
 
@@ -15,6 +16,7 @@ export default async function AccountLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUser();
+  if (!user) redirect('/login');
 
   return (
     <AccountShell user={user}>

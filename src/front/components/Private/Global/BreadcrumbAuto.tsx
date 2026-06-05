@@ -48,7 +48,8 @@ export default function BreadcrumbAuto() {
         .map((segment, index, filtered) => {
             const decoded = decodeURIComponent(segment);
             const override = overrides[segment];
-            const label = override?.label ?? SEGMENT_LABELS[segment] ?? decoded;
+            const isId = !SEGMENT_LABELS[segment] && /^[a-z0-9]{20,}$|^[0-9a-f-]{36}$/.test(decoded);
+            const label = override?.label ?? SEGMENT_LABELS[segment] ?? (isId ? "…" : decoded);
             const isCategory = override?.type === "category";
             const originalIndex = segments.indexOf(segment);
             const href = "/" + segments.slice(0, originalIndex + 1).join("/");
@@ -92,14 +93,14 @@ export default function BreadcrumbAuto() {
                                 ) : item.isCategory ? (
                                     <BreadcrumbLink
                                         href={item.href}
-                                        className="hidden md:inline-flex items-center rounded-sm px-2 py-1 text-xs font-medium transition-opacity hover:opacity-80"
+                                        className="hidden md:inline-flex items-center rounded-sm text-sm font-medium text-black dark:text-white"
                                     >
                                         {item.label}
                                     </BreadcrumbLink>
                                 ) : (
                                     <BreadcrumbLink
                                         href={item.href}
-                                        className="hidden md:block text-black dark:text-white"
+                                        className="hidden md:block text-black text-sm dark:text-white"
                                     >
                                         {item.label}
                                     </BreadcrumbLink>

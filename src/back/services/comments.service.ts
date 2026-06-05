@@ -33,8 +33,9 @@ export const CommentsService = {
 
     createComment: async (data: {
         content: string;
-        imageUrl?: string | null;
-        videoUrl?: string | null;
+        imageUrls?: string[];
+        videoUrls?: string[];
+        audioUrls?: string[];
         postId?: string;
         resourceId?: string;
         projectId?: string;
@@ -44,9 +45,8 @@ export const CommentsService = {
         if (!user) throw new Error("Unauthorized");
 
         const hasContent = !!data.content && data.content.trim().length > 0;
-        const hasImage = !!data.imageUrl;
-        const hasVideo = !!data.videoUrl;
-        if (!hasContent && !hasImage && !hasVideo) throw new Error("Content is required");
+        const hasMedia = (data.imageUrls?.length ?? 0) > 0 || (data.videoUrls?.length ?? 0) > 0 || (data.audioUrls?.length ?? 0) > 0;
+        if (!hasContent && !hasMedia) throw new Error("Content is required");
 
         const targetCount = [!!data.postId, !!data.resourceId, !!data.projectId].filter(Boolean).length;
         if (targetCount !== 1) throw new Error("Target is required");

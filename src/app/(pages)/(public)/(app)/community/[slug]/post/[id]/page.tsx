@@ -8,6 +8,7 @@ import RecentlyViewedSidebar from "@/front/components/Public/Community/Sidebar/R
 import BreadcrumbOverride from "@/front/components/Private/Global/BreadcrumbOverride";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { notFound } from "next/navigation";
 
 interface PostPageProps {
     params: Promise<{ id: string }>;
@@ -28,9 +29,7 @@ export default async function PostPage({ params }: PostPageProps) {
     const { id } = await params;
     const post = await PostsService.findByIdPost(id).catch(() => null);
 
-    if (!post) {
-        return <div>Post non trouvé</div>;
-    }
+    if (!post) notFound();
 
     return (
         <div className="flex flex-col gap-4 max-w-5xl mx-auto">
@@ -49,10 +48,10 @@ export default async function PostPage({ params }: PostPageProps) {
 
             <div className="lg:flex lg:gap-4 items-start w-full">
                 <div className="flex-1 min-w-0">
-                    {post.format === "IMAGE" && <PostImage post={post} defaultOpenComments lockOpenComments viewDelay={800} />}
-                    {post.format === "VIDEO" && <PostVideo post={post} defaultOpenComments lockOpenComments viewDelay={800} />}
-                    {post.format === "AUDIO" && <PostAudio post={post} defaultOpenComments lockOpenComments viewDelay={800} />}
-                    {post.format === "TEXT" && <PostText post={post} defaultOpenComments lockOpenComments viewDelay={800} />}
+                    {post.format === "IMAGE" && <PostImage post={post} defaultOpenComments lockOpenComments />}
+                    {post.format === "VIDEO" && <PostVideo post={post} defaultOpenComments lockOpenComments />}
+                    {post.format === "AUDIO" && <PostAudio post={post} defaultOpenComments lockOpenComments />}
+                    {post.format === "TEXT" && <PostText post={post} defaultOpenComments lockOpenComments />}
                 </div>
                 <RecentlyViewedSidebar />
             </div>

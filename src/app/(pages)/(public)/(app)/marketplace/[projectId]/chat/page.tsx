@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from "next/navigation";
 import { ProjectChatPageClient } from "@/front/components/Public/Marketplace/Projects/ProjectChatPageClient";
 import { ProjectsAction } from "@/back/repositories/projects.action";
 
@@ -18,5 +19,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProjectChatPage({ params }: Props) {
     const { projectId } = await params;
+
+    const project = await ProjectsAction.findById(projectId).catch(() => null);
+    if (!project) notFound();
+
     return <ProjectChatPageClient projectId={projectId} />;
 }

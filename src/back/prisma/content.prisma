@@ -78,8 +78,9 @@ model Post {
 model Comment {
   id            String    @id @default(cuid())
   content       String
-  imageUrl      String?
-  videoUrl      String?
+  imageUrls     String[]
+  videoUrls     String[]
+  audioUrls     String[]
   postId        String?
   resourceId    String?
   projectId     String?

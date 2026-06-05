@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import * as Ably from "ably";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAblyClient } from "@/front/states/contexts/ably.context";
 import { useUser } from "@/front/states/contexts/user.context";
 import { useActiveChat } from "@/front/states/contexts/active-chat.context";
 import {
@@ -50,12 +50,13 @@ export function DirectMessageChat({ otherUser, onClose }: DirectMessageChatProps
   const { data: messages = [], isLoading } = useConversationMessages(conversationId ?? "");
   const { mutate: sendMessage, isPending } = useSendDirectMessage(conversationId ?? "");
 
+  const ablyClient = useAblyClient();
+
   // Subscribe Ably en temps réel
   useEffect(() => {
-    if (!user?.id || !conversationId) return;
+    if (!user?.id || !conversationId || !ablyClient) return;
 
-    const client = new Ably.Realtime({ authUrl: "/api/ably/token" });
-    const channel = client.channels.get(`user-dms-${user.id}`);
+    const channel = ablyClient.channels.get(`user-dms-${user.id}`);
     const listKey = conversationQueries.messages(conversationId).queryKey;
 
     channel.subscribe("new_message", (msg) => {
@@ -68,8 +69,8 @@ export function DirectMessageChat({ otherUser, onClose }: DirectMessageChatProps
       });
     });
 
-    return () => { client.close(); };
-  }, [conversationId, user?.id, queryClient]);
+    return () => { channel.unsubscribe(); };
+  }, [conversationId, user?.id, ablyClient, queryClient]);
 
   // Scroll to bottom
   useEffect(() => {

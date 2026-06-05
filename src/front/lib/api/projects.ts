@@ -65,8 +65,9 @@ export interface CreateProjectCommentInput {
     projectId: string;
     content: string;
     parentId?: string;
-    imageUrl?: string | null;
-    videoUrl?: string | null;
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
 }
 
 export interface UpdateProjectInput {
@@ -124,8 +125,9 @@ export async function createProjectComment(input: CreateProjectCommentInput): Pr
         body: JSON.stringify({
             content: input.content,
             parentId: input.parentId,
-            imageUrl: input.imageUrl,
-            videoUrl: input.videoUrl,
+            imageUrls: input.imageUrls,
+            videoUrls: input.videoUrls,
+            audioUrls: input.audioUrls,
         }),
     });
     if (!res.ok) {

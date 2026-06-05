@@ -3,7 +3,7 @@
 import { useState, useRef, KeyboardEvent } from "react";
 import { Button } from "@/front/components/ui/button";
 import { Textarea } from "@/front/components/ui/textarea";
-import { Send, ImageIcon, Music, Video, X, Loader2 } from "lucide-react";
+import { Send, Paperclip, Music, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { uploadToImageKit } from "@/front/lib/upload";
 
@@ -30,9 +30,7 @@ export function ChatInput({ onSend, isPending, placeholder = "Écrivez un messag
   const [pending, setPending] = useState<PendingFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const imageInputRef = useRef<HTMLInputElement>(null);
-  const audioInputRef = useRef<HTMLInputElement>(null);
-  const videoInputRef = useRef<HTMLInputElement>(null);
+  const mediaInputRef = useRef<HTMLInputElement>(null);
 
   const canSend = (value.trim().length > 0 || pending.length > 0) && !isPending && !isUploading;
 
@@ -81,16 +79,25 @@ export function ChatInput({ onSend, isPending, placeholder = "Écrivez un messag
     }
   };
 
-  function onFileChange(kind: "image" | "audio" | "video", e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+  function detectKind(file: File): "image" | "audio" | "video" {
+    if (file.type.startsWith("image/")) return "image";
+    if (file.type.startsWith("audio/")) return "audio";
+    return "video";
+  }
+
+  function onFilesChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
     e.target.value = "";
-    if (!file) return;
     const limits: Record<string, number> = { image: 5 * 1024 * 1024, audio: 20 * 1024 * 1024, video: 50 * 1024 * 1024 };
-    if (file.size > limits[kind]) {
-      toast.error(`Fichier trop volumineux (max ${kind === "image" ? "5Mo" : kind === "audio" ? "20Mo" : "50Mo"})`);
-      return;
+    const labels: Record<string, string> = { image: "5 Mo", audio: "20 Mo", video: "50 Mo" };
+    for (const file of files) {
+      const kind = detectKind(file);
+      if (file.size > limits[kind]) {
+        toast.error(`${file.name} dépasse la limite (${labels[kind]})`);
+        continue;
+      }
+      addFile(kind, file);
     }
-    addFile(kind, file);
   }
 
   return (
@@ -142,22 +149,21 @@ export function ChatInput({ onSend, isPending, placeholder = "Écrivez un messag
         </Button>
       </div>
 
-      {/* Boutons upload médias */}
+      {/* Bouton upload unifié */}
       <div className="flex items-center gap-1 px-3 pb-2">
-        <input ref={imageInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => onFileChange("image", e)} />
-        <input ref={audioInputRef} type="file" accept="audio/*" className="hidden" onChange={(e) => onFileChange("audio", e)} />
-        <input ref={videoInputRef} type="file" accept="video/*" className="hidden" onChange={(e) => onFileChange("video", e)} />
-        <button onClick={() => imageInputRef.current?.click()}
-          className="flex items-center gap-1 text-xs text-neutral-400 hover:text-neutral-700 transition-colors py-0.5 px-1.5 rounded">
-          <ImageIcon className="w-3.5 h-3.5" />Image
-        </button>
-        <button onClick={() => audioInputRef.current?.click()}
-          className="flex items-center gap-1 text-xs text-neutral-400 hover:text-neutral-700 transition-colors py-0.5 px-1.5 rounded">
-          <Music className="w-3.5 h-3.5" />Audio
-        </button>
-        <button onClick={() => videoInputRef.current?.click()}
-          className="flex items-center gap-1 text-xs text-neutral-400 hover:text-neutral-700 transition-colors py-0.5 px-1.5 rounded">
-          <Video className="w-3.5 h-3.5" />Vidéo
+        <input
+          ref={mediaInputRef}
+          type="file"
+          accept="image/*,video/*,audio/*,video/webm"
+          multiple
+          className="hidden"
+          onChange={onFilesChange}
+        />
+        <button
+          onClick={() => mediaInputRef.current?.click()}
+          className="flex items-center gap-1 text-xs text-neutral-400 hover:text-neutral-700 transition-colors py-0.5 px-1.5 rounded"
+        >
+          <Paperclip className="w-3.5 h-3.5" />Médias
         </button>
       </div>
     </div>

@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avata
 import { getDisplayName, getInitialName } from "@/front/lib/utils";
 import { ChatInput, type ChatMedia } from "@/front/components/Private/Chat/ChatInput";
 import type { ProjectMessage } from "@/front/lib/api/project-messages";
-import Image from "next/image";
+import { MediaImage } from "@/front/components/Private/Chat/MediaImage";
 import Link from "next/link";
 
 interface ProjectChatProps {
@@ -140,12 +140,12 @@ function ProjectMessageBubble({ message, isMe }: { message: ProjectMessage; isMe
             {message.imageUrls?.length > 0 && (
               <div className={`grid gap-1 ${message.imageUrls.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
                 {message.imageUrls.map((url, i) => (
-                  <Image key={i} src={url} alt="" width={400} height={192} style={{ height: "auto" }} className="rounded-lg max-h-48 w-full object-cover cursor-zoom-in" />
+                  <MediaImage key={i} url={url} />
                 ))}
               </div>
             )}
             {message.videoUrls?.map((url, i) => (
-              <video key={i} src={url} controls className="rounded-lg max-h-48 w-full" />
+              <video key={i} src={url} controls className="rounded-xl max-h-64 w-full border border-neutral-200" />
             ))}
             {message.audioUrls?.map((url, i) => (
               <audio key={i} src={url} controls className="w-full" />

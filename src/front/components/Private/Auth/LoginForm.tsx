@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/front/components/ui/form";
 import { Input } from "@/front/components/ui/input";
+import { PasswordInput } from "@/front/components/ui/password-input";
 import { Button } from "@/front/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { signIn } from "@/back/lib/auth-client";
@@ -99,8 +100,7 @@ export default function LoginForm() {
                   <FormItem>
                     <FormLabel className="text-zinc-800 dark:text-zinc-900">Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
+                      <PasswordInput
                         placeholder="••••••••"
                         {...field}
                         className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"

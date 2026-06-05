@@ -18,7 +18,6 @@ import { Bell, CalendarCheck, Check, Ellipsis } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-import LencyIcon from "@/front/components/ui/lency-icon";
 
 export default function CategoryPageClient({ slug }: { slug: string }) {
     const { data: category, isPending: categoryPending } = useCategoryBySlug(slug);
@@ -208,7 +207,7 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                         </div>
                         <div className="flex items-center gap-1 text-sm">
                             <span className="font-semibold">{category.subscriberCount}</span>
-                            <span className="text-neutral-500">Membres</span>
+                            <span className="text-neutral-500">{category.subscriberCount > 1 ? "Membres" : "Membre"}</span>
                         </div>
                     </div>
 
@@ -263,9 +262,9 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                         <p className="font-semibold text-sm">Modérateur</p>
                         <div className="flex items-center gap-2">
                             <Avatar className="w-8 h-8">
-                                <AvatarImage src={category.iconUrl ?? ""} alt={category.name} />
-                                <AvatarFallback className="text-xs bg-neutral-100 dark:bg-neutral-800">
-                                    <LencyIcon />
+                                <AvatarImage src={"/logo/lency_icon.svg"} alt={category.name} />
+                                <AvatarFallback className="text-[10px] font-semibold bg-neutral-100 dark:bg-neutral-800 text-orange">
+                                    LC
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col min-w-0">

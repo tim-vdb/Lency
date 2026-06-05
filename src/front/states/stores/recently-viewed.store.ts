@@ -8,21 +8,25 @@ let currentUserId: string | null = null;
 
 export function setRecentlyViewedUser(userId: string | null) {
     currentUserId = userId;
-    useRecentlyViewed.persist.rehydrate();
+    if (userId) {
+        useRecentlyViewed.persist.rehydrate();
+    } else {
+        useRecentlyViewed.setState({ entries: [] });
+    }
 }
 
 const userScopedStorage = createJSONStorage(() => ({
     getItem: (name: string) => {
-        const key = currentUserId ? `${name}:${currentUserId}` : `${name}:guest`;
-        return localStorage.getItem(key);
+        if (!currentUserId) return null;
+        return localStorage.getItem(`${name}:${currentUserId}`);
     },
     setItem: (name: string, value: string) => {
-        const key = currentUserId ? `${name}:${currentUserId}` : `${name}:guest`;
-        localStorage.setItem(key, value);
+        if (!currentUserId) return;
+        localStorage.setItem(`${name}:${currentUserId}`, value);
     },
     removeItem: (name: string) => {
-        const key = currentUserId ? `${name}:${currentUserId}` : `${name}:guest`;
-        localStorage.removeItem(key);
+        if (!currentUserId) return;
+        localStorage.removeItem(`${name}:${currentUserId}`);
     },
 }));
 

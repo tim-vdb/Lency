@@ -1,5 +1,17 @@
 import prisma from "../lib/prisma";
 
+// "mont beau" → "mont:* & beau:*" pour que to_tsquery supporte le prefix matching
+function buildTsQuery(query: string): string {
+    return query
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .map(w => w.replace(/[^a-zA-ZÀ-ÿ0-9]/g, ""))
+        .filter(w => w.length > 0)
+        .map(w => `${w}:*`)
+        .join(" & ");
+}
+
 type FtsRow = {
     id: string;
     type: "project" | "category" | "post" | "resource";
@@ -45,6 +57,9 @@ export const SearchService = {
          *
          * Prisma ne peut pas : pondérer des vecteurs, ranker entre tables, ni générer des extraits.
          */
+        const tsQuery = buildTsQuery(query);
+        if (!tsQuery) return { projects: [], categories: [], posts: [], resources: [] };
+
         const rows = await prisma.$queryRaw<FtsRow[]>`
             SELECT
                 id,
@@ -52,9 +67,9 @@ export const SearchService = {
                 ts_rank(
                     setweight(to_tsvector('french', title), 'A') ||
                     setweight(to_tsvector('french', description), 'B'),
-                    plainto_tsquery('french', ${query})
+                    to_tsquery('french', ${tsQuery})
                 )::float8 AS score,
-                ts_headline('french', description, plainto_tsquery('french', ${query}), ${HEADLINE_OPTS}) AS excerpt
+                ts_headline('french', description, to_tsquery('french', ${tsQuery}), ${HEADLINE_OPTS}) AS excerpt
             FROM "Project"
             WHERE
                 visibility = 'PUBLIC'
@@ -62,7 +77,7 @@ export const SearchService = {
                 AND (
                     setweight(to_tsvector('french', title), 'A') ||
                     setweight(to_tsvector('french', description), 'B')
-                ) @@ plainto_tsquery('french', ${query})
+                ) @@ to_tsquery('french', ${tsQuery})
 
             UNION ALL
 
@@ -71,18 +86,18 @@ export const SearchService = {
                 'category'::text AS type,
                 ts_rank(
                     to_tsvector('french', name || ' ' || COALESCE(description, '')),
-                    plainto_tsquery('french', ${query})
+                    to_tsquery('french', ${tsQuery})
                 )::float8 AS score,
                 ts_headline(
                     'french',
                     COALESCE(description, name),
-                    plainto_tsquery('french', ${query}),
+                    to_tsquery('french', ${tsQuery}),
                     ${HEADLINE_OPTS}
                 ) AS excerpt
             FROM "Category"
             WHERE
                 to_tsvector('french', name || ' ' || COALESCE(description, ''))
-                @@ plainto_tsquery('french', ${query})
+                @@ to_tsquery('french', ${tsQuery})
 
             UNION ALL
 
@@ -91,13 +106,13 @@ export const SearchService = {
                 'post'::text AS type,
                 ts_rank(
                     to_tsvector('french', content),
-                    plainto_tsquery('french', ${query})
+                    to_tsquery('french', ${tsQuery})
                 )::float8 AS score,
-                ts_headline('french', content, plainto_tsquery('french', ${query}), ${HEADLINE_OPTS}) AS excerpt
+                ts_headline('french', content, to_tsquery('french', ${tsQuery}), ${HEADLINE_OPTS}) AS excerpt
             FROM "Post"
             WHERE
                 "isPublished" = true
-                AND to_tsvector('french', content) @@ plainto_tsquery('french', ${query})
+                AND to_tsvector('french', content) @@ to_tsquery('french', ${tsQuery})
 
             UNION ALL
 
@@ -107,19 +122,19 @@ export const SearchService = {
                 ts_rank(
                     setweight(to_tsvector('french', title), 'A') ||
                     setweight(to_tsvector('french', COALESCE(description, '')), 'B'),
-                    plainto_tsquery('french', ${query})
+                    to_tsquery('french', ${tsQuery})
                 )::float8 AS score,
                 ts_headline(
                     'french',
                     COALESCE(description, title),
-                    plainto_tsquery('french', ${query}),
+                    to_tsquery('french', ${tsQuery}),
                     ${HEADLINE_OPTS}
                 ) AS excerpt
             FROM "Resource"
             WHERE (
                 setweight(to_tsvector('french', title), 'A') ||
                 setweight(to_tsvector('french', COALESCE(description, '')), 'B')
-            ) @@ plainto_tsquery('french', ${query})
+            ) @@ to_tsquery('french', ${tsQuery})
 
             ORDER BY score DESC
             LIMIT ${limit * 4}

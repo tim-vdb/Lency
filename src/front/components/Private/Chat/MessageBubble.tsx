@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
 import { getDisplayName, getInitialName } from "@/front/lib/utils";
+import { MediaImage } from "./MediaImage";
 
 type Sender = {
   id: string;
@@ -52,7 +52,6 @@ export function MessageBubble({ content, createdAt, sender, isMe, imageUrls = []
         {/* Médias */}
         {hasMedia && (
           <div className="flex flex-col gap-2 mt-1 w-full">
-            {/* Images */}
             {imageUrls.length > 0 && (
               <div className={`grid gap-1 ${imageUrls.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
                 {imageUrls.map((url, i) => (
@@ -60,25 +59,12 @@ export function MessageBubble({ content, createdAt, sender, isMe, imageUrls = []
                 ))}
               </div>
             )}
-
-            {/* Vidéos */}
             {videoUrls.map((url, i) => (
-              <video
-                key={i}
-                src={url}
-                controls
-                className="rounded-xl max-h-48 min-w-full w-full object-cover border border-neutral-200"
-              />
+              <video key={i} src={url} controls
+                className="rounded-xl max-h-64 w-full border border-neutral-200" />
             ))}
-
-            {/* Audio */}
             {audioUrls.map((url, i) => (
-              <audio
-                key={i}
-                src={url}
-                controls
-                className="w-full min-w-60 max-w-60"
-              />
+              <audio key={i} src={url} controls className="w-full min-w-60 max-w-60" />
             ))}
           </div>
         )}
@@ -86,28 +72,5 @@ export function MessageBubble({ content, createdAt, sender, isMe, imageUrls = []
         <span className="text-[10px] text-neutral-400 px-1">{time}</span>
       </div>
     </div>
-  );
-}
-
-function MediaImage({ url }: { url: string }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <>
-      <img
-        src={url}
-        alt={url}
-        className="rounded-xl max-h-48 min-w-full w-full object-cover border border-neutral-200 cursor-zoom-in"
-        onClick={() => setOpen(true)}
-      />
-      {open && (
-        <div
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
-          onClick={() => setOpen(false)}
-        >
-          <img src={url} alt={url} className="max-h-[90vh] max-w-[90vw] rounded-xl object-contain" />
-        </div>
-      )}
-    </>
   );
 }

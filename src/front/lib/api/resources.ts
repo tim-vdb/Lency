@@ -97,8 +97,9 @@ export interface CreateResourceCommentInput {
     resourceId: string;
     content: string;
     parentId?: string;
-    imageUrl?: string | null;
-    videoUrl?: string | null;
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
 }
 
 export interface CreateResourceInput {
@@ -168,8 +169,9 @@ export async function createResourceComment(
         body: JSON.stringify({
             content: input.content,
             parentId: input.parentId,
-            imageUrl: input.imageUrl,
-            videoUrl: input.videoUrl,
+            imageUrls: input.imageUrls,
+            videoUrls: input.videoUrls,
+            audioUrls: input.audioUrls,
         }),
     });
     if (!response.ok) {
