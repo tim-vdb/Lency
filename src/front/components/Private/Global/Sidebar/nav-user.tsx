@@ -138,19 +138,6 @@ export function NavUser() {
                   </SidebarMenuItem>
                 </Collapsible>
               </DropdownMenuGroup>
-              {user?.role === "ADMIN" && (
-                <>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem asChild className="cursor-pointer">
-                      <Link href="/admin">
-                        <Shield className="size-4" />
-                        Administration
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </>
-              )}
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <LogOutIcon />

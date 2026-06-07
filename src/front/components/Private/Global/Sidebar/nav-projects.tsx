@@ -68,7 +68,7 @@ export function NavProjects() {
       <SidebarMenu>
         {projects.map((project) => (
           <SidebarMenuItem key={project.id}>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton asChild tooltip={project.title}>
               <Link href={`/marketplace/${project.id}`}>
                 <NotebookPen className="shrink-0" />
                 <span className="truncate">{project.title}</span>

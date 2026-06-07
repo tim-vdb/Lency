@@ -16,7 +16,7 @@ export function AdminShell({ user, children }: { user: User | null; children: Re
     return (
         <UserProvider user={user}>
             <div className="bg-gray-lighter dark:bg-gray-dark min-h-screen">
-                <SidebarProvider className="isolate">
+                <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
                     <Sheet>
                         <AppSidebar />
                         <SidebarInset className="relative bg-transparent!">

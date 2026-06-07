@@ -102,3 +102,13 @@ enum ProjectType {
   YOUTUBE
   AUTRE
 }
+
+enum AdminEmailBox {
+  SUPPORT
+  DEV
+}
+
+enum AdminEmailType {
+  RECEIVED
+  SENT
+}

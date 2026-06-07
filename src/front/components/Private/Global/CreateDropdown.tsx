@@ -19,7 +19,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
 import { cn } from "@/front/lib/utils"
 import { useUser } from "@/front/states/contexts/user.context"
-import { FileText, FolderKanban, Link2, Plus, Tag, NotebookText } from "lucide-react"
+import { FileText, FolderKanban, Plus, Tag, NotebookText, BookOpen } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
 import { CreateCategoryForm } from "./CreateCategoryForm"
@@ -33,8 +33,8 @@ type CreateType = "post" | "project" | "category" | "resource" | "drafts"
 const CREATE_ITEMS = [
     { value: "post" as const, icon: FileText, label: "Post", description: "Texte, image, vidéo ou audio", supportsDraft: true },
     { value: "project" as const, icon: FolderKanban, label: "Projet", description: "Chercher des collaborateurs", supportsDraft: true },
-    { value: "category" as const, icon: Tag, label: "Communauté", description: "Créer un espace thématique", supportsDraft: false },
-    { value: "resource" as const, icon: Link2, label: "Ressource", description: "Asset, tutoriel ou lien", supportsDraft: false },
+    { value: "category" as const, icon: Tag, label: "Catégorie", description: "Nouvelle communauté", supportsDraft: false },
+    { value: "resource" as const, icon: BookOpen, label: "Ressource", description: "Asset, tutoriel ou lien", supportsDraft: false },
 ]
 
 // ─── Main component ────────────────────────────────────────────────────────────
@@ -78,7 +78,11 @@ export function CreateDropdown() {
                 <DropdownMenuContent side="bottom" align="end" sideOffset={8} className="min-w-48">
                     <DropdownMenuGroup>
                         {CREATE_ITEMS.map(({ value, icon: Icon }) => (
-                            <DropdownMenuItem key={value} className="cursor-pointer" onClick={() => handleSelect(value)}>
+                            <DropdownMenuItem
+                                key={value}
+                                className="cursor-pointer"
+                                onSelect={() => setTimeout(() => handleSelect(value), 0)}
+                            >
                                 <Icon className="size-4" />
                                 {value === "post" ? "Créer un post"
                                     : value === "project" ? "Créer un projet"
@@ -87,7 +91,10 @@ export function CreateDropdown() {
                             </DropdownMenuItem>
                         ))}
                         {user && (
-                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleSelect("drafts")}>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onSelect={() => setTimeout(() => handleSelect("drafts"), 0)}
+                            >
                                 <NotebookText className="size-4" />
                                 Mes brouillons
                             </DropdownMenuItem>

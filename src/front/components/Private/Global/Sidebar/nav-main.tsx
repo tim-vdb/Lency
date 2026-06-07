@@ -73,7 +73,12 @@ export function NavMain() {
 
   const isCollapsed = state === "collapsed"
 
-  // Close popover when pathname changes
+  React.useEffect(() => {
+    if (isCollapsed) {
+      setOpenCollapsibleId(null)
+      setOpenPopoverId(null)
+    }
+  }, [isCollapsed])
 
   // Initialize state from sessionStorage and set default
   React.useEffect(() => {
@@ -200,7 +205,7 @@ export function NavMain() {
                   </PopoverContent>
                 )}
               </Popover>
-              <CollapsibleContent>
+              <CollapsibleContent hidden={isCollapsed}>
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => {
                     const isCurrentPage = pathname === item.url
