@@ -1,15 +1,17 @@
 import { z } from "zod";
+import { ProjectLevel, ProjectType, RemunerationType, Visibility, WorkMode } from "@/back/generated/prisma_client/edge";
+import { zodEnum } from "@/front/lib/utils";
 
 export const CreateProjectSchema = z.object({
     title: z.string().min(1, "Le titre est requis").max(150, "Maximum 150 caractères"),
     description: z.string().min(1, "La description est requise").max(2000, "Maximum 2000 caractères"),
-    projectType: z.preprocess((v) => v ?? "", z.string().min(1, "Le type de projet est requis")),
-    level: z.enum(["DEBUTANT", "INTERMEDIAIRE", "AVANCE"]).optional(),
-    remunerationType: z.enum(["NON_REMUNERE", "REMUNERE"]).optional(),
-    workMode: z.enum(["PRESENTIEL", "DISTANCIEL", "HYBRIDE"]).optional(),
+    projectType: zodEnum(ProjectType) as unknown as z.ZodType<ProjectType>,
+    level: zodEnum(ProjectLevel) as unknown as z.ZodType<ProjectLevel | undefined>,
+    remunerationType: zodEnum(RemunerationType) as unknown as z.ZodType<RemunerationType | undefined>,
+    workMode: zodEnum(WorkMode) as unknown as z.ZodType<WorkMode | undefined>,
+    visibility: zodEnum(Visibility) as unknown as z.ZodType<Visibility>,
     city: z.string().max(100).optional(),
     startDate: z.string().optional(),
-    visibility: z.enum(["PUBLIC", "PRIVATE"]),
     bannerUrl: z.string().optional(),
     roles: z.array(z.string()),
     isPublished: z.boolean(),
@@ -20,13 +22,13 @@ export type CreateProjectValues = z.infer<typeof CreateProjectSchema>;
 export const EditProjectSchema = z.object({
     title: z.string().min(1, "Le titre est requis").max(150, "Maximum 150 caractères"),
     description: z.string().min(1, "La description est requise").max(2000, "Maximum 2000 caractères"),
-    projectType: z.string().optional(),
-    level: z.enum(["DEBUTANT", "INTERMEDIAIRE", "AVANCE"]).optional(),
-    remunerationType: z.enum(["NON_REMUNERE", "REMUNERE"]).optional(),
-    workMode: z.enum(["PRESENTIEL", "DISTANCIEL", "HYBRIDE"]).optional(),
+    projectType: zodEnum(ProjectType) as unknown as z.ZodType<ProjectType | undefined>,
+    level: zodEnum(ProjectLevel) as unknown as z.ZodType<ProjectLevel | undefined>,
+    remunerationType: zodEnum(RemunerationType) as unknown as z.ZodType<RemunerationType | undefined>,
+    workMode: zodEnum(WorkMode) as unknown as z.ZodType<WorkMode | undefined>,
     city: z.string().max(100).optional(),
     startDate: z.string().optional(),
-    visibility: z.enum(["PUBLIC", "PRIVATE"]),
+    visibility: zodEnum(Visibility) as unknown as z.ZodType<Visibility>,
     bannerUrl: z.string().optional(),
     roles: z.array(z.string()),
 });

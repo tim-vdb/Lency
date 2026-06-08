@@ -4,7 +4,8 @@ import { useState, useEffect } from "react"
 import { Input } from "@/front/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/front/components/ui/select"
 import { Search, MapPin, X } from "lucide-react"
-import type { ProjectSubject } from "@/front/lib/api/projects"
+import { ProjectType } from "@/back/generated/prisma_client/edge"
+
 
 interface AddressSuggestion {
     id: string
@@ -17,8 +18,8 @@ interface AddressSuggestion {
 interface MapFiltersProps {
     onAddressChange: (address: string, lat?: number, lon?: number) => void
     addressFilter: string
-    onSubjectChange: (subject: ProjectSubject) => void
-    subjectFilter: ProjectSubject
+    onProjectTypeChange: (projectType: ProjectType) => void
+    projectTypeFilter: ProjectType
     onTitleChange: (title: string) => void
     titleSuggestions: Array<{ id: string; title: string }>
 }
@@ -26,8 +27,8 @@ interface MapFiltersProps {
 export default function MapFilters({
     onAddressChange,
     addressFilter,
-    onSubjectChange,
-    subjectFilter,
+    onProjectTypeChange,
+    projectTypeFilter,
     onTitleChange,
     titleSuggestions,
 }: MapFiltersProps) {
@@ -132,7 +133,7 @@ export default function MapFilters({
         setShowTitleSuggestions(false)
     }
 
-    const subjects: ProjectSubject[] = ["Tout", "Vidéo", "Motion", "Photo", "Outils"]
+    const projectTypes: ProjectType[] = Object.values(ProjectType)
 
     return (
         <div className="flex flex-col gap-4">
@@ -212,15 +213,15 @@ export default function MapFilters({
                 )}
             </div>
 
-            {/* Filtre par sujet */}
-            <Select value={subjectFilter} onValueChange={(value) => onSubjectChange(value as ProjectSubject)}>
+            {/* Filtre par type de projet */}
+            <Select value={projectTypeFilter} onValueChange={(value) => onProjectTypeChange(value as ProjectType)}>
                 <SelectTrigger className="bg-neutral-800 border-neutral-700 text-neutral-100">
-                    <SelectValue placeholder="Tous les sujets" />
+                    <SelectValue placeholder="Tous les types" />
                 </SelectTrigger>
                 <SelectContent className="bg-neutral-800 border-neutral-700">
-                    {subjects.map((subject) => (
-                        <SelectItem key={subject} value={subject}>
-                            {subject}
+                    {projectTypes.map((projectType) => (
+                        <SelectItem key={projectType} value={projectType}>
+                            {projectType}
                         </SelectItem>
                     ))}
                 </SelectContent>

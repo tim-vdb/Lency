@@ -7,15 +7,16 @@ import { cn } from "@/front/lib/utils";
 import { useProjects } from "@/front/queries/projects"
 import ExploreMarketPlace from "./ExploreMarketPlace";
 import MapFilters from "./MapFilters"
-import type { ProjectSubject } from "@/front/lib/api/projects"
+
 import { Maximize2, X } from "lucide-react"
+import { ProjectType } from "@/back/generated/prisma_client/edge";
 
 export default function ExploreBlock({ className }: { className?: string }) {
     const { data: projects = [] } = useProjects()
     const [titleFilter, setTitleFilter] = useState("")
     const [addressFilter, setAddressFilter] = useState("")
     const [addressCoords, setAddressCoords] = useState<{ lat: number; lon: number } | null>(null)
-    const [subjectFilter, setSubjectFilter] = useState<ProjectSubject>("Tout")
+    const [projectTypeFilter, setProjectTypeFilter] = useState<ProjectType>("AUTRE")
     const [isMapExpanded, setIsMapExpanded] = useState(false)
 
     // Suggestions pour le titre
@@ -34,13 +35,13 @@ export default function ExploreBlock({ className }: { className?: string }) {
             if (titleFilter && !project.title.toLowerCase().includes(titleFilter.toLowerCase())) {
                 return false
             }
-            // Filtre par sujet (si "Tout" est sélectionné, afficher tous les projets)
-            if (subjectFilter !== "Tout" && project.subject !== subjectFilter) {
+            // Filtre par type de projet (si "Tout" est sélectionné, afficher tous les projets)
+            if (projectTypeFilter !== "AUTRE" && project.projectType !== projectTypeFilter) {
                 return false
             }
             return true
         })
-    }, [projects, titleFilter, subjectFilter])
+    }, [projects, titleFilter, projectTypeFilter])
 
     const handleAddressChange = (address: string, lat?: number, lon?: number) => {
         setAddressFilter(address)
@@ -87,8 +88,8 @@ export default function ExploreBlock({ className }: { className?: string }) {
                             <MapFilters
                                 onAddressChange={handleAddressChange}
                                 addressFilter={addressFilter}
-                                onSubjectChange={setSubjectFilter}
-                                subjectFilter={subjectFilter}
+                                onProjectTypeChange={setProjectTypeFilter}
+                                projectTypeFilter={projectTypeFilter}
                                 onTitleChange={setTitleFilter}
                                 titleSuggestions={titleSuggestions}
                             />
@@ -134,8 +135,8 @@ export default function ExploreBlock({ className }: { className?: string }) {
                             <MapFilters
                                 onAddressChange={handleAddressChange}
                                 addressFilter={addressFilter}
-                                onSubjectChange={setSubjectFilter}
-                                subjectFilter={subjectFilter}
+                                onProjectTypeChange={setProjectTypeFilter}
+                                projectTypeFilter={projectTypeFilter}
                                 onTitleChange={setTitleFilter}
                                 titleSuggestions={titleSuggestions}
                             />
