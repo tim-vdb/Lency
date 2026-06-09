@@ -9,9 +9,9 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --brand:      #6C5CE7;
-      --brand-dark: #4A3ABF;
-      --brand-soft: #EDE9FF;
+      --brand:      #ea3d0e;
+      --brand-dark: #b82d08;
+      --brand-soft: #fdeee9;
       --accent:     #00CEC9;
       --text:       #1A1A2E;
       --muted:      #6B7280;
@@ -20,7 +20,7 @@
       --white:      #FFFFFF;
       --success:    #10B981;
       --warn:       #F59E0B;
-      --tag-bg:     #F3F0FF;
+      --tag-bg:     #fdeee9;
       --page-w:     860px;
     }
 
@@ -206,7 +206,7 @@
 
     /* ─── Cover ───────────────────────────────────── */
     .cover {
-      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 60%, #2D1B69 100%);
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 60%, #6b1505 100%);
       color: white;
       min-height: 100vh;
       display: flex;
@@ -241,7 +241,7 @@
       margin-bottom: 8px;
       position: relative; z-index: 1;
     }
-    .cover-logo span { color: #A78BFA; }
+    .cover-logo span { color: #ffb09e; }
     .cover-tagline {
       font-size: 16px;
       opacity: 0.75;
@@ -396,7 +396,7 @@
     }
     .info-box.tip { background: #F0FDF4; border: 1px solid #86EFAC; }
     .info-box.warn { background: #FFFBEB; border: 1px solid #FCD34D; }
-    .info-box.note { background: var(--brand-soft); border: 1px solid #C4B5FD; }
+    .info-box.note { background: var(--brand-soft); border: 1px solid #f4b49e; }
     .info-box-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
     .info-box-body { font-size: 13.5px; line-height: 1.65; }
     .info-box-body strong { font-weight: 700; display: block; margin-bottom: 2px; }
@@ -682,7 +682,7 @@
     }
     .avatar-mock {
       width: 36px; height: 36px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--brand), var(--accent));
+      background: linear-gradient(135deg, var(--brand), #ff7a50);
       flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
       color: white; font-size: 13px; font-weight: 700;
@@ -706,7 +706,7 @@
     .post-action.active { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
 
     .save-illustration {
-      background: linear-gradient(135deg, #EDE9FF 0%, #E0F2FE 100%);
+      background: linear-gradient(135deg, #fdeee9 0%, #fef3ee 100%);
       border-radius: 14px;
       padding: 28px;
       margin: 24px 0;
@@ -738,7 +738,7 @@
 <nav class="side-nav">
   <div class="side-nav-title">Chapitres</div>
   <div class="side-nav-section">
-    <button class="side-nav-link" onclick="scrollToSection('cover-section')">
+    <button class="side-nav-link" data-target="cover-section" onclick="scrollToSection('cover-section')">
       <span class="num">✦</span> Accueil
     </button>
   </div>
@@ -771,8 +771,42 @@
     <button class="side-nav-link" data-target="profil" onclick="scrollToSection('profil')">
       <span class="num">9</span> Profil & compte
     </button>
+    <button class="side-nav-link" data-target="parametres" onclick="scrollToSection('parametres')">
+      <span class="num">10</span> Paramètres
+    </button>
+    <button class="side-nav-link" data-target="notifications" onclick="scrollToSection('notifications')">
+      <span class="num">11</span> Notifications
+    </button>
     <button class="side-nav-link" data-target="astuces" onclick="scrollToSection('astuces')">
-      <span class="num">10</span> Astuces
+      <span class="num">12</span> Astuces
+    </button>
+  </div>
+  <div class="side-nav-sep"></div>
+  <div class="side-nav-title">🛒 Marketplace</div>
+  <div class="side-nav-section">
+    <button class="side-nav-link" data-target="mkt-intro" onclick="scrollToSection('mkt-intro')">
+      <span class="num">13</span> Vue d'ensemble
+    </button>
+    <button class="side-nav-link" data-target="mkt-projets" onclick="scrollToSection('mkt-projets')">
+      <span class="num">14</span> Explorer les projets
+    </button>
+    <button class="side-nav-link" data-target="mkt-creer" onclick="scrollToSection('mkt-creer')">
+      <span class="num">15</span> Créer un projet
+    </button>
+    <button class="side-nav-link" data-target="mkt-postuler" onclick="scrollToSection('mkt-postuler')">
+      <span class="num">16</span> Postuler
+    </button>
+    <button class="side-nav-link" data-target="mkt-candidatures" onclick="scrollToSection('mkt-candidatures')">
+      <span class="num">17</span> Candidatures
+    </button>
+    <button class="side-nav-link" data-target="mkt-equipe" onclick="scrollToSection('mkt-equipe')">
+      <span class="num">18</span> Équipe & invitations
+    </button>
+    <button class="side-nav-link" data-target="mkt-talents" onclick="scrollToSection('mkt-talents')">
+      <span class="num">19</span> Talents
+    </button>
+    <button class="side-nav-link" data-target="mkt-chat" onclick="scrollToSection('mkt-chat')">
+      <span class="num">20</span> Chat de projet
     </button>
   </div>
 </nav>
@@ -782,12 +816,12 @@
   <div class="cover-badge">Guide Utilisateur Officiel</div>
   <div class="cover-logo">Lency<span>.</span></div>
   <div class="cover-tagline">Plateforme créative & collaborative</div>
-  <div class="cover-title">Maîtrisez l'espace communauté</div>
+  <div class="cover-title">Maîtrisez Lency de A à Z</div>
   <div class="cover-subtitle">
-    Tout ce qu'il faut savoir pour publier, explorer et partager sur Lency —
-    posts, ressources, communautés et contenu enregistré.
+    Communauté, Marketplace, projets et talents — tout ce qu'il faut savoir pour
+    publier, explorer, postuler et collaborer sur Lency.
   </div>
-  <div class="cover-meta">Version 1.0 · Mai 2026 · lency.app</div>
+  <div class="cover-meta">Version 2.0 · Juin 2026 · lency.app</div>
 </div>
 
 <!-- ══════════════ CONTENT ══════════════ -->
@@ -796,7 +830,10 @@
   <!-- Table des matières -->
   <div class="toc">
     <h2>Table des matières</h2>
-    <div class="toc-grid">
+    <p style="font-size:13px; color:var(--muted); margin-bottom:20px;">Ce guide couvre deux espaces principaux : la <strong>Communauté</strong> et la <strong>Marketplace</strong>.</p>
+
+    <div style="font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px;">Espace Communauté</div>
+    <div class="toc-grid" style="margin-bottom:24px;">
       <a href="#connexion" class="toc-item">
         <div class="toc-num">1</div>
         <div class="toc-text">Se connecter à la plateforme</div>
@@ -835,7 +872,51 @@
       </a>
       <a href="#astuces" class="toc-item">
         <div class="toc-num">10</div>
+        <div class="toc-text">Paramètres du compte</div>
+      </a>
+      <a href="#notifications" class="toc-item">
+        <div class="toc-num">11</div>
+        <div class="toc-text">Notifications</div>
+      </a>
+      <a href="#astuces" class="toc-item">
+        <div class="toc-num">12</div>
         <div class="toc-text">Astuces & bonnes pratiques</div>
+      </a>
+    </div>
+
+    <div style="font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px;">🛒 Marketplace</div>
+    <div class="toc-grid">
+      <a href="#mkt-intro" class="toc-item">
+        <div class="toc-num" style="background:linear-gradient(135deg,var(--brand),var(--accent));color:white;">13</div>
+        <div class="toc-text">Découvrir la Marketplace</div>
+      </a>
+      <a href="#mkt-projets" class="toc-item">
+        <div class="toc-num" style="background:linear-gradient(135deg,var(--brand),var(--accent));color:white;">14</div>
+        <div class="toc-text">Explorer les projets</div>
+      </a>
+      <a href="#mkt-creer" class="toc-item">
+        <div class="toc-num" style="background:linear-gradient(135deg,var(--brand),var(--accent));color:white;">15</div>
+        <div class="toc-text">Créer & gérer un projet</div>
+      </a>
+      <a href="#mkt-postuler" class="toc-item">
+        <div class="toc-num" style="background:linear-gradient(135deg,var(--brand),var(--accent));color:white;">16</div>
+        <div class="toc-text">Postuler à un projet</div>
+      </a>
+      <a href="#mkt-candidatures" class="toc-item">
+        <div class="toc-num" style="background:linear-gradient(135deg,var(--brand),var(--accent));color:white;">17</div>
+        <div class="toc-text">Gérer les candidatures</div>
+      </a>
+      <a href="#mkt-equipe" class="toc-item">
+        <div class="toc-num" style="background:linear-gradient(135deg,var(--brand),var(--accent));color:white;">18</div>
+        <div class="toc-text">Équipe & invitations</div>
+      </a>
+      <a href="#mkt-talents" class="toc-item">
+        <div class="toc-num" style="background:linear-gradient(135deg,var(--brand),var(--accent));color:white;">19</div>
+        <div class="toc-text">Talents & profil freelance</div>
+      </a>
+      <a href="#mkt-chat" class="toc-item">
+        <div class="toc-num" style="background:linear-gradient(135deg,var(--brand),var(--accent));color:white;">20</div>
+        <div class="toc-text">Chat de projet</div>
       </a>
     </div>
   </div>
@@ -1351,7 +1432,7 @@
       <div class="info-box-icon">💡</div>
       <div class="info-box-body">
         <strong>Astuce</strong>
-        L'icône marque-page change de couleur (violet) pour indiquer qu'un contenu est déjà dans vos enregistrements. C'est le moyen le plus rapide de savoir si vous avez déjà sauvegardé quelque chose.
+        L'icône marque-page change de couleur (orange) pour indiquer qu'un contenu est déjà dans vos enregistrements. C'est le moyen le plus rapide de savoir si vous avez déjà sauvegardé quelque chose.
       </div>
     </div>
   </div>
@@ -1489,9 +1570,166 @@
     </div>
   </div>
 
-  <!-- ──────────── CHAPITRE 10 : ASTUCES ──────────── -->
-  <div class="chapter" id="astuces">
+  <!-- ──────────── CHAPITRE 10 : PARAMÈTRES DU COMPTE ──────────── -->
+  <div class="chapter page-break" id="parametres">
     <div class="chapter-label">Chapitre 10</div>
+    <h2>Paramètres du compte</h2>
+    <p class="chapter-intro">Gérez vos informations personnelles, vos préférences de sécurité et la personnalisation de votre profil depuis l'espace Paramètres.</p>
+    <div class="chapter-divider"></div>
+
+    <h3 class="section-title">Accéder aux paramètres</h3>
+
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Via la sidebar</h3>
+          <p>En bas de la sidebar gauche, cliquez sur votre avatar ou votre nom, puis sélectionnez <strong>"Paramètres"</strong> dans le menu qui apparaît. Vous êtes redirigé vers <span class="route">/account/settings</span>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Naviguer entre les sections</h3>
+          <p>Les paramètres sont organisés en plusieurs onglets : <strong>Profil</strong>, <strong>Compte</strong>, <strong>Notifications</strong> et <strong>Confidentialité</strong>. Cliquez sur chaque onglet pour accéder à la section correspondante.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-title">Ce que vous pouvez modifier</h3>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>👤 Informations de profil</h4>
+        <ul class="checklist">
+          <li>Photo de profil (avatar)</li>
+          <li>Prénom et nom d'affichage</li>
+          <li>Nom d'utilisateur (username)</li>
+          <li>Biographie courte</li>
+          <li>Liens sociaux (portfolio, GitHub, LinkedIn…)</li>
+          <li>Image de bannière du profil</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🔐 Sécurité du compte</h4>
+        <ul class="checklist">
+          <li>Adresse email</li>
+          <li>Mot de passe (changer)</li>
+          <li>Sessions actives</li>
+          <li>Supprimer le compte</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🎭 Profil Talent (Marketplace)</h4>
+        <ul class="checklist">
+          <li>Compétences et rôles</li>
+          <li>Mode de travail préféré</li>
+          <li>Niveau et rémunération</li>
+          <li>Disponibilité (statut "Prêt à démarrer")</li>
+          <li>Équipement</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🔔 Préférences de notifications</h4>
+        <ul class="checklist">
+          <li>Notifications de candidatures</li>
+          <li>Notifications de commentaires</li>
+          <li>Alertes de nouveaux projets</li>
+          <li>Emails de résumé hebdomadaire</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box warn">
+      <div class="info-box-icon">⚠️</div>
+      <div class="info-box-body">
+        <strong>Supprimer son compte</strong>
+        La suppression de compte est irréversible. Toutes vos données (posts, ressources, projets, candidatures) seront définitivement effacées. Cette action ne peut pas être annulée.
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── CHAPITRE 11 : NOTIFICATIONS ──────────── -->
+  <div class="chapter" id="notifications">
+    <div class="chapter-label">Chapitre 11</div>
+    <h2>Notifications</h2>
+    <p class="chapter-intro">Lency vous notifie en temps réel des événements importants : réponses à vos candidatures, commentaires sur vos posts, invitations reçues et messages dans vos projets.</p>
+    <div class="chapter-divider"></div>
+
+    <h3 class="section-title">Accéder aux notifications</h3>
+
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>L'icône cloche dans la sidebar</h3>
+          <p>Cliquez sur l'icône <strong>🔔</strong> dans la sidebar ou la barre de navigation. Un panneau latéral s'ouvre avec la liste de toutes vos notifications, de la plus récente à la plus ancienne.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Le badge rouge</h3>
+          <p>Un badge rouge sur l'icône cloche indique le nombre de notifications non lues. Il disparaît dès que vous ouvrez le panneau de notifications.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Cliquer sur une notification</h3>
+          <p>Chaque notification est cliquable et vous redirige directement vers l'élément concerné : le post commenté, la fiche du projet, la candidature reçue, etc.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-title">Types de notifications</h3>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📩</div>
+        <h4>Candidature reçue</h4>
+        <p>Quelqu'un a postulé à l'un de vos projets sur la Marketplace.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <h4>Candidature acceptée</h4>
+        <p>Le porteur d'un projet a accepté votre candidature.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h4>Nouveau commentaire</h4>
+        <p>Quelqu'un a commenté votre post ou votre projet.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📨</div>
+        <h4>Invitation à un projet</h4>
+        <p>Un porteur de projet vous invite directement à rejoindre son équipe.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">❤️</div>
+        <h4>Vote sur votre contenu</h4>
+        <p>Un membre a voté pour l'un de vos posts ou ressources.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👤</div>
+        <h4>Nouvel abonné</h4>
+        <p>Quelqu'un a commencé à vous suivre sur la plateforme.</p>
+      </div>
+    </div>
+
+    <div class="info-box tip">
+      <div class="info-box-icon">⚙️</div>
+      <div class="info-box-body">
+        <strong>Personnaliser les notifications</strong>
+        Rendez-vous dans <strong>Paramètres → Notifications</strong> pour choisir quels événements vous souhaitez recevoir et par quel canal (in-app ou email).
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── CHAPITRE 12 : ASTUCES ──────────── -->
+  <div class="chapter page-break" id="astuces">
+    <div class="chapter-label">Chapitre 12</div>
+
     <h2>Astuces &amp; bonnes pratiques</h2>
     <p class="chapter-intro">Quelques conseils pour tirer le meilleur parti de Lency et contribuer positivement à la communauté.</p>
     <div class="chapter-divider"></div>
@@ -1525,6 +1763,39 @@
         <div class="step-body">
           <h3>Enregistrer pour lire plus tard</h3>
           <p>Ne lisez pas à la va-vite — si un contenu vous intéresse mais que vous n'avez pas le temps, enregistrez-le immédiatement. Votre espace Enregistrés est votre bibliothèque personnelle.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-title">Astuces Marketplace</h3>
+
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num" style="background: var(--brand);">★</div>
+        <div class="step-body">
+          <h3>Complétez votre profil avant de postuler</h3>
+          <p>Avant d'envoyer une candidature, assurez-vous que votre profil public est complet : bio, compétences, avatar et liens. Un profil soigné rassure le porteur et augmente vos chances d'être accepté.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background: var(--brand);">★</div>
+        <div class="step-body">
+          <h3>Personnalisez chaque message de motivation</h3>
+          <p>Évitez les messages génériques. Montrez que vous avez lu la description du projet : citez un détail spécifique, expliquez pourquoi ce projet vous parle. 3 lignes ciblées valent mieux qu'un paragraphe copié-collé.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background: var(--brand);">★</div>
+        <div class="step-body">
+          <h3>Ajoutez une bannière à vos projets</h3>
+          <p>Les projets avec une image de couverture attirent visuellement. Même une image sobre et bien choisie suffit — elle signale que vous prenez le projet au sérieux et aide les talents à se projeter.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background: var(--brand);">★</div>
+        <div class="step-body">
+          <h3>Répondez vite aux candidatures</h3>
+          <p>Les talents postulent souvent à plusieurs projets en parallèle. Plus vous répondez rapidement (même pour refuser poliment), plus vous avez de chances de garder les meilleurs profils disponibles.</p>
         </div>
       </div>
     </div>
@@ -1576,14 +1847,890 @@
 
   </div>
 
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- ██████████████ SECTION MARKETPLACE ██████████████████████ -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+
+  <div style="margin-top: 80px; border-top: 3px solid var(--brand); padding-top: 48px;">
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom: 8px;">
+      <span style="font-size:36px;">🛒</span>
+      <div>
+        <div style="font-size:12px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em;">Partie 2</div>
+        <h2 style="font-size:32px; font-weight:900; color:var(--brand); line-height:1.1;">La Marketplace</h2>
+      </div>
+    </div>
+    <p style="font-size:16px; color:var(--muted); max-width:620px; margin-bottom:0;">
+      Trouvez des collaborateurs pour vos projets créatifs, ou proposez vos services en tant que talent. La Marketplace est l'espace de mise en relation entre porteurs de projets et freelances créatifs.
+    </p>
+  </div>
+
+  <!-- ──────────── CHAPITRE 13 : DÉCOUVRIR LA MARKETPLACE ──────────── -->
+  <div class="chapter" id="mkt-intro">
+    <div class="chapter-label">Chapitre 13</div>
+    <h2>Découvrir la Marketplace</h2>
+    <p class="chapter-intro">La Marketplace Lency est une place de marché dédiée aux créatifs : réalisateurs, monteurs, compositeurs, scénaristes et bien d'autres. Elle s'articule autour de deux onglets principaux.</p>
+    <div class="chapter-divider"></div>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>🎬 Onglet Projets</h4>
+        <ul class="checklist">
+          <li>Tous les projets publiés par la communauté</li>
+          <li>Organisés par catégorie (carousels)</li>
+          <li>Filtres avancés (type, ville, mode, niveau…)</li>
+          <li>Accès à la fiche détaillée de chaque projet</li>
+        </ul>
+        <br><span class="route">/marketplace</span>
+      </div>
+      <div class="col-card">
+        <h4>🧑‍🎨 Onglet Talents</h4>
+        <ul class="checklist">
+          <li>Profils de freelances et collaborateurs disponibles</li>
+          <li>Filtrables par rôle, mode de travail, niveau</li>
+          <li>Lien vers portfolio et CV</li>
+          <li>Accès direct au profil public</li>
+        </ul>
+        <br><span class="route">/marketplace?tab=talents</span>
+      </div>
+    </div>
+
+    <h3 class="section-title">Les 6 catégories de projets</h3>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎞️</div>
+        <h4>Court métrage</h4>
+        <p>Projets de fiction ou documentaire de format court.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎬</div>
+        <h4>Long métrage</h4>
+        <p>Productions cinématographiques de longue durée.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📺</div>
+        <h4>Série</h4>
+        <p>Contenus épisodiques pour plateformes ou diffusion TV.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎵</div>
+        <h4>Clip</h4>
+        <p>Clips musicaux et vidéos pour artistes.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎙️</div>
+        <h4>Documentaire</h4>
+        <p>Reportages, documentaires et films de réalité.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <h4>Autre</h4>
+        <p>Tout autre format créatif (pub, institutionnel, web…).</p>
+      </div>
+    </div>
+
+    <div class="nav-preview">
+      <h4>Navigation Marketplace</h4>
+      <div class="nav-item active">
+        <span class="nav-icon">🛒</span> Marketplace
+      </div>
+      <div class="nav-sub">
+        <div class="nav-item active">
+          <span class="nav-icon">🎬</span> Projets
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">🧑‍🎨</span> Talents
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box note">
+      <div class="info-box-icon">🆕</div>
+      <div class="info-box-body">
+        <strong>Nouveaux sur Lency ?</strong>
+        Si votre compte a moins de 7 jours, la Marketplace affiche des cartes d'onboarding spéciales : <em>"Publiez votre premier projet"</em> et <em>"Rejoignez en tant que talent"</em>. Ces raccourcis vous guident directement vers les bonnes actions pour démarrer.
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── CHAPITRE 14 : EXPLORER LES PROJETS ──────────── -->
+  <div class="chapter page-break" id="mkt-projets">
+    <div class="chapter-label">Chapitre 14</div>
+    <h2>Explorer les projets</h2>
+    <p class="chapter-intro">Parcourez les projets publiés, filtrez par critères et accédez à toutes les informations d'un projet avant de décider de postuler.</p>
+    <div class="chapter-divider"></div>
+
+    <h3 class="section-title">Filtres disponibles</h3>
+
+    <div class="action-row">
+      <div class="action-pill"><div class="dot purple"></div> Type de projet</div>
+      <div class="action-pill"><div class="dot teal"></div> Ville</div>
+      <div class="action-pill"><div class="dot gold"></div> Mode de travail</div>
+      <div class="action-pill"><div class="dot green"></div> Niveau</div>
+      <div class="action-pill"><div class="dot red"></div> Rémunération</div>
+      <div class="action-pill"><div class="dot purple"></div> Date de publication</div>
+    </div>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>🗂️ Mode de travail</h4>
+        <ul class="checklist">
+          <li>Présentiel</li>
+          <li>Distanciel</li>
+          <li>Hybride</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>📅 Date de publication</h4>
+        <ul class="checklist">
+          <li>Aujourd'hui</li>
+          <li>Cette semaine</li>
+          <li>Ce mois</li>
+          <li>Cette année</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🎓 Niveau requis</h4>
+        <ul class="checklist">
+          <li>Débutant</li>
+          <li>Intermédiaire</li>
+          <li>Avancé</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>💶 Rémunération</h4>
+        <ul class="checklist">
+          <li>Rémunéré</li>
+          <li>Non rémunéré</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box tip">
+      <div class="info-box-icon">🔍</div>
+      <div class="info-box-body">
+        <strong>Réinitialiser les filtres</strong>
+        Un bouton <strong>"Réinitialiser"</strong> est affiché dès qu'au moins un filtre est actif. Cliquez dessus pour effacer tous les filtres d'un coup et revenir à la liste complète.
+      </div>
+    </div>
+
+    <h3 class="section-title">Anatomie d'une fiche projet</h3>
+
+    <div class="ui-mock">
+      <div class="ui-mock-bar">
+        <div class="dot-bar red-d"></div>
+        <div class="dot-bar yel-d"></div>
+        <div class="dot-bar grn-d"></div>
+        <span style="margin-left:8px;">Fiche projet — Lency Marketplace</span>
+      </div>
+      <div class="ui-mock-content">
+        <div style="background:linear-gradient(135deg,#ea3d0e,#ff7a50); height:120px; border-radius:10px; margin-bottom:16px; display:flex; align-items:flex-end; padding:12px;">
+          <span style="background:rgba(255,255,255,0.2); color:white; padding:3px 10px; border-radius:100px; font-size:12px; font-weight:700;">🌐 Public</span>
+        </div>
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+          <div class="avatar-mock">MJ</div>
+          <div>
+            <div style="font-size:16px; font-weight:800; margin-bottom:2px;">Mon court métrage de fin d'études</div>
+            <div style="font-size:12px; color:var(--muted);">par <strong>Marie Jean</strong> · il y a 3 jours</div>
+          </div>
+        </div>
+        <div style="font-size:13px; color:var(--muted); margin-bottom:16px; line-height:1.7;">
+          Recherche un monteur et un compositeur pour un court métrage de 15 minutes tourné en mars 2026. Ambiance intimiste, dialogues forts. Disponible en distanciel…
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+          <span class="tag">🎞️ Court métrage</span>
+          <span class="tag blue">🌐 Distanciel</span>
+          <span class="tag green">Rémunéré</span>
+          <span class="tag orange">Intermédiaire</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="btn-mock">Postuler</div>
+          <div class="btn-mock secondary">↗ Partager</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-title">Ce qu'on trouve sur une fiche projet</h3>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🖼️</div>
+        <h4>Bannière</h4>
+        <p>Image de couverture du projet — cliquable pour l'agrandir en plein écran.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h4>Infos pratiques</h4>
+        <p>Type, ville, rémunération, niveau requis, date de début, rôles recherchés.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h4>Équipe actuelle</h4>
+        <p>Liste des membres déjà rejoints avec leur rôle et profil cliquable.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📎</div>
+        <h4>Pièces jointes</h4>
+        <p>Fichiers téléchargeables fournis par le porteur (script, brief, moodboard…).</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h4>Commentaires</h4>
+        <p>Fil de discussion public visible par tous les membres de la Marketplace.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h4>Projets similaires</h4>
+        <p>Carrousel de 3 autres projets publiés dans la même catégorie.</p>
+      </div>
+    </div>
+
+    <h3 class="section-title">Visibilité d'un projet</h3>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h4>Public</h4>
+        <p>Visible par tous les utilisateurs de la Marketplace, connectés ou non.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h4>Membres uniquement</h4>
+        <p>Visible uniquement par les membres de la plateforme connectés.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h4>Privé</h4>
+        <p>Visible uniquement par le créateur et les membres invités au projet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── CHAPITRE 15 : CRÉER UN PROJET ──────────── -->
+  <div class="chapter" id="mkt-creer">
+    <div class="chapter-label">Chapitre 15</div>
+    <h2>Créer &amp; gérer un projet</h2>
+    <p class="chapter-intro">Publiez votre projet sur la Marketplace pour trouver des collaborateurs. Le formulaire de création vous guide étape par étape.</p>
+    <div class="chapter-divider"></div>
+
+    <h3 class="section-title">Étapes de création</h3>
+
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Cliquer sur "Nouveau projet"</h3>
+          <p>Depuis la page Marketplace, cliquez sur le bouton <strong>"Nouveau projet"</strong> en haut à droite. Un formulaire modal s'ouvre — vous n'êtes pas redirigé ailleurs.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Renseigner le titre et la description</h3>
+          <p>Donnez un <strong>titre accrocheur</strong> (max 150 caractères) et une <strong>description complète</strong> (max 2 000 caractères). C'est votre argument principal pour attirer les bons collaborateurs.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Choisir le type de projet</h3>
+          <p>Sélectionnez la catégorie qui correspond à votre projet : Court métrage, Long métrage, Série, Clip, Documentaire ou Autre. Ce choix détermine dans quel carrousel votre projet apparaîtra.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Renseigner les critères pratiques</h3>
+          <p>
+            Ces champs sont optionnels mais recommandés :<br>
+            <span class="tag">Niveau requis</span> Débutant / Intermédiaire / Avancé<br>
+            <span class="tag">Rémunération</span> Rémunéré / Non rémunéré<br>
+            <span class="tag">Mode de travail</span> Présentiel / Distanciel / Hybride<br>
+            <span class="tag">Ville</span> Ville de tournage ou de rendez-vous<br>
+            <span class="tag">Date de début</span> Date de démarrage estimée
+          </p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Définir les rôles recherchés</h3>
+          <p>Ajoutez des tags de rôles que vous cherchez (ex : Monteur, Compositeur, Scénariste). Ces tags aident les talents à identifier rapidement si le projet leur correspond.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h3>Choisir la visibilité</h3>
+          <p>Définissez qui peut voir votre projet : <strong>Public</strong> (tout le monde), <strong>Membres uniquement</strong> (utilisateurs connectés) ou <strong>Privé</strong> (vous et vos membres invités).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <h3>Ajouter une bannière (optionnel)</h3>
+          <p>Uploadez une image de couverture pour donner de la personnalité à votre projet. Les projets avec bannière obtiennent significativement plus de candidatures.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h3>Publier ou enregistrer en brouillon</h3>
+          <p>Cliquez sur <strong>"Publier"</strong> pour que le projet soit immédiatement visible selon la visibilité choisie. Laissez en <strong>"Brouillon"</strong> si vous n'êtes pas encore prêt — le projet ne sera pas visible publiquement.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box tip">
+      <div class="info-box-icon">✏️</div>
+      <div class="info-box-body">
+        <strong>Modifier ou supprimer un projet</strong>
+        Depuis la fiche de votre projet, un menu d'actions (accessible via le bouton "···" ou le bouton "Modifier") vous permet de <strong>mettre à jour</strong> toutes les informations ou de <strong>supprimer définitivement</strong> le projet. La suppression est irréversible et supprime également tous les commentaires associés.
+      </div>
+    </div>
+
+    <h3 class="section-title">Champs du formulaire — récapitulatif</h3>
+
+    <div class="ui-mock">
+      <div class="ui-mock-bar">
+        <div class="dot-bar red-d"></div><div class="dot-bar yel-d"></div><div class="dot-bar grn-d"></div>
+        <span style="margin-left:8px;">Créer un projet — Lency Marketplace</span>
+      </div>
+      <div class="ui-mock-content">
+        <div class="field">
+          <label>Titre du projet *</label>
+          <div class="input-mock filled">Mon court métrage de fin d'études</div>
+        </div>
+        <div class="field">
+          <label>Description *</label>
+          <div class="input-mock" style="min-height:60px;">Décrivez votre projet, vos besoins, l'ambiance souhaitée…</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="field">
+            <label>Type de projet *</label>
+            <div class="input-mock">Court métrage ▾</div>
+          </div>
+          <div class="field">
+            <label>Visibilité *</label>
+            <div class="input-mock">Public ▾</div>
+          </div>
+          <div class="field">
+            <label>Niveau requis</label>
+            <div class="input-mock">Intermédiaire ▾</div>
+          </div>
+          <div class="field">
+            <label>Rémunération</label>
+            <div class="input-mock">Rémunéré ▾</div>
+          </div>
+          <div class="field">
+            <label>Mode de travail</label>
+            <div class="input-mock">Distanciel ▾</div>
+          </div>
+          <div class="field">
+            <label>Ville</label>
+            <div class="input-mock">Paris</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Rôles recherchés</label>
+          <div class="input-mock"><span class="tag">Monteur</span> <span class="tag">Compositeur</span> + Ajouter…</div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <div class="btn-mock">Publier</div>
+          <div class="btn-mock secondary">Brouillon</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── CHAPITRE 16 : POSTULER ──────────── -->
+  <div class="chapter page-break" id="mkt-postuler">
+    <div class="chapter-label">Chapitre 16</div>
+    <h2>Postuler à un projet</h2>
+    <p class="chapter-intro">Vous avez trouvé un projet qui vous correspond ? Envoyez une candidature directement depuis la fiche projet. Le porteur recevra votre dossier et pourra l'accepter ou le refuser.</p>
+    <div class="chapter-divider"></div>
+
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Ouvrir la fiche projet</h3>
+          <p>Depuis la liste ou un carrousel de la Marketplace, cliquez sur la card d'un projet pour accéder à sa fiche complète. Consultez la description, les rôles recherchés et les critères pratiques.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Cliquer sur "Postuler"</h3>
+          <p>Le bouton <strong>"Postuler"</strong> apparaît en bas de la fiche projet. Il n'est visible que si vous êtes connecté et que vous n'êtes pas déjà membre ou candidat du projet.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Remplir le formulaire de candidature</h3>
+          <p>Une modal s'ouvre avec trois champs optionnels :</p>
+          <ul style="margin-top:8px; padding-left:16px; font-size:13px; color:var(--muted); line-height:1.8;">
+            <li><strong>Message de motivation</strong> — max 1 000 caractères. Expliquez pourquoi vous êtes le bon profil.</li>
+            <li><strong>Lien portfolio</strong> — URL vers vos réalisations.</li>
+            <li><strong>Lien CV</strong> — lien Google Drive ou autre.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Soumettre la candidature</h3>
+          <p>Cliquez sur <strong>"Envoyer ma candidature"</strong>. Un toast de confirmation s'affiche et le porteur du projet est notifié. Votre candidature passe en statut <span class="tag orange">En attente</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-mock">
+      <div class="ui-mock-bar">
+        <div class="dot-bar red-d"></div><div class="dot-bar yel-d"></div><div class="dot-bar grn-d"></div>
+        <span style="margin-left:8px;">Postuler au projet — Lency</span>
+      </div>
+      <div class="ui-mock-content">
+        <div style="font-size:15px; font-weight:700; margin-bottom:16px;">Mon court métrage de fin d'études</div>
+        <div class="field">
+          <label>Message de motivation (optionnel)</label>
+          <div class="input-mock filled" style="min-height:80px;">Je suis monteur avec 3 ans d'expérience sur des courts métrages indépendants…</div>
+          <div style="font-size:11px; color:var(--muted); text-align:right; margin-top:4px;">127 / 1000 caractères</div>
+        </div>
+        <div class="field">
+          <label>Lien portfolio (optionnel)</label>
+          <div class="input-mock">https://monportfolio.fr</div>
+        </div>
+        <div class="field">
+          <label>Lien CV (optionnel)</label>
+          <div class="input-mock">https://drive.google.com/…</div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <div class="btn-mock">Envoyer ma candidature</div>
+          <div class="btn-mock secondary">Annuler</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>📬 Après la candidature</h4>
+        <ul class="checklist">
+          <li>Statut initial : <span class="tag orange">En attente</span></li>
+          <li>Le porteur reçoit une notification</li>
+          <li>Il peut accepter, refuser ou vous laisser un message</li>
+          <li>Vous serez notifié de sa réponse</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>✅ Si accepté</h4>
+        <ul class="checklist">
+          <li>Statut passe à <span class="tag green">Accepté</span></li>
+          <li>Vous rejoignez l'équipe du projet</li>
+          <li>Accès au chat privé du projet</li>
+          <li>Votre profil apparaît dans la section "Équipe"</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box warn">
+      <div class="info-box-icon">⚠️</div>
+      <div class="info-box-body">
+        <strong>Une seule candidature par projet</strong>
+        Vous ne pouvez postuler qu'une seule fois à un même projet. Le bouton "Postuler" disparaît après l'envoi de votre candidature et est remplacé par votre statut actuel.
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── CHAPITRE 17 : GÉRER LES CANDIDATURES ──────────── -->
+  <div class="chapter" id="mkt-candidatures">
+    <div class="chapter-label">Chapitre 17</div>
+    <h2>Gérer les candidatures reçues</h2>
+    <p class="chapter-intro">En tant que porteur de projet, vous pouvez consulter toutes les candidatures reçues, les filtrer et répondre à chacune avec un message personnalisé.</p>
+    <div class="chapter-divider"></div>
+
+    <h3 class="section-title">Accéder aux candidatures</h3>
+
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Ouvrir la page Candidatures</h3>
+          <p>Depuis la fiche de votre projet, cliquez sur le bouton <strong>"Voir les candidatures"</strong> ou accédez directement à <span class="route">/marketplace/[projectId]/candidature</span>. Cette page n'est visible que par le porteur du projet.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Filtrer les candidatures</h3>
+          <p>Affinez la liste grâce aux filtres disponibles : <strong>Statut</strong> (En attente, Accepté, Refusé), <strong>Rôle</strong> (déduit des profils), et toggles <strong>"A un portfolio"</strong> et <strong>"Est un talent Marketplace"</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Consulter un candidat</h3>
+          <p>Chaque carte de candidature affiche l'avatar, le nom, la bio, les rôles et compétences, le message de motivation (dépliable), les liens portfolio et CV, et la date de candidature.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Cliquer sur "Répondre"</h3>
+          <p>Le bouton <strong>"Répondre"</strong> s'affiche uniquement pour les candidatures <span class="tag orange">En attente</span>. Cliquez pour ouvrir la modal de réponse.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Accepter ou refuser</h3>
+          <p>Dans la modal, vous voyez le profil complet du candidat. Rédigez un <strong>message de réponse</strong> (optionnel, max 500 caractères), puis cliquez sur <strong>"Accepter"</strong> ou <strong>"Refuser"</strong>. Le candidat est notifié immédiatement.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-title">Ce que contient une carte de candidature</h3>
+
+    <div class="post-card-mock">
+      <div class="author-row">
+        <div class="avatar-mock">LB</div>
+        <div class="author-meta">
+          <div class="name">Lucas Bernard <span class="tag">Talent Marketplace</span> <span class="tag orange">En attente</span></div>
+          <div class="time">Candidature envoyée il y a 2 jours</div>
+        </div>
+      </div>
+      <div class="post-content-mock">
+        <strong>Rôles :</strong> Monteur vidéo, Motion designer<br>
+        <strong>Motivation :</strong> Je travaille sur des courts métrages depuis 5 ans, notamment avec des productions indépendantes parisiennes…
+      </div>
+      <div class="post-actions-mock">
+        <div class="post-action active">📁 Portfolio</div>
+        <div class="post-action">📄 CV</div>
+        <div class="post-action">👤 Voir le profil</div>
+        <div class="post-action" style="border-color:var(--brand); color:var(--brand);">Répondre →</div>
+      </div>
+    </div>
+
+    <div class="info-box note">
+      <div class="info-box-icon">🏅</div>
+      <div class="info-box-body">
+        <strong>Badge "Talent Marketplace"</strong>
+        Ce badge indique que le candidat a configuré son profil talent sur la Marketplace. Il s'engage activement à collaborer et a renseigné ses disponibilités, son niveau et son mode de travail préféré.
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── CHAPITRE 18 : ÉQUIPE & INVITATIONS ──────────── -->
+  <div class="chapter page-break" id="mkt-equipe">
+    <div class="chapter-label">Chapitre 18</div>
+    <h2>Équipe &amp; invitations</h2>
+    <p class="chapter-intro">En tant que porteur de projet, vous pouvez inviter directement des talents à rejoindre votre équipe sans passer par le processus de candidature classique.</p>
+    <div class="chapter-divider"></div>
+
+    <h3 class="section-title">La section "Équipe" sur la fiche projet</h3>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>👑 Porteur du projet</h4>
+        <ul class="checklist">
+          <li>Affiché en premier avec badge couronne</li>
+          <li>Lien cliquable vers son profil</li>
+          <li>Rôle affiché sous son nom</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>👥 Participants</h4>
+        <ul class="checklist">
+          <li>Membres ayant accepté une invitation</li>
+          <li>Membres dont la candidature a été acceptée</li>
+          <li>Profil cliquable pour chacun</li>
+          <li>Rôle affiché si renseigné</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="section-title">Inviter un talent directement</h3>
+
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Accéder au bloc d'invitation</h3>
+          <p>Sur la fiche de votre projet (visible uniquement pour vous en tant que porteur), faites défiler jusqu'à la section <strong>"Inviter un membre"</strong> sous la liste de l'équipe.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Rechercher un talent</h3>
+          <p>Tapez un nom d'utilisateur ou un prénom dans la barre de recherche. La liste affiche en temps réel les talents disponibles (avec le statut <em>"Prêt à démarrer"</em>), avec leur nom d'affichage et leur username.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Envoyer l'invitation</h3>
+          <p>Cliquez sur le bouton <strong>"Inviter"</strong> à côté du profil souhaité. L'invitation est envoyée immédiatement. Le bouton se désactive si la personne est déjà membre, déjà invitée ou a déjà candidaté.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Suivre les invitations en attente</h3>
+          <p>La liste des <strong>invitations envoyées</strong> s'affiche sous le bloc de recherche, avec le statut de chacune : <span class="tag orange">En attente</span>, <span class="tag green">Acceptée</span> ou <span class="tag red" style="background:#FEE2E2; color:#EF4444;">Refusée</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box tip">
+      <div class="info-box-icon">💡</div>
+      <div class="info-box-body">
+        <strong>Invitations vs candidatures</strong>
+        Les invitations directes et les candidatures aboutissent au même résultat (rejoindre l'équipe), mais le sens est inversé : l'invitation part du porteur, la candidature part du talent. Les deux flux apparaissent dans la section "Équipe" une fois acceptés.
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── CHAPITRE 19 : TALENTS ──────────── -->
+  <div class="chapter" id="mkt-talents">
+    <div class="chapter-label">Chapitre 19</div>
+    <h2>Talents &amp; profil freelance</h2>
+    <p class="chapter-intro">L'onglet Talents de la Marketplace vous permet de vous rendre visible auprès des porteurs de projets. Configurez votre profil talent pour être trouvé et contacté.</p>
+    <div class="chapter-divider"></div>
+
+    <h3 class="section-title">Devenir un Talent Marketplace</h3>
+
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Ouvrir la modal de profil talent</h3>
+          <p>Depuis la Marketplace, cliquez sur le bouton <strong>"Devenir un talent"</strong> (visible si vous n'êtes pas encore inscrit en tant que talent). Une modal s'ouvre pour configurer votre profil.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Renseigner vos informations</h3>
+          <p>Complétez votre profil avec vos compétences / rôles, votre mode de travail préféré, votre niveau, votre préférence de rémunération, votre portfolio et votre CV.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Activer le statut "Prêt à démarrer"</h3>
+          <p>Ce statut signale aux porteurs de projets que vous êtes disponible et ouvert à des collaborations. Vous apparaissez alors dans les résultats de recherche d'invitation directe.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Apparaître dans l'onglet Talents</h3>
+          <p>Votre profil est désormais visible dans l'onglet <strong>Talents</strong> de la Marketplace. Les porteurs de projets peuvent vous trouver, consulter vos infos et vous inviter directement.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-title">Ce qu'affiche une card Talent</h3>
+
+    <div class="post-card-mock">
+      <div class="author-row">
+        <div class="avatar-mock" style="position:relative;">CM
+          <span style="position:absolute; bottom:-4px; right:-4px; background:var(--brand); color:white; font-size:9px; border-radius:100px; padding:1px 5px; font-weight:800;">12</span>
+        </div>
+        <div class="author-meta">
+          <div class="name">Camille Martin <span class="tag green">Prêt à démarrer</span></div>
+          <div class="time">@camillem · 5 projets sur Lency</div>
+        </div>
+      </div>
+      <div class="post-content-mock">
+        <strong>Rôles :</strong> Compositrice, Sound Designer<br>
+        <strong>Mode :</strong> Distanciel · <strong>Niveau :</strong> Avancé · <strong>Rémunération :</strong> Rémunérée
+        <br><br><em>"Je compose des musiques originales pour films et séries depuis 6 ans…"</em>
+      </div>
+      <div class="post-actions-mock">
+        <div class="post-action active">🎼 Portfolio</div>
+        <div class="post-action">📄 CV</div>
+        <div class="post-action">👤 Voir le profil</div>
+      </div>
+    </div>
+
+    <h3 class="section-title">Filtres de l'onglet Talents</h3>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎭</div>
+        <h4>Rôle / Compétence</h4>
+        <p>Filtrez par métier : Monteur, Réalisateur, Compositeur, etc.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h4>Mode de travail</h4>
+        <p>Présentiel, Distanciel ou Hybride selon vos besoins.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎓</div>
+        <h4>Niveau</h4>
+        <p>Débutant, Intermédiaire ou Avancé.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💶</div>
+        <h4>Rémunération</h4>
+        <p>Talents disponibles avec ou sans rémunération.</p>
+      </div>
+    </div>
+
+    <div class="info-box note">
+      <div class="info-box-icon">🔗</div>
+      <div class="info-box-body">
+        <strong>Profil public lié</strong>
+        Les informations de votre profil talent (bio, compétences, équipement…) proviennent directement de votre profil public Lency <span class="route">/user/[username]</span>. Pensez à le compléter pour maximiser votre visibilité.
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── CHAPITRE 20 : CHAT DE PROJET ──────────── -->
+  <div class="chapter page-break" id="mkt-chat">
+    <div class="chapter-label">Chapitre 20</div>
+    <h2>Chat de projet</h2>
+    <p class="chapter-intro">Chaque projet dispose d'un espace de messagerie privé accessible uniquement aux membres de l'équipe. C'est l'espace de coordination de votre équipe.</p>
+    <div class="chapter-divider"></div>
+
+    <h3 class="section-title">Accéder au chat</h3>
+
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Être membre du projet</h3>
+          <p>Le chat est accessible uniquement si vous êtes le <strong>porteur du projet</strong> ou un <strong>membre accepté</strong>. Les simples visiteurs ou candidats en attente n'y ont pas accès.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Cliquer sur "Accéder au chat"</h3>
+          <p>Depuis la fiche projet, un bouton <strong>"Chat de l'équipe"</strong> est visible pour les membres. Vous êtes redirigé vers <span class="route">/marketplace/[projectId]/chat</span>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Envoyer des messages</h3>
+          <p>Tapez votre message dans la zone de saisie en bas du chat et appuyez sur <strong>Entrée</strong> ou le bouton d'envoi. Vous pouvez également partager des <strong>images</strong>, des <strong>vidéos</strong> ou des <strong>liens audio</strong> via les icônes médias.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-mock">
+      <div class="ui-mock-bar">
+        <div class="dot-bar red-d"></div><div class="dot-bar yel-d"></div><div class="dot-bar grn-d"></div>
+        <span style="margin-left:8px;">Chat — Mon court métrage · 3 membres</span>
+      </div>
+      <div class="ui-mock-content">
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+          <div style="display:flex; gap:10px;">
+            <div class="avatar-mock" style="width:30px; height:30px; font-size:11px; flex-shrink:0;">MJ</div>
+            <div>
+              <div style="font-size:11px; color:var(--muted); margin-bottom:3px;">Marie Jean · 14:23</div>
+              <div style="background:var(--brand-soft); border-radius:0 10px 10px 10px; padding:10px 14px; font-size:13px; max-width:320px;">
+                Bonjour à tous ! On se retrouve en visio vendredi 15h pour le premier brief montage ? 🎬
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <div>
+              <div style="font-size:11px; color:var(--muted); text-align:right; margin-bottom:3px;">Vous · 14:31</div>
+              <div style="background:var(--brand); color:white; border-radius:10px 0 10px 10px; padding:10px 14px; font-size:13px; max-width:320px;">
+                Parfait, je serai là ! J'ai commencé à regarder les rushes 👍
+              </div>
+            </div>
+            <div class="avatar-mock" style="width:30px; height:30px; font-size:11px; flex-shrink:0; background:linear-gradient(135deg,var(--accent),var(--brand));">LB</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; border-top:1px solid var(--border); padding-top:14px;">
+          <div class="input-mock" style="flex:1; margin:0;">Écrire un message…</div>
+          <div class="btn-mock" style="padding:10px 14px;">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>💬 Fonctionnalités du chat</h4>
+        <ul class="checklist">
+          <li>Messages texte en temps réel</li>
+          <li>Partage d'images, vidéos et audio</li>
+          <li>Historique complet des échanges</li>
+          <li>Noms et avatars affichés</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🔐 Accès & confidentialité</h4>
+        <ul class="checklist">
+          <li>Réservé aux membres confirmés</li>
+          <li>Inaccessible aux candidats en attente</li>
+          <li>Non visible publiquement</li>
+          <li>Accessible dès l'acceptation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <div>
+        <h3>Prêt à lancer votre projet ?</h3>
+        <p>Publiez votre projet sur la Marketplace et trouvez les talents créatifs qui vous correspondent. Ou proposez vos services et rejoignez des projets passionnants.</p>
+      </div>
+      <div class="cta-btn">lency.app/marketplace →</div>
+    </div>
+
+    <h3 class="section-title">Rappel des pages Marketplace</h3>
+
+    <div class="feature-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="feature-card" style="text-align:left;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="font-size:20px;">🎬</span>
+          <strong>Projets</strong>
+        </div>
+        <span class="route">/marketplace</span>
+        <p style="margin-top:8px;">Explorer et filtrer tous les projets</p>
+      </div>
+      <div class="feature-card" style="text-align:left;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="font-size:20px;">🧑‍🎨</span>
+          <strong>Talents</strong>
+        </div>
+        <span class="route">/marketplace?tab=talents</span>
+        <p style="margin-top:8px;">Trouver des collaborateurs disponibles</p>
+      </div>
+      <div class="feature-card" style="text-align:left;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="font-size:20px;">📋</span>
+          <strong>Candidatures</strong>
+        </div>
+        <span class="route">/marketplace/[id]/candidature</span>
+        <p style="margin-top:8px;">Gérer les candidatures de votre projet</p>
+      </div>
+      <div class="feature-card" style="text-align:left;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="font-size:20px;">💬</span>
+          <strong>Chat</strong>
+        </div>
+        <span class="route">/marketplace/[id]/chat</span>
+        <p style="margin-top:8px;">Messagerie privée de l'équipe projet</p>
+      </div>
+    </div>
+  </div>
+
   <!-- ──────────── FOOTER ──────────── -->
   <div class="doc-footer">
     <div>
-      <strong>Lency</strong> — Guide Utilisateur v1.0<br>
-      Plateforme créative & communauté de designers et développeurs
+      <strong>Lency</strong> — Guide Utilisateur v2.0<br>
+      Plateforme créative — Communauté & Marketplace
     </div>
     <div style="text-align:right;">
-      Mai 2026 · lency.app<br>
+      Juin 2026 · lency.app<br>
       Pour toute question : support@lency.app
     </div>
   </div>
@@ -1591,8 +2738,8 @@
 </div>
 
 <script>
-  const sections = ['cover-section','connexion','navigation','feed','creer-post','ressource','interagir','enregistres','communautes','profil','astuces'];
-  const labels   = ['Accueil','Connexion','Navigation','Fil d\'actualité','Créer un post','Publier une ressource','Interagir','Enregistrements','Communautés','Profil & compte','Astuces'];
+  const sections = ['cover-section','connexion','navigation','feed','creer-post','ressource','interagir','enregistres','communautes','profil','parametres','notifications','astuces','mkt-intro','mkt-projets','mkt-creer','mkt-postuler','mkt-candidatures','mkt-equipe','mkt-talents','mkt-chat'];
+  const labels   = ['Accueil','Connexion','Navigation','Fil d\'actualité','Créer un post','Publier une ressource','Interagir','Enregistrements','Communautés','Profil & compte','Paramètres du compte','Notifications','Astuces','Marketplace — Vue d\'ensemble','Explorer les projets','Créer un projet','Postuler à un projet','Gérer les candidatures','Équipe & invitations','Talents','Chat de projet'];
 
   let current = 0;
 
@@ -1627,7 +2774,8 @@
       const el = document.getElementById(sections[i]);
       if (!el) continue;
       const rect = el.getBoundingClientRect();
-      if (rect.top <= 100) active = i;
+      const threshold = i === 0 ? window.innerHeight * 0.6 : 100;
+      if (rect.top <= threshold) active = i;
     }
     current = active;
 
