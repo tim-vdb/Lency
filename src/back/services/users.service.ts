@@ -132,6 +132,9 @@ export const UsersService = {
             portfolio?: string;
             isMarketplaceTalent?: boolean;
             readyToStart?: boolean;
+            address?: string;
+            latitude?: number;
+            longitude?: number;
         }
     ) => {
         if (!data || Object.keys(data).length === 0) {

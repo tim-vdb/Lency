@@ -16,6 +16,8 @@ export interface CreateProjectInput {
     roles?: string[];
     visibility?: Visibility;
     city?: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 export type MyProject = { id: string; title: string; ownerId: string };
@@ -92,6 +94,8 @@ export interface UpdateProjectInput {
     roles?: string[];
     visibility?: Visibility;
     city?: string;
+    latitude?: number;
+    longitude?: number;
     status?: ProjectStatus;
 }
 

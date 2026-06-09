@@ -15,7 +15,9 @@ export const createProjectSchema = z.object({
     startDate: z.string().optional(),
     roles: z.array(z.string()).optional(),
     visibility: zodEnum(Visibility).optional(),
-    city: z.string().optional(),
+    city: z.string().max(255).optional(),
+    latitude: z.number().optional(),
+    longitude: z.number().optional(),
 });
 
 export const updateProjectSchema = z.object({
@@ -30,7 +32,9 @@ export const updateProjectSchema = z.object({
     startDate: z.string().optional(),
     roles: z.array(z.string()).optional(),
     visibility: zodEnum(Visibility).optional(),
-    city: z.string().optional(),
+    city: z.string().max(255).optional(),
+    latitude: z.number().optional(),
+    longitude: z.number().optional(),
 }).refine(data => Object.keys(data).length > 0, { message: "Aucune donnée à mettre à jour" });
 
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;

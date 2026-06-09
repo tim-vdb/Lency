@@ -70,6 +70,9 @@ export interface UpdateUserInput {
     cv?: string;
     isMarketplaceTalent?: boolean;
     readyToStart?: boolean;
+    address?: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 /**

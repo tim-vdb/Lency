@@ -154,6 +154,9 @@ export const UsersAction = {
             isPremium?: boolean;
             isMarketplaceTalent?: boolean;
             readyToStart?: boolean;
+            address?: string;
+            latitude?: number;
+            longitude?: number;
         }
     ) => {
         return prisma.user.update({ where: { id }, data });

@@ -17,6 +17,9 @@ export const TalentProfileModalSchema = z.object({
     workMode: z.string().optional(),
     level: z.string().optional(),
     remunerationType: z.string().optional(),
+    address: z.string().max(255).optional(),
+    latitude: z.number().optional(),
+    longitude: z.number().optional(),
 });
 
 export type TalentProfileModalValues = z.infer<typeof TalentProfileModalSchema>;
