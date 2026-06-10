@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import type * as Ably from "ably";
 import { useAblyClient } from "@/front/states/contexts/ably.context";
 import { useUser } from "@/front/states/contexts/user.context";
 import { useActiveChat } from "@/front/states/contexts/active-chat.context";
@@ -59,7 +60,7 @@ export function DirectMessageChat({ otherUser, onClose }: DirectMessageChatProps
     const channel = ablyClient.channels.get(`user-dms-${user.id}`);
     const listKey = conversationQueries.messages(conversationId).queryKey;
 
-    channel.subscribe("new_message", (msg) => {
+    const handler = (msg: Ably.Message) => {
       const incoming = msg.data as DirectMessage;
       if (incoming.conversationId !== conversationId) return;
       if (incoming.senderId === user.id) return;
@@ -67,9 +68,13 @@ export function DirectMessageChat({ otherUser, onClose }: DirectMessageChatProps
         const exists = old.some((m) => m.id === incoming.id);
         return exists ? old : [...old, incoming];
       });
-    });
+    };
 
-    return () => { channel.unsubscribe(); };
+    channel.subscribe("new_message", handler);
+
+    // Unsubscribe only this specific handler — channel.unsubscribe() with no args
+    // would also strip AblyInitializer's listeners on this shared channel.
+    return () => { channel.unsubscribe("new_message", handler); };
   }, [conversationId, user?.id, ablyClient, queryClient]);
 
   // Scroll to bottom

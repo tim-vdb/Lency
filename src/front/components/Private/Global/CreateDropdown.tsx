@@ -48,9 +48,14 @@ export function CreateDropdown() {
 
     function handleSelect(type: CreateType) {
         if (!user) { setAuthModalOpen(true); return }
-        setEditingDraft(null)
-        setActiveType(type)
-        setModalOpen(true)
+        // All three updates in the same deferred batch — ensures the modal
+        // opens with the correct tab in one atomic render, and lets Radix
+        // finish its DropdownMenu cleanup (pointer-events) before the Dialog opens.
+        setTimeout(() => {
+            setEditingDraft(null)
+            setActiveType(type)
+            setModalOpen(true)
+        }, 0)
     }
 
     function handleEdit(draft: EditDraft) {

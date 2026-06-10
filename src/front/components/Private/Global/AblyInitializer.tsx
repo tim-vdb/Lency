@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as Ably from "ably";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/front/states/contexts/user.context";
@@ -16,14 +16,18 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
   const { setConnected } = useNotifications();
   const queryClient = useQueryClient();
   const [ablyClient, setAblyClient] = useState<Ably.Realtime | null>(null);
+  // Prevents StrictMode double-invoke from creating two simultaneous clients.
+  const activeClientRef = useRef<Ably.Realtime | null>(null);
   // Observer permanent : garantit que invalidateQueries déclenche un refetch
   // même quand le panel notifications est fermé.
   useNotificationsQuery();
 
   useEffect(() => {
     if (!user?.id) return;
+    if (activeClientRef.current) return;
 
     const client = new Ably.Realtime({ authUrl: "/api/ably/token" });
+    activeClientRef.current = client;
     setAblyClient(client);
 
     client.connection.on("connected", () => {
@@ -200,18 +204,17 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
     });
 
     return () => {
+      activeClientRef.current = null;
       setAblyClient(null);
-      try {
-        [ownerChannelName, userChannelName, "projects-feed", "users-feed", dmChannelName, "community-feed"].forEach((ch) => {
-          try { client.channels.release(ch); } catch { /* already released */ }
-        });
-        const state = client.connection.state;
-        if (state !== "closed" && state !== "failed" && state !== "closing") {
-          client.connection.off();
-          client.close();
-        }
-      } catch {
-        // connexion déjà fermée (StrictMode double-invoke ou échec auth)
+      [ownerChannelName, userChannelName, "projects-feed", "users-feed", dmChannelName, "community-feed"].forEach((ch) => {
+        try { client.channels.release(ch); } catch { /* already released */ }
+      });
+      // Never call connection.off() before close() — it removes error handlers
+      // and makes internal close() errors propagate as unhandled events.
+      // close() manages its own teardown.
+      const state = client.connection.state;
+      if (state !== "closed" && state !== "failed" && state !== "closing") {
+        try { client.close(); } catch { /* race between state check and close() */ }
       }
     };
   }, [user?.id, setConnected, queryClient]);
