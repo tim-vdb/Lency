@@ -24,27 +24,28 @@ export const metadata: Metadata = {
 export default function DashboardAccount() {
     return (
         <div
-            className="flex flex-col overflow-hidden bg-[#F7F7F2] h-full"
+            className="flex flex-col overflow-hidden bg-[#F7F7F2] h-full w-full"
             style={{ padding: "12px 12px 0 12px", gap: "24px" }}
         >
             {/* ── Projet à la Une ── */}
             <DashboardFeaturedProjects
-                className="shrink-0"
-                style={{ height: "clamp(180px, calc((100vh - 128px) * 0.283), 300px)" }}
+                className="shrink-0 w-full"
+                style={{ height: "clamp(180px, calc((100vh - 128px) * 0.283), 300px)"}}
             />
 
             {/* ── Tabs + Notifications ── */}
-            <div className="flex flex-1 overflow-hidden min-h-0" style={{ gap: "16px" }}>
+            <div className="flex flex-1 overflow-hidden min-h-0 w-full" style={{ gap: "16px" }}>
                 {/* Tabs : flex-1 → prend toute la largeur restante */}
                 <div
-                    className="flex-1 bg-white rounded-xl border border-[#E8E8E1] overflow-hidden flex flex-col min-w-0"
+                    className="flex-1 bg-white rounded-xl border border-[#E8E8E1] overflow-hidden flex flex-col min-w-0 w-full"
                     style={{ padding: "20px 24px" }}
                 >
-                    <DashboardTabs className="flex-1 flex flex-col overflow-hidden" />
+                    <DashboardTabs className="flex-1 flex flex-col overflow-hidden w-full" />
                 </div>
 
                 {/* Notifications : largeur proportionnelle à la spec (329px sur 1440px) */}
                 <DashboardNotifications
+                    className="w-full"
                     style={{ width: "clamp(240px, calc(27.9vw - 67px), 329px)", flexShrink: 0 }}
                 />
             </div>

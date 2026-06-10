@@ -9,10 +9,10 @@ import type { Project } from "@/front/lib/api/projects"
 
 interface ExploreMarketPlaceProps {
     filteredProjects: Project[]
-    addressCoords: { lat: number; lon: number } | null
+    addressCoords?: { lat: number; lon: number } | null
 }
 
-export default function ExploreMarketPlace({ filteredProjects, addressCoords }: ExploreMarketPlaceProps) {
+export default function ExploreMarketPlace({ filteredProjects }: ExploreMarketPlaceProps) {
     return (
         <Tabs defaultValue="projects" className="flex flex-col items-center gap-1 h-full">
             <div className="px-5 w-full">
@@ -29,7 +29,7 @@ export default function ExploreMarketPlace({ filteredProjects, addressCoords }: 
             </div>
             <TabsContent value="projects" className="flex flex-col gap-4 w-full overflow-hidden flex-1 px-5 pb-1">
                 <Card className="border border-neutral-600 gap-1 text-neutral-400 py-0 w-full h-full overflow-hidden">
-                    <ProjectsMap projects={filteredProjects} addressCoords={addressCoords} />
+                    <ProjectsMap projects={filteredProjects} />
                 </Card>
             </TabsContent>
             <TabsContent value="members" className="flex flex-col gap-4 w-full overflow-y-auto flex-1 px-5 pb-1">

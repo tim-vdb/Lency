@@ -113,8 +113,8 @@ function PopupCard({ project }: { project: Project }) {
                 href={`/marketplace/${project.id}`}
                 style={{
                     display: "block", padding: "5px 0", fontSize: 11, fontWeight: 600,
-                    textAlign: "center", borderRadius: 7,
-                    background: "#EA3D0E", color: "#fff", textDecoration: "none", borderRadius: 4,
+                    textAlign: "center", borderRadius: 4,
+                    background: "#EA3D0E", color: "#fff", textDecoration: "none",
                 }}
             >
                 Rejoindre le projet
