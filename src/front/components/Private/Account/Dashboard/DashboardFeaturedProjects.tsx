@@ -72,9 +72,9 @@ export function DashboardFeaturedProjects({ className, style }: { className?: st
                 </div>
 
                 {/* Carousel */}
-                <div className="relative">
+                <div className="relative overflow-hidden w-full">
                     {/* Masque le dernier item partiellement pour indiquer le scroll */}
-                    <div className="overflow-hidden" style={{ maskImage: "linear-gradient(to right, black 85%, transparent 100%)" }}>
+                    <div className="overflow-hidden w-full" style={{ maskImage: "linear-gradient(to right, black 85%, transparent 100%)" }}>
                         <div
                             ref={scrollRef}
                             className="flex gap-4 overflow-x-auto pb-1"
