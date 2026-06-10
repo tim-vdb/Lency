@@ -6,6 +6,7 @@ import {
     fetchCategories,
     fetchCategoryById,
     fetchCategoryBySlug,
+    fetchFollowedCategories,
     fetchPostsByCategory,
     getCategoryNotifyStatus,
     getFollowStatus,
@@ -41,6 +42,13 @@ export const categoryQueries = {
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
 export const useCategories = () => useQuery(categoryQueries.lists())
+
+export const useFollowedCategories = () =>
+    useQuery({
+        queryKey: [...CATEGORY_ROOT, "followed"] as const,
+        queryFn: fetchFollowedCategories,
+        staleTime: 1000 * 60 * 2,
+    })
 
 export const useCategoryById = (id: string) => useQuery(categoryQueries.detail(id))
 

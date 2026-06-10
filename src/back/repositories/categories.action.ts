@@ -101,4 +101,19 @@ export const CategoriesAction = {
     delete: async (id: string) => {
         return prisma.category.delete({ where: { id } });
     },
+
+    findFollowedCategories: async (userId: string) => {
+        const follows = await prisma.categoryFollow.findMany({
+            where: { userId },
+            include: {
+                category: {
+                    include: {
+                        _count: { select: { posts: true, ressources: true } },
+                    },
+                },
+            },
+            orderBy: { createdAt: "desc" },
+        });
+        return follows.map((f) => f.category);
+    },
 };
