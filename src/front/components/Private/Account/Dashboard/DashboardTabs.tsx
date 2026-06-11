@@ -7,13 +7,12 @@ import { Button } from "@/front/components/ui/button";
 import { DashboardCommunities } from "./DashboardCommunities";
 import { DashboardExplorer } from "./DashboardExplorer";
 
-type MainTab = "communautes" | "marketplace" | "explorer";
+type MainTab = "communautes" | "explorer";
 type ExplorerMode = "projets" | "talents";
 
 const MAIN_TABS: { id: MainTab; label: string }[] = [
     { id: "communautes", label: "Communautés" },
-    { id: "marketplace", label: "Marketplace" },
-    { id: "explorer", label: "Explorer" },
+    { id: "explorer", label: "Explorer & Marketplace" },
 ];
 
 const EXPLORER_MODES: { id: ExplorerMode; label: string }[] = [
@@ -39,11 +38,6 @@ export function DashboardTabs({ className }: { className?: string }) {
                 </div>
                 <div className="flex-1 overflow-y-auto p-6">
                     {activeTab === "communautes" && <DashboardCommunities />}
-                    {activeTab === "marketplace" && (
-                        <div className="flex items-center justify-center h-full">
-                            <p className="text-sm text-[#8C8A85]">Marketplace — bientôt disponible</p>
-                        </div>
-                    )}
                 </div>
             </div>
         );
@@ -105,11 +99,6 @@ export function DashboardTabs({ className }: { className?: string }) {
                 {activeTab === "communautes" && (
                     <div className="flex-1 min-h-0 overflow-y-auto">
                         <DashboardCommunities />
-                    </div>
-                )}
-                {activeTab === "marketplace" && (
-                    <div className="flex-1 flex items-center justify-center">
-                        <p className="text-sm text-[#8C8A85]">Marketplace — bientôt disponible</p>
                     </div>
                 )}
                 {activeTab === "explorer" && (
