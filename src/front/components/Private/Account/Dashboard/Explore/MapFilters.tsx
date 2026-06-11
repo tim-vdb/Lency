@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Input } from "@/front/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/front/components/ui/select"
 import { Search, MapPin, X } from "lucide-react"
-import type { ProjectSubject } from "@/front/lib/api/projects"
-
 interface AddressSuggestion {
     id: string
     name: string
@@ -17,8 +14,6 @@ interface AddressSuggestion {
 interface MapFiltersProps {
     onAddressChange: (address: string, lat?: number, lon?: number) => void
     addressFilter: string
-    onSubjectChange: (subject: ProjectSubject) => void
-    subjectFilter: ProjectSubject
     onTitleChange: (title: string) => void
     titleSuggestions: Array<{ id: string; title: string }>
 }
@@ -26,8 +21,6 @@ interface MapFiltersProps {
 export default function MapFilters({
     onAddressChange,
     addressFilter,
-    onSubjectChange,
-    subjectFilter,
     onTitleChange,
     titleSuggestions,
 }: MapFiltersProps) {
@@ -132,8 +125,6 @@ export default function MapFilters({
         setShowTitleSuggestions(false)
     }
 
-    const subjects: ProjectSubject[] = ["Tout", "Vidéo", "Motion", "Photo", "Outils"]
-
     return (
         <div className="flex flex-col gap-4">
             {/* Recherche par adresse avec autocomplete */}
@@ -212,19 +203,6 @@ export default function MapFilters({
                 )}
             </div>
 
-            {/* Filtre par sujet */}
-            <Select value={subjectFilter} onValueChange={(value) => onSubjectChange(value as ProjectSubject)}>
-                <SelectTrigger className="bg-neutral-800 border-neutral-700 text-neutral-100">
-                    <SelectValue placeholder="Tous les sujets" />
-                </SelectTrigger>
-                <SelectContent className="bg-neutral-800 border-neutral-700">
-                    {subjects.map((subject) => (
-                        <SelectItem key={subject} value={subject}>
-                            {subject}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
         </div>
     )
 }

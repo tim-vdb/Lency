@@ -3,7 +3,7 @@ import { z } from "zod";
 export const CreateProjectSchema = z.object({
     title: z.string().min(1, "Le titre est requis").max(150, "Maximum 150 caractères"),
     description: z.string().min(1, "La description est requise").max(2000, "Maximum 2000 caractères"),
-    projectType: z.enum(["COURT_METRAGE", "LONG_METRAGE", "SERIE", "CLIP", "DOCUMENTAIRE", "YOUTUBE", "AUTRE"], { required_error: "Le type de projet est requis" }),
+    projectType: z.enum(["COURT_METRAGE", "LONG_METRAGE", "SERIE", "CLIP", "DOCUMENTAIRE", "YOUTUBE", "AUTRE"], { error: "Le type de projet est requis" }),
     level: z.enum(["DEBUTANT", "INTERMEDIAIRE", "AVANCE"]).optional(),
     remunerationType: z.enum(["NON_REMUNERE", "REMUNERE"]).optional(),
     workMode: z.enum(["PRESENTIEL", "DISTANCIEL", "HYBRIDE"]).optional(),

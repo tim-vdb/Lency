@@ -80,8 +80,6 @@ export default function ExploreBlock({ className }: { className?: string }) {
                             <MapFilters
                                 onAddressChange={handleAddressChange}
                                 addressFilter={addressFilter}
-                                onSubjectChange={setSubjectFilter}
-                                subjectFilter={subjectFilter}
                                 onTitleChange={setTitleFilter}
                                 titleSuggestions={titleSuggestions}
                             />
@@ -127,8 +125,6 @@ export default function ExploreBlock({ className }: { className?: string }) {
                             <MapFilters
                                 onAddressChange={handleAddressChange}
                                 addressFilter={addressFilter}
-                                onSubjectChange={setSubjectFilter}
-                                subjectFilter={subjectFilter}
                                 onTitleChange={setTitleFilter}
                                 titleSuggestions={titleSuggestions}
                             />

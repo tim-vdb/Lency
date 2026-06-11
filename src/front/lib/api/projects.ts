@@ -1,7 +1,6 @@
 import { CommentWithChildren } from "@/front/schemas/types/post.type";
 import { ProjectWithOwner } from "@/front/schemas/types/project.type";
 
-export type ProjectSubject = "Tout" | "Vidéo" | "Motion" | "Photo" | "Outils";
 export type Project = ProjectWithOwner;
 
 export interface CreateProjectInput {
