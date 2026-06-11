@@ -42,7 +42,7 @@ export default function PostsBlock() {
                         <div className="flex flex-col gap-1">
                             <p className="text-sm font-medium text-neutral-700">Aucune communauté suivie</p>
                             <p className="text-xs text-neutral-400 max-w-[200px]">
-                                Rejoignez des communautés pour voir leurs posts ici.
+                                Rejoignez des catégories pour voir leurs posts ici.
                             </p>
                         </div>
                         <Button variant="outline" size="sm" className="text-xs" asChild>

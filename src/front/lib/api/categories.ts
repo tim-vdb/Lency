@@ -6,6 +6,7 @@
  * - Créer/Modifier/Supprimer des données (POST/PUT/DELETE)
  */
 
+// Type pour une catégorie (basé sur votre schéma Prisma)
 export interface Category {
     id: string
     name: string
@@ -19,13 +20,14 @@ export interface Category {
     lastPostAt?: Date
     createdAt: Date
     updatedAt: Date
+}
+
+export interface CategoryWithCounts extends Category {
     _count: {
         posts: number
         ressources: number
     }
 }
-
-export type CategoryWithCounts = Category
 
 // Type pour créer une nouvelle catégorie
 export interface CreateCategoryInput {

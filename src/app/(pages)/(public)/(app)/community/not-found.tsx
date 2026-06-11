@@ -9,8 +9,8 @@ export default function CategoryNotFound() {
                 <FolderXIcon className="w-8 h-8 text-neutral-400" />
             </div>
             <div className="flex flex-col gap-2">
-                <h2 className="text-xl font-semibold text-neutral-900">Communauté introuvable</h2>
-                <p className="text-sm text-neutral-500">Cette communauté n'existe pas ou a été supprimée.</p>
+                <h2 className="text-xl font-semibold text-neutral-900">Catégorie introuvable</h2>
+                <p className="text-sm text-neutral-500">Cette catégorie n'existe pas ou a été supprimée.</p>
             </div>
             <Button asChild variant="outline">
                 <Link href="/community">Retour à la communauté</Link>

@@ -33,7 +33,7 @@ type CreateType = "post" | "project" | "category" | "resource" | "drafts"
 const CREATE_ITEMS = [
     { value: "post" as const, icon: FileText, label: "Post", description: "Texte, image, vidéo ou audio", supportsDraft: true },
     { value: "project" as const, icon: FolderKanban, label: "Projet", description: "Chercher des collaborateurs", supportsDraft: true },
-    { value: "category" as const, icon: Tag, label: "Communauté", description: "Créer un espace thématique", supportsDraft: false },
+    { value: "category" as const, icon: Tag, label: "Catégorie", description: "Nouvelle communauté", supportsDraft: false },
     { value: "resource" as const, icon: Link2, label: "Ressource", description: "Asset, tutoriel ou lien", supportsDraft: false },
 ]
 
@@ -82,7 +82,7 @@ export function CreateDropdown() {
                                 <Icon className="size-4" />
                                 {value === "post" ? "Créer un post"
                                     : value === "project" ? "Créer un projet"
-                                        : value === "category" ? "Créer une communauté"
+                                        : value === "category" ? "Créer une catégorie"
                                             : "Créer une ressource"}
                             </DropdownMenuItem>
                         ))}

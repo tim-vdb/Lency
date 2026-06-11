@@ -332,13 +332,13 @@ export function CreatePostForm({ onSuccess, initialData, mode = "create" }: Crea
                 </MultistepStep>
 
                 {/* ── Étape 2 : Publication ── */}
-                <MultistepStep title="Publication" description="Choisissez une communauté et le statut de publication.">
+                <MultistepStep title="Publication" description="Choisissez une catégorie et le statut de publication.">
                     <FormField
                         control={form.control}
                         name="categoryId"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Communauté</FormLabel>
+                                <FormLabel>Catégorie</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={categoriesLoading}>
                                     <FormControl>
                                         <SelectTrigger>

@@ -70,7 +70,7 @@ export default function SearchBar() {
                             ref={inputRef}
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Rechercher un projet, post, communauté…"
+                            placeholder="Rechercher un projet, post, catégorie…"
                             className="flex-1 py-4 bg-transparent text-sm text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 outline-none"
                         />
                         {query ? (
@@ -144,7 +144,7 @@ export default function SearchBar() {
                                         {counts.categories > 0 && (
                                             <SearchSection
                                                 icon={<Tag className="w-3.5 h-3.5" />}
-                                                label="Communautés populaires"
+                                                label="Catégories populaires"
                                             >
                                                 <SearchCategoryList categories={data.categories} onClose={closeForNavigation} />
                                             </SearchSection>
@@ -181,7 +181,7 @@ export default function SearchBar() {
                                             </SearchSection>
                                         )}
                                         {sType === "categories" && (
-                                            <SearchSection icon={<Tag className="w-3.5 h-3.5" />} label="Communautés populaires">
+                                            <SearchSection icon={<Tag className="w-3.5 h-3.5" />} label="Catégories populaires">
                                                 <SearchCategoryList categories={data.categories} onClose={closeForNavigation} />
                                             </SearchSection>
                                         )}
@@ -217,7 +217,7 @@ export default function SearchBar() {
                                         )}
 
                                         {show("categories") && counts.categories > 0 && (
-                                            <SearchSection icon={<Tag className="w-3.5 h-3.5" />} label="Communautés">
+                                            <SearchSection icon={<Tag className="w-3.5 h-3.5" />} label="Catégories">
                                                 <SearchCategoryList categories={data.categories} onClose={closeForNavigation} />
                                             </SearchSection>
                                         )}

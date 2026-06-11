@@ -26,7 +26,7 @@ export default function CategoryResourcesPageClient({ slug }: { slug: string }) 
     if (!category) {
         return (
             <div className="flex items-center justify-center py-20">
-                <p className="text-neutral-500">Communauté introuvable.</p>
+                <p className="text-neutral-500">Catégorie introuvable.</p>
             </div>
         );
     }
@@ -39,7 +39,7 @@ export default function CategoryResourcesPageClient({ slug }: { slug: string }) 
                 <p className="text-sm text-neutral-500">Chargement des ressources...</p>
             )}
             {!resourcesPending && resources?.length === 0 && (
-                <p className="text-sm text-neutral-500">Aucune ressource dans cette communauté.</p>
+                <p className="text-sm text-neutral-500">Aucune ressource dans cette catégorie.</p>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

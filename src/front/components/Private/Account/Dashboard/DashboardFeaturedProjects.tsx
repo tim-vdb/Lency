@@ -61,7 +61,7 @@ export function DashboardFeaturedProjects({ className, style }: { className?: st
 
             <div className={cn("bg-white rounded-xl border border-[#E8E8E1] px-6 py-5 flex flex-col", className)} style={style}>
                 {/* Header */}
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-5">
                     <h2 className="text-[20px] font-bold text-[#000000]">Projet à la Une</h2>
                     <button
                         onClick={() => setIsExpanded(true)}
@@ -87,9 +87,8 @@ export function DashboardFeaturedProjects({ className, style }: { className?: st
                                     <DashboardProjectCard
                                         key={p.id}
                                         project={p}
-                                        compact
                                         className="shrink-0"
-                                        style={{ width: CARD_WIDTH }}
+                                        style={{ width: CARD_WIDTH, height: "clamp(120px, 15.2vh, 164px)" }}
                                     />
                                 ))
                             )}
