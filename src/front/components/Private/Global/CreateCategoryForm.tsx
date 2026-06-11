@@ -87,7 +87,7 @@ export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
             },
             {
                 onSuccess: (cat) => {
-                    toast.success(`Catégorie "${cat.name}" créée !`)
+                    toast.success(`Communauté "${cat.name}" créée !`)
                     form.reset()
                     setBannerPreview(null)
                     onSuccess?.()
@@ -110,12 +110,12 @@ export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
                         }}
                         isPending={isPending}
                         disabled={uploading !== null}
-                        submitLabel="Créer la catégorie"
+                        submitLabel="Créer la communauté"
                     />
                 }
             >
                 {/* ── Étape 1 : Identité ── */}
-                <MultistepStep title="Identité" description="Bannière, nom et URL de la catégorie.">
+                <MultistepStep title="Identité" description="Bannière, nom et URL de la communauté.">
                     {/* Bannière */}
                     <div>
                         <FormLabel className="mb-1.5 block">Bannière <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
@@ -225,7 +225,7 @@ export function CreateCategoryForm({ onSuccess }: CreateCategoryFormProps) {
                                 <FormLabel>Règles <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        placeholder="Règles de la catégorie…"
+                                        placeholder="Règles de la communauté…"
                                         className="min-h-20 resize-none text-sm"
                                         {...field}
                                     />

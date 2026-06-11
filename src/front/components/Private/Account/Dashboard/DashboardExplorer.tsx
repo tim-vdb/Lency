@@ -116,9 +116,9 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
     }
 
     return (
-        <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-hidden">
+        <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-y-auto">
             {/* Filtres */}
-            <div>
+            <div className="shrink-0">
                 <button
                     onClick={() => setFiltersOpen((v) => !v)}
                     className="flex items-center gap-2 text-sm font-medium text-[#4C4A43] hover:text-black transition-colors cursor-pointer"
@@ -149,7 +149,7 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
             </Card>
 
             {/* Liste sous la map */}
-            <div className="flex-1 overflow-y-auto min-h-0">
+            <div className="shrink-0">
                 {mode === "projets" ? (
                     filteredProjects.length === 0 ? (
                         <p className="text-sm text-[#8C8A85] text-center py-6">Aucun projet trouvé</p>
@@ -159,7 +159,6 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
                                 <DashboardProjectCard
                                     key={p.id}
                                     project={p}
-                                    style={{ height: "clamp(100px, 14.2vh, 153px)" }}
                                 />
                             ))}
                         </div>
@@ -173,7 +172,6 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
                                 <DashboardTalentCard
                                     key={t.id}
                                     talent={t}
-                                    style={{ height: "clamp(100px, 14.2vh, 153px)" }}
                                 />
                             ))}
                         </div>
