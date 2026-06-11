@@ -68,6 +68,8 @@ export const ProjectsService = {
             }),
         });
 
+        if (!project) throw new Error("Failed to create project");
+
         await NotifyNewProject(user.id, project.id)
 
         return project;
