@@ -38,9 +38,6 @@ model User {
   pendingEmail              String?
   emailChangeToken          String?
   emailChangeTokenExpiresAt DateTime?
-  address                   String?
-  latitude                  Float?
-  longitude                 Float?
   articles                  Article[]
   creator                   Category[]             @relation("CreatedCategories")
   Categorys                 Category[]
