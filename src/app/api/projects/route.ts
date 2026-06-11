@@ -1,5 +1,5 @@
 import { ProjectsService } from "@/back/services/projects.service";
-import { createProjectSchema } from "@/back/schemas/zod/project.zod";
+import { CreateProjectInput, createProjectSchema } from "@/back/schemas/zod/project.zod";
 import { createZodRoute } from "next-zod-route";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
@@ -14,7 +14,7 @@ export async function GET() {
 }
 
 export const POST = createZodRoute()
-    .body(createProjectSchema)
+     .body(createProjectSchema)
     .handler(async (_req, { body }) => {
         try {
             const newProject = await ProjectsService.createProject(body);

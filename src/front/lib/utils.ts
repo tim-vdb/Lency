@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import z from 'zod';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -49,3 +50,6 @@ export function getInitialName(author: { firstname?: string | null; lastname?: s
         .map(word => word[0]?.toUpperCase())
         .join("") || "?";
 }
+
+export const zodEnum = <T extends Record<string, string>>(e: T) =>
+    z.enum(Object.values(e) as [string, ...string[]]);

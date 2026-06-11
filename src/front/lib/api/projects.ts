@@ -1,3 +1,4 @@
+import { ProjectLevel, ProjectStatus, ProjectType, RemunerationType, Visibility, WorkMode } from "@/back/generated/prisma_client/edge";
 import { CommentWithChildren } from "@/front/schemas/types/post.type";
 import { ProjectWithOwner } from "@/front/schemas/types/project.type";
 
@@ -7,15 +8,16 @@ export interface CreateProjectInput {
     title: string;
     description: string;
     bannerUrl?: string;
-    projectType?: "COURT_METRAGE" | "LONG_METRAGE" | "SERIE" | "CLIP" | "DOCUMENTAIRE" | "YOUTUBE" | "AUTRE";
-    remunerationType?: "NON_REMUNERE" | "REMUNERE";
-    level?: "DEBUTANT" | "INTERMEDIAIRE" | "AVANCE";
-    workMode?: "PRESENTIEL" | "DISTANCIEL" | "HYBRIDE";
+    projectType?: ProjectType;
+    remunerationType?: RemunerationType;
+    level?: ProjectLevel;
+    workMode?: WorkMode;
     startDate?: string;
     roles?: string[];
-    visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
+    visibility?: Visibility;
     city?: string;
-    status?: "PUBLISHED" | "DRAFT";
+    latitude?: number;
+    longitude?: number;
 }
 
 export type MyProject = { id: string; title: string; ownerId: string };
@@ -39,8 +41,15 @@ export async function createProject(input: CreateProjectInput): Promise<ProjectW
         body: JSON.stringify(input),
     });
     if (!res.ok) {
-        const error = await res.json().catch(() => ({}));
-        throw new Error(error.error || "Erreur lors de la création du projet");
+        const text = await res.text(); // lire en brut d'abord
+        let error: Record<string, string> = {};
+        try {
+            error = JSON.parse(text);
+        } catch {
+            // la réponse n'est pas du JSON (HTML d'erreur Next.js, string vide, etc.)
+        }
+        console.error(`Erreur création projet [${res.status}]:`, text);
+        throw new Error(error.error || error.message || `Erreur ${res.status}`);
     }
     return (await res.json()).project;
 }
@@ -77,15 +86,17 @@ export interface UpdateProjectInput {
     title?: string;
     description?: string;
     bannerUrl?: string;
-    projectType?: "COURT_METRAGE" | "LONG_METRAGE" | "SERIE" | "CLIP" | "DOCUMENTAIRE" | "YOUTUBE" | "AUTRE";
-    remunerationType?: "NON_REMUNERE" | "REMUNERE";
-    level?: "DEBUTANT" | "INTERMEDIAIRE" | "AVANCE";
-    workMode?: "PRESENTIEL" | "DISTANCIEL" | "HYBRIDE";
+    projectType?: ProjectType;
+    remunerationType?: RemunerationType;
+    level?: ProjectLevel;
+    workMode?: WorkMode;
     startDate?: string;
     roles?: string[];
-    visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
+    visibility?: Visibility;
     city?: string;
-    status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
+    latitude?: number;
+    longitude?: number;
+    status?: ProjectStatus;
 }
 
 export async function updateProject(projectId: string, input: UpdateProjectInput): Promise<ProjectWithOwner> {

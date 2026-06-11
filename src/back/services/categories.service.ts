@@ -95,4 +95,10 @@ export const CategoriesService = {
         if (!user) return [];
         return CategoriesAction.findFollowedCategoryPosts(user.id);
     },
+
+    findFollowedCategories: async () => {
+        const user = await getUser();
+        if (!user) return [];
+        return CategoriesAction.findFollowedCategories(user.id);
+    },
 };

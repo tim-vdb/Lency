@@ -33,7 +33,7 @@ type CreateType = "post" | "project" | "category" | "resource" | "drafts"
 const CREATE_ITEMS = [
     { value: "post" as const, icon: FileText, label: "Post", description: "Texte, image, vidéo ou audio", supportsDraft: true },
     { value: "project" as const, icon: FolderKanban, label: "Projet", description: "Chercher des collaborateurs", supportsDraft: true },
-    { value: "category" as const, icon: Tag, label: "Catégorie", description: "Nouvelle communauté", supportsDraft: false },
+    { value: "category" as const, icon: Tag, label: "Communauté", description: "Créer un espace thématique", supportsDraft: false },
     { value: "resource" as const, icon: Link2, label: "Ressource", description: "Asset, tutoriel ou lien", supportsDraft: false },
 ]
 
@@ -87,7 +87,7 @@ export function CreateDropdown() {
                                 <Icon className="size-4" />
                                 {value === "post" ? "Créer un post"
                                     : value === "project" ? "Créer un projet"
-                                        : value === "category" ? "Créer une catégorie"
+                                        : value === "category" ? "Créer une communauté"
                                             : "Créer une ressource"}
                             </DropdownMenuItem>
                         ))}
@@ -141,11 +141,6 @@ export function CreateDropdown() {
                                         <span className="flex items-center gap-2 w-full">
                                             <Icon className="size-3.5 shrink-0" />
                                             <span className="font-medium text-sm">{label}</span>
-                                            {supportsDraft && (
-                                                <span className="ml-auto text-[9px] font-medium px-1.5 py-px rounded-full bg-muted text-muted-foreground border border-border/60">
-                                                    Brouillon
-                                                </span>
-                                            )}
                                         </span>
                                         <span className="text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight">
                                             {description}

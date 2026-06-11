@@ -6,7 +6,6 @@
  * - Créer/Modifier/Supprimer des données (POST/PUT/DELETE)
  */
 
-// Type pour une catégorie (basé sur votre schéma Prisma)
 export interface Category {
     id: string
     name: string
@@ -16,10 +15,17 @@ export interface Category {
     bannerUrl?: string
     rules?: string
     subscriberCount: number
+    postCount: number
     lastPostAt?: Date
     createdAt: Date
     updatedAt: Date
+    _count: {
+        posts: number
+        ressources: number
+    }
 }
+
+export type CategoryWithCounts = Category
 
 // Type pour créer une nouvelle catégorie
 export interface CreateCategoryInput {
@@ -145,6 +151,15 @@ export async function toggleCategoryNotify(categoryId: string): Promise<{ subscr
     const response = await fetch(`/api/categories/${categoryId}/notify`, { method: "POST" });
     if (!response.ok) throw new Error("Erreur toggle notification catégorie");
     return response.json();
+}
+
+export async function fetchFollowedCategories(): Promise<CategoryWithCounts[]> {
+    const response = await fetch("/api/categories/followed", { cache: "no-store" });
+    if (!response.ok) {
+        const { error } = await response.json().catch(() => ({}));
+        throw new Error(error ?? "Erreur lors de la récupération des communautés suivies");
+    }
+    return (await response.json()).categories;
 }
 
 export async function getFollowStatus(categoryId: string): Promise<{ following: boolean }> {

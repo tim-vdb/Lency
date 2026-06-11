@@ -1,11 +1,11 @@
-import { ProjectLevel, ProjectType, RemunerationType, WorkMode } from "../generated/prisma_client";
+import { ProjectLevel, ProjectType, ProjectStatus, RemunerationType, Visibility, WorkMode, ProjectType } from "../generated/prisma_client";
 import prisma from "../lib/prisma";
 
 type ProjectWriteData = {
     title?: string;
     description?: string;
-    status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
-    visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
+    status?: ProjectStatus;
+    visibility?: Visibility;
     bannerUrl?: string;
     projectType?: ProjectType;
     remunerationType?: RemunerationType;

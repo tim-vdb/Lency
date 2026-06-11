@@ -6,40 +6,49 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/
 import { cn } from "@/front/lib/utils";
 import { useProjects } from "@/front/queries/projects"
 import ExploreMarketPlace from "./ExploreMarketPlace";
-import MapFilters from "./MapFilters"
+import MapFilters, { type MapFiltersValues } from "./MapFilters"
+
 import { Maximize2, X } from "lucide-react"
 
 export default function ExploreBlock({ className }: { className?: string }) {
     const { data: projects = [] } = useProjects()
-    const [titleFilter, setTitleFilter] = useState("")
-    const [addressFilter, setAddressFilter] = useState("")
-    const [addressCoords, setAddressCoords] = useState<{ lat: number; lon: number } | null>(null)
+    const [filterValues, setFilterValues] = useState<MapFiltersValues>({
+        title: "",
+        projectType: "AUTRE",
+        level: "DEBUTANT",
+        remuneration: "NON_REMUNERE",
+        workMode: "PRESENTIEL",
+        dateFrom: "",
+        dateTo: "",
+    })
     const [isMapExpanded, setIsMapExpanded] = useState(false)
 
     // Suggestions pour le titre
     const titleSuggestions = useMemo(() => {
-        if (!titleFilter || titleFilter.length === 0) return []
+        if (!filterValues.title || filterValues.title.length === 0) return []
         return projects
-            .filter(p => p.title.toLowerCase().includes(titleFilter.toLowerCase()))
+            .filter(p => p.title.toLowerCase().includes(filterValues.title.toLowerCase()))
             .slice(0, 5)
             .map(p => ({ id: p.id, title: p.title }))
-    }, [titleFilter, projects])
+    }, [filterValues.title, projects])
 
     // Filtrer les projets selon les critères
     const filteredProjects = useMemo(() => {
         return projects.filter((project) => {
-            if (titleFilter && !project.title.toLowerCase().includes(titleFilter.toLowerCase())) {
+            // Filtre par titre
+            if (filterValues.title && !project.title.toLowerCase().includes(filterValues.title.toLowerCase())) {
+                return false
+            }
+            // Filtre par type de projet (si "AUTRE" est sélectionné, afficher tous les projets)
+            if (filterValues.projectType !== "AUTRE" && project.projectType !== filterValues.projectType) {
                 return false
             }
             return true
         })
-    }, [projects, titleFilter])
+    }, [projects, filterValues.title, filterValues.projectType])
 
-    const handleAddressChange = (address: string, lat?: number, lon?: number) => {
-        setAddressFilter(address)
-        if (lat !== undefined && lon !== undefined) {
-            setAddressCoords({ lat, lon })
-        }
+    const handleFilterChange = <K extends keyof MapFiltersValues>(key: K, value: MapFiltersValues[K]) => {
+        setFilterValues(prev => ({ ...prev, [key]: value }))
     }
 
     return (
@@ -68,7 +77,6 @@ export default function ExploreBlock({ className }: { className?: string }) {
                                 <CardContent className="px-0 h-full">
                                     <ExploreMarketPlace
                                         filteredProjects={filteredProjects}
-                                        addressCoords={addressCoords}
                                     />
                                 </CardContent>
                             </Card>
@@ -78,9 +86,8 @@ export default function ExploreBlock({ className }: { className?: string }) {
                         <div className="w-80 bg-neutral-900 rounded-lg p-6 border border-neutral-700 overflow-y-auto shrink-0">
                             <h3 className="text-lg font-semibold text-white mb-4">Filtres</h3>
                             <MapFilters
-                                onAddressChange={handleAddressChange}
-                                addressFilter={addressFilter}
-                                onTitleChange={setTitleFilter}
+                                values={filterValues}
+                                onChange={handleFilterChange}
                                 titleSuggestions={titleSuggestions}
                             />
                         </div>
@@ -113,9 +120,8 @@ export default function ExploreBlock({ className }: { className?: string }) {
                         {/* Carte */}
                         <Card className="border-none shadow-none text-neutral-400 py-0 w-full h-1/2 overflow-hidden px-5">
                             <CardContent className="flex flex-col gap-10 px-0 h-full">
-                                <ExploreMarketPlace 
+                                <ExploreMarketPlace
                                     filteredProjects={filteredProjects}
-                                    addressCoords={addressCoords}
                                 />
                             </CardContent>
                         </Card>
@@ -123,9 +129,8 @@ export default function ExploreBlock({ className }: { className?: string }) {
                         {/* Filtres */}
                         <div className="px-5">
                             <MapFilters
-                                onAddressChange={handleAddressChange}
-                                addressFilter={addressFilter}
-                                onTitleChange={setTitleFilter}
+                                values={filterValues}
+                                onChange={handleFilterChange}
                                 titleSuggestions={titleSuggestions}
                             />
                         </div>

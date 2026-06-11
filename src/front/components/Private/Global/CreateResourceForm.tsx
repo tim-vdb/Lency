@@ -368,7 +368,7 @@ export function CreateResourceForm({ onSuccess, initialData, mode = "create" }: 
                             name="categoryId"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Catégorie</FormLabel>
+                                    <FormLabel>Communauté</FormLabel>
                                     <Select onValueChange={field.onChange} value={field.value ?? ""}>
                                         <FormControl>
                                             <SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger>

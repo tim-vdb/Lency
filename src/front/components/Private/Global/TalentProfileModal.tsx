@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { TalentProfileModalSchema, type TalentProfileModalValues } from "@/front/schemas/zod/talent.zod"
 import { toast } from "sonner"
 import { Plus, X } from "lucide-react"
+import { AddressAutocompleteInput } from "@/front/components/ui/address-autocomplete-input"
 
 import {
     Dialog,
@@ -383,12 +384,19 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
             portfolio: user?.portfolio ?? "",
             cv: user?.cv ?? "",
             isMarketplaceTalent: user?.isMarketplaceTalent ?? false,
+            address: user?.address ?? "",
+            latitude: user?.latitude ?? undefined,
+            longitude: user?.longitude ?? undefined,
+            workMode: "",
+            level: "",
+            remunerationType: "",
         },
     })
 
-    // Sync state when modal opens
+    // Sync state when modal opens or when configs arrive
     useEffect(() => {
         if (!open) return
+
         const rolesConfig = configs?.find((c) => c.title === "roles")
         setRoles(rolesConfig ? ((rolesConfig.content as { roles?: string[] }).roles ?? []) : [])
 
@@ -403,11 +411,14 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
             portfolio: user?.portfolio ?? "",
             cv: user?.cv ?? "",
             isMarketplaceTalent: user?.isMarketplaceTalent ?? false,
+            address: user?.address ?? "",
+            latitude: user?.latitude ?? undefined,
+            longitude: user?.longitude ?? undefined,
             workMode: prefs.workMode ?? "",
             level: prefs.level ?? "",
             remunerationType: prefs.remunerationType ?? "",
         })
-    }, [open])
+    }, [open, configs])
 
     function handleAvAdd(key: string, value: string) {
         setAvContent((prev) => ({ ...prev, [key]: [...(prev[key] ?? []), value] }))
@@ -428,6 +439,9 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
                     portfolio: values.portfolio || undefined,
                     cv: values.cv || undefined,
                     isMarketplaceTalent: values.isMarketplaceTalent,
+                    address: values.address || undefined,
+                    latitude: values.latitude,
+                    longitude: values.longitude,
                 },
             })
 
@@ -500,7 +514,7 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
                                     render={({ field }) => (
                                         <div className="flex items-center justify-between gap-4 p-3 rounded-lg border border-border bg-muted/30">
                                             <div className="flex flex-col gap-0.5">
-                                                <p className="text-sm font-medium">Visible dans la marketplace</p>
+                                                <p className="text-sm font-medium">Visible dans la marketplace et sur la map</p>
                                                 <p className="text-xs text-muted-foreground">
                                                     Apparaître publiquement dans la liste des talents disponibles.
                                                 </p>
@@ -525,6 +539,28 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
                                                     className="resize-none min-h-20"
                                                     maxLength={500}
                                                     {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="address"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Localisation <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
+                                            <FormControl>
+                                                <AddressAutocompleteInput
+                                                    value={field.value ?? ""}
+                                                    onChange={field.onChange}
+                                                    onSelect={(_address, lat, lon) => {
+                                                        form.setValue("latitude", lat)
+                                                        form.setValue("longitude", lon)
+                                                    }}
+                                                    placeholder="Paris, Lyon…"
                                                 />
                                             </FormControl>
                                             <FormMessage />

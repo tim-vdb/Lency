@@ -11,6 +11,9 @@ export interface Talent {
     image: string | null;
     avatarUrl: string | null;
     bio: string | null;
+    address: string | null;
+    latitude: number | null;
+    longitude: number | null;
     portfolio: string | null;
     cv: string | null;
     badges: { id: string; name: string }[];
