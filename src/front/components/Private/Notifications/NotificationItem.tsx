@@ -11,9 +11,10 @@ interface NotificationItemProps {
     onDismiss: () => void;
     onOpenResponse: (notif: DBNotification) => void;
     isLoadingApp?: boolean;
+    inSheet?: boolean;
 }
 
-export function NotificationItem({ notification, onDismiss, onOpenResponse }: NotificationItemProps) {
+export function NotificationItem({ notification, onDismiss, onOpenResponse, inSheet = true }: NotificationItemProps) {
     const router = useRouter();
     const data = notification.data as Record<string, unknown>;
     const isApplication = notification.type === "new_application" && typeof data?.applicationId === "string";
@@ -102,7 +103,7 @@ export function NotificationItem({ notification, onDismiss, onOpenResponse }: No
         </div>
     );
 
-    if (href) return <SheetClose asChild>{card}</SheetClose>;
+    if (href && inSheet) return <SheetClose asChild>{card}</SheetClose>;
     return card;
 }
 

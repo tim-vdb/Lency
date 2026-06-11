@@ -122,7 +122,7 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
     if (!category) {
         return (
             <div className="flex items-center justify-center py-20">
-                <p className="text-neutral-500">Catégorie introuvable.</p>
+                <p className="text-neutral-500">Communauté introuvable.</p>
             </div>
         );
     }
@@ -177,7 +177,7 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
                 {/* Posts */}
                 {postsPending && Array.from({ length: 3 }).map((_, i) => i === 1 ? <PostImageSkeleton key={i} /> : <PostSkeleton key={i} />)}
                 {!postsPending && postsData?.length === 0 && (
-                    <p className="text-neutral-500 text-sm">Aucun post dans cette catégorie.</p>
+                    <p className="text-neutral-500 text-sm">Aucun post dans cette communauté.</p>
                 )}
                 {postsData?.map((post) => (
                     <div key={post.id}>

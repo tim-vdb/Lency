@@ -2,8 +2,19 @@
 
 import React, { useState } from "react";
 import { Trash2, ChevronDown, ChevronUp, Bell } from "lucide-react";
-import { useNotificationsQuery, useDismissNotification } from "@/front/queries/notifications";
-import type { DBNotification } from "@/front/queries/notifications";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import {
+    useNotificationsQuery,
+    useDismissNotification,
+    notificationQueries,
+    type DBNotification,
+} from "@/front/queries/notifications";
+import { useAcceptApplication, useRejectApplication } from "@/front/queries/applications";
+import { fetchApplicationById } from "@/front/lib/api/applications";
+import { NotificationItem } from "@/front/components/Private/Notifications/NotificationItem";
+import { NotificationDetailModal } from "@/front/components/Private/Notifications/NotificationDetailModal";
+import { ApplicationResponseModal, type ApplicationForModal } from "@/front/components/Public/Marketplace/Projects/ApplicationResponseModal";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/fr";
@@ -31,100 +42,18 @@ function groupByDate(notifications: DBNotification[]): { label: string; items: D
     return Array.from(map.entries()).map(([label, items]) => ({ label, items }));
 }
 
-// Extrait author + communauté selon le type de notification
-function parseNotifContent(n: DBNotification): { author: string | null; action: string; bold: string | null } {
-    const data = n.data as Record<string, unknown>;
-    const categoryName = typeof data.categoryName === "string" ? data.categoryName : null;
-    const projectTitle = typeof data.projectTitle === "string" ? data.projectTitle : null;
-
-    // Extrait le nom d'auteur depuis description "AuthorName a publié un ..."
-    const authorMatch = n.description.match(/^(.+?) a /);
-    const author = authorMatch ? authorMatch[1] : null;
-
-    if (n.type === "category_new_post" && author && categoryName) {
-        return { author, action: "à poster sur", bold: categoryName };
-    }
-    if (n.type === "category_new_resource" && author && categoryName) {
-        return { author, action: "à publié une ressource sur", bold: categoryName };
-    }
-    if ((n.type === "comment_on_post" || n.type === "reply_to_comment") && author) {
-        return { author, action: "a commenté", bold: projectTitle ?? categoryName };
-    }
-    if (n.type === "new_application" && author) {
-        return { author, action: "a candidaté sur", bold: projectTitle };
-    }
-
-    return { author: null, action: n.title, bold: null };
-}
-
-function NotifAvatar({ notification }: { notification: DBNotification }) {
-    const data = notification.data as Record<string, unknown>;
-    const authorAvatar = typeof data.authorAvatar === "string" ? data.authorAvatar : null;
-
-    // Initiales depuis description ou titre
-    const { author } = parseNotifContent(notification);
-    const initials = author ? author.slice(0, 2).toUpperCase() : "??";
-
-    return (
-        <div className="w-10 h-10 rounded-full bg-neutral-200 shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-neutral-600">
-            {authorAvatar ? (
-                <img src={authorAvatar} alt="" className="w-full h-full object-cover" />
-            ) : (
-                initials
-            )}
-        </div>
-    );
-}
-
-function NotifItem({ notification, onDismiss }: { notification: DBNotification; onDismiss: () => void }) {
-    const { author, action, bold } = parseNotifContent(notification);
-    const timeAgo = dayjs(notification.createdAt).fromNow(true);
-
-    return (
-        <div className={cn(
-            "flex items-start gap-3 px-3 py-3 rounded-lg transition-colors group cursor-pointer hover:bg-neutral-50",
-            !notification.read && "bg-neutral-50"
-        )}>
-            <NotifAvatar notification={notification} />
-
-            <div className="flex-1 min-w-0">
-                <p className="text-[13px] text-neutral-700 leading-5">
-                    {author && (
-                        <>
-                            <span>{author} </span>
-                            <span className="text-neutral-500">{action} </span>
-                        </>
-                    )}
-                    {bold ? (
-                        <span className="font-semibold text-black">{bold}</span>
-                    ) : (
-                        !author && <span>{action}</span>
-                    )}
-                </p>
-            </div>
-
-            {/* Temps + delete */}
-            <div className="flex flex-col items-end gap-1 shrink-0">
-                <span className="text-[11px] text-neutral-400">{timeAgo}</span>
-                <button
-                    className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                    onClick={(e) => { e.stopPropagation(); onDismiss(); }}
-                >
-                    <Trash2 className="w-3 h-3 text-neutral-400 hover:text-red-400" />
-                </button>
-            </div>
-        </div>
-    );
-}
-
 function DateGroup({
     label,
     items,
     onDismiss,
+    onOpenResponse,
+    isLoadingApp,
 }: {
     label: string;
     items: DBNotification[];
     onDismiss: (id: string) => void;
+    onOpenResponse: (notif: DBNotification) => void;
+    isLoadingApp: boolean;
 }) {
     const [open, setOpen] = useState(true);
 
@@ -143,9 +72,16 @@ function DateGroup({
             </button>
 
             {open && (
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-1">
                     {items.map((n) => (
-                        <NotifItem key={n.id} notification={n} onDismiss={() => onDismiss(n.id)} />
+                        <NotificationItem
+                            key={n.id}
+                            notification={n}
+                            onDismiss={() => onDismiss(n.id)}
+                            onOpenResponse={onOpenResponse}
+                            isLoadingApp={isLoadingApp}
+                            inSheet={false}
+                        />
                     ))}
                 </div>
             )}
@@ -154,8 +90,78 @@ function DateGroup({
 }
 
 export function DashboardNotifications({ className, style }: { className?: string; style?: React.CSSProperties }) {
+    const queryClient = useQueryClient();
     const { data: notifications = [], isLoading } = useNotificationsQuery();
     const { mutate: dismiss } = useDismissNotification();
+    const { mutate: accept, isPending: isAccepting } = useAcceptApplication();
+    const { mutate: reject, isPending: isRejecting } = useRejectApplication();
+
+    const [pendingResponseApp, setPendingResponseApp] = useState<ApplicationForModal | null>(null);
+    const [detailNotif, setDetailNotif] = useState<DBNotification | null>(null);
+
+    const invalidate = () =>
+        queryClient.invalidateQueries({ queryKey: notificationQueries.list().queryKey });
+
+    const { mutate: loadApplication, isPending: isLoadingApp } = useMutation({
+        mutationFn: (applicationId: string) => fetchApplicationById(applicationId),
+        onSuccess: (full) => {
+            setPendingResponseApp({
+                id: full.id,
+                applicantNote: full.applicantNote ?? null,
+                portfolioUrl: full.portfolioUrl ?? null,
+                cvUrl: full.cvUrl ?? null,
+                user: {
+                    id: full.user.id,
+                    firstname: full.user.firstname ?? null,
+                    lastname: full.user.lastname ?? null,
+                    username: full.user.username ?? null,
+                    image: full.user.image ?? null,
+                    bio: full.user.bio ?? null,
+                    portfolio: full.user.portfolio ?? null,
+                    cv: full.user.cv ?? null,
+                    badges: full.user.badges ?? [],
+                    configs: full.user.configs ?? [],
+                },
+            });
+        },
+        onError: () => toast.error("Impossible de charger la candidature."),
+    });
+
+    const handleOpenResponse = (notif: DBNotification) => {
+        if (
+            notif.type === "project_invitation" ||
+            notif.type === "application_status" ||
+            notif.type === "invitation_accepted"
+        ) {
+            setDetailNotif(notif);
+            return;
+        }
+        const d = notif.data as Record<string, unknown>;
+        const applicationId = typeof d.applicationId === "string" ? d.applicationId : null;
+        if (applicationId) loadApplication(applicationId);
+    };
+
+    const handleAccept = (applicationId: string, ownerNote: string) => {
+        accept({ applicationId, ownerNote }, {
+            onSuccess: () => {
+                toast.success("Candidature acceptée !");
+                invalidate();
+                setPendingResponseApp(null);
+            },
+            onError: (err) => toast.error(err.message),
+        });
+    };
+
+    const handleReject = (applicationId: string, ownerNote: string) => {
+        reject({ applicationId, ownerNote }, {
+            onSuccess: () => {
+                toast.success("Candidature refusée");
+                invalidate();
+                setPendingResponseApp(null);
+            },
+            onError: (err) => toast.error(err.message),
+        });
+    };
 
     const sorted = [...notifications].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -163,48 +169,72 @@ export function DashboardNotifications({ className, style }: { className?: strin
     const groups = groupByDate(sorted);
 
     return (
-        <div className={cn("bg-white rounded-xl border border-neutral-200 flex flex-col overflow-hidden", className)} style={style}>
-            {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 shrink-0">
-                <h3 className="text-[18px] font-bold text-black">Notifications</h3>
-                {notifications.length > 0 && (
-                    <button
-                        className="p-1.5 hover:bg-neutral-100 rounded-lg cursor-pointer transition-colors"
-                        onClick={() => notifications.forEach((n) => dismiss(n.id))}
-                        title="Tout supprimer"
-                    >
-                        <Trash2 className="w-4 h-4 text-neutral-400 hover:text-red-400" />
-                    </button>
-                )}
+        <>
+            <div className={cn("bg-white rounded-xl border border-neutral-200 flex flex-col overflow-hidden", className)} style={style}>
+                {/* Header */}
+                <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 shrink-0">
+                    <h3 className="text-[18px] font-bold text-black">Notifications</h3>
+                    {notifications.length > 0 && (
+                        <button
+                            className="p-1.5 hover:bg-neutral-100 rounded-lg cursor-pointer transition-colors"
+                            onClick={() => notifications.forEach((n) => dismiss(n.id))}
+                            title="Tout supprimer"
+                        >
+                            <Trash2 className="w-4 h-4 text-neutral-400 hover:text-red-400" />
+                        </button>
+                    )}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto py-2">
+                    {isLoading ? (
+                        <div className="flex flex-col gap-3 px-3 pt-2">
+                            {Array.from({ length: 4 }).map((_, i) => (
+                                <div key={i} className="flex gap-3 items-start">
+                                    <div className="w-10 h-10 rounded-full bg-neutral-100 animate-pulse shrink-0" />
+                                    <div className="flex-1 space-y-2 pt-1">
+                                        <div className="h-3 bg-neutral-100 rounded animate-pulse w-3/4" />
+                                        <div className="h-3 bg-neutral-100 rounded animate-pulse w-1/2" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : groups.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full gap-3 text-neutral-400 py-10">
+                            <Bell className="w-9 h-9" />
+                            <p className="text-[13px]">Aucune notification</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-3">
+                            {groups.map((g) => (
+                                <DateGroup
+                                    key={g.label}
+                                    label={g.label}
+                                    items={g.items}
+                                    onDismiss={dismiss}
+                                    onOpenResponse={handleOpenResponse}
+                                    isLoadingApp={isLoadingApp}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto py-2">
-                {isLoading ? (
-                    <div className="flex flex-col gap-3 px-3 pt-2">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                            <div key={i} className="flex gap-3 items-start">
-                                <div className="w-10 h-10 rounded-full bg-neutral-100 animate-pulse shrink-0" />
-                                <div className="flex-1 space-y-2 pt-1">
-                                    <div className="h-3 bg-neutral-100 rounded animate-pulse w-3/4" />
-                                    <div className="h-3 bg-neutral-100 rounded animate-pulse w-1/2" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : groups.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full gap-3 text-neutral-400 py-10">
-                        <Bell className="w-9 h-9" />
-                        <p className="text-[13px]">Aucune notification</p>
-                    </div>
-                ) : (
-                    <div className="flex flex-col gap-3">
-                        {groups.map((g) => (
-                            <DateGroup key={g.label} label={g.label} items={g.items} onDismiss={dismiss} />
-                        ))}
-                    </div>
-                )}
-            </div>
-        </div>
+            <NotificationDetailModal
+                notification={detailNotif}
+                onClose={() => setDetailNotif(null)}
+                onCloseSheet={() => setDetailNotif(null)}
+            />
+
+            <ApplicationResponseModal
+                application={pendingResponseApp}
+                onAccept={handleAccept}
+                onReject={handleReject}
+                onClose={() => setPendingResponseApp(null)}
+                isAccepting={isAccepting}
+                isRejecting={isRejecting}
+            />
+        </>
     );
 }
