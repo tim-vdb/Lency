@@ -39,6 +39,19 @@ export const ProjectsAction = {
     },
 
     create: async (userId: string, data: Required<Pick<ProjectWriteData, "title" | "description">> & Omit<ProjectWriteData, "title" | "description">) => {
+        let mapLocationId: string | undefined;
+        if (data.mapLocation?.name) {
+            const loc = await prisma.mapLocation.create({
+                data: {
+                    name: data.mapLocation.name,
+                    latitude: data.mapLocation.latitude ?? 0,
+                    longitude: data.mapLocation.longitude ?? 0,
+                    description: data.mapLocation.description,
+                },
+            });
+            mapLocationId = loc.id;
+        }
+
         return prisma.project.create({
             data: {
                 title: data.title!,
@@ -54,22 +67,33 @@ export const ProjectsAction = {
                 attachments: data.attachments ?? [],
                 visibility: data.visibility ?? "PUBLIC",
                 owner: { connect: { id: userId } },
-                ...(data.mapLocation?.name && {
-                    mapLocation: {
-                        create: {
-                            name: data.mapLocation.name,
-                            latitude: data.mapLocation.latitude ?? 0,
-                            longitude: data.mapLocation.longitude ?? 0,
-                            description: data.mapLocation.description,
-                        },
-                    },
-                }),
+                ...(mapLocationId && { mapLocation: { connect: { id: mapLocationId } } }),
             },
             include: { owner: true, participants: true, mapLocation: true },
         });
     },
 
     update: async (id: string, data: ProjectWriteData) => {
+        if (data.mapLocation) {
+            const existing = await prisma.project.findUnique({ where: { id }, select: { mapLocationId: true } });
+            if (existing?.mapLocationId) {
+                await prisma.mapLocation.update({
+                    where: { id: existing.mapLocationId },
+                    data: data.mapLocation,
+                });
+            } else {
+                const loc = await prisma.mapLocation.create({
+                    data: {
+                        name: data.mapLocation.name ?? "",
+                        latitude: data.mapLocation.latitude ?? 0,
+                        longitude: data.mapLocation.longitude ?? 0,
+                        description: data.mapLocation.description,
+                    },
+                });
+                await prisma.project.update({ where: { id }, data: { mapLocationId: loc.id } });
+            }
+        }
+
         return prisma.project.update({
             where: { id },
             data: {
@@ -85,19 +109,6 @@ export const ProjectsAction = {
                 startDate: data.startDate,
                 roles: data.roles,
                 attachments: data.attachments,
-                ...(data.mapLocation && {
-                    mapLocation: {
-                        upsert: {
-                            create: {
-                                name: data.mapLocation.name ?? "",
-                                latitude: data.mapLocation.latitude ?? 0,
-                                longitude: data.mapLocation.longitude ?? 0,
-                                description: data.mapLocation.description,
-                            },
-                            update: data.mapLocation,
-                        },
-                    },
-                }),
             },
             include: { owner: true, participants: true, mapLocation: true },
         });
