@@ -27,6 +27,7 @@ import {
 } from "@/front/components/ui/select"
 import { Textarea } from "@/front/components/ui/textarea"
 import { Badge } from "@/front/components/ui/badge"
+import { AddressAutocompleteInput } from "@/front/components/ui/address-autocomplete-input"
 import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/components/ui/multistep-form"
 import { useCreateProject, useUpdateProject } from "@/front/queries/projects"
 import { uploadToImageKit } from "@/front/lib/upload"
@@ -40,7 +41,15 @@ const STEPS = [
     { id: "finalisation", title: "Finalisation" },
 ]
 
-const PROJECT_TYPES = ["Court métrage", "Long métrage", "Série", "Clip", "Documentaire", "YouTube", "Autre"]
+const PROJECT_TYPES = [
+    { value: "COURT_METRAGE", label: "Court métrage" },
+    { value: "LONG_METRAGE", label: "Long métrage" },
+    { value: "SERIE", label: "Série" },
+    { value: "CLIP", label: "Clip" },
+    { value: "DOCUMENTAIRE", label: "Documentaire" },
+    { value: "YOUTUBE", label: "YouTube" },
+    { value: "AUTRE", label: "Autre" }
+]
 
 const LEVEL_OPTIONS = [
     { value: "DEBUTANT", label: "Débutant" },
@@ -179,6 +188,8 @@ export function CreateProjectForm({ onSuccess, initialData, mode = "create" }: C
             remunerationType: (initialData.remunerationType as "NON_REMUNERE" | "REMUNERE" | undefined) ?? undefined,
             workMode: (initialData.workMode as "PRESENTIEL" | "DISTANCIEL" | "HYBRIDE" | undefined) ?? undefined,
             city: initialData.mapLocation?.name ?? "",
+            latitude: initialData.mapLocation?.latitude ?? undefined,
+            longitude: initialData.mapLocation?.longitude ?? undefined,
             startDate: initialData.startDate ? new Date(initialData.startDate).toISOString().split("T")[0] : "",
             visibility: (initialData.visibility === "MEMBERS_ONLY" ? "PUBLIC" : (initialData.visibility as "PUBLIC" | "PRIVATE")) ?? "PUBLIC",
             bannerUrl: initialData.bannerUrl ?? "",
@@ -192,6 +203,8 @@ export function CreateProjectForm({ onSuccess, initialData, mode = "create" }: C
             remunerationType: undefined,
             workMode: undefined,
             city: "",
+            latitude: undefined,
+            longitude: undefined,
             startDate: "",
             visibility: "PUBLIC",
             bannerUrl: "",
@@ -231,6 +244,8 @@ export function CreateProjectForm({ onSuccess, initialData, mode = "create" }: C
             level: values.level,
             workMode: values.workMode,
             city: values.city || undefined,
+            latitude: values.latitude,
+            longitude: values.longitude,
             startDate: values.startDate || undefined,
             roles: values.roles,
             visibility: values.visibility,
@@ -350,7 +365,7 @@ export function CreateProjectForm({ onSuccess, initialData, mode = "create" }: C
 
                 {/* ── Étape 2 : Caractéristiques ── */}
                 <MultistepStep title="Caractéristiques" description="Le type de projet est obligatoire.">
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-3 items-start">
                         <FormField
                             control={form.control}
                             name="projectType"
@@ -363,7 +378,7 @@ export function CreateProjectForm({ onSuccess, initialData, mode = "create" }: C
                                         </FormControl>
                                         <SelectContent>
                                             {PROJECT_TYPES.map((t) => (
-                                                <SelectItem key={t} value={t}>{t}</SelectItem>
+                                                <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
@@ -445,8 +460,18 @@ export function CreateProjectForm({ onSuccess, initialData, mode = "create" }: C
                             name="city"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Ville <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
-                                    <FormControl><Input placeholder="Paris, Lyon…" {...field} /></FormControl>
+                                    <FormLabel>Lieu <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
+                                    <FormControl>
+                                        <AddressAutocompleteInput
+                                            value={field.value ?? ""}
+                                            onChange={field.onChange}
+                                            onSelect={(_address, lat, lon) => {
+                                                form.setValue("latitude", lat)
+                                                form.setValue("longitude", lon)
+                                            }}
+                                            placeholder="Paris, Lyon…"
+                                        />
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

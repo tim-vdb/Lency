@@ -1,4 +1,4 @@
-import { ProjectLevel, RemunerationType, WorkMode } from "../generated/prisma_client";
+import { ProjectLevel, ProjectType, RemunerationType, WorkMode } from "../generated/prisma_client";
 import { ProjectsAction } from "../repositories/projects.action";
 import { getUser } from "../lib/auth-session";
 import { NotifyNewProject, notifyProjectStatusChanged, notifyProjectVisibilityChanged } from "../lib/ably";
@@ -8,7 +8,7 @@ export type CreateProjectInput = {
     title: string;
     description: string;
     bannerUrl?: string;
-    projectType: string;
+    projectType: ProjectType;
     remunerationType?: RemunerationType;
     level?: ProjectLevel;
     workMode?: WorkMode;
@@ -16,6 +16,8 @@ export type CreateProjectInput = {
     roles?: string[];
     visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
     city?: string;
+    latitude?: number;
+    longitude?: number;
 };
 
 export const ProjectsService = {
@@ -59,7 +61,7 @@ export const ProjectsService = {
             roles: data.roles,
             visibility: data.visibility,
             ...(data.city && {
-                mapLocation: { name: data.city, latitude: 0, longitude: 0 },
+                mapLocation: { name: data.city, latitude: data.latitude ?? 0, longitude: data.longitude ?? 0 },
             }),
         });
 
@@ -73,7 +75,7 @@ export const ProjectsService = {
         description?: string;
         status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
         bannerUrl?: string;
-        projectType?: string;
+        projectType?: ProjectType;
         remunerationType?: RemunerationType;
         level?: ProjectLevel;
         workMode?: WorkMode;
@@ -81,6 +83,8 @@ export const ProjectsService = {
         roles?: string[];
         visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
         city?: string;
+        latitude?: number;
+        longitude?: number;
     }) => {
         if (!data || Object.keys(data).length === 0) throw new Error("No data to update");
 
@@ -103,7 +107,7 @@ export const ProjectsService = {
             roles: data.roles,
             visibility: data.visibility,
             ...(data.city && {
-                mapLocation: { name: data.city, latitude: 0, longitude: 0 },
+                mapLocation: { name: data.city, latitude: data.latitude ?? 0, longitude: data.longitude ?? 0 },
             }),
         });
 

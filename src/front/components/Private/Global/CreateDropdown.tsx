@@ -136,11 +136,6 @@ export function CreateDropdown() {
                                         <span className="flex items-center gap-2 w-full">
                                             <Icon className="size-3.5 shrink-0" />
                                             <span className="font-medium text-sm">{label}</span>
-                                            {supportsDraft && (
-                                                <span className="ml-auto text-[9px] font-medium px-1.5 py-px rounded-full bg-muted text-muted-foreground border border-border/60">
-                                                    Brouillon
-                                                </span>
-                                            )}
                                         </span>
                                         <span className="text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight">
                                             {description}

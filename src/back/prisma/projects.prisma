@@ -5,7 +5,6 @@ model Project {
   title         String
   description   String
   status        ProjectStatus @default(PUBLISHED)
-  subject       ProjectSubject @default(Tout)
   visibility    Visibility    @default(PUBLIC)
   ownerId       String
   createdAt     DateTime      @default(now())
@@ -13,7 +12,7 @@ model Project {
   mapLocationId String?
   // Marketplace fields
   bannerUrl         String?
-  projectType       String?
+  projectType       ProjectType @default(AUTRE)
   remunerationType  RemunerationType?
   level             ProjectLevel?
   workMode          WorkMode?

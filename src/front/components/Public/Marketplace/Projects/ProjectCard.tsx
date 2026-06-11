@@ -9,6 +9,18 @@ type ProjectCardProps = Prisma.ProjectGetPayload<{
     include: { mapLocation: true };
 }>;
 
+const STREET_PREFIX = /^(rue|av\.|avenue|bd|boulevard|allée|chemin|route|impasse|place|quai|square)\s/i
+
+function extractCity(name: string | null): string | null {
+    if (!name) return null
+    const parts = name.split(",").map(p => p.trim()).filter(Boolean)
+    if (parts.length === 1) return parts[0]
+    return (
+        parts.find(p => !/\d/.test(p) && !STREET_PREFIX.test(p) && p.toLowerCase() !== "france") ??
+        parts[0]
+    )
+}
+
 const WORKMODE_LABEL: Record<string, string> = {
     PRESENTIEL: "Présentiel",
     DISTANCIEL: "Distanciel",
@@ -28,7 +40,7 @@ export default function ProjectCard({ project, showProjectType }: { project: Pro
         : null;
     const dateFmt = dateLabel ? dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1) : null;
 
-    const cityName = project.mapLocation?.name ?? null;
+    const cityName = extractCity(project.mapLocation?.name ?? null);
     const workMode = project.workMode ? WORKMODE_LABEL[project.workMode] ?? null : null;
     const locationLine = [cityName, workMode].filter(Boolean).join(" / ");
     const remuLine = project.remunerationType ? REMUNERATION_LABEL[project.remunerationType] ?? null : null;

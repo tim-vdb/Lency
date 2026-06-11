@@ -14,14 +14,15 @@ import { QueryProvider } from "@/front/components/providers/QueryProvider"
 
 export function AccountShell({ user, children }: { user: User | null; children: React.ReactNode }) {
     const pathname = usePathname()
-    const isFixedLayout = pathname !== "/account" && pathname !== "/admin"
+    const isDashboard = pathname === "/account"
+    const isFixedLayout = !isDashboard && pathname !== "/admin"
 
     return (
         <QueryProvider>
         <UserProvider user={user}>
             <ActiveChatProvider>
             <AblyInitializer>
-            <div className="bg-gray-lighter dark:bg-gray-dark min-h-screen">
+            <div className="h-screen overflow-hidden bg-gray-lighter dark:bg-gray-dark">
                 <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
                     <Sheet>
                         <AppSidebar />
@@ -29,8 +30,10 @@ export function AccountShell({ user, children }: { user: User | null; children: 
                             <Header />
                             <main
                                 className={cn(
-                                    "overflow-y-auto pr-2 rounded-xl",
-                                    isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : ""
+                                    "rounded-xl",
+                                    isDashboard
+                                        ? "overflow-hidden h-[calc(100vh-5rem)]"
+                                        : cn("overflow-y-auto pr-2", isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : "")
                                 )}
                             >
                                 {children}

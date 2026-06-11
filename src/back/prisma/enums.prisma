@@ -80,14 +80,6 @@ enum BlogTag {
   OUTILS
 }
 
-enum ProjectSubject {
-  Tout
-  Vidéo
-  Motion
-  Photo
-  Outils
-}
-
 enum ProjectLevel {
   DEBUTANT
   INTERMEDIAIRE
@@ -115,4 +107,14 @@ enum ProjectInvitationStatus {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+enum ProjectType {
+  COURT_METRAGE
+  LONG_METRAGE
+  SERIE
+  CLIP
+  DOCUMENTAIRE
+  YOUTUBE
+  AUTRE
 }

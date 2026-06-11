@@ -39,7 +39,15 @@ const STEPS = [
     { id: "finalisation", title: "Finalisation" },
 ]
 
-const PROJECT_TYPES = ["Court métrage", "Long métrage", "Série", "Clip", "Documentaire", "YouTube", "Autre"]
+const PROJECT_TYPES = [
+    { value: "COURT_METRAGE", label: "Court métrage" },
+    { value: "LONG_METRAGE", label: "Long métrage" },
+    { value: "SERIE", label: "Série" },
+    { value: "CLIP", label: "Clip" },
+    { value: "DOCUMENTAIRE", label: "Documentaire" },
+    { value: "YOUTUBE", label: "YouTube" },
+    { value: "AUTRE", label: "Autre" }
+]
 
 const LEVEL_OPTIONS = [
     { value: "DEBUTANT", label: "Débutant" },
@@ -326,7 +334,7 @@ export function EditProjectForm({ project, onSuccess }: EditProjectFormProps) {
                                     <Select onValueChange={field.onChange} value={field.value ?? ""}>
                                         <FormControl><SelectTrigger><SelectValue placeholder="Choisir…" /></SelectTrigger></FormControl>
                                         <SelectContent>
-                                            {PROJECT_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                                            {PROJECT_TYPES.map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
