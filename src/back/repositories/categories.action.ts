@@ -11,7 +11,11 @@ export const CategoriesAction = {
     },
 
     findAll: async () => {
-        return prisma.category.findMany();
+        return prisma.category.findMany({
+            include: {
+                _count: { select: { posts: true, ressources: true } },
+            },
+        });
     },
 
     findPostsByCategoryId: async (categoryId: string, userId?: string) => {

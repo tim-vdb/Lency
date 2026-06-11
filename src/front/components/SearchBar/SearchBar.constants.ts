@@ -18,7 +18,7 @@ export type FilterKey = "" | "projects" | "categories" | "posts" | "resources";
 export const FILTERS: { key: FilterKey; label: string; icon: React.ElementType }[] = [
     { key: "", label: "Tout", icon: Sparkles },
     { key: "projects", label: "Projets", icon: Folder },
-    { key: "categories", label: "Catégories", icon: Tag },
+    { key: "categories", label: "Communautés", icon: Tag },
     { key: "posts", label: "Posts", icon: FileText },
     { key: "resources", label: "Ressources", icon: BookOpen },
 ];

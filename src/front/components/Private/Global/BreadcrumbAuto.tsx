@@ -27,7 +27,7 @@ const SEGMENT_LABELS: Record<string, string> = {
     security: "Sécurité",
     blog: "Blog",
     users: "Utilisateurs",
-    categories: "Catégories",
+    categories: "Communautés",
     create: "Créer",
 };
 
