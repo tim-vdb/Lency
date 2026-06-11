@@ -1,14 +1,15 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Poppins, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import { Toaster } from 'sonner';
 import { QueryProvider } from '@/front/components/providers/QueryProvider';
 import { NotificationsProvider } from '@/front/states/contexts/notifications.context';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const poppins = Poppins({
+  variable: '--font-poppins',
   subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
 const geistMono = Geist_Mono({
@@ -36,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-inter antialiased min-h-screen dark:bg-gray-extra-dark`}
+        className={`${poppins.variable} ${geistMono.variable} font-poppins antialiased min-h-screen dark:bg-gray-extra-dark`}
         suppressHydrationWarning
       >
         <QueryProvider>

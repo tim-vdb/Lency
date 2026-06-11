@@ -25,22 +25,50 @@ export default function HeaderPublic() {
 
 
   return (
-    <header className={`relative h-20`}>
-      <div className="left-0 right-0 shadow-sm top-0 z-50 bg-white text- dark:bg-neutral-900 fixed transition-all duration-200 ease-in-out h-20">
-        <div className="mx-8 flex justify-between items-center h-full">
+    <header className="relative h-[70px]">
+      <div className="left-0 right-0 top-4 z-50 fixed px-6">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm h-14 flex items-center px-6 gap-6">
+          {/* Logo — far left */}
           <Link href="/" className="shrink-0">
             <LencyLogo className="w-auto h-10" />
           </Link>
 
-          <DesktopNavbar />
-          <MobileNavbar
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-          />
+          {/* Spacer — pushes nav links to the right */}
+          <div className="flex-1" />
 
-          <div className="flex items-center gap-4">
+          {/* Nav links — right aligned, desktop only */}
+          <DesktopNavbar />
+
+          {/* Controls */}
+          <div className="flex items-center gap-3">
+            <ToggleDarkMode className="w-fit" />
+
+            {user ? (
+              <>
+                {!isDashboard && (
+                  <Link
+                    href="/account"
+                    className="hidden md:inline-flex text-sm font-medium text-black dark:text-white"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                <SidebarProvider className="w-fit min-h-auto">
+                  <NavUser />
+                </SidebarProvider>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="hidden md:inline-flex text-sm font-semibold text-[#EA3D0E]"
+              >
+                Se connecter
+              </Link>
+            )}
+
+            {/* Mobile burger */}
             <button
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-550"
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               onClick={toggleMenu}
               aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             >
@@ -51,15 +79,8 @@ export default function HeaderPublic() {
               )}
             </button>
           </div>
-          {!isDashboard && user && (
-            <Button asChild variant="default" size="sm" className="ml-4">
-              <Link href="/account">Dashboard</Link>
-            </Button>
-          )}
-          <ToggleDarkMode className='w-fit' />
-          <SidebarProvider className='w-fit min-h-auto'>
-            <NavUser />
-          </SidebarProvider>
+
+          <MobileNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         </div>
       </div>
     </header>
