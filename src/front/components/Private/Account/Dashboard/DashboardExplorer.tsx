@@ -159,7 +159,6 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
                                 <DashboardProjectCard
                                     key={p.id}
                                     project={p}
-                                    style={{ height: "clamp(100px, 14.2vh, 153px)" }}
                                 />
                             ))}
                         </div>
@@ -173,7 +172,6 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
                                 <DashboardTalentCard
                                     key={t.id}
                                     talent={t}
-                                    style={{ height: "clamp(100px, 14.2vh, 153px)" }}
                                 />
                             ))}
                         </div>

@@ -87,8 +87,9 @@ export function DashboardFeaturedProjects({ className, style }: { className?: st
                                     <DashboardProjectCard
                                         key={p.id}
                                         project={p}
+                                        compact
                                         className="shrink-0"
-                                        style={{ width: CARD_WIDTH, height: "clamp(120px, 15.2vh, 164px)" }}
+                                        style={{ width: CARD_WIDTH }}
                                     />
                                 ))
                             )}
