@@ -23,9 +23,12 @@ export const POST = createZodRoute()
             return NextResponse.json({ project: newProject }, { status: 201 });
         } catch (error) {
             if (error instanceof Error) {
+                console.error("[POST /api/projects] Error:", error.message, error.stack);
                 if (error.message === "Unauthorized")
                     return NextResponse.json({ error: error.message }, { status: 401 });
+                return NextResponse.json({ error: error.message }, { status: 500 });
             }
+            console.error("[POST /api/projects] Unknown error:", error);
             return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
         }
     });
