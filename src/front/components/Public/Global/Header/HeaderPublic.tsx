@@ -6,7 +6,6 @@ import DesktopNavbar from '@/front/components/Public/Global/Navbar/DesktopNavbar
 import MobileNavbar from '@/front/components/Public/Global/Navbar/MobileNavbar';
 import { useState } from 'react';
 import { useUser } from '@/front/states/contexts/user.context';
-import { Button } from '@/front/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { ToggleDarkMode } from '@/front/components/DarkMode/ToggleDarkMode';
 import { NavUser } from '@/front/components/Private/Global/Sidebar/nav-user';

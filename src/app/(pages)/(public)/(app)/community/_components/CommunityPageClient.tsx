@@ -22,7 +22,7 @@ function formatCount(n: number): string {
     return String(n);
 }
 
-function CommunityCard({ category }: { category: Category }) {
+function _CommunityCard({ category }: { category: Category }) {
     return (
         <Link href={`/community/${category.slug}`} className="block group">
             <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-200">
@@ -62,7 +62,7 @@ function CommunityCard({ category }: { category: Category }) {
     );
 }
 
-function CommunitiesGridSkeleton() {
+function _CommunitiesGridSkeleton() {
     return (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
@@ -107,7 +107,7 @@ function PostList({ posts }: { posts: PostWithUserState[] }) {
 export default function CommunityPageClient() {
     const { data: posts, isPending } = usePosts();
     const { data: followedPosts, isPending: followedPending } = useFollowedCategoryPosts();
-    const { data: categories, isPending: categoriesPending } = useCategories();
+    const { data: _categories, isPending: _categoriesPending } = useCategories();
 
     const popularPosts = useMemo(() => {
         if (!posts) return [];

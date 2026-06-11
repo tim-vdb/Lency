@@ -1,4 +1,4 @@
-import { ProjectLevel, ProjectType, ProjectStatus, RemunerationType, Visibility, WorkMode, ProjectType } from "../generated/prisma_client";
+import { ProjectLevel, ProjectType, ProjectStatus, RemunerationType, Visibility, WorkMode } from "../generated/prisma_client";
 import prisma from "../lib/prisma";
 
 type ProjectWriteData = {

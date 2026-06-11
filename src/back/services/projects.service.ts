@@ -1,4 +1,4 @@
-import { ProjectLevel, ProjectType, ProjectType, RemunerationType, WorkMode } from "../generated/prisma_client";
+import { ProjectLevel, ProjectType, RemunerationType, WorkMode } from "../generated/prisma_client";
 import { ProjectsAction } from "../repositories/projects.action";
 import { getUser } from "../lib/auth-session";
 import { NotifyNewProject, notifyProjectStatusChanged, notifyProjectVisibilityChanged } from "../lib/ably";
