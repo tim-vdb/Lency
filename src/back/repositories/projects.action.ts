@@ -52,7 +52,7 @@ export const ProjectsAction = {
             mapLocationId = loc.id;
         }
 
-        return prisma.project.create({
+        const created = await prisma.project.create({
             data: {
                 title: data.title!,
                 description: data.description!,
@@ -66,9 +66,13 @@ export const ProjectsAction = {
                 roles: data.roles ?? [],
                 attachments: data.attachments ?? [],
                 visibility: data.visibility ?? "PUBLIC",
-                owner: { connect: { id: userId } },
-                ...(mapLocationId && { mapLocation: { connect: { id: mapLocationId } } }),
+                ownerId: userId,
+                ...(mapLocationId && { mapLocationId }),
             },
+        });
+
+        return prisma.project.findUnique({
+            where: { id: created.id },
             include: { owner: true, participants: true, mapLocation: true },
         });
     },
@@ -94,7 +98,7 @@ export const ProjectsAction = {
             }
         }
 
-        return prisma.project.update({
+        await prisma.project.update({
             where: { id },
             data: {
                 title: data.title,
@@ -110,6 +114,10 @@ export const ProjectsAction = {
                 roles: data.roles,
                 attachments: data.attachments,
             },
+        });
+
+        return prisma.project.findUnique({
+            where: { id },
             include: { owner: true, participants: true, mapLocation: true },
         });
     },
