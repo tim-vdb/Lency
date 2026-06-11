@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Maximize2 } from "lucide-react";
+import { Maximize2, X } from "lucide-react";
 import { cn } from "@/front/lib/utils";
+import { Button } from "@/front/components/ui/button";
 import { DashboardCommunities } from "./DashboardCommunities";
 import { DashboardExplorer } from "./DashboardExplorer";
 
@@ -23,7 +24,30 @@ const EXPLORER_MODES: { id: ExplorerMode; label: string }[] = [
 export function DashboardTabs({ className }: { className?: string }) {
     const [activeTab, setActiveTab] = useState<MainTab>("communautes");
     const [explorerMode, setExplorerMode] = useState<ExplorerMode>("projets");
-    const [mapExpanded, setMapExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(false);
+
+    /* ── Fullscreen overlay pour Communautés / Marketplace ── */
+    if (expanded && activeTab !== "explorer") {
+        const label = MAIN_TABS.find((t) => t.id === activeTab)?.label ?? "";
+        return (
+            <div className="fixed inset-0 z-50 bg-white dark:bg-neutral-950 flex flex-col">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 shrink-0">
+                    <h2 className="text-lg font-semibold">{label}</h2>
+                    <Button variant="ghost" size="icon" onClick={() => setExpanded(false)}>
+                        <X className="w-5 h-5" />
+                    </Button>
+                </div>
+                <div className="flex-1 overflow-y-auto p-6">
+                    {activeTab === "communautes" && <DashboardCommunities />}
+                    {activeTab === "marketplace" && (
+                        <div className="flex items-center justify-center h-full">
+                            <p className="text-sm text-[#8C8A85]">Marketplace — bientôt disponible</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className={cn("flex flex-col", className)}>
@@ -69,7 +93,7 @@ export function DashboardTabs({ className }: { className?: string }) {
 
                 {/* Expand — toujours à droite */}
                 <button
-                    onClick={() => setMapExpanded(true)}
+                    onClick={() => setExpanded(true)}
                     className="ml-auto p-1.5 hover:bg-[#F7F7F2] rounded-lg cursor-pointer transition-colors"
                 >
                     <Maximize2 className="w-4 h-4 text-[#8C8A85]" />
@@ -91,9 +115,9 @@ export function DashboardTabs({ className }: { className?: string }) {
                 {activeTab === "explorer" && (
                     <DashboardExplorer
                         mode={explorerMode}
-                        expanded={mapExpanded}
-                        onExpand={() => setMapExpanded(true)}
-                        onCollapse={() => setMapExpanded(false)}
+                        expanded={expanded}
+                        onExpand={() => setExpanded(true)}
+                        onCollapse={() => setExpanded(false)}
                     />
                 )}
             </div>
