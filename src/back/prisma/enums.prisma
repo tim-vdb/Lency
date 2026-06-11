@@ -80,16 +80,6 @@ enum BlogTag {
   OUTILS
 }
 
-enum ProjectType {
-  COURT_METRAGE
-  LONG_METRAGE
-  SERIE
-  CLIP
-  DOCUMENTAIRE
-  YOUTUBE
-  AUTRE
-}
-
 enum ProjectLevel {
   DEBUTANT
   INTERMEDIAIRE
