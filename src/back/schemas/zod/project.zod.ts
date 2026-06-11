@@ -4,7 +4,7 @@ export const createProjectSchema = z.object({
     title: z.string().min(1, "Requis"),
     description: z.string().min(1, "Requis"),
     bannerUrl: z.string().optional(),
-    projectType: z.string().min(1, "Requis"),
+    projectType: z.enum(["COURT_METRAGE", "LONG_METRAGE", "SERIE", "CLIP", "DOCUMENTAIRE", "YOUTUBE", "AUTRE"]),
     remunerationType: z.enum(["NON_REMUNERE", "REMUNERE"]).optional(),
     level: z.enum(["DEBUTANT", "INTERMEDIAIRE", "AVANCE"]).optional(),
     workMode: z.enum(["PRESENTIEL", "DISTANCIEL", "HYBRIDE"]).optional(),
@@ -12,6 +12,7 @@ export const createProjectSchema = z.object({
     roles: z.array(z.string()).optional(),
     visibility: z.enum(["PUBLIC", "PRIVATE", "MEMBERS_ONLY"]).optional(),
     city: z.string().optional(),
+    status: z.enum(["PUBLISHED", "DRAFT"]).optional(),
 });
 
 export const updateProjectSchema = z.object({

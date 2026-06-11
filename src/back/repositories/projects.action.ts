@@ -1,4 +1,4 @@
-import { ProjectLevel, RemunerationType, WorkMode } from "../generated/prisma_client";
+import { ProjectLevel, ProjectType, RemunerationType, WorkMode } from "../generated/prisma_client";
 import prisma from "../lib/prisma";
 
 type ProjectWriteData = {
@@ -6,9 +6,8 @@ type ProjectWriteData = {
     description?: string;
     status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
     visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
-    subject?: "Tout" | "Vidéo" | "Motion" | "Photo" | "Outils";
     bannerUrl?: string;
-    projectType?: string;
+    projectType?: ProjectType;
     remunerationType?: RemunerationType;
     level?: ProjectLevel;
     workMode?: WorkMode;
@@ -53,7 +52,6 @@ export const ProjectsAction = {
                 roles: data.roles ?? [],
                 attachments: data.attachments ?? [],
                 visibility: data.visibility ?? "PUBLIC",
-                subject: data.subject ?? "Tout",
                 owner: { connect: { id: userId } },
                 ...(data.mapLocation?.name && {
                     mapLocation: {
@@ -78,7 +76,6 @@ export const ProjectsAction = {
                 description: data.description,
                 status: data.status,
                 visibility: data.visibility,
-                subject: data.subject,
                 bannerUrl: data.bannerUrl,
                 projectType: data.projectType,
                 remunerationType: data.remunerationType,

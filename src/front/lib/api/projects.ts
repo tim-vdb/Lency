@@ -8,7 +8,7 @@ export interface CreateProjectInput {
     title: string;
     description: string;
     bannerUrl?: string;
-    projectType?: string;
+    projectType?: "COURT_METRAGE" | "LONG_METRAGE" | "SERIE" | "CLIP" | "DOCUMENTAIRE" | "YOUTUBE" | "AUTRE";
     remunerationType?: "NON_REMUNERE" | "REMUNERE";
     level?: "DEBUTANT" | "INTERMEDIAIRE" | "AVANCE";
     workMode?: "PRESENTIEL" | "DISTANCIEL" | "HYBRIDE";
@@ -16,6 +16,7 @@ export interface CreateProjectInput {
     roles?: string[];
     visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
     city?: string;
+    status?: "PUBLISHED" | "DRAFT";
 }
 
 export type MyProject = { id: string; title: string; ownerId: string };
@@ -77,7 +78,7 @@ export interface UpdateProjectInput {
     title?: string;
     description?: string;
     bannerUrl?: string;
-    projectType?: string;
+    projectType?: "COURT_METRAGE" | "LONG_METRAGE" | "SERIE" | "CLIP" | "DOCUMENTAIRE" | "YOUTUBE" | "AUTRE";
     remunerationType?: "NON_REMUNERE" | "REMUNERE";
     level?: "DEBUTANT" | "INTERMEDIAIRE" | "AVANCE";
     workMode?: "PRESENTIEL" | "DISTANCIEL" | "HYBRIDE";

@@ -80,12 +80,14 @@ enum BlogTag {
   OUTILS
 }
 
-enum ProjectSubject {
-  Tout
-  Vidéo
-  Motion
-  Photo
-  Outils
+enum ProjectType {
+  COURT_METRAGE
+  LONG_METRAGE
+  SERIE
+  CLIP
+  DOCUMENTAIRE
+  YOUTUBE
+  AUTRE
 }
 
 enum ProjectLevel {

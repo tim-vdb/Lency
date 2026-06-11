@@ -7,7 +7,6 @@ import { cn } from "@/front/lib/utils";
 import { useProjects } from "@/front/queries/projects"
 import ExploreMarketPlace from "./ExploreMarketPlace";
 import MapFilters from "./MapFilters"
-import type { ProjectSubject } from "@/front/lib/api/projects"
 import { Maximize2, X } from "lucide-react"
 
 export default function ExploreBlock({ className }: { className?: string }) {
@@ -15,7 +14,6 @@ export default function ExploreBlock({ className }: { className?: string }) {
     const [titleFilter, setTitleFilter] = useState("")
     const [addressFilter, setAddressFilter] = useState("")
     const [addressCoords, setAddressCoords] = useState<{ lat: number; lon: number } | null>(null)
-    const [subjectFilter, setSubjectFilter] = useState<ProjectSubject>("Tout")
     const [isMapExpanded, setIsMapExpanded] = useState(false)
 
     // Suggestions pour le titre
@@ -30,17 +28,12 @@ export default function ExploreBlock({ className }: { className?: string }) {
     // Filtrer les projets selon les critères
     const filteredProjects = useMemo(() => {
         return projects.filter((project) => {
-            // Filtre par titre
             if (titleFilter && !project.title.toLowerCase().includes(titleFilter.toLowerCase())) {
-                return false
-            }
-            // Filtre par sujet (si "Tout" est sélectionné, afficher tous les projets)
-            if (subjectFilter !== "Tout" && project.subject !== subjectFilter) {
                 return false
             }
             return true
         })
-    }, [projects, titleFilter, subjectFilter])
+    }, [projects, titleFilter])
 
     const handleAddressChange = (address: string, lat?: number, lon?: number) => {
         setAddressFilter(address)

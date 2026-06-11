@@ -1,12 +1,23 @@
 import * as Ably from "ably";
 
-// Initialiser le client Ably avec la clé API
-const apiKey = process.env.ABLY_API_KEY;
-if (!apiKey) {
-  throw new Error("ABLY_API_KEY est manquante");
+function getAblyClient(): Ably.Rest {
+  const apiKey = process.env.ABLY_API_KEY;
+  if (!apiKey) throw new Error("ABLY_API_KEY est manquante");
+  return new Ably.Rest({ key: apiKey });
 }
 
-export const ably = new Ably.Rest({ key: apiKey });
+// Lazy singleton — instantiated on first use, not at module load time.
+// Avoids crashing the entire module (and every route that imports it) when
+// ABLY_API_KEY is missing (e.g. running without `doppler run --`).
+let _ably: Ably.Rest | null = null;
+function getAbly(): Ably.Rest {
+  if (!_ably) _ably = getAblyClient();
+  return _ably;
+}
+
+export function getAblyRest(): Ably.Rest {
+  return getAbly();
+}
 
 /**
  * Envoyer une notification au propriétaire quand il reçoit une candidature
@@ -23,7 +34,7 @@ export async function notifyProjectOwnerNewApplication(
     const channelName = `owner-applications-${ownerId}`;
     console.error("[Ably] Publishing to channel:", channelName);
 
-    const channel = ably.channels.get(channelName);
+    const channel = getAbly().channels.get(channelName);
     await channel.publish("new_application", {
       applicantName,
       applicantId,
@@ -49,7 +60,7 @@ export async function notifyUserApplicationStatus(
   applicationId: string
 ) {
   try {
-    const channel = ably.channels.get(`user-notifications-${userId}`);
+    const channel = getAbly().channels.get(`user-notifications-${userId}`);
     await channel.publish("application_status", {
       projectTitle,
       status,
@@ -63,13 +74,13 @@ export async function notifyUserApplicationStatus(
 
 export async function NotifyNewProject(userId: string, projectId: string) {
   try {
-    const userChannel = ably.channels.get(`user-notifications-${userId}`);
+    const userChannel = getAbly().channels.get(`user-notifications-${userId}`);
     await userChannel.publish("new_project", {
       projectId,
       timestamp: new Date().toISOString(),
     });
 
-    const feedChannel = ably.channels.get("projects-feed");
+    const feedChannel = getAbly().channels.get("projects-feed");
     await feedChannel.publish("project_created", {
       projectId,
       userId,
@@ -86,7 +97,7 @@ export async function NotifyNewProject(userId: string, projectId: string) {
  */
 export async function notifyUserProjectMessage(userId: string, projectId: string) {
   try {
-    const channel = ably.channels.get(`user-notifications-${userId}`);
+    const channel = getAbly().channels.get(`user-notifications-${userId}`);
     await channel.publish("project_message", { projectId, timestamp: new Date().toISOString() });
   } catch (error) {
     console.error("[Ably] Error sending project_message notification:", error);
@@ -112,7 +123,7 @@ export async function notifyProjectMessage(
   }
 ) {
   try {
-    const channel = ably.channels.get(`project-chat-${projectId}`);
+    const channel = getAbly().channels.get(`project-chat-${projectId}`);
     await channel.publish("new_message", message);
   } catch (error) {
     console.error("[Ably] Error sending project message:", error);
@@ -139,7 +150,7 @@ export async function notifyDirectMessage(
   }
 ) {
   try {
-    const channel = ably.channels.get(`user-dms-${recipientId}`);
+    const channel = getAbly().channels.get(`user-dms-${recipientId}`);
     await channel.publish("new_message", message);
   } catch (error) {
     console.error("[Ably] Error sending direct message:", error);
@@ -152,14 +163,14 @@ export async function notifyDirectMessage(
  */
 export async function notifyNewFollower(userId: string, followerName: string, followerId: string) {
   try {
-    const channel = ably.channels.get(`user-notifications-${userId}`);
+    const channel = getAbly().channels.get(`user-notifications-${userId}`);
     await channel.publish("new_follower", {
       followerId,
       followerName,
       timestamp: new Date().toISOString(),
     });
 
-    const feedChannel = ably.channels.get("community-feed");
+    const feedChannel = getAbly().channels.get("community-feed");
     await feedChannel.publish("new_follower", {
       userId,
       followerId,
@@ -177,7 +188,7 @@ export async function notifyNewFollower(userId: string, followerName: string, fo
  */
 export async function notifyCommentOnPost(postAuthorId: string, commentAuthorName: string, postId: string, commentId: string) {
   try {
-    const channel = ably.channels.get(`user-notifications-${postAuthorId}`);
+    const channel = getAbly().channels.get(`user-notifications-${postAuthorId}`);
     await channel.publish("comment_on_post", {
       postId,
       commentId,
@@ -195,7 +206,7 @@ export async function notifyCommentOnPost(postAuthorId: string, commentAuthorNam
  */
 export async function notifyCommentReply(commentAuthorId: string, replyAuthorName: string, postId: string, commentId: string, replyId: string) {
   try {
-    const channel = ably.channels.get(`user-notifications-${commentAuthorId}`);
+    const channel = getAbly().channels.get(`user-notifications-${commentAuthorId}`);
     await channel.publish("reply_to_comment", {
       postId,
       commentId,
@@ -214,7 +225,7 @@ export async function notifyCommentReply(commentAuthorId: string, replyAuthorNam
  */
 export async function notifyCommentOnResource(resourceAuthorId: string, commentAuthorName: string, resourceId: string, commentId: string) {
   try {
-    const channel = ably.channels.get(`user-notifications-${resourceAuthorId}`);
+    const channel = getAbly().channels.get(`user-notifications-${resourceAuthorId}`);
     await channel.publish("comment_on_resource", {
       resourceId,
       commentId,
@@ -232,7 +243,7 @@ export async function notifyCommentOnResource(resourceAuthorId: string, commentA
  */
 export async function notifyResourceCommentReply(resourceAuthorId: string, replyAuthorName: string, resourceId: string, commentId: string, replyId: string) {
   try {
-    const channel = ably.channels.get(`user-notifications-${resourceAuthorId}`);
+    const channel = getAbly().channels.get(`user-notifications-${resourceAuthorId}`);
     await channel.publish("reply_to_resource_comment", {
       resourceId,
       commentId,
@@ -252,7 +263,7 @@ export async function notifyResourceCommentReply(resourceAuthorId: string, reply
 export async function notifyCommentOnProject(recipientIds: string[], commentAuthorName: string, commentAuthorId: string, projectId: string, commentId: string) {
   try {
     for (const userId of recipientIds) {
-      const channel = ably.channels.get(`user-notifications-${userId}`);
+      const channel = getAbly().channels.get(`user-notifications-${userId}`);
       await channel.publish("comment_on_project", {
         projectId,
         commentId,
@@ -272,7 +283,7 @@ export async function notifyCommentOnProject(recipientIds: string[], commentAuth
  */
 export async function notifyAddedToProject(userId: string, projectTitle: string, projectId: string, addedByName: string) {
   try {
-    const channel = ably.channels.get(`user-notifications-${userId}`);
+    const channel = getAbly().channels.get(`user-notifications-${userId}`);
     await channel.publish("added_to_project", {
       projectId,
       projectTitle,
@@ -298,7 +309,7 @@ export async function notifyAddedToProject(userId: string, projectTitle: string,
  */
 export async function notifyCategoryFeedUpdate(categoryId: string, postId: string) {
   try {
-    const channel = ably.channels.get("community-feed");
+    const channel = getAbly().channels.get("community-feed");
     await channel.publish("category_post_created", { categoryId, postId, timestamp: new Date().toISOString() });
   } catch (error) {
     console.error("[Ably] Error publishing category feed update:", error);
@@ -316,7 +327,7 @@ export async function notifyCategoryNewContent(
   try {
     const event = type === "post" ? "category_new_post" : "category_new_resource";
     for (const userId of subscriberIds) {
-      const channel = ably.channels.get(`user-notifications-${userId}`);
+      const channel = getAbly().channels.get(`user-notifications-${userId}`);
       await channel.publish(event, {
         categoryId,
         categoryName,
@@ -333,7 +344,7 @@ export async function notifyCategoryNewContent(
 export async function notifyProjectStatusChanged(recipientIds: string[], projectId: string, newStatus: string, changedByName: string) {
   try {
     for (const userId of recipientIds) {
-      const channel = ably.channels.get(`user-notifications-${userId}`);
+      const channel = getAbly().channels.get(`user-notifications-${userId}`);
       await channel.publish("project_status_changed", {
         projectId,
         newStatus,
@@ -358,7 +369,7 @@ export async function notifyProjectInvitation(
   ownerName: string
 ) {
   try {
-    const channel = ably.channels.get(`user-notifications-${userId}`);
+    const channel = getAbly().channels.get(`user-notifications-${userId}`);
     await channel.publish("project_invitation", {
       projectTitle,
       projectId,
@@ -377,7 +388,7 @@ export async function notifyProjectInvitation(
  */
 export async function notifyInvitationUpdate(ownerId: string, projectId: string, status: "ACCEPTED" | "REJECTED") {
   try {
-    const channel = ably.channels.get(`user-notifications-${ownerId}`);
+    const channel = getAbly().channels.get(`user-notifications-${ownerId}`);
     await channel.publish("invitation_update", { projectId, status, timestamp: new Date().toISOString() });
   } catch (error) {
     console.error("[Ably] Error sending invitation_update:", error);
@@ -390,7 +401,7 @@ export async function notifyInvitationUpdate(ownerId: string, projectId: string,
  */
 export async function notifyProjectVisibilityChanged(projectId: string, visibility: string) {
   try {
-    const channel = ably.channels.get("projects-feed");
+    const channel = getAbly().channels.get("projects-feed");
     await channel.publish("project_visibility_changed", {
       projectId,
       visibility,
@@ -407,7 +418,7 @@ export async function notifyProjectVisibilityChanged(projectId: string, visibili
  */
 export async function notifyUserReadyStatusChanged(userId: string, readyToStart: boolean) {
   try {
-    const channel = ably.channels.get("users-feed");
+    const channel = getAbly().channels.get("users-feed");
     await channel.publish("user_ready_status_changed", {
       userId,
       readyToStart,

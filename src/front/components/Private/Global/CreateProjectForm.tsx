@@ -40,7 +40,15 @@ const STEPS = [
     { id: "finalisation", title: "Finalisation" },
 ]
 
-const PROJECT_TYPES = ["Court métrage", "Long métrage", "Série", "Clip", "Documentaire", "YouTube", "Autre"]
+const PROJECT_TYPES = [
+    { value: "COURT_METRAGE", label: "Court métrage" },
+    { value: "LONG_METRAGE", label: "Long métrage" },
+    { value: "SERIE", label: "Série" },
+    { value: "CLIP", label: "Clip" },
+    { value: "DOCUMENTAIRE", label: "Documentaire" },
+    { value: "YOUTUBE", label: "YouTube" },
+    { value: "AUTRE", label: "Autre" },
+]
 
 const LEVEL_OPTIONS = [
     { value: "DEBUTANT", label: "Débutant" },
@@ -363,7 +371,7 @@ export function CreateProjectForm({ onSuccess, initialData, mode = "create" }: C
                                         </FormControl>
                                         <SelectContent>
                                             {PROJECT_TYPES.map((t) => (
-                                                <SelectItem key={t} value={t}>{t}</SelectItem>
+                                                <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>

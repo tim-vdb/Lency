@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUser } from "@/back/lib/auth-session";
-import { ably } from "@/back/lib/ably";
+import { getAblyRest } from "@/back/lib/ably";
 
 /**
  * Générer un token Ably pour le client
@@ -21,7 +21,7 @@ export async function GET(_req: NextRequest) {
 
     // Générer un token request Ably avec le user ID comme clientId
     // Cela permet à Ably de tracker quel utilisateur envoie les messages
-    const tokenRequest = await ably.auth.createTokenRequest({
+    const tokenRequest = await getAblyRest().auth.createTokenRequest({
       clientId: user.id,
       ttl: 1000 * 60 * 60, // 1 hour
     });
