@@ -171,11 +171,13 @@
 | 10.3 | Ajouter un lien portfolio | URL portfolio dans la candidature | | |
 | 10.4 | Uploader un CV | Fichier CV joint à la candidature | | |
 | 10.5 | Voir ses candidatures | En tant que postulant | | |
-| 10.6 | Voir les candidatures reçues | En tant que créateur du projet | | |
+| 10.6 | Voir les candidatures reçues | En tant que créateur du projet (`/marketplace/[projectId]/candidature`) | | |
 | 10.7 | Accepter une candidature | Action du créateur | | |
 | 10.8 | Refuser une candidature | Action du créateur | | |
 | 10.9 | Statut de candidature | Affichage Pending / Accepté / Refusé | | |
 | 10.10 | Empêcher de candidater 2x | Validation si déjà postulant | | |
+| 10.11 | Notif Ably à candidature | Créateur notifié en temps réel via Ably | | |
+| 10.12 | Répondre depuis les notifications | Modal `ApplicationResponseModal` directement depuis les notifs dashboard | | |
 
 ---
 
@@ -203,6 +205,7 @@
 | 12.5 | Envoyer un audio | Audio dans le chat | | |
 | 12.6 | Voir l'historique des messages | Persistance des messages | | |
 | 12.7 | Temps réel (Ably) | Réception instantanée des messages | | |
+| 12.8 | Prévisualisation image chat | Composant `MediaImage` pour les images envoyées | | |
 
 ---
 
@@ -228,6 +231,11 @@
 | 14.3 | Se marquer comme talent | Activer son profil talent | | |
 | 14.4 | Filtrer les talents | Par compétence, disponibilité | | |
 | 14.5 | Contacter un talent | Via DM ou lien portfolio | | |
+| 14.6 | Modal profil talent multi-étapes | Formulaire en 4 étapes : Profil / Disponibilité / Rôles / Équipements (`TalentProfileModal`) | | |
+| 14.7 | Localisation talent | Adresse avec autocomplétion dans le profil talent | | |
+| 14.8 | Mode de travail talent | Présentiel / Distanciel / Hybride | | |
+| 14.9 | Voir talents sur la carte | Carte Leaflet des talents géolocalisés (dashboard Explorer) | | |
+| 14.10 | Filtres talents carte | Filtrer par rôle, niveau, rémunération, mode de travail | | |
 
 ---
 
@@ -235,13 +243,17 @@
 
 | # | Fonctionnalité | Description | Statut | Commentaire |
 |---|---|---|---|---|
-| 15.1 | Voir ses notifications | Liste des notifications | | |
+| 15.1 | Voir ses notifications | Liste des notifications (sheet + dashboard) | | |
 | 15.2 | Marquer comme lu | Passer une notification en lue | | |
-| 15.3 | Notif nouvelle candidature | Projet owner notifié | | |
-| 15.4 | Notif candidature acceptée/refusée | Postulant notifié | | |
-| 15.5 | Notif nouveau commentaire | Auteur du post/ressource notifié | | |
-| 15.6 | Notif nouveau follower | Utilisateur notifié | | |
-| 15.7 | Notif catégorie | Nouvelles publications dans une catégorie suivie | | |
+| 15.3 | Supprimer une notification | Bouton supprimer par notification | | |
+| 15.4 | Notif nouvelle candidature | Projet owner notifié | | |
+| 15.5 | Notif candidature acceptée/refusée | Postulant notifié | | |
+| 15.6 | Notif nouveau commentaire | Auteur du post/ressource notifié | | |
+| 15.7 | Notif nouveau follower | Utilisateur notifié | | |
+| 15.8 | Notif catégorie | Nouvelles publications dans une catégorie suivie | | |
+| 15.9 | Notifications temps réel (Ably) | Réception instantanée sans rechargement | | |
+| 15.10 | Notifications groupées par date | Groupement Aujourd'hui / Hier / date dans le dashboard | | |
+| 15.11 | Répondre à une candidature depuis la notif | Modal de réponse intégré dans le panneau notifications | | |
 
 ---
 
@@ -319,12 +331,47 @@
 | # | Fonctionnalité | Description | Statut | Commentaire |
 |---|---|---|---|---|
 | 21.1 | Page d'accueil | Hero, présentation, CTA | | |
-| 21.2 | Page À propos | Présentation de Lency | | |
-| 21.3 | Page Équipe | Membres de l'équipe | | |
-| 21.4 | Page Contact | Formulaire de contact | | |
-| 21.5 | Page Support | FAQ et aide | | |
-| 21.6 | Mentions légales | CGU / CGV | | |
-| 21.7 | Formulaire de contact | Envoi de message via le formulaire | | |
+| 21.2 | Section Stats | Compteurs animés (membres, projets, ressources…) | | |
+| 21.3 | Section Comment rejoindre | Étapes pour s'inscrire / démarrer | | |
+| 21.4 | Section Témoignages | Avis utilisateurs | | |
+| 21.5 | Section FAQ | Questions fréquentes dépliables | | |
+| 21.6 | Section ProfileCTA | Appel à l'action pour créer son profil | | |
+| 21.7 | Page À propos | Présentation de Lency | | |
+| 21.8 | Page Équipe | Membres de l'équipe | | |
+| 21.9 | Page Contact | Formulaire de contact | | |
+| 21.10 | Page Support | FAQ et aide | | |
+| 21.11 | Mentions légales | CGU / CGV | | |
+| 21.12 | Formulaire de contact | Envoi de message via le formulaire | | |
+
+---
+
+## 25. Dashboard (`/account`)
+
+| # | Fonctionnalité | Description | Statut | Commentaire |
+|---|---|---|---|---|
+| 25.1 | Projets mis en avant | Carrousel de projets recommandés (haut du dashboard) | | |
+| 25.2 | Onglet Communautés | Posts & ressources des communautés suivies | | |
+| 25.3 | Onglet Explorer — Projets | Carte Leaflet + liste des projets du marketplace | | |
+| 25.4 | Onglet Explorer — Talents | Carte Leaflet + liste des talents géolocalisés | | |
+| 25.5 | Filtres carte projets | Type, niveau, mode de travail, rémunération, localisation | | |
+| 25.6 | Filtres carte talents | Rôle, niveau, mode de travail, rémunération | | |
+| 25.7 | Géocodage adresse | Conversion adresse → coordonnées (API `/api/geocode`) | | |
+| 25.8 | Panneau notifications dashboard | Notifications groupées par date, en temps réel (Ably) | | |
+| 25.9 | Plein écran onglet | Bouton pour agrandir Communautés ou Explorer en overlay | | |
+| 25.10 | Layout responsive dashboard | Hauteurs calculées proportionnellement au viewport | | |
+
+---
+
+## 26. Carte & Explorer
+
+| # | Fonctionnalité | Description | Statut | Commentaire |
+|---|---|---|---|---|
+| 26.1 | Carte projets (`ProjectsMap`) | Points projets sur carte Leaflet dans le dashboard | | |
+| 26.2 | Carte talents (`TalentsMap`) | Points talents sur carte Leaflet dans le dashboard | | |
+| 26.3 | Popup projet sur carte | Clic sur un marqueur → détail du projet | | |
+| 26.4 | Popup talent sur carte | Clic sur un marqueur → profil du talent | | |
+| 26.5 | Filtrer projets sur carte | Les filtres MapFilters mettent à jour les marqueurs | | |
+| 26.6 | Filtrer talents sur carte | Les filtres TalentFilters mettent à jour les marqueurs | | |
 
 ---
 
@@ -384,19 +431,21 @@
 | 7. Ressources | 12 | | | | |
 | 8. Catégories | 7 | | | | |
 | 9. Marketplace — Projets | 15 | | | | |
-| 10. Candidatures | 10 | | | | |
+| 10. Candidatures | 12 | | | | |
 | 11. Équipe & Invitations | 6 | | | | |
-| 12. Chat Projet | 7 | | | | |
+| 12. Chat Projet | 8 | | | | |
 | 13. Messagerie directe | 6 | | | | |
-| 14. Talents | 5 | | | | |
-| 15. Notifications | 7 | | | | |
+| 14. Talents | 10 | | | | |
+| 15. Notifications | 11 | | | | |
 | 16. Recherche | 8 | | | | |
 | 17. Upload & Médias | 6 | | | | |
 | 18. Blog | 7 | | | | |
 | 19. Carte & Lieux | 5 | | | | |
 | 20. Administration | 8 | | | | |
-| 21. Site public | 7 | | | | |
+| 21. Site public | 12 | | | | |
 | 22. Abonnements Premium | 4 | | | | |
 | 23. Feedback & Support | 3 | | | | |
 | 24. Navigation & UX | 15 | | | | |
-| **TOTAL** | **198** | | | | |
+| 25. Dashboard (/account) | 10 | | | | |
+| 26. Carte & Explorer | 6 | | | | |
+| **TOTAL** | **231** | | | | |
