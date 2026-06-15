@@ -28,7 +28,6 @@ model User {
   address                   String?
   latitude                  Float?
   longitude                 Float?
-  eventId                   String?
   createdAt                 DateTime               @default(now())
   updatedAt                 DateTime               @updatedAt
   emailVerified             Boolean                @default(false)
@@ -38,21 +37,15 @@ model User {
   pendingEmail              String?
   emailChangeToken          String?
   emailChangeTokenExpiresAt DateTime?
-  articles                  Article[]
   creator                   Category[]             @relation("CreatedCategories")
   Categorys                 Category[]
   Comments                  Comment[]
-  NewsletterSubscribers     NewsletterSubscriber[]
   Posts                     Post[]
   projects                  Project[]
-  spots                     Spot[]
-  subscription              Subscription?
   configs                   UserConfig[]
   accounts                  Account[]
   sessions                  Session[]
   participants              Project[]              @relation("Participants")
-  badges                    Badge[]                @relation("UserBadge")
-  events                    Event[]                @relation("UserEvent")
   savedPosts                PostSave[]
   postVotes                 PostVote[]
   reportedPosts             PostReport[]

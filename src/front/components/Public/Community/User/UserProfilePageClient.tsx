@@ -24,7 +24,7 @@ import { useUser } from "@/front/states/contexts/user.context";
 import { useUpdateUser } from "@/front/queries/users";
 import { useBreadcrumbOverride } from "@/front/hooks/use-breadcrumb-override";
 import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar";
-import { Camera, ExternalLink, FileText, FolderOpen, Lightbulb, MapPin, Mic, Monitor, Sparkles, TrendingUp, UserCog, Wallet, Wrench, Zap } from "lucide-react";
+import { Camera, ExternalLink, FileText, FolderOpen, Lightbulb, Mic, Monitor, Sparkles, TrendingUp, UserCog, Wallet, Wrench, Zap } from "lucide-react";
 import { getInitialName } from "@/front/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -43,6 +43,7 @@ const AV_SECTION_META: Record<string, { label: string; icon: React.ElementType }
 const WORKMODE_LABEL: Record<string, string> = { PRESENTIEL: "Présentiel", DISTANCIEL: "Distanciel", HYBRIDE: "Hybride" };
 const LEVEL_LABEL: Record<string, string> = { DEBUTANT: "Débutant", INTERMEDIAIRE: "Intermédiaire", AVANCE: "Avancé" };
 const REMU_LABEL: Record<string, string> = { REMUNERE: "Rémunéré", NON_REMUNERE: "Non rémunéré" };
+
 
 function TalentProfileCard({ user }: { user: UserProfile }) {
     if (!user.isMarketplaceTalent) return null;
@@ -441,14 +442,6 @@ export default function UserProfilePageClient({ username }: { username: string }
                                 </Tooltip>
                             </TooltipProvider>
                         )}
-                        <Button
-                            variant="outline"
-                            className="w-full gap-2"
-                            onClick={() => toast.info("En développement")}
-                        >
-                            <MapPin className="w-4 h-4" />
-                            Voir la localisation
-                        </Button>
                         {isOwnProfile && (
                             <Button
                                 variant="outline"

@@ -1,5 +1,5 @@
 /// *
-/// PROJETS & ÉVÉNEMENTS
+/// PROJETS
 model Project {
   id            String        @id @default(cuid())
   title         String
@@ -80,16 +80,3 @@ model ProjectApplication {
   @@index([userId])
 }
 
-model Event {
-  id           String    @id @default(cuid())
-  title        String
-  description  String
-  location     String?
-  participants Int       @default(1)
-  startDate    DateTime
-  endDate      DateTime
-  createdAt    DateTime  @default(now())
-  userId       String?
-  typeEvent    TypeEvent
-  users        User[]    @relation("UserEvent")
-}

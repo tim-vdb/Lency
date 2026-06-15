@@ -127,7 +127,7 @@ export function CreateDropdown() {
                                 <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 px-2 pt-5 pb-1.5">
                                     Créer
                                 </p>
-                                {CREATE_ITEMS.map(({ value, icon: Icon, label, description, supportsDraft }) => (
+                                {CREATE_ITEMS.map(({ value, icon: Icon, label, description }) => (
                                     <TabsTrigger
                                         key={value}
                                         value={value}

@@ -25,7 +25,9 @@
     "all": "doppler run -- concurrently \"npm run dev\" \"npm run studio\"",
     "all:env": "npx prisma migrate dev && concurrently \"npm run dev\" \"npm run studio\"",
     "all:local": "npx prisma generate && npx prisma db push && concurrently \"npm run dev\" \"npm run studio\"",
-    "email": "email dev --dir ./src/front/emails --port 4000"
+    "email": "email dev --dir ./src/front/emails --port 4000",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -113,6 +115,7 @@
     "react-email": "5.2.9",
     "tailwindcss": "^4.1.16",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.8"
   }
 }

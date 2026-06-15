@@ -17,26 +17,10 @@ enum ProjectStatus {
   ARCHIVED
 }
 
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELED
-  EXPIRED
-}
-
 enum Visibility {
   PUBLIC
   PRIVATE
   MEMBERS_ONLY
-}
-
-enum GalleryType {
-  EVENT
-  GALLERY
-}
-
-enum TypeEvent {
-  PHYSICAL
-  VIRTUAL
 }
 
 enum PostFormat {
