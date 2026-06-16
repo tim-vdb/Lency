@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Camera, Loader2, Mail } from "lucide-react"
+import dayjs from "dayjs"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { useState } from "react"
@@ -15,6 +16,7 @@ import { Separator } from "@/front/components/ui/separator"
 import { useUser } from "@/front/states/contexts/user.context"
 import { useUpdateUser } from "@/front/queries/users"
 import { UpdateProfileSchema, type UpdateProfileFormValues } from "@/front/schemas/zod/profile.zod"
+import { getInitialName } from "@/front/lib/utils"
 import { VerifyEmailChangeModal } from "./VerifyEmailChangeModal"
 import { useRouter } from "next/navigation"
 
@@ -51,7 +53,7 @@ export function ProfileSection() {
         )
     }
 
-    const initials = [user?.firstname?.[0], user?.lastname?.[0]].filter(Boolean).join("").toUpperCase() || "?"
+    const initials = user ? getInitialName(user) : "?"
 
     return (
         <div className="flex flex-col gap-6">
@@ -177,7 +179,7 @@ export function ProfileSection() {
                                         <p className="text-muted-foreground">Inscription</p>
                                         <p className="font-medium">
                                             {user?.createdAt
-                                                ? new Date(user.createdAt).toLocaleDateString("fr-FR")
+                                                ? dayjs(user.createdAt).format("DD/MM/YYYY")
                                                 : "—"}
                                         </p>
                                     </div>
@@ -185,7 +187,7 @@ export function ProfileSection() {
                                         <p className="text-muted-foreground">Dernière modification</p>
                                         <p className="font-medium">
                                             {user?.updatedAt
-                                                ? new Date(user.updatedAt).toLocaleDateString("fr-FR")
+                                                ? dayjs(user.updatedAt).format("DD/MM/YYYY")
                                                 : "—"}
                                         </p>
                                     </div>

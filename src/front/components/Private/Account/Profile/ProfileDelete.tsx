@@ -1,34 +1,44 @@
-'use client';
-import { AlertTriangle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
-import { Button } from "../../../ui/button";
-import { useDeleteUser } from '@/front/queries/users';
-import { useRouter } from 'next/navigation';
-import { useUser } from "@/front/states/contexts/user.context";
+"use client"
+
+import { useState } from "react"
+import { AlertTriangle, Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card"
+import { Button } from "@/front/components/ui/button"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/front/components/ui/alert-dialog"
+import { useDeleteUser } from "@/front/queries/users"
+import { useUser } from "@/front/states/contexts/user.context"
 
 export default function ProfileDelete() {
     const user = useUser()
-    const deleteUserMutation = useDeleteUser();
-    const router = useRouter();
+    const { mutate: deleteUser, isPending } = useDeleteUser()
+    const router = useRouter()
+    const [open, setOpen] = useState(false)
 
-    const handleDelete = async () => {
-        if (!window.confirm("Êtes-vous sûr ? Cette action est irréversible.")) return;
-
-        if (!user?.id) {
-            alert('Erreur : utilisateur non identifié');
-            return;
-        }
-
-        deleteUserMutation.mutate(user.id, {
+    function handleDelete() {
+        if (!user?.id) return
+        deleteUser(user.id, {
             onSuccess: () => {
-                router.push('/');
+                setOpen(false)
+                router.push("/")
             },
-            onError: (error) => {
-                console.error(error);
-                alert('Erreur lors de la suppression');
+            onError: () => {
+                setOpen(false)
+                toast.error("Une erreur est survenue lors de la suppression du compte.")
             },
-        });
-    };
+        })
+    }
 
     return (
         <Card className="border-destructive/50">
@@ -43,18 +53,38 @@ export default function ProfileDelete() {
                     <div>
                         <h4 className="font-medium">Supprimer votre compte</h4>
                         <p className="text-sm text-muted-foreground">
-                            Cette action est permanente et irréversible.
+                            Cette action est permanente et irréversible. Toutes vos données seront définitivement supprimées.
                         </p>
                     </div>
-                    <Button
-                        variant="destructive"
-                        onClick={handleDelete}
-                        disabled={deleteUserMutation.isPending}
-                    >
-                        {deleteUserMutation.isPending ? "Suppression..." : "Supprimer mon compte"}
-                    </Button>
+
+                    <AlertDialog open={open} onOpenChange={setOpen}>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive" className="w-fit">
+                                Supprimer mon compte
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Êtes-vous absolument sûr ?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Cette action est irréversible. Votre compte et toutes vos données associées seront définitivement supprimés.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel disabled={isPending}>Annuler</AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={handleDelete}
+                                    disabled={isPending}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                >
+                                    {isPending && <Loader2 className="size-4 animate-spin" />}
+                                    Supprimer définitivement
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             </CardContent>
         </Card>
-    );
+    )
 }
