@@ -16,7 +16,6 @@ export interface Talent {
     longitude: number | null;
     portfolio: string | null;
     cv: string | null;
-    badges: { id: string; name: string }[];
     categoryFollows: { category: { id: string; name: string } }[];
     configs: TalentConfig[];
     _count: { followers: number; participants: number; projects: number };

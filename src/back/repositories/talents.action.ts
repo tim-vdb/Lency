@@ -17,7 +17,6 @@ export const TalentsAction = {
                 longitude: true,
                 portfolio: true,
                 cv: true,
-                badges: { select: { id: true, name: true } },
                 categoryFollows: {
                     select: { category: { select: { id: true, name: true } } },
                     take: 4,

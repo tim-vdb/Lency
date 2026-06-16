@@ -311,22 +311,6 @@ async function main() {
     }
 
     console.log("✅ Comments created")
-
-    // ─── Badges ──────────────────────────────────────────────────────────────
-
-    await prisma.badge.upsert({
-        where: { id: "badge-early-adopter" },
-        update: {},
-        create: {
-            id: "badge-early-adopter",
-            name: "Early Adopter",
-            description: "Membre depuis les débuts de Lency",
-            active: true,
-            users: { connect: [{ id: admin.id }, { id: user1.id }, { id: user2.id }, { id: userBasic.id }, { id: userPremium.id }] },
-        },
-    })
-
-    console.log("✅ Badges created")
     console.log("🌱 Seed completed!")
 }
 

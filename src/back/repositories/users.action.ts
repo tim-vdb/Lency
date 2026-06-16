@@ -45,7 +45,6 @@ export const UsersAction = {
                     where: { title: { in: ["roles", "audiovisual", "preferences"] } },
                     select: { title: true, content: true },
                 },
-                badges: true,
                 categoryFollows: { include: { category: true } },
                 followers: {
                     include: {
@@ -81,7 +80,6 @@ export const UsersAction = {
                         Posts: true,
                         projects: true,
                         categoryFollows: true,
-                        badges: true,
                         followers: true,
                     },
                 },

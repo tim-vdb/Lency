@@ -17,7 +17,7 @@ export default function CallToAction() {
 
       <Button
         variant="outline"
-        className="mt-4 w-full max-w-xs sm:max-w-sm rounded-xl border-gray-300 bg-[#F9B8B8] hover:bg-[#f5a0a0] text-gray-800 font-medium py-5 sm:py-6 text-sm sm:text-base"
+        className="mt-4 w-full max-w-xs sm:max-w-sm rounded-xl border-[#EA3D0E] bg-[#EA3D0E] hover:bg-[#c4300a] text-white font-medium py-5 sm:py-6 text-sm sm:text-base"
       >
         Commencer
       </Button>

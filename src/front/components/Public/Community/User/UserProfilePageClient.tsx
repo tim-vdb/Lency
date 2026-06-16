@@ -6,7 +6,6 @@ import PostVideo from "@/front/components/Public/Community/Posts/PostVideo";
 import PostText from "@/front/components/Public/Community/Posts/PostText";
 import PostSkeleton, { PostImageSkeleton } from "@/front/components/Public/Community/Posts/PostSkeleton";
 import ProjectCard from "@/front/components/Public/Marketplace/Projects/ProjectCard";
-import UserAchievementsCard from "@/front/components/Public/Community/User/UserAchievementsCard";
 import UserFollowingCommunities from "@/front/components/Public/Community/User/UserFollowingCommunities";
 import UserProfileHeader from "@/front/components/Public/Community/User/UserProfileHeader";
 import UserStats from "@/front/components/Public/Community/User/UserStats";
@@ -465,7 +464,6 @@ export default function UserProfilePageClient({ username }: { username: string }
                             ...(user.participants ?? []),
                         ]} />
                         <UserFollowingCommunities follows={user.categoryFollows} />
-                        <UserAchievementsCard badges={user.badges} userId={user.id} />
 
                         {isOwnProfile && user.following && user.following.length > 0 && (
                             <Card>
