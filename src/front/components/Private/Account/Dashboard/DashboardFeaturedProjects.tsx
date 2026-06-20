@@ -55,7 +55,7 @@ export function DashboardFeaturedProjects({ className, style }: { className?: st
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-4 gap-4 w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
                     {latest.length === 0 ? (
                         <p className="text-sm text-[#8C8A85] py-6">Aucun projet disponible</p>
                     ) : (

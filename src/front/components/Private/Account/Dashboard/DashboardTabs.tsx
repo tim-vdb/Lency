@@ -10,9 +10,9 @@ import { DashboardExplorer } from "./DashboardExplorer";
 type MainTab = "communautes" | "explorer";
 type ExplorerMode = "projets" | "talents";
 
-const MAIN_TABS: { id: MainTab; label: string }[] = [
-    { id: "communautes", label: "Communautés" },
-    { id: "explorer", label: "Explorer & Marketplace" },
+const MAIN_TABS: { id: MainTab; label: string; labelShort: string }[] = [
+    { id: "communautes", label: "Communautés", labelShort: "Communautés" },
+    { id: "explorer", label: "Explorer & Marketplace", labelShort: "Explorer" },
 ];
 
 const EXPLORER_MODES: { id: ExplorerMode; label: string }[] = [
@@ -46,7 +46,7 @@ export function DashboardTabs({ className }: { className?: string }) {
     return (
         <div className={cn("flex flex-col", className)}>
             {/* Header row */}
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-2 shrink-0 flex-wrap">
                 {/* Main tab bar — style segmented control */}
                 <div className="flex items-center bg-[#F7F7F2] dark:bg-neutral-800 rounded-lg p-1 gap-0.5">
                     {MAIN_TABS.map((tab) => (
@@ -54,13 +54,14 @@ export function DashboardTabs({ className }: { className?: string }) {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={cn(
-                                "px-5 py-2 rounded-lg text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
+                                "px-3 sm:px-5 py-2 rounded-lg text-[12px] sm:text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
                                 activeTab === tab.id
                                     ? "bg-[#000000] dark:bg-white dark:text-black text-white shadow-sm"
                                     : "text-[#000000] dark:text-neutral-300 hover:bg-[#E8E8E1] dark:hover:bg-neutral-700"
                             )}
                         >
-                            {tab.label}
+                            <span className="sm:hidden">{tab.labelShort}</span>
+                            <span className="hidden sm:inline">{tab.label}</span>
                         </button>
                     ))}
                 </div>
@@ -73,7 +74,7 @@ export function DashboardTabs({ className }: { className?: string }) {
                                 key={m.id}
                                 onClick={() => setExplorerMode(m.id)}
                                 className={cn(
-                                    "px-4 py-2 rounded-lg text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
+                                    "px-2 sm:px-4 py-2 rounded-lg text-[12px] sm:text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
                                     explorerMode === m.id
                                         ? "bg-[#EA3D0E] text-white shadow-sm"
                                         : "text-[#000000] dark:text-neutral-300 hover:bg-[#E8E8E1] dark:hover:bg-neutral-700"

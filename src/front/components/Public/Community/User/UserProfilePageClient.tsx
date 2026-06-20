@@ -191,9 +191,9 @@ export function UserProfileSkeleton() {
     return (
         <div className="max-w-5xl mx-auto flex flex-col gap-6">
             {/* Header : card gauche + stats droite */}
-            <div className="flex gap-6 items-center">
+            <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                 {/* Card gauche */}
-                <Card className="shrink-0 w-64 py-5 min-w-md">
+                <Card className="shrink-0 w-full sm:w-64 py-5 sm:min-w-md">
                     <CardContent className="flex flex-col gap-4 px-5">
                         {/* Avatar + nom */}
                         <div className="flex items-center gap-3">
@@ -242,15 +242,15 @@ export function UserProfileSkeleton() {
                     <Skeleton className="h-9 w-20 rounded-md" />
                 </div>
 
-                <div className="flex gap-6 items-start">
+                <div className="flex flex-col xl:flex-row gap-6 items-start">
                     {/* Posts */}
-                    <div className="flex-1 flex flex-col gap-4">
+                    <div className="flex-1 w-full flex flex-col gap-4">
                         <PostSkeleton />
                         <PostImageSkeleton />
                         <PostSkeleton />
                     </div>
                     {/* Sidebar */}
-                    <div className="w-60 shrink-0 flex flex-col gap-3">
+                    <div className="w-full xl:w-60 xl:shrink-0 flex flex-col gap-3">
                         <Skeleton className="h-9 w-full rounded-md" />
                         <Card>
                             <CardContent className="p-4 flex flex-col gap-2">
@@ -323,7 +323,7 @@ export default function UserProfilePageClient({ username }: { username: string }
         <div className="max-w-5xl mx-auto flex flex-col gap-6">
 
             {/* ── Header : card gauche + stats droite ── */}
-            <div className="flex gap-6 items-center">
+            <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                 <UserProfileHeader user={user} />
                 <UserStats user={user} />
             </div>
@@ -355,10 +355,10 @@ export default function UserProfilePageClient({ username }: { username: string }
                 </div>
 
                 {/* Colonnes : contenu gauche + sidebar droite */}
-                <div className="flex gap-6 mt-6 items-start">
+                <div className="flex flex-col xl:flex-row gap-6 mt-6 items-start">
 
                     {/* Contenu principal */}
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 w-full">
                         <TabsContent value="posts" className="mt-0 flex flex-col gap-4">
                             {postsPending && (
                                 <>
@@ -418,7 +418,7 @@ export default function UserProfilePageClient({ username }: { username: string }
                         </TabsContent>
                     </div>
 
-                    <div className="w-60 shrink-0 flex flex-col gap-3 sticky top-2 self-start">
+                    <div className="w-full xl:w-60 xl:shrink-0 flex flex-col gap-3 xl:sticky xl:top-2 xl:self-start">
                         {isOwnProfile && (
                             <TooltipProvider>
                                 <Tooltip>

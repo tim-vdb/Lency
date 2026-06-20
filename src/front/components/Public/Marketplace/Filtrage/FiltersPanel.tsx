@@ -13,7 +13,7 @@ export function FiltersPanel({ open, children, hasActiveFilters, onReset }: {
             "max-h-0 opacity-0": !open,
         })}>
             <div className="bg-white rounded-[10px] p-6 flex flex-col gap-5">
-                <div className="grid grid-cols-2 gap-x-10 gap-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
                     {children}
                 </div>
                 {hasActiveFilters && onReset && (

@@ -32,7 +32,7 @@ export function AccountShell({ user, children }: { user: User | null; children: 
                                 className={cn(
                                     "rounded-xl",
                                     isDashboard
-                                        ? "overflow-hidden h-[calc(100vh-5rem)]"
+                                        ? "overflow-y-auto md:overflow-hidden h-[calc(100vh-5rem)]"
                                         : cn("overflow-y-auto pr-2", isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : "")
                                 )}
                             >

@@ -27,7 +27,7 @@ export default function HeaderPublic() {
   return (
     <header className="relative h-[70px]">
       <div className="left-0 right-0 top-4 z-50 fixed px-6">
-        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm h-14 flex items-center px-6 gap-6">
+        <div className="relative bg-white dark:bg-neutral-900 rounded-2xl shadow-sm h-14 flex items-center px-6 gap-6">
           {/* Logo — far left */}
           <Link href="/" className="shrink-0">
             <LencyLogo className="w-auto h-10" />
@@ -80,7 +80,7 @@ export default function HeaderPublic() {
             </button>
           </div>
 
-          <MobileNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+          <MobileNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} user={user ?? null} />
         </div>
       </div>
     </header>

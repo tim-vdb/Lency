@@ -154,7 +154,7 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
                     filteredProjects.length === 0 ? (
                         <p className="text-sm text-neutral-400 text-center py-6">Aucun projet trouvé</p>
                     ) : (
-                        <div className="grid grid-cols-2 gap-3 pb-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-2">
                             {filteredProjects.map((p) => (
                                 <DashboardProjectCard
                                     key={p.id}
@@ -167,7 +167,7 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
                     filteredTalents.length === 0 ? (
                         <p className="text-sm text-neutral-400 text-center py-6">Aucun talent trouvé</p>
                     ) : (
-                        <div className="grid grid-cols-2 gap-3 pb-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-2">
                             {filteredTalents.map((t) => (
                                 <DashboardTalentCard
                                     key={t.id}
