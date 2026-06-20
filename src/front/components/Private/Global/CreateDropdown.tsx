@@ -137,7 +137,7 @@ export function CreateDropdown() {
                                             <Icon className="size-3.5 shrink-0" />
                                             <span className="font-medium text-sm">{label}</span>
                                         </span>
-                                        <span className="text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight">
+                                        <span className="text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight w-full truncate block">
                                             {description}
                                         </span>
                                     </TabsTrigger>
@@ -156,7 +156,7 @@ export function CreateDropdown() {
                                         <span className="font-medium text-sm">Brouillons</span>
                                         <DraftCount />
                                     </span>
-                                    <span className="text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight">
+                                    <span className="text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight w-full truncate block">
                                         Posts et projets en attente
                                     </span>
                                 </TabsTrigger>

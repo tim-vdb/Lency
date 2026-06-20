@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 export default function DashboardAccount() {
     return (
         <div
-            className="flex flex-col overflow-hidden bg-[#F7F7F2] h-full w-full"
+            className="flex flex-col overflow-hidden bg-[#F7F7F2] dark:bg-neutral-950 h-full w-full"
             style={{ padding: "12px 12px 0 12px", gap: "24px" }}
         >
             {/* ── Projet à la Une ── */}
@@ -37,7 +37,7 @@ export default function DashboardAccount() {
             <div className="flex flex-1 overflow-hidden min-h-0 w-full" style={{ gap: "16px" }}>
                 {/* Tabs : flex-1 → prend toute la largeur restante */}
                 <div
-                    className="flex-1 bg-white rounded-xl border border-[#E8E8E1] overflow-hidden flex flex-col min-w-0 w-full"
+                    className="flex-1 bg-white dark:bg-neutral-900 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 overflow-hidden flex flex-col min-w-0 w-full"
                     style={{ padding: "20px 24px" }}
                 >
                     <DashboardTabs className="flex-1 flex flex-col overflow-hidden w-full" />

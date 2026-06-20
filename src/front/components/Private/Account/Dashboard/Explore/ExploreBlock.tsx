@@ -105,13 +105,13 @@ export default function ExploreBlock({ className }: { className?: string }) {
                                 variant="outline" 
                                 size="sm" 
                                 onClick={() => setIsMapExpanded(true)}
-                                className="border bg-neutral-300 cursor-pointer text-xs"
+                                className="border bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:border-neutral-600 cursor-pointer text-xs"
                                 title="Agrandir la carte"
                             >
                                 <Maximize2 className="w-4 h-4 mr-1" />
                                 Agrandir
                             </Button>
-                            <Button variant="outline" size="sm" className="border bg-neutral-300 cursor-pointer text-xs">
+                            <Button variant="outline" size="sm" className="border bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:border-neutral-600 cursor-pointer text-xs">
                                 View All
                             </Button>
                         </div>

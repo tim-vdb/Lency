@@ -169,10 +169,10 @@ export function DashboardNotifications({ className, style }: { className?: strin
 
     return (
         <>
-            <div className={cn("bg-white rounded-xl border border-neutral-200 flex flex-col overflow-hidden", className)} style={style}>
+            <div className={cn("bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-700 flex flex-col overflow-hidden", className)} style={style}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 shrink-0">
-                    <h3 className="text-[18px] font-bold text-black">Notifications</h3>
+                <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 dark:border-neutral-700 shrink-0">
+                    <h3 className="text-[18px] font-bold text-black dark:text-white">Notifications</h3>
                     {notifications.length > 0 && (
                         <button
                             className="p-1.5 hover:bg-neutral-100 rounded-lg cursor-pointer transition-colors"

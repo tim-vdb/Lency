@@ -4,7 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Camera, Loader2, Mail } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useState } from "react"
+import { useRef, useState } from "react"
+import { uploadToImageKit } from "@/front/lib/upload"
 import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar"
 import { Badge } from "@/front/components/ui/badge"
 import { Button } from "@/front/components/ui/button"
@@ -23,6 +24,38 @@ export function ProfileSection() {
     const router = useRouter()
     const { mutate: updateUser, isPending } = useUpdateUser()
     const [showEmailModal, setShowEmailModal] = useState(false)
+    const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
+    async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0]
+        if (!file || !user?.id) return
+
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error("L'image ne doit pas dépasser 5MB.")
+            return
+        }
+
+        setIsUploadingAvatar(true)
+        try {
+            const url = await uploadToImageKit(file, "/avatars")
+            updateUser(
+                { id: user.id, data: { avatarUrl: url } },
+                {
+                    onSuccess: () => {
+                        toast.success("Photo de profil mise à jour.")
+                        router.refresh()
+                    },
+                    onError: () => toast.error("Erreur lors de la mise à jour."),
+                }
+            )
+        } catch {
+            toast.error("Erreur lors de l'upload de la photo.")
+        } finally {
+            setIsUploadingAvatar(false)
+            if (fileInputRef.current) fileInputRef.current.value = ""
+        }
+    }
 
     const form = useForm<UpdateProfileFormValues>({
         resolver: zodResolver(UpdateProfileSchema),
@@ -73,11 +106,27 @@ export function ProfileSection() {
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col gap-2">
-                                <Button variant="outline" size="sm" type="button">
-                                    <Camera className="size-4" />
-                                    Changer la photo
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleAvatarChange}
+                                />
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    type="button"
+                                    disabled={isUploadingAvatar}
+                                    onClick={() => fileInputRef.current?.click()}
+                                >
+                                    {isUploadingAvatar
+                                        ? <Loader2 className="size-4 animate-spin" />
+                                        : <Camera className="size-4" />
+                                    }
+                                    {isUploadingAvatar ? "Upload en cours..." : "Changer la photo"}
                                 </Button>
-                                <p className="text-xs text-muted-foreground">JPG, PNG ou GIF. Max 2MB.</p>
+                                <p className="text-xs text-muted-foreground">JPG, PNG ou GIF. Max 5MB.</p>
                             </div>
                         </div>
 

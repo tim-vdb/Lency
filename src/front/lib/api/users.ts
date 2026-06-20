@@ -66,6 +66,7 @@ export interface UpdateUserInput {
     phone?: string;
     bio?: string;
     image?: string;
+    avatarUrl?: string;
     portfolio?: string;
     cv?: string;
     isMarketplaceTalent?: boolean;

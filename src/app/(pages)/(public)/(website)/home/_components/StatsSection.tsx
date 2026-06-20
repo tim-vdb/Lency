@@ -11,7 +11,7 @@ const stats = [
 
 export default function StatsSection() {
   return (
-    <section className="w-full py-20 px-8 lg:px-16">
+    <section className="w-full py-20 px-8 lg:px-16 dark:bg-neutral-950">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
         {/* Col 1: stats */}
         <div className="lg:w-1/4 flex flex-col gap-8 shrink-0">
@@ -20,7 +20,7 @@ export default function StatsSection() {
               <span className="text-[54px] font-black text-[#EA3D0E] leading-tight">
                 {value}
               </span>
-              <span className="text-[16px] text-neutral-500 leading-snug">
+              <span className="text-[16px] text-neutral-500 dark:text-neutral-400 leading-snug">
                 {label}
               </span>
             </div>
@@ -29,7 +29,7 @@ export default function StatsSection() {
             src="/images/calque-1.svg"
             alt=""
             aria-hidden="true"
-            className="w-32 mt-2 pointer-events-none"
+            className="w-32 mt-2 pointer-events-none dark:brightness-0 dark:invert dark:opacity-20"
           />
         </div>
 
@@ -48,10 +48,10 @@ export default function StatsSection() {
 
         {/* Col 3: text */}
         <div className="lg:w-5/12 flex flex-col gap-6">
-          <h2 className="text-[24px] font-black text-neutral-900 leading-tight">
+          <h2 className="text-[24px] font-black text-neutral-900 dark:text-white leading-tight">
             Ne laisse plus tes idées dormir dans tes tiroirs.
           </h2>
-          <p className="text-[16px] text-neutral-600 leading-relaxed">
+          <p className="text-[16px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
             On a tous commencé quelque part. Que tu veuilles{" "}
             <strong className="text-[#EA3D0E] font-semibold">réaliser</strong>{" "}
             ton tout premier court-métrage,{" "}
