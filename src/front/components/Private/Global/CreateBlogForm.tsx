@@ -118,7 +118,7 @@ export function CreateBlogForm({ onSuccess }: CreateBlogFormProps) {
                     </div>
                     <h1 className="text-3xl font-bold">Créer un article</h1>
                 </div>
-                <p className="text-muted-foreground">Partagez votre expertise avec la communauté</p>
+                <p className="text-muted-foreground">                Partager votre expertise avec la communauté</p>
             </div>
 
             <div className="grid grid-cols-1 gap-6">

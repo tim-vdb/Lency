@@ -104,7 +104,7 @@ export default function NotifsPreference() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="fr">Français</SelectItem>
-                                <SelectItem value="en">English</SelectItem>
+                                <SelectItem value="en">Anglais</SelectItem>
                                 <SelectItem value="es">Español</SelectItem>
                                 <SelectItem value="de">Deutsch</SelectItem>
                             </SelectContent>

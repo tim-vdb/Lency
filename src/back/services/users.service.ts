@@ -1,8 +1,11 @@
 import { UsersAction } from "../repositories/users.action";
 import { PostsAction } from "../repositories/posts.action";
 import { getUser } from "../lib/auth-session";
+import { auth } from "../lib/auth";
 import { notifyNewFollower, notifyUserReadyStatusChanged } from "../lib/ably";
+import { sendAccountDeletionEmail } from "../lib/send-account-deletion-email";
 import { NotificationService } from "./notifications.service";
+import { headers } from "next/headers";
 import crypto from "crypto";
 
 export const UsersService = {
@@ -125,7 +128,6 @@ export const UsersService = {
             firstname?: string;
             lastname?: string;
             username?: string;
-            phone?: string;
             bio?: string;
             image?: string;
             cv?: string;
@@ -181,20 +183,80 @@ export const UsersService = {
         return UsersAction.update(id, { role });
     },
 
-    deleteUser: async (id: string) => {
-        const currentUser = await getUser();
-        if (!currentUser) {
-            throw new Error("Unauthorized");
+    deleteUser: async (id: string, password?: string) => {
+        try {
+            console.log("[deleteUser] Starting deletion process for user:", id);
+
+            const currentUser = await getUser();
+            if (!currentUser) {
+                throw new Error("Unauthorized");
+            }
+
+            // Allow users to delete their own account, or admins to delete anyone
+            if (currentUser.id !== id && currentUser.role !== "ADMIN") {
+                throw new Error("Forbidden");
+            }
+
+            const targetUser = await UsersService.findByIdUser(id);
+            console.log("[deleteUser] Found target user:", targetUser.email);
+
+            // If user has a password (email/password auth), require password verification
+            if (targetUser.password && password) {
+                console.log("[deleteUser] Verifying password...");
+                try {
+                    await auth.api.signInEmail({
+                        body: { email: targetUser.email, password },
+                        headers: await headers(),
+                    });
+                    console.log("[deleteUser] Password verified");
+                } catch (err) {
+                    console.error("[deleteUser] Password verification failed:", err);
+                    throw new Error("Invalid password");
+                }
+            } else if (targetUser.password && !password) {
+                throw new Error("Password required");
+            }
+
+            // Generate deletion token (24h expiration)
+            console.log("[deleteUser] Generating deletion token...");
+            const rawToken = crypto.randomBytes(32).toString('hex');
+            const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+            const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+            // Save token to user
+            console.log("[deleteUser] Saving deletion token to user...");
+            await UsersAction.saveDeletionToken(id, {
+                deletionToken: hashedToken,
+                deletionTokenExpiresAt: expiresAt,
+            });
+
+            // Send confirmation email
+            console.log("[deleteUser] Sending confirmation email to:", targetUser.email);
+            await sendAccountDeletionEmail({
+                email: targetUser.email,
+                firstname: targetUser.firstname,
+                confirmationToken: rawToken,
+            });
+
+            console.log("[deleteUser] Email sent successfully");
+            return { message: "Email de confirmation envoyé" };
+        } catch (error) {
+            console.error("[deleteUser] Error:", error);
+            throw error;
+        }
+    },
+
+    confirmDeleteUser: async (rawToken: string) => {
+        const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+        const user = await UsersAction.findByDeletionToken(hashedToken);
+
+        if (!user) throw new Error("TOKEN_INVALID_OR_EXPIRED");
+        if (!user.deletionTokenExpiresAt || user.deletionTokenExpiresAt < new Date()) {
+            throw new Error("TOKEN_EXPIRED");
         }
 
-        // Allow users to delete their own account, or admins to delete anyone
-        if (currentUser.id !== id && currentUser.role !== "ADMIN") {
-            throw new Error("Forbidden");
-        }
-
-        await UsersService.findByIdUser(id);
-
-        return UsersAction.delete(id);
+        // Delete the user
+        return UsersAction.delete(user.id);
     },
 
     initiateEmailChange: async (userId: string, newEmail: string) => {

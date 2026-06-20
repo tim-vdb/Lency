@@ -1,5 +1,5 @@
 
 export default async function Page() {
 
-  return <h1>Admin Dashboard</h1>;
+  return <h1>Panneau d'administration</h1>;
 }

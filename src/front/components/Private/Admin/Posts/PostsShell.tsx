@@ -98,7 +98,7 @@ export function PostsShell() {
                 return (
                     <div className="flex items-center gap-2">
                         <Avatar className="size-5 shrink-0">
-                            <AvatarImage src={author.avatarUrl ?? ""} />
+                            <AvatarImage src={author.image ?? author.avatarUrl ?? ""} />
                             <AvatarFallback className="text-[9px]">{getInitialName(author)}</AvatarFallback>
                         </Avatar>
                         <span className="text-xs truncate max-w-[100px]">{getDisplayName(author)}</span>

@@ -28,7 +28,7 @@ export function OnboardingTalentCard({ onAction }: { onAction: () => void }) {
             </div>
             <div className="flex-1 min-w-0">
                 <p className="font-['Poppins',sans-serif] font-bold text-[15px] text-black">Tu es dans l&apos;audiovisuel ?</p>
-                <p className="font-['Poppins',sans-serif] text-[12px] text-gray mt-0.5">Rejoins la marketplace et fais-toi repérer</p>
+                <p className="font-['Poppins',sans-serif] text-[12px] text-gray mt-0.5">Rejoindre la marketplace et se faire repérer</p>
             </div>
             <button
                 onClick={onAction}

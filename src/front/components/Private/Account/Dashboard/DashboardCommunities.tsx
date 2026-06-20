@@ -77,7 +77,7 @@ export function DashboardCommunities() {
                                 </span>
                                 <span className="flex items-center gap-1.5 bg-neutral-900 text-white rounded-full px-3 py-1 text-[11px] font-medium">
                                     <Paperclip className="w-3 h-3" />
-                                    {formatCount(cat._count.ressources)} Resources
+                                    {formatCount(cat._count.ressources)} Ressources
                                 </span>
                             </div>
                         </div>

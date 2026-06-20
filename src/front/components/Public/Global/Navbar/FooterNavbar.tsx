@@ -4,11 +4,11 @@ export default function FooterNavbar() {
   return (
     <>
       <div className="flex flex-col items-start md:items-center">
-        <h3 className="text-lg">Company</h3>
+        <h3 className="text-lg">Entreprise</h3>
         <ul className="space-y-4 ">
           <li>
             <Link href="/features" className="transition">
-              Features
+              Fonctionnalités
             </Link>
           </li>
           <li>
@@ -18,22 +18,22 @@ export default function FooterNavbar() {
           </li>
           <li>
             <Link href="/pricing" className="transition">
-              Pricing
+              Tarifs
             </Link>
           </li>
           <li>
             <Link href="/about" className="transition">
-              About
+              À propos
             </Link>
           </li>
           <li>
             <Link href="/contact" className="transition">
-              Contact Us
+              Contact
             </Link>
           </li>
           <li>
             <Link href="/team" className="transition">
-              Our Team
+              Équipe
             </Link>
           </li>
           <li>
@@ -44,11 +44,11 @@ export default function FooterNavbar() {
         </ul>
       </div>
       <div className="flex flex-col">
-        <h3 className="text-lg">Resources</h3>
+        <h3 className="text-lg">Ressources</h3>
         <ul className="space-y-4 ">
           <li>
             <Link href="/docs" className="transition">
-              Docs
+              Documentation
             </Link>
           </li>
           <li>

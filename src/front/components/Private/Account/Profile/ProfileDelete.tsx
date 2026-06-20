@@ -2,10 +2,10 @@
 
 import { useState } from "react"
 import { AlertTriangle, Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Card, CardContent, CardHeader, CardTitle } from "@/front/components/ui/card"
 import { Button } from "@/front/components/ui/button"
+import { Input } from "@/front/components/ui/input"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,21 +23,34 @@ import { useUser } from "@/front/states/contexts/user.context"
 export default function ProfileDelete() {
     const user = useUser()
     const { mutate: deleteUser, isPending } = useDeleteUser()
-    const router = useRouter()
     const [open, setOpen] = useState(false)
+    const [password, setPassword] = useState("")
+    const [emailSent, setEmailSent] = useState(false)
+
+    const hasPasswordAuth = !!user?.password
 
     function handleDelete() {
         if (!user?.id) return
-        deleteUser(user.id, {
-            onSuccess: () => {
-                setOpen(false)
-                router.push("/")
-            },
-            onError: () => {
-                setOpen(false)
-                toast.error("Une erreur est survenue lors de la suppression du compte.")
-            },
-        })
+
+        if (hasPasswordAuth && !password.trim()) {
+            toast.error("Veuillez entrer votre mot de passe")
+            return
+        }
+
+        deleteUser(
+            { userId: user.id, password: hasPasswordAuth ? password : undefined },
+            {
+                onSuccess: () => {
+                    setEmailSent(true)
+                    setPassword("")
+                    toast.success("Email de confirmation envoyé. Vérifiez votre boîte mail.")
+                },
+                onError: () => {
+                    setOpen(false)
+                    toast.error("Une erreur est survenue. Veuillez réessayer.")
+                },
+            }
+        )
     }
 
     return (
@@ -57,9 +70,20 @@ export default function ProfileDelete() {
                         </p>
                     </div>
 
-                    <AlertDialog open={open} onOpenChange={setOpen}>
+                    {emailSent ? (
+                        <div className="rounded-md bg-blue-50 border border-blue-200 p-4">
+                            <p className="text-sm text-blue-900">
+                                ✅ <strong>Email de confirmation envoyé</strong>
+                            </p>
+                            <p className="text-sm text-blue-800 mt-2">
+                                Vérifiez votre boîte mail et cliquez sur le lien de confirmation pour supprimer votre compte.
+                                Le lien expire dans 24 heures.
+                            </p>
+                        </div>
+                    ) : (
+                        <AlertDialog open={open} onOpenChange={setOpen}>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive" className="w-fit">
+                            <Button variant="destructive" className="w-fit text-white!">
                                 Supprimer mon compte
                             </Button>
                         </AlertDialogTrigger>
@@ -70,12 +94,27 @@ export default function ProfileDelete() {
                                     Cette action est irréversible. Votre compte et toutes vos données associées seront définitivement supprimés.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
+                            {hasPasswordAuth && (
+                                <div className="space-y-2">
+                                    <label htmlFor="delete-password" className="text-sm font-medium">
+                                        Confirmez avec votre mot de passe
+                                    </label>
+                                    <Input
+                                        id="delete-password"
+                                        type="password"
+                                        placeholder="Votre mot de passe"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        disabled={isPending}
+                                    />
+                                </div>
+                            )}
                             <AlertDialogFooter>
                                 <AlertDialogCancel disabled={isPending}>Annuler</AlertDialogCancel>
                                 <AlertDialogAction
                                     onClick={handleDelete}
                                     disabled={isPending}
-                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    className="bg-destructive text-white hover:bg-destructive/90"
                                 >
                                     {isPending && <Loader2 className="size-4 animate-spin" />}
                                     Supprimer définitivement
@@ -83,6 +122,7 @@ export default function ProfileDelete() {
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
+                    )}
                 </div>
             </CardContent>
         </Card>

@@ -189,7 +189,7 @@ export function CreatePostForm({ onSuccess, initialData, mode = "create" }: Crea
                 }
             >
                 {/* ── Étape 1 : Contenu ── */}
-                <MultistepStep title="Contenu du post" description="Choisissez un format et rédigez votre contenu.">
+                <MultistepStep title="Contenu du post"                         description="Choisir un format et rédiger votre contenu.">
                     {/* Sélecteur de type */}
                     <div className="grid grid-cols-4 gap-2">
                         {CONTENT_TYPES.map((type) => {

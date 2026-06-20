@@ -19,7 +19,7 @@ export default function ProfileCTA() {
             className="text-[14px] bg-[#EA3D0E] hover:bg-[#d13509] text-white rounded-[4px]"
             style={{ width: 530, height: 47 }}
           >
-            <Link href="/register">Choisir</Link>
+            <Link href="/register">Choisir ton profil</Link>
           </Button>
         </div>
       </div>

@@ -259,7 +259,7 @@ export function CategoriesShell() {
                 return (
                     <div className="flex items-center gap-1.5">
                         <Avatar className="size-5">
-                            <AvatarImage src={creator.avatarUrl ?? ""} />
+                            <AvatarImage src={creator.image ?? creator.avatarUrl ?? ""} />
                             <AvatarFallback className="text-[9px]">{getInitialName(creator)}</AvatarFallback>
                         </Avatar>
                         <span className="text-xs">{getDisplayName(creator)}</span>

@@ -106,6 +106,7 @@ enum ProjectType {
 enum AdminEmailBox {
   SUPPORT
   DEV
+  MESSAGES
 }
 
 enum AdminEmailType {

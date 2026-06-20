@@ -32,7 +32,7 @@ import { uploadToImageKit } from "@/front/lib/upload"
 import { ResourceWithUserState } from "@/front/schemas/types/resource.type"
 
 const RESOURCE_TYPE_LABELS: Record<string, string> = {
-    ASSET: "Asset(s)",
+    ASSET: "Ressource(s)",
     TUTORIAL: "Tutoriel(s)",
     LINK: "Lien(s)",
 }

@@ -73,7 +73,7 @@ export default function StatsSection() {
             className="text-[14px] w-fit bg-[#EA3D0E] hover:bg-[#d13509] text-white px-8 h-12 rounded-[4px]"
           >
             <Link href="/register" className="flex items-center gap-1">
-              Rejoins Lency
+              Rejoindre Lency
               <ChevronRight className="w-4 h-4" />
             </Link>
           </Button>

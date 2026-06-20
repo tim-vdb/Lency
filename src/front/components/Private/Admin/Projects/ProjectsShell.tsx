@@ -103,7 +103,7 @@ export function ProjectsShell() {
                 return (
                     <div className="flex items-center gap-2">
                         <Avatar className="size-5 shrink-0">
-                            <AvatarImage src={owner.avatarUrl ?? ""} />
+                            <AvatarImage src={owner.image ?? owner.avatarUrl ?? ""} />
                             <AvatarFallback className="text-[9px]">{getInitialName(owner)}</AvatarFallback>
                         </Avatar>
                         <span className="text-xs truncate max-w-[120px]">{getDisplayName(owner)}</span>

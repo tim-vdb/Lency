@@ -145,7 +145,6 @@ export const UsersAction = {
             firstname?: string;
             lastname?: string;
             username?: string;
-            phone?: string;
             bio?: string;
             image?: string;
             cv?: string;
@@ -261,6 +260,26 @@ export const UsersAction = {
             },
             take: 20,
             orderBy: { createdAt: "desc" },
+        });
+    },
+
+    saveDeletionToken: async (
+        userId: string,
+        data: { deletionToken: string; deletionTokenExpiresAt: Date }
+    ) => {
+        return prisma.user.update({ where: { id: userId }, data });
+    },
+
+    findByDeletionToken: async (token: string) => {
+        return prisma.user.findFirst({
+            where: { deletionToken: token },
+        });
+    },
+
+    findAllAdmins: async () => {
+        return prisma.user.findMany({
+            where: { role: "ADMIN" },
+            select: { id: true, firstname: true, lastname: true, email: true },
         });
     },
 };

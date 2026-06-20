@@ -36,26 +36,26 @@ export default function Footer() {
       {/* Copyright */}
       <div className="flex flex-col-reverse justify-between items-center gap-4 px-4 border-t border-neutral-500 mt-10 pt-6 text-center md:px-0 md:gap-0 md:flex-row">
         <p className="text-xs text-neutral-600 dark:text-neutral-400">
-          © {year} Lency - Inc. - All rights reserved.
+          © {year} Lency - Tous droits réservés.
         </p>
         <div className="flex items-center gap-8">
           <Link
             href="/privacy-policy"
             className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
           >
-            Privacy Policy
+            Politique de confidentialité
           </Link>
           <Link
             href="/terms-of-service"
             className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
           >
-            Terms of Service
+            Conditions d'utilisation
           </Link>
           <Link
             href="/cookie-policy"
             className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
           >
-            Cookie Policy
+            Politique de cookies
           </Link>
         </div>
       </div>

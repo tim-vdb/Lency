@@ -33,11 +33,11 @@ export default function SearchBar() {
                     "bg-white dark:bg-transparent",
                     "hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
                 )}>
-                    <Search className="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 shrink-0" />
-                    <span className="flex-1 text-left text-sm text-neutral-400 dark:text-neutral-500">
+                    <Search className="w-3.5 h-3.5 text-neutral-400 dark:text-zinc-400 shrink-0" />
+                    <span className="flex-1 text-left text-sm text-neutral-400 dark:text-zinc-400">
                         Rechercher…
                     </span>
-                    <kbd className="hidden sm:flex items-center gap-0.5 text-[10px] text-neutral-400 dark:text-neutral-600 font-mono shrink-0">
+                    <kbd className="hidden sm:flex items-center gap-0.5 text-[10px] text-neutral-400 dark:text-zinc-400 font-mono shrink-0">
                         <span className="text-xs">⌘</span>K
                     </kbd>
                 </button>
@@ -65,13 +65,13 @@ export default function SearchBar() {
 
                     {/* Input */}
                     <div className="flex items-center gap-3 px-4 border-b border-neutral-100 dark:border-neutral-800">
-                        <Search className="w-4 h-4 text-neutral-400 dark:text-neutral-500 shrink-0" />
+                        <Search className="w-4 h-4 text-neutral-400 dark:text-zinc-400 shrink-0" />
                         <input
                             ref={inputRef}
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             placeholder="Rechercher un projet, post, communauté…"
-                            className="flex-1 py-4 bg-transparent text-sm text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 outline-none"
+                            className="flex-1 py-4 bg-transparent text-sm text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-zinc-400 outline-none"
                         />
                         {query ? (
                             <button

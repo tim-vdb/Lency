@@ -16,7 +16,6 @@ export interface User {
     firstname?: string;
     lastname?: string;
     username?: string;
-    phone?: string;
     bio?: string;
     image?: string;
     portfolio?: string;
@@ -63,7 +62,6 @@ export interface UpdateUserInput {
     lastname?: string;
     username?: string;
     email?: string;
-    phone?: string;
     bio?: string;
     image?: string;
     portfolio?: string;
@@ -206,9 +204,11 @@ export async function reportUser(userId: string, reason?: string): Promise<void>
     }
 }
 
-export async function deleteUser(userId: string): Promise<void> {
-    const response = await fetch(`/api/users/${userId}`, {
+export async function deleteUser(input: { userId: string; password?: string }): Promise<void> {
+    const response = await fetch(`/api/users/${input.userId}`, {
         method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: input.password }),
     })
 
     if (!response.ok) {

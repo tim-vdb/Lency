@@ -5,9 +5,9 @@ import { Camera, Loader2, Mail } from "lucide-react"
 import dayjs from "dayjs"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useState } from "react"
+import { useRef, useState } from "react"
+import { uploadToImageKit } from "@/front/lib/upload"
 import { Avatar, AvatarFallback, AvatarImage } from "@/front/components/ui/avatar"
-import { Badge } from "@/front/components/ui/badge"
 import { Button } from "@/front/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/front/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/front/components/ui/form"
@@ -25,6 +25,39 @@ export function ProfileSection() {
     const router = useRouter()
     const { mutate: updateUser, isPending } = useUpdateUser()
     const [showEmailModal, setShowEmailModal] = useState(false)
+    const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
+    const avatarInputRef = useRef<HTMLInputElement>(null)
+
+    async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0]
+        e.target.value = ""
+        if (!file) return
+
+        if (!file.type.startsWith("image/")) {
+            toast.error("Seules les images sont acceptées.")
+            return
+        }
+        if (file.size > 2 * 1024 * 1024) {
+            toast.error("Fichier trop volumineux (max 2 Mo).")
+            return
+        }
+
+        setIsUploadingAvatar(true)
+        try {
+            const url = await uploadToImageKit(file, "/avatars")
+            updateUser(
+                { id: user!.id, data: { image: url } },
+                {
+                    onSuccess: () => toast.success("Photo de profil mise à jour."),
+                    onError: (err) => toast.error(err instanceof Error ? err.message : "Échec de la mise à jour"),
+                }
+            )
+        } catch (err) {
+            toast.error(err instanceof Error ? err.message : "Échec de l'upload")
+        } finally {
+            setIsUploadingAvatar(false)
+        }
+    }
 
     const form = useForm<UpdateProfileFormValues>({
         resolver: zodResolver(UpdateProfileSchema),
@@ -32,7 +65,6 @@ export function ProfileSection() {
             firstname: user?.firstname ?? "",
             lastname: user?.lastname ?? "",
             username: user?.username ?? "",
-            phone: user?.phone ?? "",
         },
     })
 
@@ -75,11 +107,28 @@ export function ProfileSection() {
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col gap-2">
-                                <Button variant="outline" size="sm" type="button">
-                                    <Camera className="size-4" />
-                                    Changer la photo
+                                <input
+                                    ref={avatarInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleAvatarChange}
+                                />
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    type="button"
+                                    onClick={() => avatarInputRef.current?.click()}
+                                    disabled={isUploadingAvatar}
+                                >
+                                    {isUploadingAvatar ? (
+                                        <Loader2 className="size-4 animate-spin" />
+                                    ) : (
+                                        <Camera className="size-4" />
+                                    )}
+                                    {isUploadingAvatar ? "Envoi..." : "Changer la photo"}
                                 </Button>
-                                <p className="text-xs text-muted-foreground">JPG, PNG ou GIF. Max 2MB.</p>
+                                <p className="text-xs text-muted-foreground">JPG, PNG ou GIF. Max 2 Mo.</p>
                             </div>
                         </div>
 
@@ -137,43 +186,34 @@ export function ProfileSection() {
                                         <div className="flex-1 rounded-md border border-input bg-muted/50 px-3 py-2 text-sm text-muted-foreground">
                                             {user?.email}
                                         </div>
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => setShowEmailModal(true)}
-                                        >
-                                            <Mail className="size-4" />
-                                            Changer
-                                        </Button>
+                                        {user?.password && (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => setShowEmailModal(true)}
+                                            >
+                                                <Mail className="size-4" />
+                                                Changer
+                                            </Button>
+                                        )}
+                                        {!user?.password && (
+                                            <div className="text-xs text-muted-foreground py-2 px-3">
+                                                Connecté via OAuth
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-
-                                <FormField
-                                    control={form.control}
-                                    name="phone"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Téléphone</FormLabel>
-                                            <FormControl>
-                                                <Input type="tel" placeholder="Non spécifié" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
 
                                 <Separator />
 
                                 {/* Account Info */}
-                                <div className="grid gap-4 sm:grid-cols-2 text-sm">
+                                <div className="grid gap-4 sm:grid-cols-3 text-sm">
                                     <div>
                                         <p className="text-muted-foreground">Rôle</p>
-                                        <p className="font-medium">{user?.role ?? "—"}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-muted-foreground">Statut</p>
-                                        <Badge variant="secondary">Membre</Badge>
+                                        <p className="font-medium">
+                                            {user?.role === "ADMIN" ? "Admin" : "Membre"}
+                                        </p>
                                     </div>
                                     <div>
                                         <p className="text-muted-foreground">Inscription</p>

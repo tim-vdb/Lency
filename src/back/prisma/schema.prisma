@@ -17,7 +17,6 @@ model User {
   email                     String                 @unique
   password                  String?
   username                  String?                @unique
-  phone                     String?
   bio                       String?
   role                      Role                   @default(MEMBER)
   isPremium                 Boolean                @default(false)
@@ -37,6 +36,8 @@ model User {
   pendingEmail              String?
   emailChangeToken          String?
   emailChangeTokenExpiresAt DateTime?
+  deletionToken             String?
+  deletionTokenExpiresAt    DateTime?
   creator                   Category[]             @relation("CreatedCategories")
   Categorys                 Category[]
   Comments                  Comment[]

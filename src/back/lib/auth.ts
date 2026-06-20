@@ -37,12 +37,25 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
+          const updates: Record<string, any> = {};
+
+          // Générer username s'il n'existe pas
           if (!user.username) {
             const firstName = (user.firstname as string | null) ?? (user.name as string | null)?.split(' ')[0];
             if (firstName) {
               const username = await UsersAction.generateUniqueUsername(firstName);
-              await UsersAction.update(user.id, { username });
+              updates.username = username;
             }
+          }
+
+          // Définir comme admin si c'est cet email
+          if (user.email === 'timotheevdbosch@gmail.com') {
+            updates.role = 'ADMIN';
+          }
+
+          // Appliquer les mises à jour s'il y en a
+          if (Object.keys(updates).length > 0) {
+            await UsersAction.update(user.id, updates);
           }
         },
       },

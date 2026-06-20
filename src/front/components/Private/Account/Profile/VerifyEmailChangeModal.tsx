@@ -52,7 +52,7 @@ export function VerifyEmailChangeModal({ open, onOpenChange, currentEmail }: Ver
                 <DialogHeader>
                     <DialogTitle>Changer d'adresse email</DialogTitle>
                     <DialogDescription>
-                        Entrez votre mot de passe et votre nouvelle adresse email.
+                        Entrer votre mot de passe et votre nouvelle adresse email.
                     </DialogDescription>
                 </DialogHeader>
 

@@ -63,7 +63,7 @@ export default function MobileNavbar({
               : linksClasses.notActive
           )}
         >
-          Pricing
+          Tarifs
         </Link>
         <Link
           href="/about"
@@ -73,7 +73,7 @@ export default function MobileNavbar({
             isActive('/about') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
-          About
+          À propos
         </Link>
         <Link
           href="/contact"
@@ -85,7 +85,7 @@ export default function MobileNavbar({
               : linksClasses.notActive
           )}
         >
-          Contact Us
+          Contact
         </Link>
         <Link
           href="/team"
@@ -95,7 +95,7 @@ export default function MobileNavbar({
             isActive('/team') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
-          Our Team
+          Équipe
         </Link>
         <Link
           href="/docs"
@@ -105,7 +105,7 @@ export default function MobileNavbar({
             isActive('/docs') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
-          Docs
+          Documentation
         </Link>
         <Link
           href="/blog"

@@ -69,7 +69,7 @@ export function NavUser() {
               <button className="flex items-center gap-1 rounded-lg px-2 py-1 text-sm outline-none hover:bg-neutral-150 hover:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer">
                 <Avatar className="h-8 w-8 rounded-full">
                   <AvatarImage src={(user?.avatarUrl || user?.image) ?? undefined} alt={user?.name ?? ""} />
-                  <AvatarFallback className="rounded-full text-xs bg-black dark:bg-white text-white dark:text-black">{initials}</AvatarFallback>
+                  <AvatarFallback className="rounded-full text-xs bg-zinc-950 dark:bg-zinc-700 text-white dark:text-white">{initials}</AvatarFallback>
                 </Avatar>
                 <ChevronsUpDown className="ml-1 size-4 text-muted-foreground" />
               </button>
@@ -109,7 +109,7 @@ export function NavUser() {
                 <DropdownMenuGroup>
                   <DropdownMenuItem onSelect={() => setFeedbackOpen(true)} className="cursor-pointer">
                     <MessageSquare className="size-4" />
-                    Feedback
+Retours
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <Collapsible asChild className="group/collapsible">

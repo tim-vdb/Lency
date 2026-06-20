@@ -121,7 +121,7 @@ export function UsersShell() {
                 return (
                     <div className="flex items-center gap-2.5 min-w-0">
                         <Avatar className="size-7 shrink-0">
-                            <AvatarImage src={u.avatarUrl ?? ""} />
+                            <AvatarImage src={u.image ?? u.avatarUrl ?? ""} />
                             <AvatarFallback className="text-[10px]">{getInitialName(u)}</AvatarFallback>
                         </Avatar>
                         <div className="min-w-0">

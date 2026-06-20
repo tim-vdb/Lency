@@ -57,7 +57,7 @@ export default function SecurityPassword() {
             <CardHeader>
                 <CardTitle>Mot de passe</CardTitle>
                 <CardDescription>
-                    Modifiez votre mot de passe pour sécuriser votre compte.
+                    Modifier votre mot de passe pour sécuriser votre compte.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -71,7 +71,7 @@ export default function SecurityPassword() {
                                     <FormLabel>Mot de passe actuel</FormLabel>
                                     <div className="relative">
                                         <FormControl>
-                                            <Input type={showPassword.currentPassword ? "text" : "password"} placeholder="Entrez votre mot de passe actuel" {...field} />
+                                            <Input type={showPassword.currentPassword ? "text" : "password"}                 placeholder="Entrer votre mot de passe actuel" {...field} />
                                         </FormControl>
                                         <Eye className={cn("size-5 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground", showPassword.currentPassword ? "hidden" : "block")} onClick={() => togglePassword("currentPassword")} />
                                         <EyeOff className={cn("size-5 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground", showPassword.currentPassword ? "block" : "hidden")} onClick={() => togglePassword("currentPassword")} />
@@ -88,7 +88,7 @@ export default function SecurityPassword() {
                                     <FormLabel>Nouveau mot de passe</FormLabel>
                                     <div className="relative">
                                         <FormControl>
-                                            <Input type={showPassword.newPassword ? "text" : "password"} placeholder="Entrez votre nouveau mot de passe" {...field} />
+                                            <Input type={showPassword.newPassword ? "text" : "password"}                 placeholder="Entrer votre nouveau mot de passe" {...field} />
                                         </FormControl>
                                         <Eye className={cn("size-5 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground", showPassword.newPassword ? "hidden" : "block")} onClick={() => togglePassword("newPassword")} />
                                         <EyeOff className={cn("size-5 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground", showPassword.newPassword ? "block" : "hidden")} onClick={() => togglePassword("newPassword")} />

@@ -50,7 +50,7 @@ export default function HeaderPublic() {
                     href="/account"
                     className="hidden md:inline-flex text-sm font-medium text-black dark:text-white"
                   >
-                    Dashboard
+Tableau de bord
                   </Link>
                 )}
                 <SidebarProvider className="w-fit min-h-auto">

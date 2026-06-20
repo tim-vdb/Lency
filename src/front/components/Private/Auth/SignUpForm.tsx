@@ -72,17 +72,17 @@ export default function SignUpForm() {
                 lastname: values.lastName,
             });
             if (error) {
-                toast.error(error.message || 'An error occurred');
+                toast.error(error.message || 'Une erreur est survenue');
                 return;
             }
 
             const otpResult = await sendVerificationOtp(values.email, 'email-verification');
             if (!otpResult) {
-                toast.error("Account created but OTP email was not sent.");
+                toast.error("Compte créé mais l'email OTP n'a pas pu être envoyé.");
                 return;
             }
 
-            toast.success('Account created. Verify your email with the OTP code.');
+            toast.success('Compte créé. Vérifiez votre email avec le code OTP.');
             router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
             router.refresh();
         });
@@ -90,20 +90,20 @@ export default function SignUpForm() {
 
     return (
         <div className="flex items-center justify-center text-foreground h-[calc(100svh-5rem)]">
-            <div className="bg-white dark:bg-white border-4 border-zinc-200 dark:border-zinc-300 rounded-3xl p-10 w-full max-w-md shadow-lg">
+            <div className="bg-white dark:bg-zinc-900 border-4 border-zinc-200 dark:border-zinc-700 rounded-3xl p-10 w-full max-w-md shadow-lg">
 
                 {/* HEADER */}
                 <div className="text-center mb-8">
-                    <p className="text-xs uppercase tracking-[0.25em] text-zinc-700 dark:text-zinc-700 font-inter">
-                        Sign up
+                    <p className="text-xs uppercase tracking-[0.25em] text-zinc-500 dark:text-zinc-400 font-inter">
+                        Inscription
                     </p>
 
-                    <h2 className="text-4xl leading-tight text-zinc-950 dark:text-zinc-900">
-                        Create your player account
+                    <h2 className="text-4xl leading-tight text-zinc-950 dark:text-white">
+                        Créer votre compte
                     </h2>
 
-                    <p className="font-inter text-sm text-zinc-600 dark:text-zinc-600 mt-3">
-                        Fill in the fields to join Chef’s Blueprint.
+                    <p className="font-inter text-sm text-zinc-600 dark:text-zinc-300 mt-3">
+                        Remplir les champs pour rejoindre Lency.
                     </p>
                 </div>
 
@@ -120,12 +120,12 @@ export default function SignUpForm() {
                                 name="firstName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="text-zinc-800 dark:text-zinc-900">First name</FormLabel>
+                                        <FormLabel className="text-zinc-700 dark:text-zinc-200">Prénom</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="Ex: Camille"
                                                 {...field}
-                                                className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
+                                                className="rounded-md border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 focus:outline-none"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -138,12 +138,12 @@ export default function SignUpForm() {
                                 name="lastName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="text-zinc-800 dark:text-zinc-900">Last name</FormLabel>
+                                        <FormLabel className="text-zinc-700 dark:text-zinc-200">Nom</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="Ex: Martin"
                                                 {...field}
-                                                className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
+                                                className="rounded-md border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 focus:outline-none"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -158,13 +158,13 @@ export default function SignUpForm() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-zinc-800 dark:text-zinc-900">Email</FormLabel>
+                                    <FormLabel className="text-zinc-700 dark:text-zinc-200">Adresse email</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="email"
                                             placeholder="example@mail.com"
                                             {...field}
-                                            className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
+                                            className="rounded-md border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 focus:outline-none"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -178,12 +178,12 @@ export default function SignUpForm() {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-zinc-800 dark:text-zinc-900">Password</FormLabel>
+                                    <FormLabel className="text-zinc-700 dark:text-zinc-200">Mot de passe</FormLabel>
                                     <FormControl>
                                         <PasswordInput
                                             placeholder="••••••••"
                                             {...field}
-                                            className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
+                                            className="rounded-md border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 focus:outline-none"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -197,12 +197,12 @@ export default function SignUpForm() {
                             name="passwordConfirmation"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-zinc-800 dark:text-zinc-900">Confirm password</FormLabel>
+                                    <FormLabel className="text-zinc-700 dark:text-zinc-200">Confirmer le mot de passe</FormLabel>
                                     <FormControl>
                                         <PasswordInput
                                             placeholder="••••••••"
                                             {...field}
-                                            className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
+                                            className="rounded-md border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 focus:outline-none"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -212,13 +212,13 @@ export default function SignUpForm() {
 
                         {/* IMAGE UPLOAD */}
                         <div className="grid gap-2">
-                            <FormLabel className="text-zinc-800 dark:text-zinc-900">Profile picture (optional)</FormLabel>
+                            <FormLabel className="text-zinc-700 dark:text-zinc-200">Photo de profil (optionnel)</FormLabel>
                             <div className="flex items-end gap-4">
                                 {imagePreview && (
                                     <div className="relative w-16 h-16 rounded-sm overflow-hidden">
                                         <Image
                                             src={imagePreview}
-                                            alt="Preview"
+                                            alt="Aperçu"
                                             width={64}
                                             height={64}
                                             className="object-cover"
@@ -232,11 +232,11 @@ export default function SignUpForm() {
                                         type="file"
                                         accept="image/*"
                                         onChange={handleImageChange}
-                                        className="w-full border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 file:text-zinc-800 dark:file:text-zinc-800"
+                                        className="w-full border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white file:text-zinc-800 dark:file:text-zinc-200"
                                     />
                                     {imagePreview && (
                                         <X
-                                            className="cursor-pointer text-zinc-700 dark:text-zinc-700"
+                                            className="cursor-pointer text-zinc-700 dark:text-zinc-300"
                                             onClick={() => {
                                                 setImage(null);
                                                 setImagePreview(null);
@@ -250,18 +250,18 @@ export default function SignUpForm() {
                         {/* SUBMIT */}
                         <Button
                             type="submit"
-                            className="rounded-md dark:bg-background text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold  transition"
+                            className="rounded-md bg-zinc-900 dark:bg-orange-600 text-white dark:text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition hover:bg-zinc-800 dark:hover:bg-orange-700"
                             disabled={isPending}
                         >
                             {isPending ? (
                                 <Loader2 size={16} className="animate-spin" />
                             ) : (
-                                "Sign up"
+                                "S'inscrire"
                             )}
                         </Button>
 
-                        <Link href="/login" className="text-sm text-zinc-600 dark:text-zinc-700 text-center underline">
-                            Already have an account?
+                        <Link href="/login" className="text-sm text-zinc-600 dark:text-zinc-400 text-center underline hover:text-zinc-800 dark:hover:text-zinc-200">
+                            Déjà un compte ?
                         </Link>
                     </form>
                 </Form>
