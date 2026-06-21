@@ -40,7 +40,7 @@ export default function TestimonialsSection() {
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border-2 border-white shadow">
                 <Image
                   src="/images/af-24-ac-3-da-0691-ebc-0-da-7-ba-6-a-09-ff-8-f-1.png"
-                  alt="Timothée Van Den Bosch"
+                  alt="Guerric Cochelin"
                   width={48}
                   height={48}
                   className="w-full h-full object-cover object-top"
@@ -48,7 +48,7 @@ export default function TestimonialsSection() {
               </div>
               <div>
                 <p className="text-[15px] sm:text-[16px] font-bold text-neutral-900 dark:text-white">
-                  Timothée Van Den Bosch
+                  Guerric Cochelin
                 </p>
                 <p className="text-[13px] sm:text-[14px] text-neutral-500 dark:text-neutral-400">Réalisateur</p>
               </div>
