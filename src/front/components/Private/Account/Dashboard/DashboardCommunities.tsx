@@ -15,7 +15,7 @@ export function DashboardCommunities() {
 
     if (isLoading) {
         return (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="bg-neutral-100 rounded-xl h-64 animate-pulse" />
                 ))}
@@ -36,10 +36,10 @@ export function DashboardCommunities() {
     }
 
     return (
-        <div className="grid grid-cols-2 gap-4 pb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-2">
             {categories.map((cat) => (
                 <Link key={cat.id} href={`/community/${cat.slug}`} className="block group">
-                    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-200">
+                    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-200">
                         {/* Banner */}
                         <div className="relative w-full h-36 bg-neutral-100 shrink-0 overflow-hidden">
                             {cat.bannerUrl ? (
@@ -77,7 +77,7 @@ export function DashboardCommunities() {
                                 </span>
                                 <span className="flex items-center gap-1.5 bg-neutral-900 text-white rounded-full px-3 py-1 text-[11px] font-medium">
                                     <Paperclip className="w-3 h-3" />
-                                    {formatCount(cat._count.ressources)} Ressources
+                                    {formatCount(cat._count.ressources)} Resources
                                 </span>
                             </div>
                         </div>

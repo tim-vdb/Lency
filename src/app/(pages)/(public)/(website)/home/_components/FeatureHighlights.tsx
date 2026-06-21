@@ -26,14 +26,14 @@ function CursorIcon({ className }: { className?: string }) {
 
 export default function FeatureHighlights() {
   return (
-    <section className="w-full py-20 px-8 lg:px-16 bg-[#FAF7F2] dark:bg-neutral-900">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-16">
+    <section className="w-full py-12 sm:py-16 lg:py-20 px-6 sm:px-8 lg:px-16 bg-[#FAF7F2] dark:bg-neutral-900">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 md:gap-16">
         {/* Left: title */}
         <div className="md:w-2/5 flex flex-col gap-4">
-          <h2 className="text-[48px] font-black text-[#EA3D0E] uppercase leading-tight">
+          <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black text-[#EA3D0E] uppercase leading-tight">
             Tout pour tes projets.
           </h2>
-          <p className="text-[16px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
+          <p className="text-[15px] sm:text-[16px] text-neutral-600 dark:text-neutral-400 leading-relaxed">
             Lency met à ta disposition les outils indispensables pour ne plus
             jamais bloquer sur une création vidéo. Découvre ce qu&apos;on
             t&apos;a préparé.
@@ -41,20 +41,20 @@ export default function FeatureHighlights() {
         </div>
 
         {/* Right: two cards */}
-        <div className="md:w-3/5 flex flex-col sm:flex-row gap-6">
+        <div className="md:w-3/5 flex flex-col sm:flex-row gap-5 sm:gap-6">
           {/* Card 1 — orange theme */}
-          <div className="flex-1 bg-white dark:bg-neutral-800 rounded-2xl p-6 flex flex-col gap-4 shadow-sm border border-neutral-100 dark:border-neutral-700 relative overflow-hidden">
+          <div className="flex-1 bg-white dark:bg-neutral-800 rounded-2xl p-5 sm:p-6 flex flex-col gap-4 shadow-sm border border-neutral-100 dark:border-neutral-700 relative overflow-hidden">
             <div className="flex items-start justify-between">
               <span
-                className="text-[120px] font-black leading-none select-none pointer-events-none text-[#F9D0C0]"
+                className="text-[80px] sm:text-[100px] lg:text-[120px] font-black leading-none select-none pointer-events-none text-[#F9D0C0]"
                 aria-hidden="true"
               >
                 1
               </span>
-              <Users className="w-10 h-10 text-[#EA3D0E] shrink-0 mt-2" />
+              <Users className="w-8 h-8 sm:w-10 sm:h-10 text-[#EA3D0E] shrink-0 mt-2" />
             </div>
-            <h3 className="text-[24px] font-bold text-neutral-900 dark:text-white">La Communauté</h3>
-            <p className="text-[16px] text-neutral-500 dark:text-neutral-400 leading-relaxed flex-1">
+            <h3 className="text-[20px] sm:text-[24px] font-bold text-neutral-900 dark:text-white">La Communauté</h3>
+            <p className="text-[15px] sm:text-[16px] text-neutral-500 dark:text-neutral-400 leading-relaxed flex-1">
               Échange avec des centaines de passionnés, demande des avis en
               direct sur tes montages et trouve l&apos;inspiration au quotidien.
             </p>
@@ -70,10 +70,10 @@ export default function FeatureHighlights() {
           </div>
 
           {/* Card 2 — neutral theme */}
-          <div className="flex-1 bg-white dark:bg-neutral-800 rounded-2xl p-6 flex flex-col gap-4 shadow-sm border border-neutral-100 dark:border-neutral-700 relative overflow-hidden">
+          <div className="flex-1 bg-white dark:bg-neutral-800 rounded-2xl p-5 sm:p-6 flex flex-col gap-4 shadow-sm border border-neutral-100 dark:border-neutral-700 relative overflow-hidden">
             <div className="flex items-start justify-between">
               <span
-                className="text-[120px] font-black leading-none select-none pointer-events-none"
+                className="text-[80px] sm:text-[100px] lg:text-[120px] font-black leading-none select-none pointer-events-none"
                 style={{ color: "#00000033" }}
                 aria-hidden="true"
               >
@@ -81,14 +81,14 @@ export default function FeatureHighlights() {
               </span>
               <CursorIcon className="shrink-0 mt-2" />
             </div>
-            <h3 className="text-[24px] font-bold text-neutral-900">L&apos;Explorateur</h3>
-            <p className="text-[16px] text-neutral-500 leading-relaxed flex-1">
+            <h3 className="text-[20px] sm:text-[24px] font-bold text-neutral-900 dark:text-white">L&apos;Explorateur</h3>
+            <p className="text-[15px] sm:text-[16px] text-neutral-500 dark:text-neutral-400 leading-relaxed flex-1">
               Découvre les meilleurs projets réalisés par la communauté, trouve
               des tournages qui recrutent près de chez toi et fais-toi repérer.
             </p>
             <Button
               asChild
-              className="text-[14px] w-fit rounded-[4px] mt-auto bg-[#F5F5F5] hover:bg-[#e8e8e8] text-neutral-800 dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-white"
+              className="text-[14px] w-fit rounded-[4px] mt-auto bg-[#F5F5F5] hover:bg-[#e8e8e8] dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-800 dark:text-neutral-200"
             >
               <Link href="/marketplace" className="flex items-center gap-1">
                 Voir les projets

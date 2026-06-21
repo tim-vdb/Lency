@@ -19,32 +19,32 @@ export function AccountShell({ user, children }: { user: User | null; children: 
 
     return (
         <QueryProvider>
-            <UserProvider user={user}>
-                <ActiveChatProvider>
-                    <AblyInitializer>
-                        <div className="h-screen overflow-hidden bg-gray-lighter dark:bg-gray-dark dark:text-white">
-                            <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
-                                <Sheet>
-                                    <AppSidebar />
-                                    <SidebarInset className="relative bg-transparent!">
-                                        <Header />
-                                        <main
-                                            className={cn(
-                                                "dark:text-white bg-transparent",
-                                                isDashboard
-                                                    ? "overflow-hidden pr-2 flex-1"
-                                                    : cn("overflow-y-auto pr-2", isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : "")
-                                            )}
-                                        >
-                                            {children}
-                                        </main>
-                                    </SidebarInset>
-                                </Sheet>
-                            </SidebarProvider>
-                        </div>
-                    </AblyInitializer>
-                </ActiveChatProvider>
-            </UserProvider>
+        <UserProvider user={user}>
+            <ActiveChatProvider>
+            <AblyInitializer>
+            <div className="h-screen overflow-hidden bg-gray-lighter dark:bg-gray-dark">
+                <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
+                    <Sheet>
+                        <AppSidebar />
+                        <SidebarInset className="relative bg-transparent!">
+                            <Header />
+                            <main
+                                className={cn(
+                                    "rounded-xl",
+                                    isDashboard
+                                        ? "overflow-y-auto md:overflow-hidden h-[calc(100vh-5rem)]"
+                                        : cn("overflow-y-auto pr-2", isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : "")
+                                )}
+                            >
+                                {children}
+                            </main>
+                        </SidebarInset>
+                    </Sheet>
+                </SidebarProvider>
+            </div>
+            </AblyInitializer>
+            </ActiveChatProvider>
+        </UserProvider>
         </QueryProvider>
     )
 }

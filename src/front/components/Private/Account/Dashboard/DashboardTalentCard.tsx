@@ -34,12 +34,12 @@ export function DashboardTalentCard({ talent, className, style }: DashboardTalen
 
     return (
         <div
-            className={cn("bg-white dark:bg-neutral-900 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 p-4 flex flex-col gap-3", className)}
+            className={cn("bg-white dark:bg-neutral-800 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 p-4 flex flex-col gap-3", className)}
             style={style}
         >
             {/* Avatar + nom + adresse */}
             <div className="flex items-start gap-3">
-                <div className="w-11 h-11 rounded-full bg-[#E8E8E1] dark:bg-neutral-700 shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-[#4C4A43] dark:text-neutral-300">
+                <div className="w-11 h-11 rounded-full bg-[#E8E8E1] shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-[#4C4A43]">
                     {avatar
                         ? <img src={avatar} alt={name} className="w-full h-full object-cover" />
                         : initials}
@@ -58,7 +58,7 @@ export function DashboardTalentCard({ talent, className, style }: DashboardTalen
             </div>
 
             {/* Bio */}
-            <p className="text-[13px] leading-[1.55] text-[#4C4A43] dark:text-neutral-300 line-clamp-2 flex-1">
+            <p className="text-[13px] leading-[1.55] text-[#4C4A43] line-clamp-2 flex-1">
                 {talent.bio ?? "Aucune bio disponible."}
             </p>
 
@@ -68,25 +68,25 @@ export function DashboardTalentCard({ talent, className, style }: DashboardTalen
                     {roles.map((role) => (
                         <span
                             key={role}
-                            className="text-[11px] px-2 py-0.5 bg-[#F7F7F2] dark:bg-neutral-800 border border-[#E8E8E1] dark:border-neutral-700 rounded-lg text-[#4C4A43] dark:text-neutral-300 whitespace-nowrap"
+                            className="text-[11px] px-2 py-0.5 bg-[#F7F7F2] dark:bg-neutral-700 border border-[#E8E8E1] dark:border-neutral-600 rounded-lg text-[#4C4A43] dark:text-neutral-300 whitespace-nowrap"
                         >
                             {role}
                         </span>
                     ))}
                     {prefs.workMode && (
-                        <span className="text-[11px] px-2 py-0.5 bg-[#F7F7F2] dark:bg-neutral-800 border border-[#E8E8E1] dark:border-neutral-700 rounded-lg text-[#4C4A43] dark:text-neutral-300 whitespace-nowrap">
+                        <span className="text-[11px] px-2 py-0.5 bg-[#F7F7F2] border border-[#E8E8E1] rounded-lg text-[#4C4A43] whitespace-nowrap">
                             {WORK_MODE_LABELS[prefs.workMode] ?? prefs.workMode}
                         </span>
                     )}
                     {prefs.level && (
-                        <span className="text-[11px] px-2 py-0.5 bg-[#F7F7F2] dark:bg-neutral-800 border border-[#E8E8E1] dark:border-neutral-700 rounded-lg text-[#4C4A43] dark:text-neutral-300 whitespace-nowrap">
+                        <span className="text-[11px] px-2 py-0.5 bg-[#F7F7F2] border border-[#E8E8E1] rounded-lg text-[#4C4A43] whitespace-nowrap">
                             {LEVEL_LABELS[prefs.level] ?? prefs.level}
                         </span>
                     )}
                 </div>
 
                 <Link href={`/user/${talent.username ?? talent.id}`} className="shrink-0">
-                    <button className="text-[13px] font-medium h-8 px-4 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] dark:border-neutral-700 bg-white dark:bg-neutral-800 text-[#000000] dark:text-white hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]">
+                    <button className="text-[13px] font-medium h-8 px-4 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] bg-white text-[#000000] hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]">
                         Voir le profil
                     </button>
                 </Link>

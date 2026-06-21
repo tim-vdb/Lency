@@ -28,10 +28,10 @@ export function DashboardProjectCard({ project, className, style, compact = fals
     if (compact) {
         return (
             <div className={cn(
-                "bg-white dark:bg-neutral-900 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 p-3 flex items-center gap-3",
+                "bg-white dark:bg-neutral-800 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 p-3 flex items-center gap-3",
                 className
             )} style={style}>
-                <div className="w-10 h-10 rounded-full bg-[#E8E8E1] dark:bg-neutral-700 shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-[#4C4A43] dark:text-neutral-300">
+                <div className="w-10 h-10 rounded-full bg-[#E8E8E1] shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-[#4C4A43]">
                     {project.owner.image ? (
                         <img src={project.owner.image} alt={displayOwnerName} className="w-full h-full object-cover" />
                     ) : (
@@ -60,7 +60,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
                     )}
                 </div>
                 <Link href={`/marketplace/${project.id}`} className="shrink-0">
-                    <button className="text-[12px] font-medium h-7 px-3 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] dark:border-neutral-700 bg-white dark:bg-neutral-800 text-[#000000] dark:text-white hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]">
+                    <button className="text-[12px] font-medium h-7 px-3 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] dark:border-neutral-600 bg-white dark:bg-neutral-700 text-[#000000] dark:text-white hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]">
                         Rejoindre
                     </button>
                 </Link>
@@ -70,12 +70,12 @@ export function DashboardProjectCard({ project, className, style, compact = fals
 
     return (
         <div className={cn(
-            "bg-white dark:bg-neutral-900 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 p-4 flex flex-col gap-3",
+            "bg-white dark:bg-neutral-800 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 p-4 flex flex-col gap-3",
             className
         )} style={style}>
             {/* Ligne 1 : avatar + titre + date/lieu */}
             <div className="flex items-start gap-3">
-                <div className="w-11 h-11 rounded-full bg-[#E8E8E1] dark:bg-neutral-700 shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-[#4C4A43] dark:text-neutral-300">
+                <div className="w-11 h-11 rounded-full bg-[#E8E8E1] shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-[#4C4A43]">
                     {project.owner.image ? (
                         <img src={project.owner.image} alt={displayOwnerName} className="w-full h-full object-cover" />
                     ) : (
@@ -104,7 +104,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
             </div>
 
             {/* Description */}
-            <p className="text-[13px] leading-[1.55] text-[#4C4A43] dark:text-neutral-300 line-clamp-4 flex-1">
+            <p className="text-[13px] leading-[1.55] text-[#4C4A43] dark:text-neutral-400 line-clamp-4 flex-1">
                 {project.description}
             </p>
 
@@ -117,7 +117,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
                             {participants.slice(0, 3).map((p) => (
                                 <div
                                     key={p.id}
-                                    className="w-7 h-7 rounded-full bg-[#E8E8E1] dark:bg-neutral-700 border-2 border-white dark:border-neutral-900 overflow-hidden flex items-center justify-center text-[10px] font-semibold text-[#4C4A43] dark:text-neutral-300 shrink-0"
+                                    className="w-7 h-7 rounded-full bg-[#E8E8E1] border-2 border-white overflow-hidden flex items-center justify-center text-[10px] font-semibold text-[#4C4A43] shrink-0"
                                 >
                                     {p.image ? (
                                         <img src={p.image} alt={getDisplayName(p)} className="w-full h-full object-cover" />
@@ -136,7 +136,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
                 {/* Bouton — gris par défaut, orange au survol */}
                 <Link href={`/marketplace/${project.id}`}>
                     <button
-                        className="text-[13px] font-medium h-8 px-4 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] dark:border-neutral-700 bg-white dark:bg-neutral-800 text-[#000000] dark:text-white hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]"
+                        className="text-[13px] font-medium h-8 px-4 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] dark:border-neutral-600 bg-white dark:bg-neutral-700 text-[#000000] dark:text-white hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]"
                     >
                         Rejoindre le projet
                     </button>

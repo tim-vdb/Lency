@@ -98,7 +98,6 @@ export function ProjectApplicationsPageClient({ projectId }: Props) {
                 bio: app.user.bio,
                 portfolio: app.user.portfolio,
                 cv: app.user.cv,
-                badges: app.user.badges,
                 configs: app.user.configs,
             },
         });
@@ -251,7 +250,6 @@ interface ApplicationWithUser {
         portfolio?: string | null;
         cv?: string | null;
         isMarketplaceTalent?: boolean;
-        badges?: Array<{ id: string; name: string }>;
         configs?: UserConfig[];
         socialLinks?: Array<{ platform: string; url: string }>;
     };

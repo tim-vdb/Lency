@@ -75,7 +75,6 @@ export default function NotificationsSheet() {
                     bio: full.user.bio ?? null,
                     portfolio: full.user.portfolio ?? null,
                     cv: full.user.cv ?? null,
-                    badges: full.user.badges ?? [],
                     configs: full.user.configs ?? [],
                 },
             });

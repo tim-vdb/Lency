@@ -224,7 +224,7 @@ export default function UserProfileHeader({ user }: { user: UserProfile }) {
     }
 
     return (
-        <Card className="shrink-0 w-64 py-5 min-w-md">
+        <Card className="shrink-0 w-full sm:w-64 py-5 sm:min-w-md">
             <CardContent className="flex flex-col gap-4 px-5">
                 {/* Avatar + level */}
                 <div className="flex items-center gap-3">

@@ -22,7 +22,6 @@ export interface ApplicationUser {
     bio?: string | null;
     portfolio?: string | null;
     cv?: string | null;
-    badges?: Array<{ id: string; name: string }>;
     configs?: Array<{ title: string; content: unknown }>;
 }
 
@@ -107,13 +106,6 @@ export function ApplicationResponseModal({
                                     {roles.length > 4 && (
                                         <Badge variant="secondary" className="text-[10px] px-1.5 py-0">+{roles.length - 4}</Badge>
                                     )}
-                                </div>
-                            )}
-                            {user.badges && user.badges.length > 0 && (
-                                <div className="flex flex-wrap gap-1 mt-1">
-                                    {user.badges.slice(0, 3).map((b) => (
-                                        <span key={b.id} className="text-[10px] text-orange font-medium">🏅 {b.name}</span>
-                                    ))}
                                 </div>
                             )}
                         </div>

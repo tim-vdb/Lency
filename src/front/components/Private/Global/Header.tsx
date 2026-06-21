@@ -6,7 +6,7 @@ import { SheetTrigger } from "../../ui/sheet";
 import { NavUser } from "./Sidebar/nav-user";
 import { useState, useEffect } from "react";
 import { cn } from "@/front/lib/utils";
-import { useSidebar } from "../../ui/sidebar";
+import { SidebarTrigger, useSidebar } from "../../ui/sidebar";
 import { usePathname } from "next/navigation";
 import { CreateDropdown } from "./CreateDropdown";
 import BreadcrumbAuto from "./BreadcrumbAuto";
@@ -50,6 +50,8 @@ export default function Header({ className }: { className?: string }) {
             className
         )}>
             <div className="flex items-center justify-between gap-2 px-4 w-full">
+                {/* Mobile sidebar trigger — visible uniquement sur mobile */}
+                <SidebarTrigger className="md:hidden mr-1 shrink-0" />
                 <BreadcrumbAuto />
                 <div className="flex items-center gap-2">
                     <SearchBar />
