@@ -1,5 +1,5 @@
 import { ProjectsService } from "@/back/services/projects.service";
-import { CreateProjectInput, createProjectSchema } from "@/back/schemas/zod/project.zod";
+import { createProjectSchema } from "@/back/schemas/zod/project.zod";
 import { createZodRoute } from "next-zod-route";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";

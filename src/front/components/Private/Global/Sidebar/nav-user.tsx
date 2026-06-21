@@ -44,7 +44,6 @@ import {
 } from "@/front/components/ui/sidebar"
 import LogOut from "../../Auth/LogOut"
 import FeedbackDialog from "@/front/components/common/FeedbackDialog"
-import { toast } from "sonner"
 
 const settingsItems = [
   { title: "Compte", url: "/account/settings/profile", icon: User2 },

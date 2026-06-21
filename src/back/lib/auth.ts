@@ -37,6 +37,7 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const updates: Record<string, any> = {};
 
           // Générer username s'il n'existe pas

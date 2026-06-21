@@ -22,7 +22,7 @@ export async function sendEmailChangeConfirmation({
     const confirmationUrl = `${baseUrl}/confirm-email-change?token=${confirmationToken}`
 
     try {
-        console.log('[send-email-change-confirmation] Sending email to:', email);
+        console.warn('[send-email-change-confirmation] Sending email to:', email);
         await resend.emails.send({
             from: 'support@infos.lency.net',
             to: email,
@@ -32,7 +32,7 @@ export async function sendEmailChangeConfirmation({
                 confirmationUrl,
             }),
         })
-        console.log('[send-email-change-confirmation] Email sent successfully');
+        console.warn('[send-email-change-confirmation] Email sent successfully');
     } catch (error) {
         console.error('[send-email-change-confirmation] Error:', error)
         throw error

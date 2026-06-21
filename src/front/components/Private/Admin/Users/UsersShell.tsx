@@ -69,7 +69,7 @@ interface UserActionsProps {
 }
 
 function UserActions({ user, onRoleEdit, onDelete }: UserActionsProps) {
-    const { mutate: patch } = usePatchAdminUser()
+    const { mutate: _patch } = usePatchAdminUser()
 
     return (
         <div className="flex items-center gap-1">

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { Tabs, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
 import { Button } from "@/front/components/ui/button"
 import { Badge } from "@/front/components/ui/badge"
@@ -15,7 +15,6 @@ import { cn } from "@/front/lib/utils"
 
 export function EmailsShell() {
     const searchParams = useSearchParams()
-    const router = useRouter()
     const [activeBox, setActiveBox] = useState<AdminEmailBox>(AdminEmailBox.SUPPORT)
     const [selectedId, setSelectedId] = useState<string | null>(null)
     const [composeOpen, setComposeOpen] = useState(false)

@@ -1,3 +1,5 @@
+/* global Response */
+
 import type { AdminUser, AdminProject, AdminCategory, AdminPost, AdminResource } from "@/front/schemas/types/admin-data.type"
 
 async function handleResponse<T>(res: Response): Promise<T> {

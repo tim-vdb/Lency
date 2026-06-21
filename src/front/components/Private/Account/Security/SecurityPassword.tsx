@@ -16,6 +16,7 @@ import { useUser } from "@/front/states/contexts/user.context";
 import type { Account } from "@/back/generated/prisma_client";
 
 export default function SecurityPassword() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const user = useUser() as any;
     const hasPasswordAuth = (user?.accounts as Account[] | undefined ?? []).some(
         (account: Account) => account.providerId === "credential" && account.password

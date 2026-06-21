@@ -22,7 +22,7 @@ export async function sendPasswordChangeConfirmation({
     const confirmationUrl = `${baseUrl}/confirm-password-change?token=${confirmationToken}`
 
     try {
-        console.log('[send-password-change-confirmation] Sending email to:', email)
+        console.warn('[send-password-change-confirmation] Sending email to:', email)
         await resend.emails.send({
             from: 'support@infos.lency.net',
             to: email,
@@ -32,7 +32,7 @@ export async function sendPasswordChangeConfirmation({
                 confirmationUrl,
             }),
         })
-        console.log('[send-password-change-confirmation] Email sent successfully')
+        console.warn('[send-password-change-confirmation] Email sent successfully')
     } catch (error) {
         console.error('[send-password-change-confirmation] Error:', error)
         throw error

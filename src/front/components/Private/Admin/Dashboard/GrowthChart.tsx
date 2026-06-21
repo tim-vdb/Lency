@@ -11,7 +11,6 @@ import {
 } from "@/front/components/ui/card";
 import {
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/front/components/ui/chart";
 import { DASHBOARD_COLORS } from "./colors";
 import {
@@ -31,29 +30,6 @@ interface ChartDataPoint {
   emails: number;
 }
 
-// Utiliser les mêmes couleurs partout
-const chartConfig = {
-  users: {
-    label: DASHBOARD_COLORS.users.name,
-    color: DASHBOARD_COLORS.users.hex,
-  },
-  projects: {
-    label: DASHBOARD_COLORS.projects.name,
-    color: DASHBOARD_COLORS.projects.hex,
-  },
-  posts: {
-    label: DASHBOARD_COLORS.posts.name,
-    color: DASHBOARD_COLORS.posts.hex,
-  },
-  resources: {
-    label: DASHBOARD_COLORS.resources.name,
-    color: DASHBOARD_COLORS.resources.hex,
-  },
-  emails: {
-    label: DASHBOARD_COLORS.emails.name,
-    color: DASHBOARD_COLORS.emails.hex,
-  },
-};
 
 export function GrowthChart() {
   const [chartData, setChartData] = React.useState<ChartDataPoint[]>([]);

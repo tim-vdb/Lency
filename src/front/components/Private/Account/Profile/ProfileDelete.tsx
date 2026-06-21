@@ -22,6 +22,7 @@ import { useUser } from "@/front/states/contexts/user.context"
 import type { Account } from "@/back/generated/prisma_client"
 
 export default function ProfileDelete() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const user = useUser() as any
     const { mutate: deleteUser, isPending } = useDeleteUser()
     const [open, setOpen] = useState(false)

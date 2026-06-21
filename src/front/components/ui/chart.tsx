@@ -3,13 +3,6 @@ import * as RechartsPrimitive from "recharts"
 
 import { cn } from "@/front/lib/utils"
 
-const CHART_COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
-]
 
 const ChartContext = React.createContext<{
   config: ChartConfig
@@ -51,6 +44,7 @@ const ChartContainer = React.forwardRef<
   return (
     <ChartContext.Provider value={{ config }}>
       <div
+        data-chart={chartId}
         ref={ref}
         className={cn(
           "flex aspect-auto justify-center text-xs",
@@ -133,8 +127,8 @@ const ChartTooltipContent = React.forwardRef<
       payload,
       label,
       hideLabel = false,
-      hideIndicator = false,
-      indicator = "dot",
+      hideIndicator: _hideIndicator = false,
+      indicator: _indicator = "dot",
       className,
       labelFormatter,
       ...props
@@ -154,7 +148,7 @@ const ChartTooltipContent = React.forwardRef<
     const items = payload.map(({ color: _, name, value }: TooltipPayloadItem) => {
       const fakeValue = String(value)
       const itemConfig = config[name as keyof typeof config] || {}
-      const indicatorColor = itemConfig.color
+      const _indicatorColor = itemConfig.color
 
       return (
         <div

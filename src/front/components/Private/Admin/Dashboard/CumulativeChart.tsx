@@ -11,7 +11,6 @@ import {
 } from "@/front/components/ui/card";
 import {
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/front/components/ui/chart";
 import {
   Select,

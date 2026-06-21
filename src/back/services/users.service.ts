@@ -186,7 +186,7 @@ export const UsersService = {
 
     deleteUser: async (id: string, password?: string) => {
         try {
-            console.log("[deleteUser] Starting deletion process for user:", id);
+            console.warn("[deleteUser] Starting deletion process for user:", id);
 
             const currentUser = await getUser();
             if (!currentUser) {
@@ -199,17 +199,17 @@ export const UsersService = {
             }
 
             const targetUser = await UsersService.findByIdUser(id);
-            console.log("[deleteUser] Found target user:", targetUser.email);
+            console.warn("[deleteUser] Found target user:", targetUser.email);
 
             // If user has a password (email/password auth), require password verification
             if (targetUser.password && password) {
-                console.log("[deleteUser] Verifying password...");
+                console.warn("[deleteUser] Verifying password...");
                 try {
                     await auth.api.signInEmail({
                         body: { email: targetUser.email, password },
                         headers: await headers(),
                     });
-                    console.log("[deleteUser] Password verified");
+                    console.warn("[deleteUser] Password verified");
                 } catch (err) {
                     console.error("[deleteUser] Password verification failed:", err);
                     throw new Error("Invalid password");
@@ -219,27 +219,27 @@ export const UsersService = {
             }
 
             // Generate deletion token (24h expiration)
-            console.log("[deleteUser] Generating deletion token...");
+            console.warn("[deleteUser] Generating deletion token...");
             const rawToken = crypto.randomBytes(32).toString('hex');
             const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
             const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
             // Save token to user
-            console.log("[deleteUser] Saving deletion token to user...");
+            console.warn("[deleteUser] Saving deletion token to user...");
             await UsersAction.saveDeletionToken(id, {
                 deletionToken: hashedToken,
                 deletionTokenExpiresAt: expiresAt,
             });
 
             // Send confirmation email
-            console.log("[deleteUser] Sending confirmation email to:", targetUser.email);
+            console.warn("[deleteUser] Sending confirmation email to:", targetUser.email);
             await sendAccountDeletionEmail({
                 email: targetUser.email,
                 firstname: targetUser.firstname,
                 confirmationToken: rawToken,
             });
 
-            console.log("[deleteUser] Email sent successfully");
+            console.warn("[deleteUser] Email sent successfully");
             return { message: "Email de confirmation envoyé" };
         } catch (error) {
             console.error("[deleteUser] Error:", error);
@@ -249,28 +249,28 @@ export const UsersService = {
 
     confirmDeleteUser: async (rawToken: string) => {
         try {
-            console.log("[confirmDeleteUser] Starting with token:", rawToken);
+            console.warn("[confirmDeleteUser] Starting with token:", rawToken);
             const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
-            console.log("[confirmDeleteUser] Hashed token:", hashedToken);
+            console.warn("[confirmDeleteUser] Hashed token:", hashedToken);
 
             const user = await UsersAction.findByDeletionToken(hashedToken);
-            console.log("[confirmDeleteUser] Found user:", user?.email);
+            console.warn("[confirmDeleteUser] Found user:", user?.email);
 
             if (!user) {
-                console.log("[confirmDeleteUser] User not found");
+                console.warn("[confirmDeleteUser] User not found");
                 throw new Error("TOKEN_INVALID_OR_EXPIRED");
             }
 
-            console.log("[confirmDeleteUser] Token expires at:", user.deletionTokenExpiresAt);
+            console.warn("[confirmDeleteUser] Token expires at:", user.deletionTokenExpiresAt);
             if (!user.deletionTokenExpiresAt || user.deletionTokenExpiresAt < new Date()) {
-                console.log("[confirmDeleteUser] Token expired");
+                console.warn("[confirmDeleteUser] Token expired");
                 throw new Error("TOKEN_EXPIRED");
             }
 
-            console.log("[confirmDeleteUser] Deleting user...");
+            console.warn("[confirmDeleteUser] Deleting user...");
             // Delete the user
             const result = await UsersAction.delete(user.id);
-            console.log("[confirmDeleteUser] User deleted successfully");
+            console.warn("[confirmDeleteUser] User deleted successfully");
             return result;
         } catch (error) {
             console.error("[confirmDeleteUser] Error:", error);

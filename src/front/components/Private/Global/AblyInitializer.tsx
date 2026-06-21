@@ -38,6 +38,7 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
       console.warn("[Ably] ❌ Failed:", err);
       setConnected(false);
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     client.connection.on(["error"] as any, () => {
       // swallow connection errors during StrictMode cleanup
     });

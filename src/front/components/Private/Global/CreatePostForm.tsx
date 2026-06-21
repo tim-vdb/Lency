@@ -33,7 +33,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/front/components/ui/select"
-import { Switch } from "@/front/components/ui/switch"
 import { Textarea } from "@/front/components/ui/textarea"
 import { useCategories } from "@/front/queries/categories"
 import { useCreatePost, useUpdatePost } from "@/front/queries/posts"

@@ -1,4 +1,3 @@
-import type { Prisma } from "@/back/generated/prisma_client"
 
 export type AdminUser = {
     id: string

@@ -8,15 +8,14 @@ import {
     getInitialName,
     zodEnum,
 } from "@/front/lib/utils";
-import { z } from "zod";
-
 describe("cn", () => {
     it("merges classes with clsx + twMerge", () => {
         expect(cn("px-4", "py-2")).toBe("px-4 py-2");
     });
 
     it("handles conditional classes", () => {
-        expect(cn("base", false && "hidden", "extra")).toBe("base extra");
+        const showHidden = false;
+        expect(cn("base", showHidden && "hidden", "extra")).toBe("base extra");
     });
 
     it("resolves tailwind conflicts", () => {

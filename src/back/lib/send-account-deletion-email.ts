@@ -22,7 +22,7 @@ export async function sendAccountDeletionEmail({
   const expiresIn = "24 heures";
 
   try {
-    console.log("[send-account-deletion-email] Sending email to:", email);
+    console.warn("[send-account-deletion-email] Sending email to:", email);
     await resend.emails.send({
       from: "support@infos.lency.net",
       to: email,
@@ -33,7 +33,7 @@ export async function sendAccountDeletionEmail({
         expiresIn,
       }),
     });
-    console.log("[send-account-deletion-email] Email sent successfully");
+    console.warn("[send-account-deletion-email] Email sent successfully");
   } catch (error) {
     console.error("[send-account-deletion-email] Error:", error);
     throw error;

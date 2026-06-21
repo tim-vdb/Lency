@@ -22,7 +22,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/front/components/ui/sidebar"
-import { Briefcase, ChevronRight, Store, Users, Rss, BookOpen, Bookmark, type LucideIcon } from "lucide-react"
+import { Briefcase, ChevronRight, Store, Users, Rss, BookOpen, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import React from "react"

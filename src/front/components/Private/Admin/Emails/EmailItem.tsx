@@ -3,7 +3,7 @@
 import { cn } from "@/front/lib/utils"
 import type { AdminEmailListItem } from "@/front/schemas/types/admin-email.type"
 import { AdminEmailType } from "@/back/generated/prisma_client"
-import { Star, Reply, Send, MessageSquare } from "lucide-react"
+import { Star, Send, MessageSquare } from "lucide-react"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import "dayjs/locale/fr"

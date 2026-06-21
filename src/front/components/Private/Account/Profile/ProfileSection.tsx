@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation"
 import type { Account } from "@/back/generated/prisma_client"
 
 export function ProfileSection() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const user = useUser() as any
     const router = useRouter()
     const { mutate: updateUser, isPending } = useUpdateUser()

@@ -1,4 +1,5 @@
 "use client"
+/* global HTMLIFrameElement */
 
 import { useEffect, useRef, useState } from "react"
 
