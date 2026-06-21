@@ -119,7 +119,6 @@ export function DashboardNotifications({ className, style }: { className?: strin
                     bio: full.user.bio ?? null,
                     portfolio: full.user.portfolio ?? null,
                     cv: full.user.cv ?? null,
-                    badges: full.user.badges ?? [],
                     configs: full.user.configs ?? [],
                 },
             });

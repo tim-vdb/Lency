@@ -41,7 +41,7 @@ export default function HeaderPublic() {
 
           {/* Controls */}
           <div className="flex items-center gap-3">
-            <ToggleDarkMode className="w-fit" />
+            <ToggleDarkMode />
 
             {user ? (
               <>
