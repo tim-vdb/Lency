@@ -60,6 +60,19 @@ export const auth = betterAuth({
         },
       },
     },
+    account: {
+      create: {
+        after: async (account) => {
+          // Si c'est un account credentials, copier le password au user
+          if (account.providerId === 'credential' && account.password) {
+            await prisma.user.update({
+              where: { id: account.userId },
+              data: { password: account.password },
+            });
+          }
+        },
+      },
+    },
   },
   plugins: [
     emailOTP({

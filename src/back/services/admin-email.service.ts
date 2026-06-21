@@ -7,7 +7,6 @@ import type { SendEmailInput, ReplyEmailInput, PatchEmailInput, InboundEmailInpu
 const BOX_ADDRESS: Record<AdminEmailBox, string> = {
     SUPPORT: "support@infos.lency.net",
     DEV: "dev@infos.lency.net",
-    MESSAGES: "messages@infos.lency.net",
 }
 
 function boxFromAddress(address: string): AdminEmailBox | null {
@@ -162,11 +161,10 @@ export const AdminEmailService = {
     countUnread: async () => {
         const user = await getUser()
         if (!user || user.role !== "ADMIN") throw new Error("Unauthorized")
-        const [support, messages, dev] = await Promise.all([
+        const [support, dev] = await Promise.all([
             AdminEmailAction.countUnread(AdminEmailBox.SUPPORT),
-            AdminEmailAction.countUnread(AdminEmailBox.MESSAGES),
             AdminEmailAction.countUnread(AdminEmailBox.DEV),
         ])
-        return { support, messages, dev, total: support + messages + dev }
+        return { support, dev, total: support + dev }
     },
 }

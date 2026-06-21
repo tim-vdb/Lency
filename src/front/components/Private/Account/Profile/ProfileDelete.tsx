@@ -19,15 +19,18 @@ import {
 } from "@/front/components/ui/alert-dialog"
 import { useDeleteUser } from "@/front/queries/users"
 import { useUser } from "@/front/states/contexts/user.context"
+import type { Account } from "@/back/generated/prisma_client"
 
 export default function ProfileDelete() {
-    const user = useUser()
+    const user = useUser() as any
     const { mutate: deleteUser, isPending } = useDeleteUser()
     const [open, setOpen] = useState(false)
     const [password, setPassword] = useState("")
     const [emailSent, setEmailSent] = useState(false)
 
-    const hasPasswordAuth = !!user?.password
+    const hasPasswordAuth = (user?.accounts as Account[] | undefined ?? []).some(
+        (account: Account) => account.providerId === 'credential' && account.password
+    )
 
     function handleDelete() {
         if (!user?.id) return

@@ -25,7 +25,6 @@ export type AdminEmailListItem = Prisma.AdminEmailGetPayload<{
 
 export type UnreadCounts = {
     support: number
-    messages: number
     dev: number
     total: number
 }

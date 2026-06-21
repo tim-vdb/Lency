@@ -15,6 +15,7 @@ export const createProjectSchema = z.object({
     startDate: z.string().optional(),
     roles: z.array(z.string()).optional(),
     visibility: zodEnum(Visibility).optional(),
+    status: zodEnum(ProjectStatus).optional(),
     city: z.string().max(255).optional(),
     latitude: z.number().optional(),
     longitude: z.number().optional(),

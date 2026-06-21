@@ -108,7 +108,7 @@ export function CreatePostForm({ onSuccess, initialData, mode = "create" }: Crea
             categoryId: "",
             format: "TEXT",
             orientation: undefined,
-            isPublished: false,
+            isPublished: true,
         },
     })
 
@@ -356,25 +356,46 @@ export function CreatePostForm({ onSuccess, initialData, mode = "create" }: Crea
                         )}
                     />
 
-                    <FormField
-                        control={form.control}
-                        name="isPublished"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-3 rounded-lg border px-4 py-3">
-                                <FormControl>
-                                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                                </FormControl>
-                                <div className="flex flex-col gap-0.5">
-                                    <FormLabel className="text-sm cursor-pointer leading-none mb-0">
-                                        {field.value ? "Publier maintenant" : "Sauvegarder en brouillon"}
-                                    </FormLabel>
-                                    <p className="text-xs text-muted-foreground">
-                                        {field.value ? "Visible par la communauté." : "Vous pourrez le publier plus tard."}
-                                    </p>
-                                </div>
-                            </FormItem>
-                        )}
-                    />
+                    <div className="space-y-2">
+                        <FormLabel>Statut de publication</FormLabel>
+                        <FormField
+                            control={form.control}
+                            name="isPublished"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <div className="flex gap-2">
+                                            <button
+                                                type="button"
+                                                onClick={() => field.onChange(true)}
+                                                className={`flex-1 rounded-lg border-2 px-4 py-3 text-sm font-medium transition-all ${
+                                                    field.value
+                                                        ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
+                                                        : "border-neutral-200 bg-transparent text-foreground hover:border-neutral-400 dark:border-neutral-700"
+                                                }`}
+                                            >
+                                                Publier
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => field.onChange(false)}
+                                                className={`flex-1 rounded-lg border-2 px-4 py-3 text-sm font-medium transition-all ${
+                                                    !field.value
+                                                        ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
+                                                        : "border-neutral-200 bg-transparent text-foreground hover:border-neutral-400 dark:border-neutral-700"
+                                                }`}
+                                            >
+                                                Brouillon
+                                            </button>
+                                        </div>
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            {form.watch("isPublished") ? "Visible par la communauté immédiatement." : "Vous pourrez le publier plus tard."}
+                        </p>
+                    </div>
                 </MultistepStep>
             </MultistepForm>
         </Form>

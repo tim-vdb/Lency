@@ -22,7 +22,6 @@ export interface User {
     cv?: string;
     role?: string;
     emailVerified?: boolean;
-    isPremium?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }

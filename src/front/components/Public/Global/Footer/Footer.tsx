@@ -14,7 +14,7 @@ export default function Footer() {
   const isAdmin = pathname.startsWith("/admin");
 
   return (
-    <footer className={cn("shadow-md bg-white text-gray-800 py-10 dark:bg-neutral-900 dark:text-gray-200", isAdmin ? "px-4" : "md:px-20 lg:px-20 xl:px-20")}>
+    <footer className={cn("shadow-md bg-white text-neutral-800 py-10 dark:bg-neutral-900 dark:text-neutral-200", isAdmin ? "px-4" : "md:px-20 lg:px-20 xl:px-20")}>
       <div className="container grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-20 [&_h3]:mt-5">
         <div className="flex flex-col justify-center items-start">
           <div className="flex flex-col">

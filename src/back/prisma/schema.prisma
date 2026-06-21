@@ -19,7 +19,6 @@ model User {
   username                  String?                @unique
   bio                       String?
   role                      Role                   @default(MEMBER)
-  isPremium                 Boolean                @default(false)
   isMarketplaceTalent       Boolean                @default(false)
   readyToStart              Boolean                @default(false)
   cv                        String?
@@ -36,8 +35,11 @@ model User {
   pendingEmail              String?
   emailChangeToken          String?
   emailChangeTokenExpiresAt DateTime?
-  deletionToken             String?
-  deletionTokenExpiresAt    DateTime?
+  deletionToken                String?
+  deletionTokenExpiresAt       DateTime?
+  pendingPasswordHash          String?
+  passwordChangeToken          String?
+  passwordChangeTokenExpiresAt DateTime?
   creator                   Category[]             @relation("CreatedCategories")
   Categorys                 Category[]
   Comments                  Comment[]

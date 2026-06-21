@@ -19,17 +19,19 @@ export function SearchFilters({ data, isLoading, sType, setSType, counts, total 
             {FILTERS.map(({ key, label, icon: Icon }) => {
                 const count = key === "" ? total : counts[key as Exclude<FilterKey, "">];
                 const active = sType === key;
-                const unavailable = !isLoading && data && key !== "" && count === 0;
-                if (unavailable) return null;
+                const isDisabled = !isLoading && data && key !== "" && count === 0;
 
                 return (
                     <button
                         key={key || "all"}
-                        onClick={() => setSType(key || null)}
+                        onClick={() => !isDisabled && setSType(key || null)}
+                        disabled={isDisabled}
                         className={cn(
                             "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium shrink-0 transition-all duration-150",
                             active
                                 ? "bg-orange/10 text-orange border border-orange/20"
+                                : isDisabled
+                                ? "text-neutral-300 dark:text-neutral-700 cursor-not-allowed border border-transparent"
                                 : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 border border-transparent"
                         )}
                     >

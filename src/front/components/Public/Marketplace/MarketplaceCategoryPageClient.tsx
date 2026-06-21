@@ -73,7 +73,7 @@ export default function MarketplaceCategoryPageClient({ type }: { type: string }
                         <Briefcase className="w-8 h-8 text-neutral-300" />
                     </div>
                     <div className="text-center">
-                        <p className="font-semibold text-neutral-700">Aucun projet dans cette catégorie</p>
+                        <p className="font-semibold text-neutral-700">Aucun projet dans cette communauté</p>
                         <p className="text-sm text-neutral-400 mt-1">Soyez le premier à publier un projet !</p>
                     </div>
                     <Button asChild variant="outline" size="sm">

@@ -12,7 +12,7 @@ import { Input } from "@/front/components/ui/input"
 import { Button } from "@/front/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/front/components/ui/select"
 import { TiptapEditor } from "@/front/components/ui/tiptap-editor"
-import { Send, X } from "lucide-react"
+import { Send } from "lucide-react"
 
 type EmailComposeProps = {
     open: boolean
@@ -51,14 +51,9 @@ export function EmailCompose({ open, onClose, defaultBox, replyTo, onSent }: Ema
         <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
             <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
                 <DialogHeader className="px-6 pt-5 pb-4 border-b">
-                    <div className="flex items-center justify-between">
-                        <DialogTitle className="text-base font-semibold">
-                            {replyTo ? "Répondre" : "Nouveau message"}
-                        </DialogTitle>
-                        <Button size="icon" variant="ghost" onClick={onClose} className="size-7">
-                            <X className="size-4" />
-                        </Button>
-                    </div>
+                    <DialogTitle className="text-base font-semibold">
+                        {replyTo ? "Répondre" : "Nouveau message"}
+                    </DialogTitle>
                 </DialogHeader>
 
                 <Form {...form}>

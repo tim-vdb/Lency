@@ -7,12 +7,12 @@ export type AdminUser = {
     username: string | null
     email: string
     role: string
-    isPremium: boolean
     isMarketplaceTalent: boolean
     emailVerified: boolean
+    image: string | null
     avatarUrl: string | null
     createdAt: Date | string
-    _count: { Posts: number; projects: number; resources: number }
+    _count: { Posts: number; projects: number; resources: number; creator: number }
 }
 
 export type AdminProject = {
@@ -20,10 +20,9 @@ export type AdminProject = {
     title: string
     description: string
     status: string
-    subject: string
     visibility: string
     createdAt: Date | string
-    owner: { id: string; firstname: string | null; lastname: string | null; username: string | null; avatarUrl: string | null }
+    owner: { id: string; firstname: string | null; lastname: string | null; username: string | null; avatarUrl: string | null; image: string | null }
     _count: { participants: number; applications: number; comments: number }
 }
 
@@ -32,14 +31,10 @@ export type AdminCategory = {
     name: string
     slug: string
     description: string | null
-    visibility: string
-    isNSFW: boolean
-    postCount: number
-    members: number
-    subscriberCount: number
     createdAt: Date | string
     iconUrl: string | null
-    creator: { id: string; firstname: string | null; lastname: string | null; username: string | null; avatarUrl: string | null }
+    _count: { posts: number; ressources: number; followers: number }
+    creator: { id: string; firstname: string | null; lastname: string | null; username: string | null; avatarUrl: string | null; image: string | null }
 }
 
 export type AdminPost = {
@@ -47,13 +42,12 @@ export type AdminPost = {
     content: string
     format: string
     isPublished: boolean
-    isLocked: boolean
     viewCount: number
     upvoteCount: number
     commentCount: number
     saveCount: number
     createdAt: Date | string
-    author: { id: string; firstname: string | null; lastname: string | null; username: string | null; avatarUrl: string | null }
+    author: { id: string; firstname: string | null; lastname: string | null; username: string | null; image: string | null; avatarUrl: string | null }
     category: { id: string; name: string; slug: string }
 }
 
@@ -68,6 +62,6 @@ export type AdminResource = {
     commentCount: number
     viewCount: number
     createdAt: Date | string
-    author: { id: string; firstname: string | null; lastname: string | null; username: string | null; avatarUrl: string | null }
+    author: { id: string; firstname: string | null; lastname: string | null; username: string | null; image: string | null; avatarUrl: string | null }
     category: { id: string; name: string; slug: string }
 }

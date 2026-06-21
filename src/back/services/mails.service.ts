@@ -53,19 +53,19 @@ export const MailsService = {
             throw new Error("Email invalide");
         if (!data.sujet || data.sujet.trim().length < 3)
             throw new Error("Sujet trop court");
-        if (!data.message || data.message.trim().length < 10)
+        if (!data.message || data.message.trim().length < 5)
             throw new Error("Message trop court");
 
         const mail = await MailsAction.create(data);
         const senderName = `${data.prenom} ${data.nom}`;
 
-        // Créer une AdminEmail dans la boîte "MESSAGES"
-        await AdminEmailAction.create({
+        // Créer une AdminEmail dans la boîte "SUPPORT"
+        const adminEmail = await AdminEmailAction.create({
             type: AdminEmailType.RECEIVED,
-            box: AdminEmailBox.MESSAGES,
+            box: AdminEmailBox.SUPPORT,
             fromEmail: data.email,
             fromName: senderName,
-            toEmail: "messages@infos.lency.net",
+            toEmail: "support@infos.lency.net",
             subject: data.sujet,
             textContent: data.message,
         });
@@ -80,7 +80,7 @@ export const MailsService = {
                 "Nouveau message support",
                 `Nouveau message support de ${senderName}: ${data.sujet}`,
                 {
-                    mailId: mail.id,
+                    mailId: adminEmail.id,
                     senderName: "Support Lency",
                     fromName: senderName,
                     sujet: data.sujet,

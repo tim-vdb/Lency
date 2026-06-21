@@ -19,10 +19,6 @@ export const AdminUsersService = {
         await requireAdmin()
         return AdminUsersAction.updateRole(id, role)
     },
-    updatePremium: async (id: string, isPremium: boolean) => {
-        await requireAdmin()
-        return AdminUsersAction.updatePremium(id, isPremium)
-    },
     delete: async (id: string) => {
         const admin = await requireAdmin()
         if (admin.id === id) throw new Error("Cannot delete yourself")
@@ -58,18 +54,16 @@ export const AdminCategoriesService = {
         await requireAdmin()
         return AdminCategoriesAction.findAll()
     },
-    create: async (data: { name: string; slug: string; description?: string; visibility?: Visibility; isNSFW?: boolean }) => {
+    create: async (data: { name: string; slug: string; description?: string }) => {
         const admin = await requireAdmin()
         return AdminCategoriesAction.create({
             name: data.name,
             slug: data.slug,
             description: data.description,
-            visibility: data.visibility ?? Visibility.PUBLIC,
-            isNSFW: data.isNSFW ?? false,
             creator: { connect: { id: admin.id } },
         })
     },
-    update: async (id: string, data: { name?: string; slug?: string; description?: string; visibility?: Visibility; isNSFW?: boolean }) => {
+    update: async (id: string, data: { name?: string; slug?: string; description?: string }) => {
         await requireAdmin()
         return AdminCategoriesAction.update(id, data)
     },
@@ -89,10 +83,6 @@ export const AdminPostsService = {
     updatePublished: async (id: string, isPublished: boolean) => {
         await requireAdmin()
         return AdminPostsAction.updatePublished(id, isPublished)
-    },
-    updateLocked: async (id: string, isLocked: boolean) => {
-        await requireAdmin()
-        return AdminPostsAction.updateLocked(id, isLocked)
     },
     delete: async (id: string) => {
         await requireAdmin()

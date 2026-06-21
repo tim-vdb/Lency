@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { ColumnDef } from "@tanstack/react-table"
-import { Users, Shield, Crown, CheckCircle, XCircle, MoreHorizontal } from "lucide-react"
+import { Users, Shield, CheckCircle, XCircle, MoreHorizontal } from "lucide-react"
 import dayjs from "dayjs"
+import Link from "next/link"
 import { AdminDataTable, SortableHeader } from "@/front/components/Private/Admin/Shared/AdminDataTable"
 import { AdminConfirmDelete } from "@/front/components/Private/Admin/Shared/AdminConfirmDelete"
 import { useAdminUsers, usePatchAdminUser, useDeleteAdminUser } from "@/front/queries/admin-data"
@@ -25,9 +26,8 @@ import { getDisplayName, getInitialName, cn } from "@/front/lib/utils"
 
 const ROLE_COLORS: Record<string, string> = {
     ADMIN: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
-    PREMIUM: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
     USER: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-    MEMBER: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+    MEMBER: "bg-gray-100 text-neutral-600 dark:bg-gray-800 dark:text-neutral-400",
 }
 
 // ─── Dialogs rendus UNE SEULE FOIS au niveau du shell ────────────────────────
@@ -51,8 +51,6 @@ function RoleDialog({ user, open, onClose }: { user: AdminUser | null; open: boo
                         <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent>
                             <SelectItem value="MEMBER">Membre</SelectItem>
-                            <SelectItem value="USER">Utilisateur</SelectItem>
-                            <SelectItem value="PREMIUM">Premium</SelectItem>
                             <SelectItem value="ADMIN">Admin</SelectItem>
                         </SelectContent>
                     </Select>
@@ -79,7 +77,7 @@ function UserActions({ user, onRoleEdit, onDelete }: UserActionsProps) {
                 variant="ghost" size="icon" className="size-7 text-destructive hover:text-destructive hover:bg-destructive/10"
                 onClick={() => onDelete(user)}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4h6v2" /></svg>
             </Button>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -93,10 +91,6 @@ function UserActions({ user, onRoleEdit, onDelete }: UserActionsProps) {
                     <DropdownMenuItem className="text-xs" onSelect={() => onRoleEdit(user)}>
                         <Shield className="size-3.5 mr-2" /> Changer le rôle
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-xs" onSelect={() => patch({ id: user.id, isPremium: !user.isPremium })}>
-                        <Crown className="size-3.5 mr-2" />
-                        {user.isPremium ? "Retirer Premium" : "Mettre Premium"}
-                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
@@ -107,7 +101,6 @@ export function UsersShell() {
     const { data: users = [], isLoading } = useAdminUsers()
     const { mutate: del, isPending: deleting } = useDeleteAdminUser()
 
-    // État centralisé au niveau du shell — jamais dans les cellules
     const [roleTarget, setRoleTarget] = useState<AdminUser | null>(null)
     const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null)
 
@@ -119,16 +112,16 @@ export function UsersShell() {
             cell: ({ row }) => {
                 const u = row.original
                 return (
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <Link href={`/user/${u.username ?? u.id}`} target="_blank" className="flex items-center gap-2.5 min-w-0 group">
                         <Avatar className="size-7 shrink-0">
                             <AvatarImage src={u.image ?? u.avatarUrl ?? ""} />
                             <AvatarFallback className="text-[10px]">{getInitialName(u)}</AvatarFallback>
                         </Avatar>
                         <div className="min-w-0">
-                            <p className="text-xs font-medium truncate">{getDisplayName(u)}</p>
+                            <p className="text-xs font-medium truncate group-hover:underline">{getDisplayName(u)}</p>
                             <p className="text-[10px] text-muted-foreground truncate">{u.email}</p>
                         </div>
-                    </div>
+                    </Link>
                 )
             },
         },
@@ -144,17 +137,9 @@ export function UsersShell() {
             header: ({ column }) => <SortableHeader column={column} label="Rôle" />,
             cell: ({ getValue }) => {
                 const role = getValue<string>()
-                const labels: Record<string, string> = { ADMIN: "Admin", USER: "Utilisateur", MEMBER: "Membre", PREMIUM: "Premium" }
+                const labels: Record<string, string> = { ADMIN: "Admin", USER: "Utilisateur", MEMBER: "Membre" }
                 return <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium", ROLE_COLORS[role] ?? ROLE_COLORS.MEMBER)}>{labels[role] ?? role}</span>
             },
-        },
-        {
-            id: "isPremium",
-            accessorKey: "isPremium",
-            header: "Premium",
-            cell: ({ getValue }) => getValue<boolean>()
-                ? <Crown className="size-3.5 text-amber-500" />
-                : <span className="text-muted-foreground text-xs">—</span>,
         },
         {
             id: "emailVerified",
@@ -174,6 +159,18 @@ export function UsersShell() {
             id: "projects",
             header: "Projets",
             accessorFn: (row) => row._count.projects,
+            cell: ({ getValue }) => <span className="text-xs tabular-nums">{getValue<number>()}</span>,
+        },
+        {
+            id: "resources",
+            header: "Ressources",
+            accessorFn: (row) => row._count.resources,
+            cell: ({ getValue }) => <span className="text-xs tabular-nums">{getValue<number>()}</span>,
+        },
+        {
+            id: "communities",
+            header: "Communautés",
+            accessorFn: (row) => row._count.creator,
             cell: ({ getValue }) => <span className="text-xs tabular-nums">{getValue<number>()}</span>,
         },
         {
@@ -199,7 +196,6 @@ export function UsersShell() {
 
     return (
         <>
-            {/* Dialogs hors du tableau — un seul rendu, pas d'overlay orphelin */}
             <RoleDialog
                 user={roleTarget}
                 open={!!roleTarget}
@@ -225,11 +221,10 @@ export function UsersShell() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-3 px-4 py-3 border-b border-border shrink-0">
+                <div className="grid grid-cols-3 gap-3 px-4 py-3 border-b border-border shrink-0">
                     {[
                         { label: "Total", value: users.length, icon: Users },
                         { label: "Admins", value: users.filter(u => u.role === "ADMIN").length, icon: Shield },
-                        { label: "Premium", value: users.filter(u => u.isPremium).length, icon: Crown },
                         { label: "Vérifiés", value: users.filter(u => u.emailVerified).length, icon: CheckCircle },
                     ].map((stat) => (
                         <div key={stat.label} className="flex items-center gap-2 rounded-lg bg-muted/40 px-3 py-2">

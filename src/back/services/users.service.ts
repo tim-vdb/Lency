@@ -7,6 +7,7 @@ import { sendAccountDeletionEmail } from "../lib/send-account-deletion-email";
 import { NotificationService } from "./notifications.service";
 import { headers } from "next/headers";
 import crypto from "crypto";
+import { verifyPassword, hashPassword } from "better-auth/crypto";
 
 export const UsersService = {
     findByIdUser: async (id: string) => {
@@ -247,16 +248,34 @@ export const UsersService = {
     },
 
     confirmDeleteUser: async (rawToken: string) => {
-        const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
-        const user = await UsersAction.findByDeletionToken(hashedToken);
+        try {
+            console.log("[confirmDeleteUser] Starting with token:", rawToken);
+            const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+            console.log("[confirmDeleteUser] Hashed token:", hashedToken);
 
-        if (!user) throw new Error("TOKEN_INVALID_OR_EXPIRED");
-        if (!user.deletionTokenExpiresAt || user.deletionTokenExpiresAt < new Date()) {
-            throw new Error("TOKEN_EXPIRED");
+            const user = await UsersAction.findByDeletionToken(hashedToken);
+            console.log("[confirmDeleteUser] Found user:", user?.email);
+
+            if (!user) {
+                console.log("[confirmDeleteUser] User not found");
+                throw new Error("TOKEN_INVALID_OR_EXPIRED");
+            }
+
+            console.log("[confirmDeleteUser] Token expires at:", user.deletionTokenExpiresAt);
+            if (!user.deletionTokenExpiresAt || user.deletionTokenExpiresAt < new Date()) {
+                console.log("[confirmDeleteUser] Token expired");
+                throw new Error("TOKEN_EXPIRED");
+            }
+
+            console.log("[confirmDeleteUser] Deleting user...");
+            // Delete the user
+            const result = await UsersAction.delete(user.id);
+            console.log("[confirmDeleteUser] User deleted successfully");
+            return result;
+        } catch (error) {
+            console.error("[confirmDeleteUser] Error:", error);
+            throw error;
         }
-
-        // Delete the user
-        return UsersAction.delete(user.id);
     },
 
     initiateEmailChange: async (userId: string, newEmail: string) => {
@@ -292,6 +311,39 @@ export const UsersService = {
     hasCredentialAccount: async (userId: string) => {
         const account = await UsersAction.findCredentialAccount(userId);
         return !!account?.password;
+    },
+
+    initiatePasswordChange: async (userId: string, currentPassword: string, newPassword: string) => {
+        const credentialAccount = await UsersAction.findCredentialAccount(userId);
+        if (!credentialAccount?.password) throw new Error("NO_CREDENTIAL_ACCOUNT");
+
+        const valid = await verifyPassword({ hash: credentialAccount.password, password: currentPassword });
+        if (!valid) throw new Error("INVALID_PASSWORD");
+
+        const newPasswordHash = await hashPassword(newPassword);
+        const rawToken = crypto.randomBytes(32).toString("hex");
+        const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+        await UsersAction.savePendingPasswordChange(userId, {
+            pendingPasswordHash: newPasswordHash,
+            passwordChangeToken: hashedToken,
+            passwordChangeTokenExpiresAt: expiresAt,
+        });
+
+        return rawToken;
+    },
+
+    confirmPasswordChange: async (rawToken: string) => {
+        const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+        const user = await UsersAction.findByPasswordChangeToken(hashedToken);
+
+        if (!user) throw new Error("TOKEN_INVALID_OR_EXPIRED");
+        if (!user.pendingPasswordHash) throw new Error("NO_PENDING_PASSWORD");
+
+        await UsersAction.applyPasswordChange(user.id, user.pendingPasswordHash);
+
+        return user;
     },
 
     upsertSocialLink: async (platform: string, url: string) => {

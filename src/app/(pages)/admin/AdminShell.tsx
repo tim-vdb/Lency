@@ -23,7 +23,7 @@ export function AdminShell({ user, children }: { user: User | null; children: Re
                             <Header />
                             <main
                                 className={cn(
-                                    "overflow-y-auto pr-2 rounded-xl",
+                                    "overflow-y-auto pr-2 rounded-xl dark:text-white",
                                     isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : ""
                                 )}
                             >

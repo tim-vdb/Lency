@@ -13,22 +13,18 @@ export const AdminUsersAction = {
                 username: true,
                 email: true,
                 role: true,
-                isPremium: true,
                 isMarketplaceTalent: true,
                 emailVerified: true,
                 avatarUrl: true,
                 image: true,
                 createdAt: true,
-                _count: { select: { Posts: true, projects: true, resources: true } },
+                _count: { select: { Posts: true, projects: true, resources: true, creator: true } },
             },
             orderBy: { createdAt: "desc" },
         }),
 
     updateRole: (id: string, role: Role) =>
         prisma.user.update({ where: { id }, data: { role } }),
-
-    updatePremium: (id: string, isPremium: boolean) =>
-        prisma.user.update({ where: { id }, data: { isPremium } }),
 
     delete: (id: string) => prisma.user.delete({ where: { id } }),
 }
@@ -70,13 +66,11 @@ export const AdminCategoriesAction = {
                 name: true,
                 slug: true,
                 description: true,
-                visibility: true,
-                isNSFW: true,
-                postCount: true,
                 members: true,
                 subscriberCount: true,
                 createdAt: true,
                 iconUrl: true,
+                _count: { select: { posts: true, ressources: true, followers: true } },
                 creator: { select: { id: true, firstname: true, lastname: true, username: true, avatarUrl: true, image: true } },
             },
             orderBy: { createdAt: "desc" },
@@ -101,7 +95,6 @@ export const AdminPostsAction = {
                 content: true,
                 format: true,
                 isPublished: true,
-                isLocked: true,
                 viewCount: true,
                 upvoteCount: true,
                 commentCount: true,
@@ -115,9 +108,6 @@ export const AdminPostsAction = {
 
     updatePublished: (id: string, isPublished: boolean) =>
         prisma.post.update({ where: { id }, data: { isPublished } }),
-
-    updateLocked: (id: string, isLocked: boolean) =>
-        prisma.post.update({ where: { id }, data: { isLocked } }),
 
     delete: (id: string) => prisma.post.delete({ where: { id } }),
 }

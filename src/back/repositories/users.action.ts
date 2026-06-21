@@ -34,7 +34,7 @@ export const UsersAction = {
                     include: { author: true, category: true },
                     orderBy: { createdAt: "desc" },
                 },
-                projects: { include: { mapLocation: true }, orderBy: { createdAt: "desc" } },
+                projects: { where: { status: "PUBLISHED", visibility: { not: "PRIVATE" } }, include: { mapLocation: true }, orderBy: { createdAt: "desc" } },
                 participants: {
                     where: { visibility: "PUBLIC", status: "PUBLISHED" },
                     select: { id: true, title: true },
@@ -45,7 +45,6 @@ export const UsersAction = {
                     where: { title: { in: ["roles", "audiovisual", "preferences"] } },
                     select: { title: true, content: true },
                 },
-                badges: true,
                 categoryFollows: { include: { category: true } },
                 followers: {
                     include: {
@@ -81,7 +80,6 @@ export const UsersAction = {
                         Posts: true,
                         projects: true,
                         categoryFollows: true,
-                        badges: true,
                         followers: true,
                     },
                 },
@@ -150,7 +148,6 @@ export const UsersAction = {
             cv?: string;
             portfolio?: string;
             role?: "ADMIN" | "MEMBER";
-            isPremium?: boolean;
             isMarketplaceTalent?: boolean;
             readyToStart?: boolean;
             address?: string;
@@ -280,6 +277,37 @@ export const UsersAction = {
         return prisma.user.findMany({
             where: { role: "ADMIN" },
             select: { id: true, firstname: true, lastname: true, email: true },
+        });
+    },
+
+    savePendingPasswordChange: async (
+        userId: string,
+        data: { pendingPasswordHash: string; passwordChangeToken: string; passwordChangeTokenExpiresAt: Date }
+    ) => {
+        return prisma.user.update({ where: { id: userId }, data });
+    },
+
+    findByPasswordChangeToken: async (hashedToken: string) => {
+        return prisma.user.findFirst({
+            where: {
+                passwordChangeToken: hashedToken,
+                passwordChangeTokenExpiresAt: { gt: new Date() },
+            },
+        });
+    },
+
+    applyPasswordChange: async (userId: string, newPasswordHash: string) => {
+        await prisma.account.updateMany({
+            where: { userId, providerId: 'credential' },
+            data: { password: newPasswordHash },
+        });
+        return prisma.user.update({
+            where: { id: userId },
+            data: {
+                pendingPasswordHash: null,
+                passwordChangeToken: null,
+                passwordChangeTokenExpiresAt: null,
+            },
         });
     },
 };

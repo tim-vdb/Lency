@@ -1,7 +1,6 @@
-import { auth } from '@/back/lib/auth';
 import { getUser } from '@/back/lib/auth-session';
-import { sendPasswordChangedEmail } from '@/back/lib/send-password-changed-email';
-import { headers } from 'next/headers';
+import { sendPasswordChangeConfirmation } from '@/back/lib/send-password-change-confirmation';
+import { UsersService } from '@/back/services/users.service';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -17,29 +16,32 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
         }
 
-        await auth.api.changePassword({
-            body: { currentPassword, newPassword, revokeOtherSessions: false },
-            headers: await headers(),
-        });
+        let rawToken: string;
+        try {
+            rawToken = await UsersService.initiatePasswordChange(user.id, currentPassword, newPassword);
+        } catch (err) {
+            if (err instanceof Error) {
+                if (err.message === 'INVALID_PASSWORD') {
+                    return NextResponse.json({ error: 'Mot de passe actuel incorrect' }, { status: 400 });
+                }
+                if (err.message === 'NO_CREDENTIAL_ACCOUNT') {
+                    return NextResponse.json({ error: 'Aucun compte avec mot de passe trouvé' }, { status: 400 });
+                }
+            }
+            throw err;
+        }
 
-        // Email de confirmation — non bloquant
-        sendPasswordChangedEmail({
+        sendPasswordChangeConfirmation({
             email: user.email,
-            firstName: user.firstname ?? null,
+            firstName: user.firstname,
+            confirmationToken: rawToken,
         }).catch((err) => {
-            console.error('Failed to send password changed email:', err);
+            console.error('Failed to send password change confirmation:', err);
         });
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        if (error instanceof Error) {
-            if (error.message.toLowerCase().includes('invalid password') || error.message.toLowerCase().includes('incorrect')) {
-                return NextResponse.json({ error: 'Mot de passe actuel incorrect' }, { status: 400 });
-            }
-            if (error.message.toLowerCase().includes('unauthorized') || error.message.toLowerCase().includes('session')) {
-                return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
-            }
-        }
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        console.error('Error in change-password:', error);
+        return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
     }
 }

@@ -21,7 +21,7 @@ import {
     SidebarMenuSubItem,
     useSidebar,
 } from "@/front/components/ui/sidebar"
-import { BookOpen, ChevronRight, FolderKanban, Mail, Newspaper, Tag, Users, type LucideIcon } from "lucide-react"
+import { BarChart3, BookOpen, ChevronRight, FileText, FolderKanban, List, Mail, Newspaper, Plus, Tag, Users, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import React from "react"
@@ -48,6 +48,15 @@ const navAdmin: NavAdminItem[] = [
         items: [
             { title: "Support", url: "/admin/emails?box=SUPPORT", icon: Mail },
             { title: "Dev", url: "/admin/emails?box=DEV", icon: Mail },
+        ],
+    },
+    {
+        title: "Blog",
+        url: "/admin/blogs",
+        icon: FileText,
+        items: [
+            { title: "Articles", url: "/admin/blogs", icon: List },
+            { title: "Créer un article", url: "/admin/blogs/create", icon: Plus },
         ],
     },
 ]
@@ -118,35 +127,48 @@ export function NavAdmin() {
         }
     }
 
+    const isOverviewActive = pathname === "/admin"
+    const isUsersActive = pathname.startsWith("/admin/users")
+    const isProjectsActive = pathname.startsWith("/admin/projects")
+    const isCategoriesActive = pathname.startsWith("/admin/categories")
+    const isPostsActive = pathname.startsWith("/admin/posts")
+    const isResourcesActive = pathname.startsWith("/admin/resources")
+
     return (
         <SidebarGroup>
             <SidebarGroupLabel>Administration</SidebarGroupLabel>
             <SidebarMenu>
-                <SidebarMenuButton asChild tooltip="Utilisateurs">
+                <SidebarMenuButton asChild tooltip="Vue d'ensemble" className={isOverviewActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white" : ""}>
+                    <Link href="/admin">
+                        <BarChart3 />
+                        <span className="items_sidebar">Vue d'ensemble</span>
+                    </Link>
+                </SidebarMenuButton>
+                <SidebarMenuButton asChild tooltip="Utilisateurs" className={isUsersActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white" : ""}>
                     <Link href="/admin/users">
                         <Users />
                         <span className="items_sidebar">Utilisateurs</span>
                     </Link>
                 </SidebarMenuButton>
-                <SidebarMenuButton asChild tooltip="Projets">
+                <SidebarMenuButton asChild tooltip="Projets" className={isProjectsActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white" : ""}>
                     <Link href="/admin/projects">
                         <FolderKanban />
                         <span className="items_sidebar">Projets</span>
                     </Link>
                 </SidebarMenuButton>
-                <SidebarMenuButton asChild tooltip="Catégories">
+                <SidebarMenuButton asChild tooltip="Communautés" className={isCategoriesActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white" : ""}>
                     <Link href="/admin/categories">
                         <Tag />
-                        <span className="items_sidebar">Catégories</span>
+                        <span className="items_sidebar">Communautés</span>
                     </Link>
                 </SidebarMenuButton>
-                <SidebarMenuButton asChild tooltip="Posts">
+                <SidebarMenuButton asChild tooltip="Posts" className={isPostsActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white" : ""}>
                     <Link href="/admin/posts">
                         <Newspaper />
                         <span className="items_sidebar">Posts</span>
                     </Link>
                 </SidebarMenuButton>
-                <SidebarMenuButton asChild tooltip="Ressources">
+                <SidebarMenuButton asChild tooltip="Ressources" className={isResourcesActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white" : ""}>
                     <Link href="/admin/resources">
                         <BookOpen />
                         <span className="items_sidebar">Ressources</span>
@@ -231,12 +253,12 @@ export function NavAdmin() {
                                                             className="flex w-full items-center gap-2 cursor-pointer"
                                                         >
                                                             {subItem.icon && <subItem.icon className="size-4" />}
-                                                            <span className="items_sidebar">{subItem.title}</span>
+                                                            <span className="items_sidebar whitespace-nowrap">{subItem.title}</span>
                                                         </button>
                                                     ) : (
                                                         <Link href={subItem.url}>
                                                             {subItem.icon && <subItem.icon className="size-4" />}
-                                                            <span className="items_sidebar">{subItem.title}</span>
+                                                            <span className="items_sidebar whitespace-nowrap">{subItem.title}</span>
                                                         </Link>
                                                     )}
                                                 </SidebarMenuSubButton>

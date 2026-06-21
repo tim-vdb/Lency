@@ -69,21 +69,6 @@ export default function NotifsEmails() {
                         />
                     </Field>
 
-                    <Separator />
-
-                    <Field orientation="horizontal">
-                        <div className="flex-1">
-                            <FieldLabel>Newsletter marketing</FieldLabel>
-                            <FieldDescription>
-                                Offres spéciales et actualités de la plateforme.
-                            </FieldDescription>
-                        </div>
-                        <Switch
-                            checked={prefs.email_marketing}
-                            disabled={isSaving}
-                            onCheckedChange={(v) => updatePref("email_marketing", v)}
-                        />
-                    </Field>
                 </div>
             </CardContent>
         </Card>

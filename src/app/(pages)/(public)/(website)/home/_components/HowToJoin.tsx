@@ -34,7 +34,7 @@ const steps = [
 
 export default function HowToJoin() {
   return (
-    <section className="w-full py-20 px-8 lg:px-16 bg-[#FAF7F2]">
+    <section className="w-full py-20 px-8 lg:px-16 bg-[#FAF7F2] dark:bg-neutral-900">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-20">
         {/* Left: title */}
         <div className="md:w-2/5 flex flex-col justify-center">
@@ -48,7 +48,7 @@ export default function HowToJoin() {
           {steps.map(({ number, color, title, description }) => (
             <div
               key={number}
-              className="flex items-start gap-4 p-5 bg-white rounded-2xl border border-neutral-100"
+              className="flex items-start gap-4 p-5 bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-100 dark:border-neutral-700"
             >
               <span
                 className="font-black leading-none select-none shrink-0 self-center"
@@ -58,10 +58,10 @@ export default function HowToJoin() {
                 {number}
               </span>
               <div className="flex flex-col gap-1 py-2">
-                <h3 className="text-[16px] font-bold text-neutral-900">
+                <h3 className="text-[16px] font-bold text-neutral-900 dark:text-white">
                   Étape {number} — {title}
                 </h3>
-                <p className="text-[16px] text-neutral-500 leading-relaxed">
+                <p className="text-[16px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
                   {description}
                 </p>
               </div>
@@ -71,7 +71,7 @@ export default function HowToJoin() {
             asChild
             className="text-[14px] w-fit mt-4 bg-[#EA3D0E] hover:bg-[#d13509] text-white px-8 h-12 rounded-[4px]"
           >
-            <Link href="/register">Créer un compte</Link>
+            <Link href="/sign-up">Créer un compte</Link>
           </Button>
         </div>
       </div>

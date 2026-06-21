@@ -19,14 +19,19 @@ import { UpdateProfileSchema, type UpdateProfileFormValues } from "@/front/schem
 import { getInitialName } from "@/front/lib/utils"
 import { VerifyEmailChangeModal } from "./VerifyEmailChangeModal"
 import { useRouter } from "next/navigation"
+import type { Account } from "@/back/generated/prisma_client"
 
 export function ProfileSection() {
-    const user = useUser()
+    const user = useUser() as any
     const router = useRouter()
     const { mutate: updateUser, isPending } = useUpdateUser()
     const [showEmailModal, setShowEmailModal] = useState(false)
     const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
     const avatarInputRef = useRef<HTMLInputElement>(null)
+
+    const hasCredentialAccount = (user?.accounts as Account[] | undefined ?? []).some(
+        (account: Account) => account.providerId === 'credential' && account.password
+    )
 
     async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0]
@@ -186,7 +191,7 @@ export function ProfileSection() {
                                         <div className="flex-1 rounded-md border border-input bg-muted/50 px-3 py-2 text-sm text-muted-foreground">
                                             {user?.email}
                                         </div>
-                                        {user?.password && (
+                                        {hasCredentialAccount && (
                                             <Button
                                                 type="button"
                                                 variant="outline"
@@ -197,7 +202,7 @@ export function ProfileSection() {
                                                 Changer
                                             </Button>
                                         )}
-                                        {!user?.password && (
+                                        {!hasCredentialAccount && (
                                             <div className="text-xs text-muted-foreground py-2 px-3">
                                                 Connecté via OAuth
                                             </div>

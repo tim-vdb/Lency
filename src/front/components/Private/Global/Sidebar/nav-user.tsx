@@ -2,8 +2,8 @@
 
 import { useUser } from "@/front/states/contexts/user.context"
 import {
-  BadgeCheck,
   Bell,
+  Bookmark,
   ChevronRight,
   ChevronsUpDown,
   LogOutIcon,
@@ -100,11 +100,11 @@ export function NavUser() {
                     Mon profil
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" onClick={() => { toast.info("En développement") }}>
-                  {/* <Link href="/account/badges"> */}
-                  <BadgeCheck className="size-4" />
-                  Badges
-                  {/* </Link> */}
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/community/saved">
+                    <Bookmark className="size-4" />
+                    Enregistrés
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuGroup>
                   <DropdownMenuItem onSelect={() => setFeedbackOpen(true)} className="cursor-pointer">

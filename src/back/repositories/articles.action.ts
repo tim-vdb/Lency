@@ -1,46 +1,21 @@
-// Article model not found in Prisma schema - this file is deprecated
-// import prisma from "../lib/prisma"
+// Article model not found in Prisma schema
 
-// export const ArticlesAction = {
-//     findById: async (id: string) => {
-//         return prisma.article.findUnique({ where: { id } });
-//     },
+type StubArticle = {
+    id: string;
+    authorId: string;
+    title: string;
+    slug: string;
+    excerpt: string;
+    content: string;
+    image: string;
+    createdAt: Date;
+    updatedAt: Date;
+};
 
-//     findAll: async () => {
-//         return prisma.article.findMany();
-//     },
-
-//     create: async (userId: string, data: {
-//         title: string;
-//         slug: string;
-//         excerpt: string;
-//         content: string;
-//         image: string;
-//     }) => {
-//         return prisma.article.create({
-//             data: {
-//                 ...data,
-//                 authorId: userId,
-//             }
-//         });
-//     },
-
-//     update: async (id: string, data: {
-//         title?: string;
-//         slug?: string;
-//         excerpt?: string;
-//         content?: string;
-//         image?: string;
-//     }) => {
-//         return prisma.article.update({
-//             where: { id },
-//             data,
-//         });
-//     },
-
-//     delete: async (id: string) => {
-//         return prisma.article.delete({ where: { id } });
-//     },
-// };
-
-export const ArticlesAction = {};
+export const ArticlesAction = {
+    findById: async (_id: string): Promise<StubArticle | null> => null,
+    findAll: async (): Promise<StubArticle[]> => [],
+    create: async (_userId: string, _data: { title: string; slug: string; excerpt: string; content: string; image: string }): Promise<StubArticle> => { throw new Error("Article model not implemented"); },
+    update: async (_id: string, _data: { title?: string; slug?: string; excerpt?: string; content?: string; image?: string }): Promise<StubArticle> => { throw new Error("Article model not implemented"); },
+    delete: async (_id: string): Promise<StubArticle> => { throw new Error("Article model not implemented"); },
+};

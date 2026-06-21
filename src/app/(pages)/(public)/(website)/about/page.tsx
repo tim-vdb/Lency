@@ -12,7 +12,7 @@ import HowItWorks from "./_components/HowItWorks";
 
 export default function AboutPage() {
   return (
-    <main>
+    <main className="bg-white dark:bg-neutral-900 min-h-screen">
       <Hero />
       <Problems />
       <Need />

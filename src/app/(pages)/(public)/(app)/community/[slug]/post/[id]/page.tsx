@@ -27,7 +27,13 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
 export default async function PostPage({ params }: PostPageProps) {
     const { id } = await params;
-    const post = await PostsService.findByIdPost(id).catch(() => null);
+    let post = null;
+    try {
+        post = await PostsService.findByIdPost(id);
+    } catch (error) {
+        console.error('[PostPage] Error fetching post:', error);
+        notFound();
+    }
 
     if (!post) notFound();
 

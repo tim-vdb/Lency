@@ -22,7 +22,7 @@ export default function Header({ className }: { className?: string }) {
     const unreadCount = notifications.filter((n) => !n.read).length;
 
     const isFixedLayout = pathname !== "/account" && pathname !== "/admin"
-    const isDashboard = pathname === "/account"
+    const isDashboard = pathname === "/account" || pathname === "/admin"
 
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export default function Header({ className }: { className?: string }) {
 
     return (
         <header className={cn(
-            "flex h-14 shrink-0 mr-1 items-center gap-2 border dark:border-zinc-700 backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-black/40 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14",
+            "flex h-14 shrink-0 mr-1 items-center gap-2 border dark:border-zinc-700 backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-card/60 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14",
             isDashboard && "mr-2",
             isScrolled && "rounded-t-none",
             isFixedLayout && "md:fixed top-2 z-40",

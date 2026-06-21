@@ -1,12 +1,13 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2, UploadCloud, X } from "lucide-react"
-import { useRef, useState } from "react"
+import { Loader2, Plus, UploadCloud, X } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { Badge } from "@/front/components/ui/badge"
 import { Button } from "@/front/components/ui/button"
 import {
     Form,
@@ -17,30 +18,95 @@ import {
     FormMessage,
 } from "@/front/components/ui/form"
 import { Input } from "@/front/components/ui/input"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/front/components/ui/select"
 import { Switch } from "@/front/components/ui/switch"
 import { Textarea } from "@/front/components/ui/textarea"
-import { BLOG_TAGS } from "@/front/lib/api/blogs"
+import { BLOG_TAG_SUGGESTIONS } from "@/front/lib/api/blogs"
 import { useCreateBlog } from "@/front/queries/blogs"
 import { uploadToImageKit } from "@/front/lib/upload"
-
-// ─── Schema ───────────────────────────────────────────────────────────────────
 
 const CreateBlogSchema = z.object({
     title: z.string().min(1, "Le titre est requis"),
     content: z.string().min(1, "Le contenu est requis"),
-    tag: z.enum(["VIDEO", "MOTION", "OUTILS"], { message: "Choisissez un tag" }),
+    tags: z.array(z.string()).min(1, "Au moins un tag requis"),
     coverUrl: z.string().optional(),
     isPublished: z.boolean(),
 })
 
 type CreateBlogValues = z.infer<typeof CreateBlogSchema>
+
+// ─── TagsInput ────────────────────────────────────────────────────────────────
+
+function TagsInput({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
+    const [input, setInput] = useState("")
+    const [open, setOpen] = useState(false)
+    const wrapperRef = useRef<HTMLDivElement>(null)
+
+    const filtered = input.length > 0
+        ? BLOG_TAG_SUGGESTIONS.filter(s => s.toLowerCase().includes(input.toLowerCase()) && !value.includes(s))
+        : BLOG_TAG_SUGGESTIONS.filter(s => !value.includes(s))
+
+    useEffect(() => {
+        function handleClickOutside(e: MouseEvent) {
+            if (wrapperRef.current && !wrapperRef.current.contains(e.target as HTMLElement)) setOpen(false)
+        }
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => document.removeEventListener("mousedown", handleClickOutside)
+    }, [])
+
+    function add(v: string) {
+        const trimmed = v.trim()
+        if (!trimmed || value.includes(trimmed)) return
+        onChange([...value, trimmed])
+        setInput("")
+        setOpen(false)
+    }
+
+    return (
+        <div className="flex flex-col gap-2">
+            {value.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                    {value.map(v => (
+                        <Badge key={v} variant="secondary" className="gap-1 pr-1 text-xs font-normal">
+                            {v}
+                            <button type="button" onClick={() => onChange(value.filter(r => r !== v))} className="ml-0.5 hover:text-destructive transition-colors">
+                                <X className="w-3 h-3" />
+                            </button>
+                        </Badge>
+                    ))}
+                </div>
+            )}
+            <div ref={wrapperRef} className="relative">
+                <div className="flex gap-2">
+                    <Input
+                        value={input}
+                        onChange={e => { setInput(e.target.value); setOpen(true) }}
+                        onFocus={() => setOpen(true)}
+                        onKeyDown={e => {
+                            if (e.key === "Enter") { e.preventDefault(); add(input) }
+                            if (e.key === "Escape") setOpen(false)
+                        }}
+                        placeholder="Vidéo, Motion, Outils…"
+                        className="h-8 text-sm"
+                    />
+                    <Button type="button" size="sm" variant="outline" className="h-8 px-2 shrink-0" onClick={() => add(input)} disabled={!input.trim()}>
+                        <Plus className="size-4" />
+                    </Button>
+                </div>
+                {open && filtered.length > 0 && (
+                    <ul className="absolute z-50 top-full mt-1 left-0 right-0 max-h-48 overflow-y-auto rounded-md border border-border bg-popover shadow-md text-sm">
+                        {filtered.map(s => (
+                            <li key={s}>
+                                <button type="button" className="w-full text-left px-3 py-1.5 hover:bg-accent hover:text-accent-foreground" onMouseDown={e => { e.preventDefault(); add(s) }}>
+                                    {s}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+        </div>
+    )
+}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -55,7 +121,7 @@ export default function CreateBlogForm() {
         defaultValues: {
             title: "",
             content: "",
-            tag: undefined,
+            tags: [],
             coverUrl: undefined,
             isPublished: false,
         },
@@ -85,7 +151,7 @@ export default function CreateBlogForm() {
             {
                 title: values.title,
                 content: values.content,
-                tag: values.tag,
+                tags: values.tags,
                 coverUrl: values.coverUrl,
                 status: values.isPublished ? "PUBLISHED" : "DRAFT",
             },
@@ -125,7 +191,7 @@ export default function CreateBlogForm() {
                             type="button"
                             disabled={uploading}
                             onClick={() => fileInputRef.current?.click()}
-                            className="w-full rounded-xl border-2 border-dashed border-gray-200 px-4 py-8 text-center text-sm text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
+                            className="w-full rounded-xl border-2 border-dashed border-gray-200 px-4 py-8 text-center text-sm text-neutral-400 hover:border-gray-400 hover:text-neutral-600 transition-colors disabled:opacity-50"
                         >
                             {uploading ? (
                                 <div className="flex items-center justify-center gap-2">
@@ -187,28 +253,17 @@ export default function CreateBlogForm() {
                     )}
                 />
 
-                {/* ── Tag + Publier ── */}
-                <div className="flex gap-3 items-end">
+                {/* ── Tags + Publier ── */}
+                <div className="flex gap-3 items-start">
                     <FormField
                         control={form.control}
-                        name="tag"
+                        name="tags"
                         render={({ field }) => (
                             <FormItem className="flex-1">
-                                <FormLabel>Tag</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Choisir un tag…" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {BLOG_TAGS.map(({ value, label }) => (
-                                            <SelectItem key={value} value={value}>
-                                                {label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                <FormLabel>Tags</FormLabel>
+                                <FormControl>
+                                    <TagsInput value={field.value} onChange={field.onChange} />
+                                </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -218,7 +273,7 @@ export default function CreateBlogForm() {
                         control={form.control}
                         name="isPublished"
                         render={({ field }) => (
-                            <FormItem className="flex items-center gap-2 rounded-lg border px-3 py-[9px] shrink-0">
+                            <FormItem className="flex items-center gap-2 rounded-lg border px-3 py-[9px] shrink-0 mt-[22px]">
                                 <FormControl>
                                     <Switch checked={field.value} onCheckedChange={field.onChange} />
                                 </FormControl>

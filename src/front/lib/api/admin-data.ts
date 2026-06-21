@@ -16,7 +16,7 @@ export async function fetchAdminUsers(): Promise<AdminUser[]> {
     return data.users
 }
 
-export async function patchAdminUser(id: string, body: { role?: string; isPremium?: boolean }): Promise<AdminUser> {
+export async function patchAdminUser(id: string, body: { role?: string }): Promise<AdminUser> {
     const res = await fetch(`/api/admin/users/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

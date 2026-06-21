@@ -14,7 +14,6 @@ export const createPostSchema = z.object({
 export const updatePostSchema = z.object({
     content: z.string().min(1).optional(),
     isPublished: z.boolean().optional(),
-    isLocked: z.boolean().optional(),
     categoryId: z.string().optional(),
     imageUrl: z.string().optional(),
     videoUrl: z.string().optional(),

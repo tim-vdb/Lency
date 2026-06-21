@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { AdminCategoriesService } from "@/back/services/admin-data.service"
-import { Visibility } from "@/back/generated/prisma_client"
 
 type Params = { params: Promise<{ categoryId: string }> }
 
@@ -12,8 +11,6 @@ export async function PATCH(req: NextRequest, { params }: Params) {
             name: body.name,
             slug: body.slug,
             description: body.description,
-            visibility: body.visibility as Visibility | undefined,
-            isNSFW: body.isNSFW,
         })
         return NextResponse.json({ category })
     } catch (error) {

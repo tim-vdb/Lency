@@ -72,7 +72,6 @@ async function main() {
             firstname: "Sophie",
             lastname: "Martin",
             username: "sophiemartin",
-            role: "PREMIUM",
             emailVerified: true,
             image: null,
         },

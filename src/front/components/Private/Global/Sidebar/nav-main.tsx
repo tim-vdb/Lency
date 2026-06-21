@@ -49,7 +49,6 @@ const navMain: NavMainItem[] = [
     items: [
       { title: "Fil d'actualité", url: "/community", icon: Rss },
       { title: "Ressources", url: "/community/resources", icon: BookOpen },
-      { title: "Enregistrés", url: "/community/saved", icon: Bookmark },
     ],
   },
   {
@@ -129,18 +128,24 @@ export function NavMain() {
     }
   }
 
+  const isDashboardActive = pathname === "/account"
+  const isCommunityActive = pathname.startsWith("/community")
+  const isMarketplaceActive = pathname.startsWith("/marketplace")
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Fonctionnalités</SidebarGroupLabel>
       <SidebarMenu>
-        <SidebarMenuButton asChild tooltip="Dashboard">
+        <SidebarMenuButton asChild tooltip="Tableau de bord" className={isDashboardActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white [&_svg]:fill-white" : ""}>
           <Link href="/account">
             <DashboardIcon />
-            <span className="items_sidebar">Dashboard</span>
+            <span className="items_sidebar">Tableau de bord</span>
           </Link>
         </SidebarMenuButton>
-        {isHydrated && navMain.map((item) => (
-          <Collapsible
+        {isHydrated && navMain.map((item) => {
+          const isItemActive = item.url === "/community" ? isCommunityActive : item.url === "/marketplace" ? isMarketplaceActive : false
+          return (
+            <Collapsible
             key={item.title}
             asChild
             open={openCollapsibleId === item.title}
@@ -161,6 +166,7 @@ export function NavMain() {
                     <SidebarMenuButton
                       tooltip={item.title}
                       onClick={(e) => handleMenuButtonClick(e, item.title)}
+                      className={isItemActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white" : ""}
                     >
                       {item.icon && <item.icon />}
                       <span className="items_sidebar">
@@ -188,7 +194,7 @@ export function NavMain() {
                             className={sharedClass}
                           >
                             {subItem.icon && <subItem.icon className="size-4 shrink-0" />}
-                            <span>{subItem.title}</span>
+                            <span className="truncate whitespace-nowrap">{subItem.title}</span>
                           </button>
                         ) : (
                           <Link
@@ -197,7 +203,7 @@ export function NavMain() {
                             className={sharedClass}
                           >
                             {subItem.icon && <subItem.icon className="size-4 shrink-0" />}
-                            <span>{subItem.title}</span>
+                            <span className="truncate whitespace-nowrap">{subItem.title}</span>
                           </Link>
                         )
                       })}
@@ -233,8 +239,9 @@ export function NavMain() {
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>
-          </Collapsible>
-        ))}
+            </Collapsible>
+          )
+        })}
       </SidebarMenu>
     </SidebarGroup>
   )

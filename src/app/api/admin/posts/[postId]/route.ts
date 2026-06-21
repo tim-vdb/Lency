@@ -7,14 +7,10 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     try {
         const { postId } = await params
         const body = await req.json()
-        let post
-        if (typeof body.isPublished === "boolean") {
-            post = await AdminPostsService.updatePublished(postId, body.isPublished)
-        } else if (typeof body.isLocked === "boolean") {
-            post = await AdminPostsService.updateLocked(postId, body.isLocked)
-        } else {
+        if (typeof body.isPublished !== "boolean") {
             return NextResponse.json({ error: "Champ invalide" }, { status: 400 })
         }
+        const post = await AdminPostsService.updatePublished(postId, body.isPublished)
         return NextResponse.json({ post })
     } catch (error) {
         if (error instanceof Error && error.message === "Unauthorized")

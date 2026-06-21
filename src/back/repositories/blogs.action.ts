@@ -17,7 +17,7 @@ export const BlogsAction = {
         data: {
             title: string;
             content: string;
-            tag: "VIDEO" | "MOTION" | "OUTILS";
+            tags: string[];
             coverUrl?: string;
             status?: "DRAFT" | "PUBLISHED" | "ARCHIVED";
         }
@@ -26,7 +26,7 @@ export const BlogsAction = {
             data: {
                 title: data.title,
                 content: data.content,
-                tag: data.tag,
+                tags: data.tags,
                 coverUrl: data.coverUrl,
                 status: data.status ?? "DRAFT",
                 author: { connect: { id: authorId } },
@@ -39,8 +39,8 @@ export const BlogsAction = {
         data: {
             title?: string;
             content?: string;
-            tag?: "VIDEO" | "MOTION" | "OUTILS";
-            coverUrl?: string;
+            tags?: string[];
+            coverUrl?: string | null;
             status?: "DRAFT" | "PUBLISHED" | "ARCHIVED";
         }
     ) => {

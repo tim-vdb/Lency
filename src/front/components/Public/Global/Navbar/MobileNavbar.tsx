@@ -23,7 +23,7 @@ export default function MobileNavbar({
     base: 'block px-3 py-2 rounded-md text-base font-medium transition-colors font-cooper',
     isActive: 'bg-yellow-550 text-white',
     notActive:
-      'text-neutral-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700',
+      'text-neutral-900 dark:text-neutral-300 hover:bg-gray-100 dark:hover:bg-neutral-700',
   };
 
   return (

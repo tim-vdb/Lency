@@ -3,7 +3,7 @@ model Blog {
   title     String
   content   String
   coverUrl  String?
-  tag       BlogTag
+  tags      String[]
   status    BlogStatus @default(DRAFT)
   authorId  String
   createdAt DateTime   @default(now())

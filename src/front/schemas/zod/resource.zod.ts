@@ -4,7 +4,7 @@ const baseResourceSchema = z.object({
     title: z.string().min(1, "Le titre est requis").max(150, "Maximum 150 caractères"),
     description: z.string().max(500, "Maximum 500 caractères").optional().or(z.literal("")),
     type: z.enum(["ASSET", "TUTORIAL", "LINK"], { error: "Le type est requis" }),
-    categoryId: z.string().min(1, "La catégorie est requise"),
+    categoryId: z.string().min(1, "La communauté est requise"),
     urls: z.array(z.string()),
     imageUrls: z.array(z.string()),
     videoUrls: z.array(z.string()),

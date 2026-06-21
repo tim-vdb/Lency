@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { ColumnDef } from "@tanstack/react-table"
-import { BookOpen, Link, Package, Video, ThumbsUp, MessageSquare, Eye, Bookmark } from "lucide-react"
+import { BookOpen, Link as LinkIcon, Package, Video, MessageSquare, Eye, Bookmark, Heart } from "lucide-react"
 import dayjs from "dayjs"
+import Link from "next/link"
 import { AdminDataTable, SortableHeader } from "@/front/components/Private/Admin/Shared/AdminDataTable"
 import { AdminConfirmDelete } from "@/front/components/Private/Admin/Shared/AdminConfirmDelete"
 import { useAdminResources, useDeleteAdminResource } from "@/front/queries/admin-data"
@@ -16,7 +17,7 @@ import { getDisplayName, getInitialName, cn } from "@/front/lib/utils"
 const TYPE_CONFIG: Record<string, { label: string; icon: React.ElementType; className: string }> = {
     ASSET: { label: "Asset", icon: Package, className: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
     TUTORIAL: { label: "Tutoriel", icon: Video, className: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
-    LINK: { label: "Lien", icon: Link, className: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
+    LINK: { label: "Lien", icon: LinkIcon, className: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
 }
 
 function ResourceDeleteButton({ resource, onDelete }: { resource: AdminResource; onDelete: (r: AdminResource) => void }) {
@@ -25,7 +26,7 @@ function ResourceDeleteButton({ resource, onDelete }: { resource: AdminResource;
             variant="ghost" size="icon" className="size-7 text-destructive hover:text-destructive hover:bg-destructive/10"
             onClick={() => onDelete(resource)}
         >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4h6v2" /></svg>
         </Button>
     )
 }
@@ -44,10 +45,10 @@ export function ResourcesShell() {
             cell: ({ row }) => {
                 const r = row.original
                 return (
-                    <div className="min-w-0 max-w-60">
-                        <p className="text-xs font-medium truncate">{r.title}</p>
+                    <Link href={`/community/${r.category.slug}/resources/${r.id}`} target="_blank" className="block min-w-0 max-w-60 group">
+                        <p className="text-xs font-medium truncate group-hover:underline">{r.title}</p>
                         {r.description && <p className="text-[10px] text-muted-foreground truncate">{r.description}</p>}
-                    </div>
+                    </Link>
                 )
             },
         },
@@ -72,36 +73,40 @@ export function ResourcesShell() {
             cell: ({ row }) => {
                 const author = row.original.author
                 return (
-                    <div className="flex items-center gap-2">
+                    <Link href={`/user/${author.username}`} target="_blank" className="flex items-center gap-2 group">
                         <Avatar className="size-5 shrink-0">
                             <AvatarImage src={author.image ?? author.avatarUrl ?? ""} />
                             <AvatarFallback className="text-[9px]">{getInitialName(author)}</AvatarFallback>
                         </Avatar>
-                        <span className="text-xs truncate max-w-[100px]">{getDisplayName(author)}</span>
-                    </div>
+                        <span className="text-xs truncate max-w-[100px] group-hover:underline">{getDisplayName(author)}</span>
+                    </Link>
                 )
             },
         },
         {
             id: "category",
-            header: "Catégorie",
+            header: "Communauté",
             accessorFn: (row) => row.category.name,
-            cell: ({ row }) => <span className="text-xs text-muted-foreground">#{row.original.category.slug}</span>,
+            cell: ({ row }) => (
+                <Link href={`/community/${row.original.category.slug}`} target="_blank" className="text-xs text-muted-foreground hover:underline">
+                    #{row.original.category.slug}
+                </Link>
+            ),
         },
         {
             id: "upvoteCount",
             accessorKey: "upvoteCount",
-            header: ({ column }) => <SortableHeader column={column} label="Votes" />,
+            header: ({ column }) => <SortableHeader column={column} label="Likes" />,
             cell: ({ getValue }) => (
                 <div className="flex items-center gap-1 text-xs tabular-nums">
-                    <ThumbsUp className="size-3 text-muted-foreground" />{getValue<number>()}
+                    <Heart className="size-3 text-muted-foreground" />{getValue<number>()}
                 </div>
             ),
         },
         {
             id: "saveCount",
             accessorKey: "saveCount",
-            header: ({ column }) => <SortableHeader column={column} label="Saves" />,
+            header: ({ column }) => <SortableHeader column={column} label="Enregistrées" />,
             cell: ({ getValue }) => (
                 <div className="flex items-center gap-1 text-xs tabular-nums">
                     <Bookmark className="size-3 text-muted-foreground" />{getValue<number>()}
@@ -161,7 +166,7 @@ export function ResourcesShell() {
         { label: "Total", value: resources.length, icon: BookOpen },
         { label: "Assets", value: resources.filter(r => r.type === "ASSET").length, icon: Package },
         { label: "Tutoriels", value: resources.filter(r => r.type === "TUTORIAL").length, icon: Video },
-        { label: "Liens", value: resources.filter(r => r.type === "LINK").length, icon: Link },
+        { label: "Liens", value: resources.filter(r => r.type === "LINK").length, icon: LinkIcon },
     ]
 
     return (

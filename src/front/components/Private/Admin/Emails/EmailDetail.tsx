@@ -50,7 +50,7 @@ function EmailMessage({
     const displayName = isSent ? email.toEmail : (email.fromName ?? email.fromEmail)
     const initials = isSent
         ? email.toEmail.slice(0, 2).toUpperCase()
-        : getInitialName({ firstname: email.fromName ?? email.fromEmail, lastname: null })
+        : getInitialName({ name: email.fromName ?? email.fromEmail })
 
     return (
         <div className="p-4 rounded-lg border border-border bg-card">

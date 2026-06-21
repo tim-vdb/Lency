@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { ColumnDef } from "@tanstack/react-table"
-import { FileText, Eye, Lock, Unlock, CheckCircle, XCircle, MoreHorizontal, ThumbsUp, MessageSquare } from "lucide-react"
+import { FileText, Eye, CheckCircle, XCircle, MoreHorizontal, MessageSquare, Heart } from "lucide-react"
 import dayjs from "dayjs"
+import Link from "next/link"
 import { AdminDataTable, SortableHeader } from "@/front/components/Private/Admin/Shared/AdminDataTable"
 import { AdminConfirmDelete } from "@/front/components/Private/Admin/Shared/AdminConfirmDelete"
 import { useAdminPosts, usePatchAdminPost, useDeleteAdminPost } from "@/front/queries/admin-data"
@@ -24,21 +25,12 @@ const FORMAT_LABELS: Record<string, string> = {
 interface PostActionsProps {
     post: AdminPost
     onDelete: (p: AdminPost) => void
-    onPatch: (id: string, data: { isPublished?: boolean; isLocked?: boolean }) => void
+    onPatch: (id: string, data: { isPublished?: boolean }) => void
 }
 
 function PostActions({ post, onDelete, onPatch }: PostActionsProps) {
     return (
         <div className="flex items-center gap-1">
-            <Button
-                variant="ghost" size="icon" className="size-7"
-                title={post.isLocked ? "Déverrouiller" : "Verrouiller"}
-                onClick={() => onPatch(post.id, { isLocked: !post.isLocked })}
-            >
-                {post.isLocked
-                    ? <Unlock className="size-3.5 text-orange-500" />
-                    : <Lock className="size-3.5 text-muted-foreground" />}
-            </Button>
             <Button
                 variant="ghost" size="icon" className="size-7 text-destructive hover:text-destructive hover:bg-destructive/10"
                 onClick={() => onDelete(post)}
@@ -81,12 +73,12 @@ export function PostsShell() {
             cell: ({ row }) => {
                 const p = row.original
                 return (
-                    <div className="max-w-[260px]">
-                        <p className="text-xs truncate">{p.content}</p>
+                    <Link href={`/community/${p.category.slug}/post/${p.id}`} target="_blank" className="block max-w-[260px] group">
+                        <p className="text-xs truncate group-hover:underline">{p.content}</p>
                         <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded mt-0.5 inline-block">
                             {FORMAT_LABELS[p.format] ?? p.format}
                         </span>
-                    </div>
+                    </Link>
                 )
             },
         },
@@ -96,21 +88,25 @@ export function PostsShell() {
             cell: ({ row }) => {
                 const author = row.original.author
                 return (
-                    <div className="flex items-center gap-2">
+                    <Link href={`/user/${author.username}`} target="_blank" className="flex items-center gap-2 group">
                         <Avatar className="size-5 shrink-0">
                             <AvatarImage src={author.image ?? author.avatarUrl ?? ""} />
                             <AvatarFallback className="text-[9px]">{getInitialName(author)}</AvatarFallback>
                         </Avatar>
-                        <span className="text-xs truncate max-w-[100px]">{getDisplayName(author)}</span>
-                    </div>
+                        <span className="text-xs truncate max-w-[100px] group-hover:underline">{getDisplayName(author)}</span>
+                    </Link>
                 )
             },
         },
         {
             id: "category",
-            header: "Catégorie",
+            header: "Communauté",
             accessorFn: (row) => row.category.name,
-            cell: ({ row }) => <span className="text-xs text-muted-foreground">#{row.original.category.slug}</span>,
+            cell: ({ row }) => (
+                <Link href={`/community/${row.original.category.slug}`} target="_blank" className="text-xs text-muted-foreground hover:underline">
+                    #{row.original.category.slug}
+                </Link>
+            ),
         },
         {
             id: "isPublished",
@@ -118,23 +114,15 @@ export function PostsShell() {
             header: "Publié",
             cell: ({ getValue }) => getValue<boolean>()
                 ? <CheckCircle className="size-3.5 text-green-500" />
-                : <XCircle className="size-3.5 text-muted-foreground" />,
-        },
-        {
-            id: "isLocked",
-            accessorKey: "isLocked",
-            header: "Verrouillé",
-            cell: ({ getValue }) => getValue<boolean>()
-                ? <Lock className="size-3.5 text-orange-500" />
-                : <span className="text-muted-foreground text-xs">—</span>,
+                : <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">Brouillon</span>,
         },
         {
             id: "upvoteCount",
             accessorKey: "upvoteCount",
-            header: ({ column }) => <SortableHeader column={column} label="Votes" />,
+            header: ({ column }) => <SortableHeader column={column} label="Likes" />,
             cell: ({ getValue }) => (
                 <div className="flex items-center gap-1 text-xs tabular-nums">
-                    <ThumbsUp className="size-3 text-muted-foreground" />{getValue<number>()}
+                    <Heart className="size-3 text-muted-foreground" />{getValue<number>()}
                 </div>
             ),
         },
@@ -182,8 +170,7 @@ export function PostsShell() {
     const stats = [
         { label: "Total", value: posts.length, icon: FileText },
         { label: "Publiés", value: posts.filter(p => p.isPublished).length, icon: CheckCircle },
-        { label: "Verrouillés", value: posts.filter(p => p.isLocked).length, icon: Lock },
-        { label: "Non publiés", value: posts.filter(p => !p.isPublished).length, icon: XCircle },
+        { label: "Brouillons", value: posts.filter(p => !p.isPublished).length, icon: XCircle },
     ]
 
     return (
@@ -205,7 +192,7 @@ export function PostsShell() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-3 px-4 py-3 border-b border-border shrink-0">
+                <div className="grid grid-cols-3 gap-3 px-4 py-3 border-b border-border shrink-0">
                     {stats.map((s) => (
                         <div key={s.label} className="flex items-center gap-2 rounded-lg bg-muted/40 px-3 py-2">
                             <s.icon className="size-3.5 text-muted-foreground shrink-0" />

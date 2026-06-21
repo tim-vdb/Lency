@@ -1,8 +1,8 @@
-import { auth } from '@/back/lib/auth'
 import { getUser } from '@/back/lib/auth-session'
 import { sendEmailChangeConfirmation } from '@/back/lib/send-email-change-confirmation'
 import { UsersService } from '@/back/services/users.service'
-import { headers } from 'next/headers'
+import { UsersAction } from '@/back/repositories/users.action'
+import { verifyPassword } from 'better-auth/crypto'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
@@ -18,16 +18,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
         }
 
-        const hasCredentials = await UsersService.hasCredentialAccount(user.id)
+        const credentialAccount = await UsersAction.findCredentialAccount(user.id)
 
-        if (hasCredentials) {
-            // Verify password via Better Auth (avoids raw bcrypt in route handler)
-            try {
-                await auth.api.signInEmail({
-                    body: { email: user.email, password: currentPassword },
-                    headers: await headers(),
-                })
-            } catch {
+        if (credentialAccount?.password) {
+            // Vérification directe du hash — sans créer de session (signInEmail corrompait la session)
+            const valid = await verifyPassword({ hash: credentialAccount.password, password: currentPassword })
+            if (!valid) {
                 return NextResponse.json({ error: 'Mot de passe incorrect' }, { status: 400 })
             }
         }

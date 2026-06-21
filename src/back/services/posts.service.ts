@@ -3,12 +3,14 @@ import { CategoryNotificationsAction } from "../repositories/category-notificati
 import { notifyCategoryFeedUpdate, notifyCategoryNewContent } from "../lib/ably";
 import { NotificationService } from "./notifications.service";
 import { getUser } from "../lib/auth-session";
+import prisma from "../lib/prisma";
 
 export const PostsService = {
     findByIdPost: async (id: string) => {
         const user = await getUser();
         const post = await PostsAction.findById(id, user?.id ?? undefined);
         if (!post) throw new Error("Post not found");
+        prisma.post.update({ where: { id }, data: { viewCount: { increment: 1 } } }).catch(() => {});
         return post;
     },
 
@@ -80,7 +82,6 @@ export const PostsService = {
     updatePost: async (id: string, data: {
         content?: string;
         isPublished?: boolean;
-        isLocked?: boolean;
         categoryId?: string;
         imageUrl?: string;
         videoUrl?: string;

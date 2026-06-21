@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
 import { Tabs, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
 import { Button } from "@/front/components/ui/button"
 import { Badge } from "@/front/components/ui/badge"
@@ -13,10 +14,25 @@ import { Pencil, Mail } from "lucide-react"
 import { cn } from "@/front/lib/utils"
 
 export function EmailsShell() {
+    const searchParams = useSearchParams()
+    const router = useRouter()
     const [activeBox, setActiveBox] = useState<AdminEmailBox>(AdminEmailBox.SUPPORT)
     const [selectedId, setSelectedId] = useState<string | null>(null)
     const [composeOpen, setComposeOpen] = useState(false)
     const { data: unread } = useUnreadCounts()
+
+    // Lire les paramètres URL au montage
+    useEffect(() => {
+        const box = searchParams.get("box") as AdminEmailBox | null
+        const mailId = searchParams.get("mailId")
+
+        if (box && Object.values(AdminEmailBox).includes(box)) {
+            setActiveBox(box)
+        }
+        if (mailId) {
+            setSelectedId(mailId)
+        }
+    }, [searchParams])
 
     const handleBoxChange = (box: string) => {
         setActiveBox(box as AdminEmailBox)
@@ -51,8 +67,8 @@ export function EmailsShell() {
                 {/* Box tabs */}
                 <div className="px-3 py-2 border-b border-border">
                     <Tabs value={activeBox} onValueChange={handleBoxChange}>
-                        <TabsList className="w-full h-auto grid grid-cols-3">
-                            <TabsTrigger value={AdminEmailBox.SUPPORT} className="text-xs gap-1.5 py-2">
+                        <TabsList className="w-full h-8">
+                            <TabsTrigger value={AdminEmailBox.SUPPORT} className="flex-1 text-xs gap-1.5">
                                 support
                                 {!!unread?.support && (
                                     <Badge className="h-4 px-1 text-[10px] bg-orange text-white">
@@ -60,15 +76,7 @@ export function EmailsShell() {
                                     </Badge>
                                 )}
                             </TabsTrigger>
-                            <TabsTrigger value={AdminEmailBox.MESSAGES} className="text-xs gap-1.5 py-2">
-                                messages
-                                {!!unread?.messages && (
-                                    <Badge className="h-4 px-1 text-[10px] bg-orange text-white">
-                                        {unread.messages}
-                                    </Badge>
-                                )}
-                            </TabsTrigger>
-                            <TabsTrigger value={AdminEmailBox.DEV} className="text-xs gap-1.5 py-2">
+                            <TabsTrigger value={AdminEmailBox.DEV} className="flex-1 text-xs gap-1.5">
                                 dev
                                 {!!unread?.dev && (
                                     <Badge className="h-4 px-1 text-[10px] bg-orange text-white">

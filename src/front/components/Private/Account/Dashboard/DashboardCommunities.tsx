@@ -39,7 +39,7 @@ export function DashboardCommunities() {
         <div className="grid grid-cols-2 gap-4 pb-2">
             {categories.map((cat) => (
                 <Link key={cat.id} href={`/community/${cat.slug}`} className="block group">
-                    <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-200">
+                    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-200">
                         {/* Banner */}
                         <div className="relative w-full h-36 bg-neutral-100 shrink-0 overflow-hidden">
                             {cat.bannerUrl ? (
@@ -56,7 +56,7 @@ export function DashboardCommunities() {
                         {/* Content */}
                         <div className="p-4 flex flex-col gap-2.5">
                             {/* Titre communauté — taille proche du mockup */}
-                            <h3 className="text-[18px] font-bold text-black leading-tight line-clamp-1">
+                            <h3 className="text-[18px] font-bold text-black dark:text-white leading-tight line-clamp-1">
                                 {cat.name}
                             </h3>
                             {cat.description && (

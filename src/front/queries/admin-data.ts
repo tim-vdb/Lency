@@ -23,7 +23,7 @@ export const useAdminUsers = () => useQuery(adminUsersQueries.lists())
 export const usePatchAdminUser = () => {
     const qc = useQueryClient()
     return useMutation({
-        mutationFn: ({ id, ...body }: { id: string; role?: string; isPremium?: boolean }) => patchAdminUser(id, body),
+        mutationFn: ({ id, ...body }: { id: string; role?: string }) => patchAdminUser(id, body),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ADMIN_USERS_KEY })
             toast.success("Utilisateur mis à jour")
@@ -94,7 +94,7 @@ export const useCreateAdminCategory = () => {
         mutationFn: createAdminCategory,
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ADMIN_CATEGORIES_KEY })
-            toast.success("Catégorie créée")
+            toast.success("Communauté créée")
         },
         onError: (err: Error) => toast.error(err.message),
     })
@@ -106,7 +106,7 @@ export const usePatchAdminCategory = () => {
         mutationFn: ({ id, ...body }: { id: string; name?: string; slug?: string; description?: string; visibility?: string; isNSFW?: boolean }) => patchAdminCategory(id, body),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ADMIN_CATEGORIES_KEY })
-            toast.success("Catégorie mise à jour")
+            toast.success("Communauté mise à jour")
         },
         onError: (err: Error) => toast.error(err.message),
     })
@@ -118,7 +118,7 @@ export const useDeleteAdminCategory = () => {
         mutationFn: (id: string) => deleteAdminCategory(id),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ADMIN_CATEGORIES_KEY })
-            toast.success("Catégorie supprimée")
+            toast.success("Communauté supprimée")
         },
         onError: (err: Error) => toast.error(err.message),
     })

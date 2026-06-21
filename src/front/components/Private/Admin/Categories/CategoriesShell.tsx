@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { ColumnDef } from "@tanstack/react-table"
-import { Hash, Plus, Pencil, Eye, EyeOff, AlertTriangle } from "lucide-react"
+import { Hash, Plus, Pencil } from "lucide-react"
 import dayjs from "dayjs"
 import { AdminDataTable, SortableHeader } from "@/front/components/Private/Admin/Shared/AdminDataTable"
 import { AdminConfirmDelete } from "@/front/components/Private/Admin/Shared/AdminConfirmDelete"
@@ -22,32 +22,21 @@ import {
 } from "@/front/components/ui/form"
 import { Input } from "@/front/components/ui/input"
 import { Textarea } from "@/front/components/ui/textarea"
-import {
-    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/front/components/ui/select"
-import { Switch } from "@/front/components/ui/switch"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import Link from "next/link"
 import { getDisplayName, getInitialName } from "@/front/lib/utils"
 
 const categoryFormSchema = z.object({
     name: z.string().min(1, "Requis"),
     slug: z.string().min(1, "Requis").regex(/^[a-z0-9-]+$/, "Lettres minuscules, chiffres et tirets uniquement"),
     description: z.string().optional(),
-    visibility: z.enum(["PUBLIC", "PRIVATE", "MEMBERS_ONLY"]),
-    isNSFW: z.boolean(),
 })
 type CategoryFormValues = z.infer<typeof categoryFormSchema>
 
 function toSlug(name: string) {
     return name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").trim()
-}
-
-const VISIBILITY_LABELS: Record<string, string> = {
-    PUBLIC: "Public",
-    PRIVATE: "Privé",
-    MEMBERS_ONLY: "Membres uniquement",
 }
 
 // ─── Dialog rendu UNE SEULE FOIS au niveau du shell ──────────────────────────
@@ -71,8 +60,6 @@ function CategoryFormDialog({
             name: initial?.name ?? "",
             slug: initial?.slug ?? "",
             description: initial?.description ?? "",
-            visibility: (initial?.visibility as "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY") ?? "PUBLIC",
-            isNSFW: initial?.isNSFW ?? false,
         },
     })
 
@@ -93,7 +80,7 @@ function CategoryFormDialog({
         <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>{initial ? "Modifier la catégorie" : "Créer une catégorie"}</DialogTitle>
+                    <DialogTitle>{initial ? "Modifier la communauté" : "Créer une communauté"}</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -125,26 +112,6 @@ function CategoryFormDialog({
                                 <FormLabel>Description</FormLabel>
                                 <FormControl><Textarea {...field} placeholder="Description (optionnel)" rows={3} className="resize-none" /></FormControl>
                                 <FormMessage />
-                            </FormItem>
-                        )} />
-                        <FormField control={form.control} name="visibility" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Visibilité</FormLabel>
-                                <Select onValueChange={field.onChange} value={field.value}>
-                                    <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="PUBLIC">Public</SelectItem>
-                                        <SelectItem value="PRIVATE">Privé</SelectItem>
-                                        <SelectItem value="MEMBERS_ONLY">Membres uniquement</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )} />
-                        <FormField control={form.control} name="isNSFW" render={({ field }) => (
-                            <FormItem className="flex items-center justify-between rounded-lg border p-3">
-                                <FormLabel className="text-sm cursor-pointer">Contenu NSFW</FormLabel>
-                                <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                             </FormItem>
                         )} />
                         <DialogFooter>
@@ -190,6 +157,10 @@ export function CategoriesShell() {
     const [editTarget, setEditTarget] = useState<AdminCategory | null>(null)
     const [deleteTarget, setDeleteTarget] = useState<AdminCategory | null>(null)
 
+    const totalPosts = categories.reduce((acc, c) => acc + (c._count?.posts ?? 0), 0)
+    const totalResources = categories.reduce((acc, c) => acc + (c._count?.ressources ?? 0), 0)
+    const totalMembers = categories.reduce((acc, c) => acc + (c._count?.followers ?? 0), 0)
+
     const columns: ColumnDef<AdminCategory>[] = [
         {
             id: "name",
@@ -198,16 +169,16 @@ export function CategoriesShell() {
             cell: ({ row }) => {
                 const c = row.original
                 return (
-                    <div className="flex items-center gap-2">
+                    <Link href={`/community/${c.slug}`} target="_blank" className="flex items-center gap-2 group">
                         {c.iconUrl
                             ? <img src={c.iconUrl} alt="" className="size-5 rounded-full object-cover" />
                             : <div className="size-5 rounded-full bg-muted flex items-center justify-center"><Hash className="size-3 text-muted-foreground" /></div>
                         }
                         <div>
-                            <p className="text-xs font-medium">{c.name}</p>
+                            <p className="text-xs font-medium group-hover:underline">{c.name}</p>
                             <p className="text-[10px] text-muted-foreground">/{c.slug}</p>
                         </div>
-                    </div>
+                    </Link>
                 )
             },
         },
@@ -218,37 +189,21 @@ export function CategoriesShell() {
             cell: ({ getValue }) => <span className="text-xs text-muted-foreground line-clamp-1 max-w-[200px]">{getValue<string>() ?? "—"}</span>,
         },
         {
-            id: "visibility",
-            accessorKey: "visibility",
-            header: "Visibilité",
-            cell: ({ getValue }) => {
-                const v = getValue<string>()
-                return (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        {v === "PUBLIC" ? <Eye className="size-3" /> : <EyeOff className="size-3" />}
-                        {VISIBILITY_LABELS[v] ?? v}
-                    </div>
-                )
-            },
-        },
-        {
-            id: "isNSFW",
-            accessorKey: "isNSFW",
-            header: "NSFW",
-            cell: ({ getValue }) => getValue<boolean>()
-                ? <AlertTriangle className="size-3.5 text-orange-500" />
-                : <span className="text-muted-foreground text-xs">—</span>,
-        },
-        {
-            id: "postCount",
-            accessorKey: "postCount",
+            id: "posts",
             header: ({ column }) => <SortableHeader column={column} label="Posts" />,
+            accessorFn: (row) => row._count?.posts ?? 0,
+            cell: ({ getValue }) => <span className="text-xs tabular-nums">{getValue<number>()}</span>,
+        },
+        {
+            id: "ressources",
+            header: ({ column }) => <SortableHeader column={column} label="Ressources" />,
+            accessorFn: (row) => row._count?.ressources ?? 0,
             cell: ({ getValue }) => <span className="text-xs tabular-nums">{getValue<number>()}</span>,
         },
         {
             id: "members",
-            accessorKey: "members",
             header: ({ column }) => <SortableHeader column={column} label="Membres" />,
+            accessorFn: (row) => row._count?.followers ?? 0,
             cell: ({ getValue }) => <span className="text-xs tabular-nums">{getValue<number>()}</span>,
         },
         {
@@ -257,13 +212,13 @@ export function CategoriesShell() {
             cell: ({ row }) => {
                 const creator = row.original.creator
                 return (
-                    <div className="flex items-center gap-1.5">
+                    <Link href={`/user/${creator.username}`} target="_blank" className="flex items-center gap-1.5 group">
                         <Avatar className="size-5">
                             <AvatarImage src={creator.image ?? creator.avatarUrl ?? ""} />
                             <AvatarFallback className="text-[9px]">{getInitialName(creator)}</AvatarFallback>
                         </Avatar>
-                        <span className="text-xs">{getDisplayName(creator)}</span>
-                    </div>
+                        <span className="text-xs group-hover:underline">{getDisplayName(creator)}</span>
+                    </Link>
                 )
             },
         },
@@ -303,7 +258,7 @@ export function CategoriesShell() {
             <AdminConfirmDelete
                 open={!!deleteTarget}
                 onClose={() => setDeleteTarget(null)}
-                label={`la catégorie "${deleteTarget?.name ?? ""}"`}
+                label={`la communauté "${deleteTarget?.name ?? ""}"`}
                 onConfirm={() => { if (deleteTarget) del(deleteTarget.id) }}
                 isPending={deleting}
             />
@@ -312,7 +267,7 @@ export function CategoriesShell() {
                 <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
                     <div className="flex items-center gap-2">
                         <Hash className="size-4 text-muted-foreground" />
-                        <h1 className="text-sm font-semibold">Catégories</h1>
+                        <h1 className="text-sm font-semibold">Communautés</h1>
                         <Badge variant="secondary" className="text-[10px] h-4 px-1.5">{categories.length}</Badge>
                     </div>
                     <Button size="sm" className="h-8 gap-1.5 text-xs" onClick={() => setCreateOpen(true)}>
@@ -322,10 +277,10 @@ export function CategoriesShell() {
 
                 <div className="grid grid-cols-4 gap-3 px-4 py-3 border-b border-border shrink-0">
                     {[
-                        { label: "Total", value: categories.length },
-                        { label: "Publiques", value: categories.filter(c => c.visibility === "PUBLIC").length },
-                        { label: "Privées", value: categories.filter(c => c.visibility === "PRIVATE").length },
-                        { label: "NSFW", value: categories.filter(c => c.isNSFW).length },
+                        { label: "Communautés", value: categories.length },
+                        { label: "Posts totaux", value: totalPosts },
+                        { label: "Ressources totales", value: totalResources },
+                        { label: "Membres totaux", value: totalMembers },
                     ].map((s) => (
                         <div key={s.label} className="flex items-center gap-2 rounded-lg bg-muted/40 px-3 py-2">
                             <Hash className="size-3.5 text-muted-foreground shrink-0" />
@@ -345,7 +300,7 @@ export function CategoriesShell() {
                             data={categories}
                             columns={columns}
                             searchKey="name"
-                            searchPlaceholder="Rechercher une catégorie..."
+                            searchPlaceholder="Rechercher une communauté..."
                         />
                     )}
                 </div>

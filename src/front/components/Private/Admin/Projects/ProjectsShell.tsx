@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import { Briefcase, MoreHorizontal } from "lucide-react"
 import dayjs from "dayjs"
+import Link from "next/link"
 import { AdminDataTable, SortableHeader } from "@/front/components/Private/Admin/Shared/AdminDataTable"
 import { AdminConfirmDelete } from "@/front/components/Private/Admin/Shared/AdminConfirmDelete"
 import { useAdminProjects, usePatchAdminProject, useDeleteAdminProject } from "@/front/queries/admin-data"
@@ -19,14 +20,12 @@ import { getDisplayName, getInitialName, cn } from "@/front/lib/utils"
 
 const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
     PUBLISHED: { label: "Publié", className: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
-    DRAFT: { label: "Brouillon", className: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400" },
-    ARCHIVED: { label: "Archivé", className: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400" },
+    DRAFT: { label: "Brouillon", className: "bg-gray-100 text-neutral-600 dark:bg-gray-800 dark:text-neutral-400" },
 }
 
 const VISIBILITY_CONFIG: Record<string, { label: string; className: string }> = {
     PUBLIC: { label: "Public", className: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
     PRIVATE: { label: "Privé", className: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
-    MEMBERS_ONLY: { label: "Membres", className: "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400" },
 }
 
 function StatusBadge({ value, config }: { value: string; config: Record<string, { label: string; className: string }> }) {
@@ -47,7 +46,7 @@ function ProjectActions({ project, onDelete, onPatch }: ProjectActionsProps) {
                 variant="ghost" size="icon" className="size-7 text-destructive hover:text-destructive hover:bg-destructive/10"
                 onClick={() => onDelete(project)}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4h6v2" /></svg>
             </Button>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -60,13 +59,11 @@ function ProjectActions({ project, onDelete, onPatch }: ProjectActionsProps) {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-xs" onSelect={() => onPatch(project.id, { status: "PUBLISHED" })}>Publier</DropdownMenuItem>
                     <DropdownMenuItem className="text-xs" onSelect={() => onPatch(project.id, { status: "DRAFT" })}>Brouillon</DropdownMenuItem>
-                    <DropdownMenuItem className="text-xs" onSelect={() => onPatch(project.id, { status: "ARCHIVED" })}>Archiver</DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuLabel className="text-xs">Visibilité</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-xs" onSelect={() => onPatch(project.id, { visibility: "PUBLIC" })}>Public</DropdownMenuItem>
                     <DropdownMenuItem className="text-xs" onSelect={() => onPatch(project.id, { visibility: "PRIVATE" })}>Privé</DropdownMenuItem>
-                    <DropdownMenuItem className="text-xs" onSelect={() => onPatch(project.id, { visibility: "MEMBERS_ONLY" })}>Membres</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
@@ -88,10 +85,10 @@ export function ProjectsShell() {
             cell: ({ row }) => {
                 const p = row.original
                 return (
-                    <div className="min-w-0 max-w-[280px]">
-                        <p className="text-xs font-medium truncate">{p.title}</p>
-                        <p className="text-[10px] text-muted-foreground truncate">{p.subject}</p>
-                    </div>
+                    <Link href={`/marketplace/${p.id}`} target="_blank" className="block min-w-0 max-w-[280px] group">
+                        <p className="text-xs font-medium truncate group-hover:underline">{p.title}</p>
+                        <p className="text-[10px] text-muted-foreground truncate">{p.description}</p>
+                    </Link>
                 )
             },
         },
@@ -101,13 +98,13 @@ export function ProjectsShell() {
             cell: ({ row }) => {
                 const owner = row.original.owner
                 return (
-                    <div className="flex items-center gap-2">
+                    <Link href={`/user/${owner.username}`} target="_blank" className="flex items-center gap-2 group">
                         <Avatar className="size-5 shrink-0">
                             <AvatarImage src={owner.image ?? owner.avatarUrl ?? ""} />
                             <AvatarFallback className="text-[9px]">{getInitialName(owner)}</AvatarFallback>
                         </Avatar>
-                        <span className="text-xs truncate max-w-[120px]">{getDisplayName(owner)}</span>
-                    </div>
+                        <span className="text-xs truncate max-w-[120px] group-hover:underline">{getDisplayName(owner)}</span>
+                    </Link>
                 )
             },
         },
@@ -181,12 +178,11 @@ export function ProjectsShell() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-3 px-4 py-3 border-b border-border shrink-0">
+                <div className="grid grid-cols-3 gap-3 px-4 py-3 border-b border-border shrink-0">
                     {[
                         { label: "Total", value: projects.length },
                         { label: "Publiés", value: projects.filter(p => p.status === "PUBLISHED").length },
                         { label: "Brouillons", value: projects.filter(p => p.status === "DRAFT").length },
-                        { label: "Archivés", value: projects.filter(p => p.status === "ARCHIVED").length },
                     ].map((s) => (
                         <div key={s.label} className="flex items-center gap-2 rounded-lg bg-muted/40 px-3 py-2">
                             <Briefcase className="size-3.5 text-muted-foreground shrink-0" />

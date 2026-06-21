@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Folder, MoreHorizontal, Trash2 } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,6 +38,7 @@ import { toast } from "sonner"
 
 export function NavProjects() {
   const { isMobile } = useSidebar()
+  const pathname = usePathname()
   const user = useUser()
   const { data: projects = [], isLoading } = useMyProjects()
   const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject()
@@ -66,14 +68,16 @@ export function NavProjects() {
     <SidebarGroup>
       <SidebarGroupLabel>Projets</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((project) => (
-          <SidebarMenuItem key={project.id}>
-            <SidebarMenuButton asChild tooltip={project.title}>
-              <Link href={`/marketplace/${project.id}`}>
-                <NotebookPen className="shrink-0" />
-                <span className="truncate">{project.title}</span>
-              </Link>
-            </SidebarMenuButton>
+        {projects.map((project) => {
+          const isActive = pathname === `/marketplace/${project.id}` || pathname.startsWith(`/marketplace/${project.id}/`)
+          return (
+            <SidebarMenuItem key={project.id}>
+              <SidebarMenuButton asChild tooltip={project.title} className={isActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white" : ""}>
+                <Link href={`/marketplace/${project.id}`}>
+                  <NotebookPen className="shrink-0" />
+                  <span className="truncate">{project.title}</span>
+                </Link>
+              </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>
@@ -106,8 +110,9 @@ export function NavProjects() {
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
-          </SidebarMenuItem>
-        ))}
+            </SidebarMenuItem>
+          )
+        })}
       </SidebarMenu>
 
       <AlertDialog open={!!projectToDelete} onOpenChange={(open) => !open && setProjectToDelete(null)}>

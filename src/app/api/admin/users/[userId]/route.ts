@@ -8,14 +8,10 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     try {
         const { userId } = await params
         const body = await req.json()
-        let user
-        if (typeof body.role === "string") {
-            user = await AdminUsersService.updateRole(userId, body.role as Role)
-        } else if (typeof body.isPremium === "boolean") {
-            user = await AdminUsersService.updatePremium(userId, body.isPremium)
-        } else {
+        if (typeof body.role !== "string") {
             return NextResponse.json({ error: "Champ invalide" }, { status: 400 })
         }
+        const user = await AdminUsersService.updateRole(userId, body.role as Role)
         return NextResponse.json({ user })
     } catch (error) {
         if (error instanceof Error && error.message === "Unauthorized")
