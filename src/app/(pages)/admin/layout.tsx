@@ -1,8 +1,8 @@
 import { getUser } from '@/back/lib/auth-session';
+import { redirect, unauthorized } from 'next/navigation';
 import { AdminShell } from '@/app/(pages)/admin/AdminShell';
 
 export const dynamic = 'force-dynamic';
-import { redirect, unauthorized } from 'next/navigation';
 
 export default async function AdminLayout({
   children,

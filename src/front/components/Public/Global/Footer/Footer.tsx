@@ -15,14 +15,11 @@ const LEGAL_LINKS = [
 ];
 
 const APP_LINKS = [
-  { label: 'Dashboard', href: '/account' },
   { label: 'Communauté', href: '/community' },
   { label: 'Projets', href: '/marketplace' },
-  { label: 'Mentions légales', href: '/mentions-legales' },
 ];
 
 const COMPANY_LINKS = [
-  { label: 'Tarifs', href: '#' },
   { label: 'À propos', href: '/about' },
   { label: 'Blog', href: '/blog' },
   { label: 'Support', href: '/support' },

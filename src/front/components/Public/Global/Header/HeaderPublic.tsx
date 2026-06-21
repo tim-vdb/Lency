@@ -17,29 +17,24 @@ export default function HeaderPublic() {
   const pathname = usePathname();
   const isDashboard = pathname === '/account';
   const [menuOpen, setMenuOpen] = useState(false);
-  const toggleMenu = () => {
-    setMenuOpen((prev) => !prev);
-  };
-
-
 
   return (
-    <header className="relative h-[70px]">
-      <div className="left-0 right-0 top-4 z-50 fixed px-6">
-        <div className="relative bg-white dark:bg-neutral-900 rounded-2xl shadow-sm h-14 flex items-center px-6 gap-6">
-          {/* Logo — far left */}
-          <Link href="/" className="shrink-0">
-            <LencyLogo className="w-auto h-10" />
-          </Link>
+    <header className="h-0 select-none">
+      <div className="fixed left-0 right-0 top-4 z-50 px-4 lg:px-8">
+        <div className="max-w-7xl mx-auto bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md rounded-2xl shadow-sm border border-neutral-200/60 dark:border-neutral-800 h-14 flex items-center px-5 gap-4">
 
-          {/* Spacer — pushes nav links to the right */}
-          <div className="flex-1" />
+          {/* Left — Logo */}
+          <div className="flex-1 flex items-center">
+            <Link href="/" className="shrink-0">
+              <LencyLogo className="h-8 w-auto" />
+            </Link>
+          </div>
 
-          {/* Nav links — right aligned, desktop only */}
+          {/* Center — Nav links */}
           <DesktopNavbar />
 
-          {/* Controls */}
-          <div className="flex items-center gap-3">
+          {/* Right — Actions */}
+          <div className="flex-1 flex items-center justify-end gap-3">
             <ToggleDarkMode />
 
             {user ? (
@@ -47,9 +42,9 @@ export default function HeaderPublic() {
                 {!isDashboard && (
                   <Link
                     href="/account"
-                    className="hidden md:inline-flex text-sm font-medium text-black dark:text-white"
+                    className="hidden md:inline-flex text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors"
                   >
-                    Dashboard
+                    Tableau de bord
                   </Link>
                 )}
                 <SidebarProvider className="w-fit min-h-auto">
@@ -57,29 +52,33 @@ export default function HeaderPublic() {
                 </SidebarProvider>
               </>
             ) : (
-              <Link
-                href="/login"
-                className="hidden md:inline-flex text-sm font-semibold text-[#EA3D0E]"
-              >
-                Se connecter
-              </Link>
+              <div className="hidden md:flex items-center gap-3">
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                >
+                  Se connecter
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="text-sm font-semibold bg-[#EA3D0E] hover:bg-[#d43509] text-white px-4 h-9 rounded-xl inline-flex items-center transition-colors"
+                >
+                  Rejoindre
+                </Link>
+              </div>
             )}
 
             {/* Mobile burger */}
             <button
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              onClick={toggleMenu}
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              onClick={() => setMenuOpen((prev) => !prev)}
               aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             >
-              {menuOpen ? (
-                <FaTimes className="h-6 w-6" />
-              ) : (
-                <FaBars className="h-6 w-6" />
-              )}
+              {menuOpen ? <FaTimes className="h-5 w-5" /> : <FaBars className="h-5 w-5" />}
             </button>
           </div>
 
-          <MobileNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} user={user ?? null} />
+          <MobileNavbar user={user} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         </div>
       </div>
     </header>
