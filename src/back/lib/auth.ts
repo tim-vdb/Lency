@@ -50,7 +50,7 @@ export const auth = betterAuth({
           }
 
           // Définir comme admin si c'est cet email
-          if (user.email === 'timotheevdbosch@gmail.com') {
+          if (user.email === 'timotheevdbosch@proton.me') {
             updates.role = 'ADMIN';
           }
 
