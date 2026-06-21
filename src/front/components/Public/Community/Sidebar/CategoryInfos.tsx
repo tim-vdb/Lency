@@ -1,6 +1,6 @@
 "use client";
 
-import { PostWithAuthorAndCategory } from "@/front/types/post.schema";
+import { PostWithAuthorAndCategory } from "@/front/schemas/types/post.type";
 import { PencilRuler } from "lucide-react";
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
@@ -17,7 +17,7 @@ export default function CategoryInfos({ post }: { post: PostWithAuthorAndCategor
 
     return (
         <Card className="p-4 flex flex-col gap-2 shadow-none">
-            <Link href={`/c/${post.category.slug}`} className="text-lg font-semibold hover:underline">
+            <Link href={`/community/${post.category.slug}`} className="text-lg font-semibold hover:underline">
                 <h2 className="text-base text-neutral-500">{post.category.name}</h2>
             </Link>
             <p className="text-xs text-muted-foreground">{post.category.description}</p>

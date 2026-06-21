@@ -1,0 +1,2338 @@
+{
+  "nodes": [
+    {
+      "id": "ably_md_ably_client",
+      "label": "Ably Client (Lazy Singleton)",
+      "file_type": "code",
+      "source_file": "ably.md",
+      "source_location": "src/front/lib/ably-client.ts",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "ably_md_ably_token_route",
+      "label": "Ably Token Route Handler",
+      "file_type": "code",
+      "source_file": "ably.md",
+      "source_location": "src/api/ably/token/route.ts",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "ably_md_ably_realtime",
+      "label": "Ably Realtime SDK",
+      "file_type": "code",
+      "source_file": "ably.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "ably_md_auth_session",
+      "label": "auth-session (getUser)",
+      "file_type": "code",
+      "source_file": "ably.md",
+      "source_location": "src/back/lib/auth-session.ts",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_lency_project",
+      "label": "Lency SaaS Project",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_nextjs",
+      "label": "Next.js 16 App Router",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_react",
+      "label": "React 19",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_typescript",
+      "label": "TypeScript",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_shadcn_ui",
+      "label": "shadcn/ui (Radix UI + Tailwind CSS 4)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_tanstack_query",
+      "label": "TanStack React Query 5",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_react_hook_form",
+      "label": "react-hook-form + zod",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_better_auth",
+      "label": "Better Auth",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_prisma",
+      "label": "Prisma 7 ORM",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_imagekit",
+      "label": "ImageKit Upload",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_react_email",
+      "label": "React Email + nodemailer/resend",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_sonner",
+      "label": "Sonner Toasts",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_doppler",
+      "label": "Doppler CLI Secrets",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_data_flow_pattern",
+      "label": "Data Flow: Client -> FetchWrapper -> RouteHandler -> Service -> Repository -> Prisma -> PostgreSQL",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Strict layering enforces separation of concerns and prevents direct DB access from the client side or route handlers"
+    },
+    {
+      "id": "claude_md_repository_pattern",
+      "label": "Repository Pattern (EntityAction)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "src/back/repositories/",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Pure data access, no business logic — isolates Prisma queries for testability and reuse"
+    },
+    {
+      "id": "claude_md_service_pattern",
+      "label": "Service Pattern (EntityService)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "src/back/services/",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Business logic + auth verification in one place, calls repository, called by route handlers"
+    },
+    {
+      "id": "claude_md_fetch_wrapper_pattern",
+      "label": "Fetch Wrapper Pattern",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "src/front/lib/api/",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Centralizes fetch calls to API routes; keeps components and hooks clean of raw fetch logic"
+    },
+    {
+      "id": "claude_md_react_query_hook_pattern",
+      "label": "React Query Hook Pattern",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "src/front/hooks/queries/",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Encapsulates useQuery/useMutation with typed query keys; promotes reuse and cache coherence"
+    },
+    {
+      "id": "claude_md_prisma_type_derivation",
+      "label": "Prisma Type Derivation Pattern",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Use Prisma.EntityGetPayload instead of manually redefining types — ensures type-safety stays in sync with schema"
+    },
+    {
+      "id": "claude_md_optimistic_updates_pattern",
+      "label": "Optimistic Updates Pattern",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Update UI before server response for instant reactivity; rollback on error via onMutate/onError/onSettled lifecycle"
+    },
+    {
+      "id": "claude_md_form_pattern",
+      "label": "Standardized Form Pattern (react-hook-form + zod + useMutation)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_md_state_hook_extraction",
+      "label": "State Extraction into Hooks Pattern",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Avoid duplicating useState/handlers across components; extract to a dedicated hook and spread state onto children"
+    },
+    {
+      "id": "claude_md_display_name_helpers",
+      "label": "Display Name Helpers (getDisplayName, getInitialName)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "src/front/lib/utils.ts",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Centralizes name formatting logic to avoid inline recalculations"
+    },
+    {
+      "id": "claude_md_prisma_transaction",
+      "label": "Prisma Transaction for Multi-table Ops",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Use prisma.$transaction for atomicity across multiple table mutations"
+    },
+    {
+      "id": "claude_md_email_templates",
+      "label": "React Email Templates",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "src/front/emails/",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "infra_md_infrastructure",
+      "label": "Lency Infrastructure",
+      "file_type": "document",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Timothée Van Den Bosch, Guerric Cochelin",
+      "contributor": null
+    },
+    {
+      "id": "infra_md_vercel",
+      "label": "Vercel PaaS Hosting",
+      "file_type": "rationale",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Chosen for native Next.js compatibility, automatic scaling, CDN, SSL, and zero-config CI/CD with GitHub"
+    },
+    {
+      "id": "infra_md_neon",
+      "label": "Neon.com PostgreSQL Serverless",
+      "file_type": "rationale",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Serverless PostgreSQL with usage-based pricing, isolated instances per environment, Prisma adapter support"
+    },
+    {
+      "id": "infra_md_github_repo",
+      "label": "GitHub Repository (tim-vdb/Lency)",
+      "file_type": "document",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": "https://github.com/tim-vdb/Lency",
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "infra_md_cicd_pipeline",
+      "label": "CI/CD Pipeline (GitHub -> Vercel)",
+      "file_type": "rationale",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Push to main/staging triggers automatic build, Prisma migration, and deployment without manual intervention"
+    },
+    {
+      "id": "infra_md_doppler_secrets",
+      "label": "Doppler Secrets Management",
+      "file_type": "rationale",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Centralized multi-environment secrets (lency/lency-staging/lency-development), injected at Vercel build time via native integration"
+    },
+    {
+      "id": "infra_md_resend",
+      "label": "Resend Transactional Email",
+      "file_type": "rationale",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Reliable transactional email via REST API with SPF/DKIM/DMARC support"
+    },
+    {
+      "id": "infra_md_better_auth_infra",
+      "label": "Better Auth (Auth Layer)",
+      "file_type": "rationale",
+      "source_file": "infra.md",
+      "source_location": "src/back/lib/auth.ts",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "infra_md_production_url",
+      "label": "Production: lency.net",
+      "file_type": "document",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": "https://lency.net",
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "infra_md_staging_url",
+      "label": "Staging: staging.lency.net",
+      "file_type": "document",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": "https://staging.lency.net",
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "infra_md_neon_adapter",
+      "label": "Neon Serverless Adapter (@prisma/adapter-neon)",
+      "file_type": "rationale",
+      "source_file": "infra.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Required because Neon uses WebSocket in serverless mode instead of standard PostgreSQL TCP driver"
+    },
+    {
+      "id": "rq_guide_react_query_guide",
+      "label": "React Query Best Practices Guide",
+      "file_type": "document",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "rq_guide_usequery",
+      "label": "useQuery Hook",
+      "file_type": "rationale",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "rq_guide_usemutation",
+      "label": "useMutation Hook",
+      "file_type": "rationale",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "rq_guide_query_keys",
+      "label": "Query Keys Hierarchy Pattern",
+      "file_type": "rationale",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Hierarchical array query keys enable targeted invalidation at different granularities (all, list, detail)"
+    },
+    {
+      "id": "rq_guide_optimistic_updates",
+      "label": "Optimistic Updates (onMutate/onError/onSettled)",
+      "file_type": "rationale",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "rq_guide_custom_hooks",
+      "label": "Custom Query Hooks Pattern",
+      "file_type": "rationale",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "rq_guide_infinite_query",
+      "label": "Infinite Query (useInfiniteQuery)",
+      "file_type": "rationale",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "rq_guide_pagination",
+      "label": "Pagination with keepPreviousData",
+      "file_type": "rationale",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "rq_guide_prefetching",
+      "label": "Prefetching (queryClient.prefetchQuery)",
+      "file_type": "rationale",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "rq_guide_dependent_queries",
+      "label": "Dependent Queries (enabled flag)",
+      "file_type": "rationale",
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_lency_app",
+      "label": "Lency Next.js App (README)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_better_auth_otp",
+      "label": "Better Auth Email OTP",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": "src/back/lib/auth.ts",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_verify_email_template",
+      "label": "VerifyEmailOTP Email Template",
+      "file_type": "code",
+      "source_file": "README.md",
+      "source_location": "src/front/emails/VerifyEmailOTP.tsx",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_reset_password_template",
+      "label": "ResetPasswordOTP Email Template",
+      "file_type": "code",
+      "source_file": "README.md",
+      "source_location": "src/front/emails/ResetPasswordOTP.tsx",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_verify_email_page",
+      "label": "Verify Email Page (/verify-email)",
+      "file_type": "code",
+      "source_file": "README.md",
+      "source_location": "app/(pages)/(public)/verify-email",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_forgot_password_page",
+      "label": "Forgot Password Page (/forgot-password)",
+      "file_type": "code",
+      "source_file": "README.md",
+      "source_location": "app/(pages)/(public)/forgot-password",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_reset_password_page",
+      "label": "Reset Password Page (/reset-password)",
+      "file_type": "code",
+      "source_file": "README.md",
+      "source_location": "app/(pages)/(public)/reset-password",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_images_pricing_bg",
+      "label": "Pricing Background Image",
+      "file_type": "image",
+      "source_file": "public/images/pricing-bg.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_images_saas_bg",
+      "label": "SaaS Background Image",
+      "file_type": "image",
+      "source_file": "public/images/saas-bg.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_images_thumbnail_community",
+      "label": "Community Thumbnail Image",
+      "file_type": "image",
+      "source_file": "public/images/thumbnail-community.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_images_thumbnail_lency",
+      "label": "Lency Thumbnail Image",
+      "file_type": "image",
+      "source_file": "public/images/thumbnail-lency.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_images_thumbnail_tool",
+      "label": "Tool Thumbnail Image",
+      "file_type": "image",
+      "source_file": "public/images/thumbnail-tool.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_images_tutorial_preview",
+      "label": "Tutorial Preview Image",
+      "file_type": "image",
+      "source_file": "public/images/tutorial-preview.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_discord",
+      "label": "Discord Icon",
+      "file_type": "image",
+      "source_file": "src/front/assets/icons/discord.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_email",
+      "label": "Email Icon",
+      "file_type": "image",
+      "source_file": "src/front/assets/icons/email.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_github",
+      "label": "GitHub Icon",
+      "file_type": "image",
+      "source_file": "src/front/assets/icons/github.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_google",
+      "label": "Google Icon",
+      "file_type": "image",
+      "source_file": "src/front/assets/icons/google.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_product_hunt",
+      "label": "Product Hunt Icon",
+      "file_type": "image",
+      "source_file": "src/front/assets/icons/product-hunt.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_slack",
+      "label": "Slack Icon",
+      "file_type": "image",
+      "source_file": "src/front/assets/icons/slack.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_x",
+      "label": "X (Twitter) Icon",
+      "file_type": "image",
+      "source_file": "src/front/assets/icons/x.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo_lency_white",
+      "label": "Lency Logo White Variant",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/Lency-logo-white.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo_lency",
+      "label": "Lency Logo (SVG)",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo_lency_square",
+      "label": "Lency Logo Square Variant",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/lency-logo-square.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo_lency_v2",
+      "label": "Lency Logo V2 Variant",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/lency-logo-v2.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "logo_lency_icon",
+      "label": "Lency Icon (Diamond Shape)",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/lency_icon.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icon_dashboard",
+      "label": "Dashboard Icon (SVG)",
+      "file_type": "image",
+      "source_file": "src/front/assets/icons/dashboard-icon.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icon_notebook_pen",
+      "label": "Notebook Pen Icon (SVG)",
+      "file_type": "image",
+      "source_file": "src/front/assets/icons/notebook-pen.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "sidebar_app_sidebar",
+      "label": "App Sidebar Component",
+      "file_type": "code",
+      "source_file": "src/front/components/Private/Global/Sidebar/app-sidebar.tsx",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "sidebar_nav_main",
+      "label": "Nav Main Component",
+      "file_type": "code",
+      "source_file": "src/front/components/Private/Global/Sidebar/nav-main.tsx",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "sidebar_nav_projects",
+      "label": "Nav Projects Component",
+      "file_type": "code",
+      "source_file": "src/front/components/Private/Global/Sidebar/nav-projects.tsx",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "lency_logo_v3_png",
+      "label": "Lency Logo v3 (PNG)",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/lency-logo-v3.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "lency_svg",
+      "label": "Lency Full Wordmark SVG",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "lency_icon_svg",
+      "label": "Lency Icon SVG (Diamond Shape)",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/lency_icon.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "vector_svg",
+      "label": "Letter L SVG",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/letters/Vector.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "vector_1_svg",
+      "label": "Letter E SVG",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/letters/Vector-1.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "vector_2_svg",
+      "label": "Letter N SVG",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/letters/Vector-2.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "vector_3_svg",
+      "label": "Letter C SVG",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/letters/Vector-3.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "vector_4_svg",
+      "label": "Letter Y SVG",
+      "file_type": "image",
+      "source_file": "src/front/assets/logo/letters/Vector-4.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "lency_brand",
+      "label": "Lency Brand Identity",
+      "file_type": "rationale",
+      "source_file": "src/front/assets/logo",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "lency_color_ea3d0e",
+      "label": "Lency Brand Color #EA3D0E (Orange-Red)",
+      "file_type": "rationale",
+      "source_file": "src/front/assets/logo",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "ably_md_ably_client",
+      "target": "ably_md_ably_realtime",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ably.md",
+      "source_location": "src/front/lib/ably-client.ts:13",
+      "weight": 1.0
+    },
+    {
+      "source": "ably_md_ably_token_route",
+      "target": "ably_md_ably_realtime",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ably.md",
+      "source_location": "src/api/ably/token/route.ts:31",
+      "weight": 1.0
+    },
+    {
+      "source": "ably_md_ably_token_route",
+      "target": "ably_md_auth_session",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ably.md",
+      "source_location": "src/api/ably/token/route.ts:33",
+      "weight": 1.0
+    },
+    {
+      "source": "ably_md_ably_client",
+      "target": "ably_md_ably_token_route",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ably.md",
+      "source_location": "src/front/lib/ably-client.ts authUrl:/api/ably/token",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_nextjs",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_react",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_typescript",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_shadcn_ui",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_tanstack_query",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_react_hook_form",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_better_auth",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_prisma",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_imagekit",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_react_email",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_sonner",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_doppler",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Stack technique",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "claude_md_data_flow_pattern",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Flux de données",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_data_flow_pattern",
+      "target": "claude_md_repository_pattern",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 1",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_data_flow_pattern",
+      "target": "claude_md_service_pattern",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 1",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_data_flow_pattern",
+      "target": "claude_md_fetch_wrapper_pattern",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 1",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_data_flow_pattern",
+      "target": "claude_md_react_query_hook_pattern",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 1",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_service_pattern",
+      "target": "claude_md_repository_pattern",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 1 Service",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_react_query_hook_pattern",
+      "target": "claude_md_fetch_wrapper_pattern",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 1 React Query hook",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_react_query_hook_pattern",
+      "target": "claude_md_optimistic_updates_pattern",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 3",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_form_pattern",
+      "target": "claude_md_react_hook_form",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 4",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_form_pattern",
+      "target": "claude_md_react_query_hook_pattern",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 4",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_prisma_type_derivation",
+      "target": "claude_md_prisma",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 2",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_prisma_transaction",
+      "target": "claude_md_prisma",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 8",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_email_templates",
+      "target": "claude_md_react_email",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Pattern 9",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_infrastructure",
+      "target": "infra_md_vercel",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 1",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_infrastructure",
+      "target": "infra_md_neon",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 1",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_infrastructure",
+      "target": "infra_md_github_repo",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 1",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_infrastructure",
+      "target": "infra_md_doppler_secrets",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 2",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_infrastructure",
+      "target": "infra_md_resend",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 2",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_infrastructure",
+      "target": "infra_md_better_auth_infra",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 3",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_cicd_pipeline",
+      "target": "infra_md_github_repo",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 2",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_cicd_pipeline",
+      "target": "infra_md_vercel",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 2",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_vercel",
+      "target": "infra_md_production_url",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 1",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_vercel",
+      "target": "infra_md_staging_url",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 1",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_neon",
+      "target": "infra_md_neon_adapter",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Difficultés rencontrées",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_neon_adapter",
+      "target": "claude_md_prisma",
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "infra.md",
+      "source_location": "Difficultés rencontrées",
+      "weight": 0.95
+    },
+    {
+      "source": "infra_md_doppler_secrets",
+      "target": "infra_md_vercel",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md",
+      "source_location": "Section 2, Intégration Doppler -> Vercel",
+      "weight": 1.0
+    },
+    {
+      "source": "infra_md_better_auth_infra",
+      "target": "claude_md_better_auth",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "infra.md",
+      "source_location": "Section 3",
+      "weight": 0.95
+    },
+    {
+      "source": "infra_md_resend",
+      "target": "claude_md_react_email",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "infra.md",
+      "source_location": "Section 2",
+      "weight": 0.85
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "claude_md_tanstack_query",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "import statement",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "rq_guide_usequery",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 2",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "rq_guide_usemutation",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 3",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "rq_guide_optimistic_updates",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 4",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "rq_guide_query_keys",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 5",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "rq_guide_custom_hooks",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 6",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "rq_guide_pagination",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 8",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "rq_guide_prefetching",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 9",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "rq_guide_dependent_queries",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 10",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_react_query_guide",
+      "target": "rq_guide_infinite_query",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 11",
+      "weight": 1.0
+    },
+    {
+      "source": "rq_guide_optimistic_updates",
+      "target": "claude_md_optimistic_updates_pattern",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 4",
+      "weight": 0.95
+    },
+    {
+      "source": "rq_guide_custom_hooks",
+      "target": "claude_md_react_query_hook_pattern",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 6",
+      "weight": 0.95
+    },
+    {
+      "source": "rq_guide_query_keys",
+      "target": "claude_md_react_query_hook_pattern",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "REACT_QUERY_GUIDE.md",
+      "source_location": "Section 5",
+      "weight": 0.85
+    },
+    {
+      "source": "readme_lency_app",
+      "target": "claude_md_nextjs",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "Line 1",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_lency_app",
+      "target": "readme_better_auth_otp",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "Better Auth Email OTP section",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_better_auth_otp",
+      "target": "claude_md_better_auth",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "Better Auth Email OTP section",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_better_auth_otp",
+      "target": "infra_md_resend",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "RESEND_API_KEY env var",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_better_auth_otp",
+      "target": "readme_verify_email_template",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "Email templates section",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_better_auth_otp",
+      "target": "readme_reset_password_template",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "Email templates section",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_better_auth_otp",
+      "target": "readme_verify_email_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "New auth pages section",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_better_auth_otp",
+      "target": "readme_forgot_password_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "New auth pages section",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_better_auth_otp",
+      "target": "readme_reset_password_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "New auth pages section",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_verify_email_template",
+      "target": "claude_md_email_templates",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "README.md",
+      "source_location": "Email templates",
+      "weight": 0.95
+    },
+    {
+      "source": "readme_reset_password_template",
+      "target": "claude_md_email_templates",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "README.md",
+      "source_location": "Email templates",
+      "weight": 0.95
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "infra_md_infrastructure",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 0.95
+    },
+    {
+      "source": "claude_md_lency_project",
+      "target": "readme_lency_app",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 0.95
+    },
+    {
+      "source": "ably_md_ably_client",
+      "target": "claude_md_lency_project",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "ably.md",
+      "source_location": null,
+      "weight": 0.85
+    },
+    {
+      "source": "infra_md_doppler_secrets",
+      "target": "claude_md_doppler",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "infra.md",
+      "source_location": null,
+      "weight": 0.95
+    },
+    {
+      "source": "sidebar_app_sidebar",
+      "target": "logo_lency",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/components/Private/Global/Sidebar/app-sidebar.tsx",
+      "source_location": "line 3",
+      "weight": 1.0
+    },
+    {
+      "source": "sidebar_app_sidebar",
+      "target": "logo_lency_icon",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/components/Private/Global/Sidebar/app-sidebar.tsx",
+      "source_location": "line 4",
+      "weight": 1.0
+    },
+    {
+      "source": "sidebar_nav_main",
+      "target": "icon_dashboard",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/components/Private/Global/Sidebar/nav-main.tsx",
+      "source_location": "line 3",
+      "weight": 1.0
+    },
+    {
+      "source": "sidebar_nav_projects",
+      "target": "icon_notebook_pen",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/components/Private/Global/Sidebar/nav-projects.tsx",
+      "source_location": "line 27",
+      "weight": 1.0
+    },
+    {
+      "source": "logo_lency",
+      "target": "logo_lency_icon",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 0.9
+    },
+    {
+      "source": "logo_lency",
+      "target": "logo_lency_white",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "logo_lency",
+      "target": "logo_lency_square",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "logo_lency",
+      "target": "logo_lency_v2",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 0.7
+    },
+    {
+      "source": "icons_google",
+      "target": "sidebar_app_sidebar",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "src/front/assets/icons/google.png",
+      "source_location": null,
+      "weight": 0.6
+    },
+    {
+      "source": "icons_github",
+      "target": "sidebar_app_sidebar",
+      "relation": "conceptually_related_to",
+      "confidence": "AMBIGUOUS",
+      "confidence_score": 0.2,
+      "source_file": "src/front/assets/icons/github.png",
+      "source_location": null,
+      "weight": 0.2
+    },
+    {
+      "source": "public_images_pricing_bg",
+      "target": "public_images_saas_bg",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "public/images/pricing-bg.png",
+      "source_location": null,
+      "weight": 0.7
+    },
+    {
+      "source": "public_images_thumbnail_community",
+      "target": "public_images_thumbnail_lency",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/images/thumbnail-community.png",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "public_images_thumbnail_tool",
+      "target": "public_images_thumbnail_lency",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/images/thumbnail-tool.png",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "public_images_tutorial_preview",
+      "target": "public_images_thumbnail_lency",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "public/images/tutorial-preview.png",
+      "source_location": null,
+      "weight": 0.7
+    },
+    {
+      "source": "icons_discord",
+      "target": "icons_slack",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/icons/discord.png",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "icons_x",
+      "target": "icons_discord",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "src/front/assets/icons/x.png",
+      "source_location": null,
+      "weight": 0.7
+    },
+    {
+      "source": "icons_github",
+      "target": "icons_discord",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "src/front/assets/icons/github.png",
+      "source_location": null,
+      "weight": 0.7
+    },
+    {
+      "source": "icons_product_hunt",
+      "target": "icons_x",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "src/front/assets/icons/product-hunt.png",
+      "source_location": null,
+      "weight": 0.7
+    },
+    {
+      "source": "icons_email",
+      "target": "icons_google",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "src/front/assets/icons/email.png",
+      "source_location": null,
+      "weight": 0.6
+    },
+    {
+      "source": "vector_svg",
+      "target": "lency_brand",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/letters/Vector.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "vector_1_svg",
+      "target": "lency_brand",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/letters/Vector-1.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "vector_2_svg",
+      "target": "lency_brand",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/letters/Vector-2.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "vector_3_svg",
+      "target": "lency_brand",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/letters/Vector-3.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "vector_4_svg",
+      "target": "lency_brand",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/letters/Vector-4.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "lency_svg",
+      "target": "lency_brand",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "lency_icon_svg",
+      "target": "lency_brand",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/lency_icon.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "lency_svg",
+      "target": "vector_svg",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "lency_svg",
+      "target": "vector_1_svg",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "lency_svg",
+      "target": "vector_2_svg",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "lency_svg",
+      "target": "vector_3_svg",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "lency_svg",
+      "target": "vector_4_svg",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "vector_svg",
+      "target": "lency_color_ea3d0e",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/assets/logo/letters/Vector.svg",
+      "source_location": "line 2",
+      "weight": 1.0
+    },
+    {
+      "source": "vector_1_svg",
+      "target": "lency_color_ea3d0e",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/assets/logo/letters/Vector-1.svg",
+      "source_location": "line 2",
+      "weight": 1.0
+    },
+    {
+      "source": "vector_2_svg",
+      "target": "lency_color_ea3d0e",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/assets/logo/letters/Vector-2.svg",
+      "source_location": "line 2",
+      "weight": 1.0
+    },
+    {
+      "source": "vector_3_svg",
+      "target": "lency_color_ea3d0e",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/assets/logo/letters/Vector-3.svg",
+      "source_location": "line 2",
+      "weight": 1.0
+    },
+    {
+      "source": "vector_4_svg",
+      "target": "lency_color_ea3d0e",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/assets/logo/letters/Vector-4.svg",
+      "source_location": "line 2",
+      "weight": 1.0
+    },
+    {
+      "source": "lency_svg",
+      "target": "lency_color_ea3d0e",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/assets/logo/lency.svg",
+      "source_location": "lines 2-6",
+      "weight": 1.0
+    },
+    {
+      "source": "lency_icon_svg",
+      "target": "lency_color_ea3d0e",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/front/assets/logo/lency_icon.svg",
+      "source_location": "lines 3-4",
+      "weight": 1.0
+    },
+    {
+      "source": "lency_logo_v3_png",
+      "target": "lency_brand",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo/lency-logo-v3.png",
+      "source_location": null,
+      "weight": 0.8
+    },
+    {
+      "source": "lency_logo_v3_png",
+      "target": "lency_svg",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "src/front/assets/logo/lency-logo-v3.png",
+      "source_location": null,
+      "weight": 0.7
+    },
+    {
+      "source": "lency_icon_svg",
+      "target": "lency_svg",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo/lency_icon.svg",
+      "source_location": null,
+      "weight": 0.8
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "full_data_flow_stack",
+      "label": "Full Data Flow Stack: FetchWrapper -> RouteHandler -> Service -> Repository -> Prisma",
+      "nodes": [
+        "claude_md_fetch_wrapper_pattern",
+        "claude_md_service_pattern",
+        "claude_md_repository_pattern",
+        "claude_md_prisma",
+        "claude_md_data_flow_pattern"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md"
+    },
+    {
+      "id": "auth_otp_flow",
+      "label": "Auth OTP Flow: Better Auth + Resend + Email Templates + Auth Pages",
+      "nodes": [
+        "readme_better_auth_otp",
+        "infra_md_resend",
+        "readme_verify_email_template",
+        "readme_reset_password_template",
+        "readme_verify_email_page",
+        "readme_forgot_password_page",
+        "readme_reset_password_page"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md"
+    },
+    {
+      "id": "infra_deployment_pipeline",
+      "label": "Deployment Pipeline: GitHub -> Vercel -> Neon + Doppler",
+      "nodes": [
+        "infra_md_github_repo",
+        "infra_md_cicd_pipeline",
+        "infra_md_vercel",
+        "infra_md_neon",
+        "infra_md_doppler_secrets"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "infra.md"
+    },
+    {
+      "id": "react_query_crud_pattern",
+      "label": "React Query CRUD Pattern: useQuery + useMutation + optimistic updates + custom hooks",
+      "nodes": [
+        "rq_guide_usequery",
+        "rq_guide_usemutation",
+        "rq_guide_optimistic_updates",
+        "rq_guide_custom_hooks",
+        "rq_guide_query_keys"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "REACT_QUERY_GUIDE.md"
+    },
+    {
+      "id": "ably_realtime_integration",
+      "label": "Ably Realtime Integration: Client Singleton + Token Route + Auth",
+      "nodes": [
+        "ably_md_ably_client",
+        "ably_md_ably_token_route",
+        "ably_md_ably_realtime",
+        "ably_md_auth_session"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ably.md"
+    },
+    {
+      "id": "lency_brand_assets",
+      "label": "Lency Brand Identity Assets",
+      "nodes": [
+        "logo_lency",
+        "logo_lency_icon",
+        "logo_lency_white",
+        "logo_lency_square",
+        "logo_lency_v2"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/"
+    },
+    {
+      "id": "social_media_icons",
+      "label": "Social Media Platform Icons",
+      "nodes": [
+        "icons_discord",
+        "icons_github",
+        "icons_slack",
+        "icons_x",
+        "icons_product_hunt"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/icons/"
+    },
+    {
+      "id": "auth_provider_icons",
+      "label": "Authentication Provider Icons",
+      "nodes": [
+        "icons_google",
+        "icons_email",
+        "icons_github"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/icons/"
+    },
+    {
+      "id": "public_page_thumbnails",
+      "label": "Public Page Open Graph Thumbnails",
+      "nodes": [
+        "public_images_thumbnail_community",
+        "public_images_thumbnail_lency",
+        "public_images_thumbnail_tool"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/images/"
+    },
+    {
+      "id": "public_page_backgrounds",
+      "label": "Public Page Background Images",
+      "nodes": [
+        "public_images_pricing_bg",
+        "public_images_saas_bg"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/images/"
+    },
+    {
+      "id": "sidebar_ui_assets",
+      "label": "Sidebar UI Icons and Logos",
+      "nodes": [
+        "logo_lency",
+        "logo_lency_icon",
+        "icon_dashboard",
+        "icon_notebook_pen"
+      ],
+      "relation": "implement",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/components/Private/Global/Sidebar/"
+    },
+    {
+      "id": "lency_letter_svgs",
+      "label": "Lency Individual Letter SVGs (L, E, N, C, Y)",
+      "nodes": [
+        "vector_svg",
+        "vector_1_svg",
+        "vector_2_svg",
+        "vector_3_svg",
+        "vector_4_svg"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/front/assets/logo/letters"
+    },
+    {
+      "id": "lency_logo_assets",
+      "label": "All Lency Logo Assets",
+      "nodes": [
+        "lency_logo_v3_png",
+        "lency_svg",
+        "lency_icon_svg",
+        "vector_svg",
+        "vector_1_svg",
+        "vector_2_svg",
+        "vector_3_svg",
+        "vector_4_svg"
+      ],
+      "relation": "implement",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/front/assets/logo"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

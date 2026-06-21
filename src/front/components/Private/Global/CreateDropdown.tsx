@@ -4,6 +4,7 @@ import { Button } from "@/front/components/ui/button"
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogOverlay,
     DialogPortal,
     DialogTitle
@@ -15,92 +16,56 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/front/components/ui/dropdown-menu"
-import { Input } from "@/front/components/ui/input"
-import { Label } from "@/front/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
-import { Textarea } from "@/front/components/ui/textarea"
 import { cn } from "@/front/lib/utils"
-import { FileText, FolderKanban, Plus, Tag } from "lucide-react"
+import { useUser } from "@/front/states/contexts/user.context"
+import { FileText, FolderKanban, Link2, Plus, Tag, NotebookText } from "lucide-react"
 import { useState } from "react"
+import Link from "next/link"
+import { CreateCategoryForm } from "./CreateCategoryForm"
 import { CreatePostForm } from "./CreatePostForm"
+import { CreateProjectForm } from "./CreateProjectForm"
+import { CreateResourceForm } from "./CreateResourceForm"
+import { DraftsTab, DraftCount, type EditDraft } from "./DraftsTab"
 
-type CreateType = "post" | "project" | "category"
+type CreateType = "post" | "project" | "category" | "resource" | "drafts"
 
-// ─── Placeholder forms (project & category) ───────────────────────────────────
-
-function CreateProjectForm() {
-    return (
-        <div className="flex flex-col gap-5">
-            <div>
-                <h2 className="text-lg font-semibold">Créer un projet</h2>
-                <p className="text-sm text-muted-foreground">
-                    Présentez votre projet à la communauté.
-                </p>
-            </div>
-            <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="project-title">Titre</Label>
-                    <Input id="project-title" placeholder="Nom de votre projet…" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="project-description">Description</Label>
-                    <Textarea
-                        id="project-description"
-                        placeholder="Décrivez votre projet…"
-                        className="min-h-36 resize-none"
-                    />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="project-link">Lien (optionnel)</Label>
-                    <Input id="project-link" type="url" placeholder="https://…" />
-                </div>
-            </div>
-            <div className="flex justify-end pt-2">
-                <Button>Créer le projet</Button>
-            </div>
-        </div>
-    )
-}
-
-function CreateCategoryForm() {
-    return (
-        <div className="flex flex-col gap-5">
-            <div>
-                <h2 className="text-lg font-semibold">Créer une catégorie</h2>
-                <p className="text-sm text-muted-foreground">
-                    Organisez le contenu par thématique.
-                </p>
-            </div>
-            <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="cat-name">Nom</Label>
-                    <Input id="cat-name" placeholder="Ex : Photographie, Montage…" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="cat-description">Description</Label>
-                    <Textarea
-                        id="cat-description"
-                        placeholder="Décrivez cette catégorie…"
-                        className="min-h-32 resize-none"
-                    />
-                </div>
-            </div>
-            <div className="flex justify-end pt-2">
-                <Button>Créer la catégorie</Button>
-            </div>
-        </div>
-    )
-}
+const CREATE_ITEMS = [
+    { value: "post" as const, icon: FileText, label: "Post", description: "Texte, image, vidéo ou audio", supportsDraft: true },
+    { value: "project" as const, icon: FolderKanban, label: "Projet", description: "Chercher des collaborateurs", supportsDraft: true },
+    { value: "category" as const, icon: Tag, label: "Communauté", description: "Créer un espace thématique", supportsDraft: false },
+    { value: "resource" as const, icon: Link2, label: "Ressource", description: "Asset, tutoriel ou lien", supportsDraft: false },
+]
 
 // ─── Main component ────────────────────────────────────────────────────────────
 
 export function CreateDropdown() {
+    const user = useUser()
     const [modalOpen, setModalOpen] = useState(false)
+    const [authModalOpen, setAuthModalOpen] = useState(false)
     const [activeType, setActiveType] = useState<CreateType>("post")
+    const [editingDraft, setEditingDraft] = useState<EditDraft | null>(null)
 
-    const handleSelect = (type: CreateType) => {
-        setActiveType(type)
-        setModalOpen(true)
+    function handleSelect(type: CreateType) {
+        if (!user) { setAuthModalOpen(true); return }
+        // All three updates in the same deferred batch — ensures the modal
+        // opens with the correct tab in one atomic render, and lets Radix
+        // finish its DropdownMenu cleanup (pointer-events) before the Dialog opens.
+        setTimeout(() => {
+            setEditingDraft(null)
+            setActiveType(type)
+            setModalOpen(true)
+        }, 0)
+    }
+
+    function handleEdit(draft: EditDraft) {
+        setEditingDraft(draft)
+        setActiveType(draft.type)
+    }
+
+    function handleModalClose() {
+        setModalOpen(false)
+        setEditingDraft(null)
     }
 
     return (
@@ -109,100 +74,150 @@ export function CreateDropdown() {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="outline"
-                        className="ml-auto shadow-lg-base cursor-pointer border-neutral-300"
+                        className="flex gap-2 ml-auto cursor-pointer border-neutral-300 bg-orange hover:bg-orange/80 rounded-sm"
                     >
-                        <span>Créer</span>
-                        <Plus className="w-4 h-4" />
+                        <Plus className="w-4 h-4 border border-white text-white rounded-[3px]" />
+                        <span className="text-white">Créer</span>
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent side="bottom" align="end" sideOffset={8} className="min-w-44">
+                <DropdownMenuContent side="bottom" align="end" sideOffset={8} className="min-w-48">
                     <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={() => handleSelect("post")}>
-                            <FileText className="size-4" />
-                            Créer un post
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSelect("project")}>
-                            <FolderKanban className="size-4" />
-                            Créer un projet
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleSelect("category")}>
-                            <Tag className="size-4" />
-                            Créer une catégorie
-                        </DropdownMenuItem>
+                        {CREATE_ITEMS.map(({ value, icon: Icon }) => (
+                            <DropdownMenuItem key={value} className="cursor-pointer" onClick={() => handleSelect(value)}>
+                                <Icon className="size-4" />
+                                {value === "post" ? "Créer un post"
+                                    : value === "project" ? "Créer un projet"
+                                        : value === "category" ? "Créer une communauté"
+                                            : "Créer une ressource"}
+                            </DropdownMenuItem>
+                        ))}
+                        {user && (
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleSelect("drafts")}>
+                                <NotebookText className="size-4" />
+                                Mes brouillons
+                            </DropdownMenuItem>
+                        )}
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Modal */}
-            <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+            {/* Modal de création */}
+            <Dialog open={modalOpen} onOpenChange={handleModalClose}>
                 <DialogPortal>
                     <DialogOverlay />
                     <DialogContent
                         className={cn(
                             "p-0 gap-0",
-                            "w-full max-w-2xl h-[560px]",
+                            "w-full max-w-[820px] h-[90vh] sm:h-[600px]",
                             "flex overflow-hidden rounded-xl",
                         )}
                     >
                         <DialogTitle className="sr-only">Créer du contenu</DialogTitle>
+                        <DialogDescription className="sr-only">Formulaire de création de contenu</DialogDescription>
 
-                        {/* Tabs = sidebar gauche + contenu droite */}
                         <Tabs
                             value={activeType}
-                            onValueChange={(v) => setActiveType(v as CreateType)}
-                            className="flex flex-1 overflow-hidden"
+                            onValueChange={(v) => { setActiveType(v as CreateType); setEditingDraft(null) }}
+                            className="flex flex-col sm:flex-row flex-1 overflow-hidden"
                         >
-                            {/* Sidebar */}
+                            {/* Sidebar / top bar on mobile */}
                             <TabsList
                                 className={cn(
-                                    "flex flex-col h-full w-44 shrink-0",
-                                    "justify-start gap-1 rounded-none",
-                                    "border-r bg-muted/30 p-2 pt-10",
+                                    "flex sm:flex-col h-auto sm:h-full w-full sm:w-52 shrink-0",
+                                    "justify-start gap-0.5 rounded-none",
+                                    "border-b sm:border-b-0 sm:border-r bg-muted/30 p-2 sm:p-3",
+                                    "overflow-x-auto sm:overflow-x-visible",
                                 )}
                             >
+                                {/* Créer */}
+                                <p className="hidden sm:block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 px-2 pt-5 pb-1.5">
+                                    Créer
+                                </p>
+                                {CREATE_ITEMS.map(({ value, icon: Icon, label, description }) => (
+                                    <TabsTrigger
+                                        key={value}
+                                        value={value}
+                                        className="sm:w-full justify-start sm:flex-col sm:items-start px-3 py-2 sm:py-2.5 h-auto data-[state=active]:bg-background shrink-0"
+                                    >
+                                        <span className="flex items-center gap-2 w-full">
+                                            <Icon className="size-3.5 shrink-0" />
+                                            <span className="font-medium text-sm">{label}</span>
+                                        </span>
+                                        <span className="hidden sm:block text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight w-full truncate">
+                                            {description}
+                                        </span>
+                                    </TabsTrigger>
+                                ))}
+
+                                {/* Brouillons */}
+                                <p className="hidden sm:block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 px-2 pt-4 pb-1.5">
+                                    Gérer
+                                </p>
                                 <TabsTrigger
-                                    value="post"
-                                    className="w-full justify-start gap-2.5"
+                                    value="drafts"
+                                    className="sm:w-full justify-start sm:flex-col sm:items-start px-3 py-2 sm:py-2.5 h-auto data-[state=active]:bg-background shrink-0"
                                 >
-                                    <FileText className="size-4 shrink-0" />
-                                    Post
-                                </TabsTrigger>
-                                <TabsTrigger
-                                    value="project"
-                                    className="w-full justify-start gap-2.5"
-                                >
-                                    <FolderKanban className="size-4 shrink-0" />
-                                    Projet
-                                </TabsTrigger>
-                                <TabsTrigger
-                                    value="category"
-                                    className="w-full justify-start gap-2.5"
-                                >
-                                    <Tag className="size-4 shrink-0" />
-                                    Catégorie
+                                    <span className="flex items-center gap-2 w-full">
+                                        <NotebookText className="size-3.5 shrink-0" />
+                                        <span className="font-medium text-sm">Brouillons</span>
+                                        <DraftCount />
+                                    </span>
+                                    <span className="hidden sm:block text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight w-full truncate">
+                                        Posts et projets en attente
+                                    </span>
                                 </TabsTrigger>
                             </TabsList>
 
                             {/* Content */}
-                            <TabsContent
-                                value="post"
-                                className="flex-1 overflow-y-auto p-6 mt-0"
-                            >
-                                <CreatePostForm onSuccess={() => setModalOpen(false)} />
+                            <TabsContent value="post" className="flex-1 overflow-hidden mt-0 flex">
+                                <CreatePostForm
+                                    key={editingDraft?.type === "post" ? editingDraft.data.id : "new-post"}
+                                    onSuccess={handleModalClose}
+                                    initialData={editingDraft?.type === "post" ? editingDraft.data : undefined}
+                                    mode={editingDraft?.type === "post" ? "edit" : "create"}
+                                />
                             </TabsContent>
-                            <TabsContent
-                                value="project"
-                                className="flex-1 overflow-y-auto p-6 mt-0"
-                            >
-                                <CreateProjectForm />
+                            <TabsContent value="project" className="flex-1 overflow-hidden mt-0 flex">
+                                <CreateProjectForm
+                                    key={editingDraft?.type === "project" ? editingDraft.data.id : "new-project"}
+                                    onSuccess={handleModalClose}
+                                    initialData={editingDraft?.type === "project" ? editingDraft.data : undefined}
+                                    mode={editingDraft?.type === "project" ? "edit" : "create"}
+                                />
                             </TabsContent>
-                            <TabsContent
-                                value="category"
-                                className="flex-1 overflow-y-auto p-6 mt-0"
-                            >
-                                <CreateCategoryForm />
+                            <TabsContent value="category" className="flex-1 overflow-hidden mt-0 flex">
+                                <CreateCategoryForm onSuccess={handleModalClose} />
+                            </TabsContent>
+                            <TabsContent value="resource" className="flex-1 overflow-hidden mt-0 flex">
+                                <CreateResourceForm onSuccess={handleModalClose} />
+                            </TabsContent>
+                            <TabsContent value="drafts" className="flex-1 overflow-hidden mt-0 flex">
+                                <DraftsTab onEdit={handleEdit} />
                             </TabsContent>
                         </Tabs>
+                    </DialogContent>
+                </DialogPortal>
+            </Dialog>
+
+            {/* Auth Required Modal */}
+            <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
+                <DialogPortal>
+                    <DialogOverlay />
+                    <DialogContent className="max-w-md">
+                        <DialogTitle>Authentification requise</DialogTitle>
+                        <DialogDescription>
+                            Vous devez vous connecter ou créer un compte pour créer du contenu.
+                        </DialogDescription>
+                        <div className="flex gap-3 mt-6 justify-end">
+                            <Link href="/sign-up" className="flex-1">
+                                <Button variant="outline" className="w-full border-neutral-600">
+                                    Créer un compte
+                                </Button>
+                            </Link>
+                            <Link href="/login" className="flex-1">
+                                <Button className="w-full">Se connecter</Button>
+                            </Link>
+                        </div>
                     </DialogContent>
                 </DialogPortal>
             </Dialog>

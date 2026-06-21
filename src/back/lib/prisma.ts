@@ -11,11 +11,26 @@ if (!connectionString) {
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
-// Use HTTP adapter in production, direct PostgreSQL connection for seeding in dev.
-// In dev, we use an explicit Pool with ssl options to avoid the pg v8→v9 sslmode deprecation warning.
+// Strip sslmode from the connection string for the pg Pool — ssl is passed explicitly below,
+// which avoids the pg v8→v9 deprecation warning about 'require'/'prefer' becoming libpq aliases.
+function stripSslMode(url: string): string {
+    try {
+        const u = new URL(url);
+        u.searchParams.delete('sslmode');
+        return u.toString();
+    } catch {
+        return url.replace(/[?&]sslmode=[^&]*/g, '');
+    }
+}
+
 const prismaOptions: Prisma.PrismaClientOptions = process.env.NODE_ENV === 'production'
     ? { adapter: new PrismaNeonHttp(connectionString, {}) }
-    : { adapter: new PrismaPg(new Pool({ connectionString, ssl: { rejectUnauthorized: true } })) };
+    : { adapter: new PrismaPg(new Pool({
+        connectionString: stripSslMode(connectionString),
+        ssl: { rejectUnauthorized: true },
+        statement_timeout: 30000,
+        application_name: 'lency'
+    })) };
 
 const prisma: PrismaClient =
     globalForPrisma.prisma ??

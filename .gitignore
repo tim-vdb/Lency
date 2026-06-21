@@ -41,6 +41,9 @@ src/back/**/*.generated.*
 
 
 
+# local uploads (fichiers uploadés en dev — doit être sur ImageKit en prod)
+/public/uploads/
+
 # vercel
 .vercel
 
@@ -50,3 +53,5 @@ next-env.d.ts
 
 .vscode/
 .env*.local
+
+*.stackdump

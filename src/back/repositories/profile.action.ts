@@ -46,9 +46,8 @@ export const updateUserProfile = async (data: {
     lastname?: string;
     username?: string;
     email?: string;
-    phone?: string;
     bio?: string;
-    avatarUrl?: string;
+    image?: string;
     portfolio?: string;
     cv?: string;
 }) => {

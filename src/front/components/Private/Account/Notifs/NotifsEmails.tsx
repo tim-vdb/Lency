@@ -1,10 +1,15 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { Field, FieldDescription, FieldLabel } from "@/front/components/ui/field";
 import { Separator } from "@/front/components/ui/separator";
 import { Switch } from "@/front/components/ui/switch";
 import { Mail } from "lucide-react";
+import { useNotifPreferences } from "@/front/queries/notif-preferences";
 
 export default function NotifsEmails() {
+    const { prefs, updatePref, isSaving } = useNotifPreferences();
+
     return (
         <Card>
             <CardHeader>
@@ -25,7 +30,11 @@ export default function NotifsEmails() {
                                 Recevez des informations sur les nouvelles fonctionnalités et améliorations.
                             </FieldDescription>
                         </div>
-                        <Switch defaultChecked />
+                        <Switch
+                            checked={prefs.email_product_updates}
+                            disabled={isSaving}
+                            onCheckedChange={(v) => updatePref("email_product_updates", v)}
+                        />
                     </Field>
 
                     <Separator />
@@ -37,7 +46,11 @@ export default function NotifsEmails() {
                                 Un résumé de votre activité chaque semaine.
                             </FieldDescription>
                         </div>
-                        <Switch defaultChecked />
+                        <Switch
+                            checked={prefs.email_weekly_reports}
+                            disabled={isSaving}
+                            onCheckedChange={(v) => updatePref("email_weekly_reports", v)}
+                        />
                     </Field>
 
                     <Separator />
@@ -49,20 +62,13 @@ export default function NotifsEmails() {
                                 Notifications importantes concernant la sécurité de votre compte.
                             </FieldDescription>
                         </div>
-                        <Switch defaultChecked />
+                        <Switch
+                            checked={prefs.email_security_alerts}
+                            disabled={isSaving}
+                            onCheckedChange={(v) => updatePref("email_security_alerts", v)}
+                        />
                     </Field>
 
-                    <Separator />
-
-                    <Field orientation="horizontal">
-                        <div className="flex-1">
-                            <FieldLabel>Newsletter marketing</FieldLabel>
-                            <FieldDescription>
-                                Offres spéciales et actualités de la plateforme.
-                            </FieldDescription>
-                        </div>
-                        <Switch />
-                    </Field>
                 </div>
             </CardContent>
         </Card>

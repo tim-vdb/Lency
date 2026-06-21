@@ -20,16 +20,15 @@ export default function HeroSection() {
           <div className="relative mx-auto max-w-5xl px-6 pt-28 lg:pt-24">
             <div className="relative z-10 mx-auto max-w-2xl text-center">
               <h1 className="text-balance text-4xl font-semibold md:text-5xl lg:text-6xl">
-                Modern Software testing reimagined
+                Modernisez vos projets audiovisuels
               </h1>
               <p className="text-muted-foreground mx-auto my-8 max-w-2xl text-xl">
-                Officiis laudantium excepturi ducimus rerum dignissimos, and
-                tempora nam vitae, excepturi ducimus iste provident dolores.
+                Collaborer, créer et gérer vos projets créatifs avec une plateforme pensée pour les professionnels de l'audiovisuel.
               </p>
 
               <Button asChild size="lg">
                 <Link href="#">
-                  <span className="btn-label">Start Building</span>
+                  <span className="btn-label">Commencer</span>
                 </Link>
               </Button>
             </div>
@@ -40,15 +39,15 @@ export default function HeroSection() {
               <div className="lg:h-176 rotate-x-20 mask-b-from-55% mask-b-to-100% mask-r-from-75% skew-x-12 pl-6 pt-6">
                 <Image
                   className="rounded-(--radius) border shadow-xl dark:hidden"
-                  src="/card.png"
-                  alt="Tailark hero section"
+                  src="/images/team/avatar/Photo_Pro_avecOutline.png"
+                  alt="Section héros Lency"
                   width={2880}
                   height={2074}
                 />
                 <Image
                   className="rounded-(--radius) hidden border shadow-xl dark:block"
                   src="/dark-card.webp"
-                  alt="Tailark hero section"
+                  alt="Section héros Lency"
                   width={2880}
                   height={2074}
                 />
@@ -59,7 +58,7 @@ export default function HeroSection() {
         <section className="dark:bg-background bg-muted/50 relative z-10 py-16">
           <div className="m-auto max-w-5xl px-6">
             <h2 className="text-center text-lg font-medium">
-              Your favorite companies are our partners.
+              Ils nous font confiance pour leurs projets créatifs.
             </h2>
             <div className="mx-auto mt-20 flex max-w-4xl flex-wrap items-center justify-center gap-x-12 gap-y-8 sm:gap-x-16 sm:gap-y-12">
               <img

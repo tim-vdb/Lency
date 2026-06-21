@@ -1,5 +1,6 @@
 // lib/auth.ts
 
+import { UsersAction } from '@/back/repositories/users.action';
 import { prisma } from '@/back/lib/prisma';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
@@ -23,13 +24,58 @@ export const auth = betterAuth({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       prompt: 'select_account',
+      mapProfileToUser: (profile) => ({
+        firstname: profile.given_name ?? null,
+        lastname: profile.family_name ?? null,
+      }),
     },
   },
   trustedOrigins: [
     process.env.BASE_URL ?? 'http://localhost:3000',
   ],
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const updates: Record<string, any> = {};
+
+          // Générer username s'il n'existe pas
+          if (!user.username) {
+            const firstName = (user.firstname as string | null) ?? (user.name as string | null)?.split(' ')[0];
+            if (firstName) {
+              const username = await UsersAction.generateUniqueUsername(firstName);
+              updates.username = username;
+            }
+          }
+
+          // Définir comme admin si c'est cet email
+          if (user.email === 'timotheevdbosch@proton.me') {
+            updates.role = 'ADMIN';
+          }
+
+          // Appliquer les mises à jour s'il y en a
+          if (Object.keys(updates).length > 0) {
+            await UsersAction.update(user.id, updates);
+          }
+        },
+      },
+    },
+    account: {
+      create: {
+        after: async (account) => {
+          // Si c'est un account credentials, copier le password au user
+          if (account.providerId === 'credential' && account.password) {
+            await prisma.user.update({
+              where: { id: account.userId },
+              data: { password: account.password },
+            });
+          }
+        },
+      },
+    },
+  },
   plugins: [
-    nextCookies(),
     emailOTP({
       overrideDefaultEmailVerification: true,
       sendVerificationOnSignUp: false,
@@ -40,6 +86,7 @@ export const auth = betterAuth({
         await sendAuthOtpEmail({ email, otp, type });
       },
     }),
+    nextCookies(),
   ],
   user: {
     additionalFields: {
@@ -47,6 +94,15 @@ export const auth = betterAuth({
         type: 'string',
         required: false,
         defaultValue: 'MEMBER',
+        input: false,
+      },
+      firstname: {
+        type: 'string',
+        required: false,
+      },
+      lastname: {
+        type: 'string',
+        required: false,
       },
     },
   },

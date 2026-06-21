@@ -1,7 +1,10 @@
 import { getUser } from '@/back/lib/auth-session';
-import AuthShell from './AuthShell';
+import { UserProvider } from '@/front/states/contexts/user.context';
+import HeaderPublic from '@/front/components/Public/Global/Header/HeaderPublic';
 
-export default async function WebsiteLayout({
+export const dynamic = 'force-dynamic';
+
+export default async function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -9,8 +12,9 @@ export default async function WebsiteLayout({
   const user = await getUser();
 
   return (
-    <AuthShell user={user}>
-      {children}
-    </AuthShell>
+    <UserProvider user={user}>
+      <HeaderPublic />
+      <main>{children}</main>
+    </UserProvider>
   );
 }

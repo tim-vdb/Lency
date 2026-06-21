@@ -1,9 +1,15 @@
-import { CommentWithChildren, PostWithAuthorAndCategory, PostWithUserState } from "@/front/types/post.schema";
+import { CommentWithChildren, PostWithAuthorAndCategory, PostWithUserState } from "@/front/schemas/types/post.type";
 
 export interface CreatePostInput {
-    title: string
+    title?: string
     content: string
     categoryId: string
+    format?: "DESKTOP" | "MOBILE" | "TEXT" | "IMAGE" | "VIDEO" | "AUDIO"
+    orientation?: "LANDSCAPE" | "PORTRAIT"
+    imageUrl?: string
+    videoUrl?: string
+    audioUrl?: string
+    isPublished?: boolean
 }
 
 export async function fetchPosts(): Promise<PostWithUserState[]> {
@@ -91,6 +97,9 @@ export interface CreateCommentInput {
     content: string;
     postId: string;
     parentId?: string;
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
 }
 
 export async function createComment(input: CreateCommentInput): Promise<CommentWithChildren> {
@@ -160,18 +169,44 @@ export async function toggleVotePost(postId: string): Promise<{ voted: boolean }
     return response.json()
 }
 
-export async function hidePost(postId: string): Promise<void> {
-    const response = await fetch(`/api/posts/${postId}/hide`, { method: 'POST' })
-    if (!response.ok) {
-        const error = await response.json().catch(() => ({}))
-        throw new Error(error.error || 'Erreur lors du masquage du post')
-    }
-}
-
 export async function reportPost(postId: string): Promise<void> {
     const response = await fetch(`/api/posts/${postId}/report`, { method: 'POST' })
     if (!response.ok) {
         const error = await response.json().catch(() => ({}))
         throw new Error(error.error || 'Erreur lors du signalement du post')
     }
+}
+
+export async function fetchPostsByAuthor(authorId: string): Promise<PostWithUserState[]> {
+    const response = await fetch(`/api/posts?authorId=${authorId}`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des posts')
+    }
+    const data = await response.json()
+    return data.posts
+}
+
+export async function fetchMyDraftPosts(): Promise<PostWithUserState[]> {
+    const response = await fetch("/api/posts/drafts", { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur lors de la récupération des brouillons");
+    return (await response.json()).posts;
+}
+
+export async function fetchSavedPosts(): Promise<PostWithUserState[]> {
+    const response = await fetch("/api/posts/saved", { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur lors de la récupération des posts enregistrés");
+    const data = await response.json();
+    return data.posts;
+}
+
+export async function fetchFollowedCategoryPosts(): Promise<PostWithUserState[]> {
+    const response = await fetch('/api/posts/followed', { method: 'GET', cache: 'no-store' })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des posts suivis')
+    }
+    const data = await response.json()
+    return data.posts
 }

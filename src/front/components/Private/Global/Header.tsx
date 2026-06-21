@@ -1,7 +1,8 @@
 "use client";
 
+"use client";
+
 import { Bell } from "lucide-react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../../ui/breadcrumb";
 import { Separator } from "../../ui/separator";
 import { SheetTrigger } from "../../ui/sheet";
 import { NavUser } from "./Sidebar/nav-user";
@@ -10,14 +11,21 @@ import { cn } from "@/front/lib/utils";
 import { useSidebar } from "../../ui/sidebar";
 import { usePathname } from "next/navigation";
 import { CreateDropdown } from "./CreateDropdown";
+import BreadcrumbAuto from "./BreadcrumbAuto";
+import SearchBar from "../../SearchBar/SearchBar";
+import { useNotificationsQuery } from "@/front/queries/notifications";
 
 export default function Header({ className }: { className?: string }) {
-    const [isNotifs,] = useState(true)
     const [isScrolled, setIsScrolled] = useState(false)
     const { state } = useSidebar()
     const pathname = usePathname()
 
+    const { data: notifications = [] } = useNotificationsQuery();
+    const unreadCount = notifications.filter((n) => !n.read).length;
+
     const isFixedLayout = pathname !== "/account" && pathname !== "/admin"
+    const isDashboard = pathname === "/account" || pathname === "/admin"
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -34,40 +42,33 @@ export default function Header({ className }: { className?: string }) {
 
     return (
         <header className={cn(
-            "flex h-14 shrink-0 items-center gap-2 border dark:border-white backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-black/40 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 mr-1.5",
-            isScrolled && "rounded-t-none bg-white",
-            isFixedLayout && "fixed top-2 z-40",
+            "flex h-14 shrink-0 mr-1 items-center gap-2 border dark:border-zinc-700 backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-card/60 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14",
+            isDashboard && "mr-2",
+            isScrolled && "rounded-t-none",
+            isFixedLayout && "md:fixed top-2 z-40",
             isFixedLayout && state === "expanded"
-                ? "left-[calc(14.3rem)] right-2"
-                : isFixedLayout && "left-16.5 right-2",
+                ? "md:left-[14.3rem] md:right-2"
+                : isFixedLayout && "md:left-16.5 md:right-2",
             className
         )}>
             <div className="flex items-center justify-between gap-2 px-4 w-full">
-                <Breadcrumb className="flex items-center gap-2">
-                    <BreadcrumbList>
-                        <BreadcrumbItem className="hidden md:block">
-                            <BreadcrumbLink href="#" className="text-black dark:text-white">
-                                Build Your Application
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator className="hidden md:block text-black dark:text-white" />
-                        <BreadcrumbItem>
-                            <BreadcrumbPage className="text-black dark:text-white">Data Fetching</BreadcrumbPage>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-                <div className="flex items-center gap-4">
+                <BreadcrumbAuto />
+                <div className="flex items-center gap-2">
+                    <SearchBar />
                     <CreateDropdown />
+                    <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
                     <SheetTrigger className="cursor-pointer relative flex">
-                        <Bell className="w-6 h-6 fill-black text-black dark:fill-white dark:text-white" />
-                        {isNotifs &&
-                            (<span className="flex w-4 h-4">
-                                <span className="absolute inline-flex -top-1 left-3 h-4 w-4 rounded-full bg-red-500 opacity-75 "></span>
-                                <span className="relative inline-flex justify-center items-center -top-1 -left-3 h-4 w-4 rounded-full text-xs text-white bg-red-600">2</span>
-                            </span>)
-                        }
+                        <Bell className="w-6 h-6 min-w-6 min-h-6 fill-white text-black dark:fill-black/20 dark:text-white" />
+                        {unreadCount > 0 && (
+                            <span className="absolute -top-1 left-3 flex h-4 w-4">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange opacity-75" />
+                                <span className="relative inline-flex h-4 w-4 rounded-full bg-red-600 text-white text-xs justify-center items-center">
+                                    {unreadCount > 9 ? "9+" : unreadCount}
+                                </span>
+                            </span>
+                        )}
                     </SheetTrigger>
-                    <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500" />
+                    <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
                     <NavUser />
                 </div>
             </div>

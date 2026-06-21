@@ -1,11 +1,11 @@
 "use client";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useTransition } from "react";
+import { LoginFormSchema, type LoginFormValues } from "@/front/schemas/zod/auth/login.zod";
 import {
   Form,
   FormField,
@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/front/components/ui/form";
 import { Input } from "@/front/components/ui/input";
+import { PasswordInput } from "@/front/components/ui/password-input";
 import { Button } from "@/front/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { signIn } from "@/back/lib/auth-client";
@@ -22,20 +23,13 @@ import { CardFooter } from "@/front/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/front/lib/utils";
 
-const LoginFormSchema = z.object({
-  email: z.string().email("Email invalide"),
-  password: z
-    .string()
-    .min(6, "The password must contain at least 6 characters."),
-});
-
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof LoginFormSchema>>({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       email: "",
@@ -43,52 +37,35 @@ export default function LoginForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/auth/sign-in/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: values.email, password: values.password, callbackURL: callbackUrl ?? '/' }),
-        credentials: 'include',
+  function onSubmit(values: LoginFormValues) {
+    startTransition(async () => {
+      const { error } = await signIn.email({
+        email: values.email,
+        password: values.password,
       });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        const message = data?.message || data?.error || 'Une erreur est survenue';
-        toast.error(message);
+      if (error) {
+        toast.error(error.message || 'Une erreur est survenue');
         return;
       }
-
       toast.success('Utilisateur connecté');
-      if (callbackUrl) {
-        router.push(callbackUrl);
-      } else {
-        router.push('/');
-      }
+      router.push(callbackUrl ?? '/account');
       router.refresh();
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue';
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
+    });
   }
 
   return (
     <>
       <div className="flex items-center justify-center text-foreground h-[calc(100svh-5rem)]">
-        <div className="bg-white dark:bg-white border-4 border-zinc-200 dark:border-zinc-300 rounded-3xl p-10 w-full max-w-md shadow-lg">
+        <div className="bg-white dark:bg-zinc-900 border-4 border-zinc-200 dark:border-zinc-700 rounded-3xl p-10 w-full max-w-md shadow-lg">
           <div className="text-center mb-8">
-            <p className="text-xs uppercase tracking-[0.25em] text-zinc-700 dark:text-zinc-700 font-inter">
-              Login
+            <p className="text-xs uppercase tracking-[0.25em] text-zinc-500 dark:text-zinc-400 font-inter">
+              Connexion
             </p>
-            <h2 className="text-4xl leading-tight text-zinc-950 dark:text-zinc-900">
-              Welcome back to Lency
+            <h2 className="text-4xl leading-tight text-zinc-950 dark:text-white">
+              Bon retour sur Lency
             </h2>
-            <p className="font-inter text-sm text-zinc-600 dark:text-zinc-600 mt-3">
-              Log in to access your account.
+            <p className="font-inter text-sm text-zinc-600 dark:text-zinc-300 mt-3">
+              Se connecter pour accéder à votre compte.
             </p>
           </div>
 
@@ -102,13 +79,13 @@ export default function LoginForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-800 dark:text-zinc-900">Email</FormLabel>
+                    <FormLabel className="text-zinc-700 dark:text-zinc-200">Adresse email</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
                         placeholder="example@mail.com"
                         {...field}
-                        className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
+                        className="rounded-md border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 focus:outline-none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -121,13 +98,12 @@ export default function LoginForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-zinc-800 dark:text-zinc-900">Password</FormLabel>
+                    <FormLabel className="text-zinc-700 dark:text-zinc-200">Mot de passe</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
+                      <PasswordInput
                         placeholder="••••••••"
                         {...field}
-                        className="rounded-md border-zinc-300 dark:border-zinc-300 bg-white dark:bg-zinc-50 text-zinc-900 dark:text-zinc-900 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 px-3 py-2 focus:outline-none"
+                        className="rounded-md border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400 px-3 py-2 focus:outline-none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -136,43 +112,35 @@ export default function LoginForm() {
               />
 
               <div className="flex justify-end">
-                <Link href="/forgot-password" className="text-xs text-zinc-600 dark:text-zinc-700 underline">
-                  Forgot your password?
+                <Link href="/forgot-password" className="text-xs text-zinc-600 dark:text-zinc-400 underline hover:text-zinc-800 dark:hover:text-zinc-200">
+                  Mot de passe oublié ?
                 </Link>
               </div>
 
               <Button
                 type="submit"
-                className="rounded-md dark:bg-background text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition"
-                disabled={loading}
+                className="rounded-md bg-zinc-900 dark:bg-orange-600 text-white dark:text-white py-3 uppercase tracking-[0.2em] text-xs font-semibold transition hover:bg-zinc-800 dark:hover:bg-orange-700"
+                disabled={isPending}
               >
-                {loading ? (
+                {isPending ? (
                   <Loader2 size={16} className="animate-spin" />
                 ) : (
-                  "log in"
+                  "Se connecter"
                 )}
               </Button>
 
               <Button
                 variant="outline"
-                className={cn("w-full gap-2 border-zinc-300 dark:border-zinc-300 text-zinc-800 dark:text-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-100")}
-                disabled={loading}
-                onClick={async () => {
-                  await signIn.social(
-                    {
+                className={cn("w-full gap-2 border-zinc-300 dark:border-zinc-600 text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800")}
+                disabled={isPending}
+                onClick={() => {
+                  startTransition(async () => {
+                    await signIn.social({
                       provider: "google",
-                      callbackURL: callbackUrl ?? "/",
-                      newUserCallbackURL: `/${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`,
-                    },
-                    {
-                      onRequest: () => {
-                        setLoading(true);
-                      },
-                      onResponse: () => {
-                        setLoading(false);
-                      },
-                    }
-                  );
+                      callbackURL: callbackUrl ?? "/account",
+                      newUserCallbackURL: `/account`,
+                    });
+                  });
                 }}
               >
                 <svg
@@ -198,14 +166,14 @@ export default function LoginForm() {
                     d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
                   ></path>
                 </svg>
-                Sign in with Google
+                Se connecter avec Google
               </Button>
               <CardFooter>
                 <div className="flex justify-center w-full py-4">
-                  <p className="text-center text-xs text-zinc-500 dark:text-zinc-600">
-                    <Link href="/sign-up" className="underline">
+                  <p className="text-center text-xs text-zinc-600 dark:text-zinc-400">
+                    <Link href="/sign-up" className="underline hover:text-zinc-800 dark:hover:text-zinc-200">
                       <span>
-                        Need an account?
+                        Pas encore de compte ?
                       </span>
                     </Link>
                   </p>

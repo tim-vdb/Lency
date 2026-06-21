@@ -1,12 +1,11 @@
 /**
- * Helpers API pour gérer les catégories
+ * Helpers API pour gérer les communautés
  * 
  * Ces fonctions sont utilisées par React Query pour:
  * - Récupérer les données (GET)
  * - Créer/Modifier/Supprimer des données (POST/PUT/DELETE)
  */
 
-// Type pour une catégorie (basé sur votre schéma Prisma)
 export interface Category {
     id: string
     name: string
@@ -15,12 +14,20 @@ export interface Category {
     iconUrl?: string
     bannerUrl?: string
     rules?: string
+    subscriberCount: number
+    postCount: number
     lastPostAt?: Date
     createdAt: Date
     updatedAt: Date
+    _count: {
+        posts: number
+        ressources: number
+    }
 }
 
-// Type pour créer une nouvelle catégorie
+export type CategoryWithCounts = Category
+
+// Type pour créer une nouvelle communauté
 export interface CreateCategoryInput {
     name: string
     slug: string
@@ -31,7 +38,7 @@ export interface CreateCategoryInput {
 }
 
 /**
- * Récupère toutes les catégories
+ * Récupère toutes les communautés
  * Utilisé avec useQuery
  */
 export async function fetchCategories(): Promise<Category[]> {
@@ -42,7 +49,7 @@ export async function fetchCategories(): Promise<Category[]> {
     })
 
     if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des catégories')
+        throw new Error('Erreur lors de la récupération des communautés')
     }
 
     const data = await response.json()
@@ -56,7 +63,7 @@ export async function fetchCategoryById(categoryId: string): Promise<Category> {
     })
 
     if (!response.ok) {
-        throw new Error('Erreur lors de la récupération de la catégorie')
+        throw new Error('Erreur lors de la récupération de la communauté')
     }
 
     const data = await response.json()
@@ -64,7 +71,7 @@ export async function fetchCategoryById(categoryId: string): Promise<Category> {
 }
 
 /**
- * Crée une nouvelle catégorie
+ * Crée une nouvelle communauté
  * Utilisé avec useMutation
  */
 export async function createCategory(input: CreateCategoryInput): Promise<Category> {
@@ -79,7 +86,7 @@ export async function createCategory(input: CreateCategoryInput): Promise<Catego
     if (!response.ok) {
         // Essayer de récupérer le message d'erreur de l'API
         const error = await response.json().catch(() => ({}))
-        throw new Error(error.error || 'Erreur lors de la création de la catégorie')
+        throw new Error(error.error || 'Erreur lors de la création de la communauté')
     }
 
     const data = await response.json()
@@ -87,7 +94,7 @@ export async function createCategory(input: CreateCategoryInput): Promise<Catego
 }
 
 /**
- * Supprime une catégorie
+ * Supprime une communauté
  * Utilisé avec useMutation
  */
 export async function deleteCategory(categoryId: string): Promise<void> {
@@ -97,12 +104,77 @@ export async function deleteCategory(categoryId: string): Promise<void> {
 
     if (!response.ok) {
         const error = await response.json().catch(() => ({}))
-        throw new Error(error.error || 'Erreur lors de la suppression de la catégorie')
+        throw new Error(error.error || 'Erreur lors de la suppression de la communauté')
     }
 }
 
+export async function fetchCategoryBySlug(slug: string): Promise<Category> {
+    const response = await fetch(`/api/categories/slug/${slug}`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération de la communauté')
+    }
+    const data = await response.json()
+    return data.category
+}
+
+export async function fetchPostsByCategory(categoryId: string): Promise<import('@/front/schemas/types/post.type').PostWithUserState[]> {
+    const response = await fetch(`/api/categories/${categoryId}/posts`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des posts de la communauté')
+    }
+    const data = await response.json()
+    return data.posts
+}
+
+export async function toggleFollowCategory(categoryId: string): Promise<{ following: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/follow`, { method: 'POST' })
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || 'Erreur lors du suivi de la communauté')
+    }
+    return response.json()
+}
+
+export async function getCategoryNotifyStatus(categoryId: string): Promise<{ subscribed: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/notify`, { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur statut notification communauté");
+    return response.json();
+}
+
+export async function toggleCategoryNotify(categoryId: string): Promise<{ subscribed: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/notify`, { method: "POST" });
+    if (!response.ok) throw new Error("Erreur toggle notification communauté");
+    return response.json();
+}
+
+export async function fetchFollowedCategories(): Promise<CategoryWithCounts[]> {
+    const response = await fetch("/api/categories/followed", { cache: "no-store" });
+    if (!response.ok) {
+        const { error } = await response.json().catch(() => ({}));
+        throw new Error(error ?? "Erreur lors de la récupération des communautés suivies");
+    }
+    return (await response.json()).categories;
+}
+
+export async function getFollowStatus(categoryId: string): Promise<{ following: boolean }> {
+    const response = await fetch(`/api/categories/${categoryId}/follow`, {
+        method: 'GET',
+        cache: 'no-store',
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération du statut de suivi')
+    }
+    return response.json()
+}
+
 /**
- * Met à jour une catégorie
+ * Met à jour une communauté
  * Utilisé avec useMutation
  */
 export async function updateCategory(
@@ -119,7 +191,7 @@ export async function updateCategory(
 
     if (!response.ok) {
         const error = await response.json().catch(() => ({}))
-        throw new Error(error.error || 'Erreur lors de la mise à jour de la catégorie')
+        throw new Error(error.error || 'Erreur lors de la mise à jour de la communauté')
     }
 
     const data = await response.json()

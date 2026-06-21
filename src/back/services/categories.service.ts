@@ -65,4 +65,40 @@ export const CategoriesService = {
 
         return CategoriesAction.delete(id);
     },
+
+    findBySlugCategory: async (slug: string) => {
+        const category = await CategoriesAction.findBySlug(slug);
+        if (!category) throw new Error("Category not found");
+        return category;
+    },
+
+    findPostsByCategory: async (categoryId: string) => {
+        const user = await getUser();
+        return CategoriesAction.findPostsByCategoryId(categoryId, user?.id ?? undefined);
+    },
+
+    toggleFollowCategory: async (categoryId: string) => {
+        const user = await getUser();
+        if (!user) throw new Error("Unauthorized");
+        await CategoriesService.findByIdCategory(categoryId);
+        return CategoriesAction.toggleFollow(user.id, categoryId);
+    },
+
+    getFollowStatus: async (categoryId: string) => {
+        const user = await getUser();
+        if (!user) return { following: false };
+        return { following: await CategoriesAction.isFollowing(user.id, categoryId) };
+    },
+
+    findFollowedCategoryPosts: async () => {
+        const user = await getUser();
+        if (!user) return [];
+        return CategoriesAction.findFollowedCategoryPosts(user.id);
+    },
+
+    findFollowedCategories: async () => {
+        const user = await getUser();
+        if (!user) return [];
+        return CategoriesAction.findFollowedCategories(user.id);
+    },
 };

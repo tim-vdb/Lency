@@ -2,7 +2,6 @@ enum Role {
   ADMIN
   USER
   MEMBER
-  PREMIUM
 }
 
 enum ResourceType {
@@ -17,33 +16,24 @@ enum ProjectStatus {
   ARCHIVED
 }
 
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELED
-  EXPIRED
-}
-
 enum Visibility {
   PUBLIC
   PRIVATE
   MEMBERS_ONLY
 }
 
-enum GalleryType {
-  EVENT
-  GALLERY
-}
-
-enum TypeEvent {
-  PHYSICAL
-  VIRTUAL
-}
-
 enum PostFormat {
   DESKTOP
   MOBILE
-  AUDIO
   TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+enum PostOrientation {
+  LANDSCAPE
+  PORTRAIT
 }
 
 enum ContactType {
@@ -59,4 +49,59 @@ enum ContactStatus {
   EN_COURS
   RESOLU
   FERME
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ProjectLevel {
+  DEBUTANT
+  INTERMEDIAIRE
+  AVANCE
+}
+
+enum WorkMode {
+  PRESENTIEL
+  DISTANCIEL
+  HYBRIDE
+}
+
+enum RemunerationType {
+  NON_REMUNERE
+  REMUNERE
+}
+
+enum ProjectApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ProjectInvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ProjectType {
+  COURT_METRAGE
+  LONG_METRAGE
+  SERIE
+  CLIP
+  DOCUMENTAIRE
+  YOUTUBE
+  AUTRE
+}
+
+enum AdminEmailBox {
+  SUPPORT
+  DEV
+}
+
+enum AdminEmailType {
+  RECEIVED
+  SENT
 }

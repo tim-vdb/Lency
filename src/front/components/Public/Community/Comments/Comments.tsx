@@ -1,28 +1,60 @@
 "use client";
 
-import { useCommentsByPostId } from "@/front/hooks/querys/use-posts";
+import { useCommentsByPostId } from "@/front/queries/posts";
+import { useResourceComments } from "@/front/queries/resources";
+import { useProjectComments } from "@/front/queries/projects";
+import { CommentTarget } from "@/front/schemas/types/comment-target.type";
+import { Skeleton } from "@/front/components/ui/skeleton";
 import { CommentItem } from "./CommentItem";
 
 interface CommentsProps {
-    postId: string;
-    commentCount: number;
+    target: CommentTarget;
 }
 
-export default function Comments({ postId, commentCount }: CommentsProps) {
-    const { data: comments, isLoading } = useCommentsByPostId(postId);
+function CommentSkeleton() {
+    return (
+        <div className="flex gap-2.5">
+            <Skeleton className="w-7 h-7 rounded-full shrink-0 mt-0.5" />
+            <div className="flex flex-col gap-2 flex-1">
+                <Skeleton className="h-2.5 w-24 rounded-md" />
+                <Skeleton className="h-2.5 w-full rounded-md" />
+                <Skeleton className="h-2.5 w-3/4 rounded-md" />
+            </div>
+        </div>
+    );
+}
 
-    const count = commentCount;
+export default function Comments({ target }: CommentsProps) {
+    const postQuery = useCommentsByPostId(target.type === "post" ? target.id : "");
+    const resourceQuery = useResourceComments(target.type === "resource" ? target.id : "");
+    const projectQuery = useProjectComments(target.type === "project" ? target.id : "");
 
-    if (isLoading) return <p className="text-xs text-neutral-400">Chargement...</p>;
+    const { data: comments, isLoading, isError } =
+        target.type === "post" ? postQuery : target.type === "resource" ? resourceQuery : projectQuery;
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col gap-5">
+                <CommentSkeleton />
+                <CommentSkeleton />
+                <CommentSkeleton />
+            </div>
+        );
+    }
+
+    if (isError) {
+        return (
+            <p className="text-sm text-neutral-400 text-center py-2">
+                Impossible de charger les commentaires.
+            </p>
+        );
+    }
 
     return (
         <div className="w-full flex flex-col gap-6">
-            <p className="text-center text-sm font-semibold">
-                {count} commentaire{count !== 1 ? "s" : ""}
-            </p>
             <div className="flex flex-col gap-5">
                 {comments?.map((comment) => (
-                    <CommentItem key={comment.id} comment={comment} />
+                    <CommentItem key={comment.id} comment={comment} target={target} />
                 ))}
             </div>
         </div>

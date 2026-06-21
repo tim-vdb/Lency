@@ -1,0 +1,183 @@
+import { CommentWithChildren } from "@/front/schemas/types/post.type";
+import { ResourceWithUserState } from "@/front/schemas/types/resource.type";
+
+export async function fetchSavedResources(): Promise<ResourceWithUserState[]> {
+    const response = await fetch("/api/resources/saved", { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur lors de la récupération des ressources enregistrées");
+    const data = await response.json();
+    return data.resources;
+}
+
+export async function fetchResourcesByAuthor(authorId: string): Promise<ResourceWithUserState[]> {
+    const response = await fetch(`/api/resources?authorId=${authorId}`, { method: "GET", cache: "no-store" });
+    if (!response.ok) throw new Error("Erreur lors de la récupération des ressources");
+    const data = await response.json();
+    return data.resources;
+}
+
+export async function fetchResources(categoryId?: string): Promise<ResourceWithUserState[]> {
+    const url = categoryId ? `/api/resources?categoryId=${categoryId}` : "/api/resources";
+    const response = await fetch(url, { method: "GET", cache: "no-store" });
+
+    if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des ressources");
+    }
+
+    const data = await response.json();
+    return data.resources;
+}
+
+export async function fetchResourceById(resourceId: string): Promise<ResourceWithUserState> {
+    const response = await fetch(`/api/resources/${resourceId}`, {
+        method: "GET",
+        cache: "no-store",
+    });
+
+    if (!response.ok) {
+        throw new Error("Erreur lors de la récupération de la ressource");
+    }
+
+    const data = await response.json();
+    return data.resource;
+}
+
+export async function toggleSaveResource(resourceId: string): Promise<{ saved: boolean }> {
+    const response = await fetch(`/api/resources/${resourceId}/save`, { method: "POST" });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la sauvegarde de la ressource");
+    }
+    return response.json();
+}
+
+export async function toggleVoteResource(resourceId: string): Promise<{ voted: boolean }> {
+    const response = await fetch(`/api/resources/${resourceId}/vote`, { method: "POST" });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors du vote");
+    }
+    return response.json();
+}
+
+export async function fetchResourceComments(resourceId: string): Promise<CommentWithChildren[]> {
+    const response = await fetch(`/api/resources/${resourceId}/comments`, {
+        method: "GET",
+        cache: "no-store",
+    });
+    if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des commentaires");
+    }
+    const data = await response.json();
+    return data.comments;
+}
+
+export interface VoteResourceCommentInput {
+    resourceId: string;
+    commentId: string;
+    prev: "upvote" | "downvote" | null;
+    next: "upvote" | "downvote" | null;
+}
+
+export async function voteResourceComment(input: VoteResourceCommentInput): Promise<void> {
+    const response = await fetch(
+        `/api/resources/${input.resourceId}/comments/${input.commentId}/vote`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prev: input.prev, next: input.next }),
+        }
+    );
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors du vote");
+    }
+}
+
+export interface CreateResourceCommentInput {
+    resourceId: string;
+    content: string;
+    parentId?: string;
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
+}
+
+export interface CreateResourceInput {
+    title: string;
+    description?: string;
+    type: "ASSET" | "TUTORIAL" | "LINK";
+    urls?: string[];
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
+    categoryId: string;
+}
+
+export async function createResource(input: CreateResourceInput): Promise<ResourceWithUserState> {
+    const response = await fetch("/api/resources", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+    });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la création de la ressource");
+    }
+    const data = await response.json();
+    return data.resource;
+}
+
+export interface UpdateResourceInput {
+    title?: string;
+    description?: string;
+    type?: "ASSET" | "TUTORIAL" | "LINK";
+    urls?: string[];
+    imageUrls?: string[];
+    videoUrls?: string[];
+    audioUrls?: string[];
+    categoryId?: string;
+}
+
+export async function updateResource(resourceId: string, input: UpdateResourceInput): Promise<ResourceWithUserState> {
+    const response = await fetch(`/api/resources/${resourceId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+    });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la modification de la ressource");
+    }
+    const data = await response.json();
+    return data.resource;
+}
+
+export async function deleteResource(resourceId: string): Promise<void> {
+    const response = await fetch(`/api/resources/${resourceId}`, { method: "DELETE" });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la suppression de la ressource");
+    }
+}
+
+export async function createResourceComment(
+    input: CreateResourceCommentInput
+): Promise<CommentWithChildren> {
+    const response = await fetch(`/api/resources/${input.resourceId}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            content: input.content,
+            parentId: input.parentId,
+            imageUrls: input.imageUrls,
+            videoUrls: input.videoUrls,
+            audioUrls: input.audioUrls,
+        }),
+    });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || "Erreur lors de la création du commentaire");
+    }
+    const data = await response.json();
+    return data.comment;
+}

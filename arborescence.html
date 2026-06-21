@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lency — Arborescence du projet</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:       #6C5CE7;
+      --brand-dark:  #4A3ABF;
+      --brand-soft:  #EDE9FF;
+      --accent:      #00CEC9;
+      --accent-soft: #E0FAF9;
+      --text:        #1A1A2E;
+      --muted:       #6B7280;
+      --border:      #E5E7EB;
+      --bg:          #F8F9FC;
+      --white:       #FFFFFF;
+      /* layer colors */
+      --c-app:       #6C5CE7;
+      --c-api:       #00B894;
+      --c-back:      #E17055;
+      --c-front:     #0984E3;
+      --c-page:      #A29BFE;
+      --c-hook:      #FDCB6E;
+      --c-type:      #74B9FF;
+      --c-schema:    #55EFC4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    @media print {
+      body { background: white; font-size: 11px; }
+      .top-bar, .side-nav, .no-print { display: none !important; }
+      .wrapper { margin-left: 0 !important; }
+      section { page-break-inside: avoid; }
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      position: fixed; top: 0; left: 0; right: 0; height: 52px;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 20px; gap: 16px;
+      z-index: 300;
+    }
+    .top-bar-logo {
+      font-size: 18px; font-weight: 900; color: var(--brand);
+      letter-spacing: -1px; text-decoration: none;
+    }
+    .top-bar-logo span { color: var(--accent); }
+    .top-bar-label { font-size: 12px; color: var(--muted); border-left: 1px solid var(--border); padding-left: 14px; font-weight: 500; }
+    .top-bar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .top-bar-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--brand); color: white; border: none;
+      border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .top-bar-btn.outline { background: transparent; color: var(--brand); border: 1.5px solid var(--brand); }
+    .top-bar-progress {
+      position: absolute; bottom: 0; left: 0; height: 2px;
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+      transition: width 0.1s;
+    }
+
+    /* ── SIDE NAV ── */
+    .side-nav {
+      position: fixed; top: 52px; left: 0; bottom: 0; width: 220px;
+      background: var(--white); border-right: 1px solid var(--border);
+      padding: 20px 12px; overflow-y: auto; z-index: 200;
+    }
+    .side-nav-title { font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; padding: 0 8px; }
+    .side-nav-sep { height: 1px; background: var(--border); margin: 10px 0; }
+    .side-nav-link {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 8px 10px; border-radius: 8px; border: none; background: transparent;
+      font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer;
+      transition: background 0.15s, color 0.15s; text-align: left;
+    }
+    .side-nav-link:hover { background: var(--brand-soft); color: var(--brand); }
+    .side-nav-link.active { background: var(--brand-soft); color: var(--brand); font-weight: 700; }
+    .side-nav-link .dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* ── WRAPPER ── */
+    .wrapper { margin-left: 220px; padding: 84px 40px 60px; max-width: 1120px; }
+
+    /* ── COVER ── */
+    .cover {
+      background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+      border-radius: 20px; padding: 52px 48px; margin-bottom: 48px;
+      color: white; position: relative; overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 280px; height: 280px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(108,92,231,0.3), transparent 70%);
+    }
+    .cover::after {
+      content: '';
+      position: absolute; bottom: -40px; left: 30%;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,206,201,0.2), transparent 70%);
+    }
+    .cover-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.5; margin-bottom: 14px; }
+    .cover-logo { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin-bottom: 4px; }
+    .cover-logo span { color: var(--accent); }
+    .cover-title { font-size: 22px; font-weight: 700; margin-bottom: 12px; opacity: 0.9; }
+    .cover-desc { font-size: 14px; opacity: 0.6; max-width: 560px; line-height: 1.7; }
+    .cover-meta { margin-top: 28px; font-size: 12px; opacity: 0.4; }
+    .cover-stats {
+      display: flex; gap: 32px; margin-top: 32px;
+    }
+    .cover-stat-val { font-size: 26px; font-weight: 900; color: var(--accent); }
+    .cover-stat-label { font-size: 11px; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 52px; }
+    .section-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+    }
+    .section-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .section-title { font-size: 20px; font-weight: 800; }
+    .section-desc { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .section-divider { height: 1px; background: var(--border); margin-bottom: 24px; }
+
+    /* ── LAYER BADGE ── */
+    .layer {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+    }
+    .layer.app    { background: #EDE9FF; color: var(--c-app); }
+    .layer.api    { background: #E6F9F5; color: var(--c-api); }
+    .layer.back   { background: #FEF0EC; color: var(--c-back); }
+    .layer.front  { background: #E8F4FD; color: var(--c-front); }
+    .layer.page   { background: #F0EEFF; color: #7C6FD6; }
+    .layer.hook   { background: #FFF9E6; color: #C5962B; }
+    .layer.schema { background: #E6FDF8; color: #00957A; }
+
+    /* ── TREE ── */
+    .tree-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; margin-bottom: 16px;
+    }
+    .tree-card-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: #FAFAFA; cursor: pointer;
+      user-select: none;
+    }
+    .tree-card-header:hover { background: #F4F5FF; }
+    .tree-card-icon { font-size: 16px; }
+    .tree-card-name { font-size: 14px; font-weight: 700; flex: 1; }
+    .tree-card-meta { font-size: 12px; color: var(--muted); }
+    .tree-card-arrow { font-size: 10px; color: var(--muted); transition: transform 0.2s; }
+    .tree-card.open .tree-card-arrow { transform: rotate(90deg); }
+    .tree-card-body { padding: 0; display: none; }
+    .tree-card.open .tree-card-body { display: block; }
+
+    /* ── TREE LINES ── */
+    .tree { padding: 12px 16px; }
+    .tree-item {
+      display: flex; align-items: flex-start; gap: 0;
+      font-size: 12.5px; line-height: 2;
+      position: relative;
+    }
+    .tree-lines { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .tree-connector {
+      font-family: 'Courier New', monospace;
+      color: #C8C8D8; font-size: 13px; line-height: 2;
+      white-space: pre; flex-shrink: 0; user-select: none;
+    }
+    .tree-name { font-weight: 600; }
+    .tree-name.folder { color: var(--brand); }
+    .tree-name.file-ts { color: #0984E3; }
+    .tree-name.file-tsx { color: #E17055; }
+    .tree-name.file-prisma { color: #00B894; }
+    .tree-name.file-other { color: var(--muted); }
+    .tree-comment { color: var(--muted); font-size: 11.5px; margin-left: 8px; font-style: italic; }
+    .tree-indent { display: flex; flex-direction: column; }
+    .tree-row { display: flex; align-items: baseline; gap: 0; white-space: nowrap; }
+
+    /* ── FLOW DIAGRAM ── */
+    .flow {
+      display: flex; align-items: center; gap: 0;
+      flex-wrap: wrap; margin: 20px 0;
+    }
+    .flow-node {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 110px;
+    }
+    .flow-node .fn-icon { font-size: 18px; margin-bottom: 4px; }
+    .flow-node .fn-name { font-size: 12px; font-weight: 700; }
+    .flow-node .fn-sub  { font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+    .flow-arrow {
+      font-size: 18px; color: #C8C8D8; padding: 0 6px; flex-shrink: 0;
+    }
+    .flow-node.highlight { border-color: var(--brand); background: var(--brand-soft); }
+    .flow-node.highlight .fn-name { color: var(--brand); }
+
+    /* ── GRID CARDS ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 20px 0; }
+    .mini-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 18px;
+    }
+    .mini-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .mini-card-icon { font-size: 16px; }
+    .mini-card-title { font-size: 13px; font-weight: 700; }
+    .mini-card ul { list-style: none; padding: 0; }
+    .mini-card ul li {
+      font-size: 12px; color: var(--muted); padding: 3px 0;
+      border-bottom: 1px solid #F3F4F6;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .mini-card ul li:last-child { border-bottom: none; }
+    .mini-card ul li::before { content: '·'; color: var(--brand); font-weight: 900; }
+    .mini-card ul li strong { color: var(--text); font-weight: 600; }
+
+    /* ── API TABLE ── */
+    .api-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    .api-table th {
+      background: #F4F5FF; font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+      padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border);
+    }
+    .api-table td { padding: 9px 14px; font-size: 12.5px; border-bottom: 1px solid #F3F4F6; }
+    .api-table tr:last-child td { border-bottom: none; }
+    .api-table tr:hover td { background: #FAFBFF; }
+    .method {
+      display: inline-block; padding: 2px 8px; border-radius: 5px;
+      font-size: 10.5px; font-weight: 800; letter-spacing: 0.05em;
+    }
+    .method.GET    { background: #E8F5E9; color: #2E7D32; }
+    .method.POST   { background: #E3F2FD; color: #1565C0; }
+    .method.PATCH  { background: #FFF8E1; color: #F57F17; }
+    .method.DELETE { background: #FFEBEE; color: #C62828; }
+    .api-path { font-family: 'Courier New', monospace; font-size: 12px; color: var(--brand); }
+    .api-desc { color: var(--muted); }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      display: flex; gap: 12px; padding: 14px 16px;
+      border-radius: 12px; margin: 20px 0; border: 1px solid;
+    }
+    .info-box.note  { background: #F0EEFF; border-color: #C7BFFF; }
+    .info-box.tip   { background: #E6FDF8; border-color: #A0EFD8; }
+    .info-box.warn  { background: #FFF9E6; border-color: #FFE082; }
+    .info-box-icon  { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .info-box-body  { font-size: 13px; line-height: 1.6; }
+    .info-box-body strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+    /* ── PRISMA SCHEMA ── */
+    .schema-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+    .schema-card {
+      background: #1A1A2E; border-radius: 12px; padding: 16px 18px; color: #E0E0F0;
+    }
+    .schema-card-name { font-size: 13px; font-weight: 800; color: #A29BFE; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .schema-card-name span { font-size: 10px; padding: 2px 7px; border-radius: 100px; background: rgba(162,155,254,0.15); color: #A29BFE; }
+    .schema-field { display: flex; justify-content: space-between; font-size: 11.5px; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .schema-field:last-child { border-bottom: none; }
+    .schema-field-name { color: #74B9FF; font-family: 'Courier New', monospace; }
+    .schema-field-type { color: #55EFC4; font-family: 'Courier New', monospace; }
+    .schema-field-mod  { color: #FDCB6E; font-size: 10px; font-style: italic; }
+
+    /* ── CONVENTION TABLE ── */
+    .conv-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    .conv-table th { background: #F4F5FF; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border); }
+    .conv-table td { padding: 9px 14px; font-size: 12.5px; border-bottom: 1px solid #F3F4F6; }
+    .conv-table tr:hover td { background: #FAFBFF; }
+    .code-inline { font-family: 'Courier New', monospace; font-size: 11.5px; background: #F4F5FF; color: var(--brand); padding: 1px 6px; border-radius: 4px; }
+
+    /* ── VISUAL TREE ── */
+    .vtree-wrap {
+      overflow-x: auto;
+      background: #0F172A;
+      border-radius: 20px;
+      padding: 36px 36px 28px;
+    }
+    .vtree, .vtree ul, .vtree li { list-style: none; margin: 0; padding: 0; }
+    .vtree > li { display: inline-block; }
+    .vtree ul {
+      border-left: 2px solid #334155;
+      margin-left: 20px;
+    }
+    .vtree ul > li {
+      position: relative;
+      padding: 5px 0 5px 28px;
+    }
+    /* Horizontal connector */
+    .vtree ul > li::before {
+      content: '';
+      position: absolute;
+      left: -2px;
+      top: 50%;
+      width: 30px;
+      height: 2px;
+      background: #334155;
+      transform: translateY(-50%);
+    }
+    /* Mask bottom of border-left for last child */
+    .vtree ul > li:last-child::after {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: calc(50% + 2px);
+      bottom: -6px;
+      width: 8px;
+      background: #0F172A;
+    }
+    /* Node box */
+    .vtn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 16px;
+      border-radius: 11px;
+      border: 1.5px solid;
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: default;
+      transition: box-shadow .15s, transform .12s;
+      position: relative;
+      z-index: 1;
+    }
+    .vtn:hover { box-shadow: 0 0 0 3px rgba(255,255,255,0.08); transform: translateX(2px); }
+    .vtn .vi { font-size: 15px; }
+    .vtn .vd { font-size: 11px; font-weight: 500; opacity: 0.55; margin-left: 4px; }
+    /* sizes */
+    .vtn.lg { padding: 13px 20px; font-size: 17px; border-radius: 14px; }
+    .vtn.lg .vi { font-size: 24px; }
+    .vtn.sm { padding: 7px 13px; font-size: 12px; }
+    .vtn.xs { padding: 5px 10px; font-size: 11.5px; border-radius: 8px; }
+    .vtn.xs .vi { font-size: 12px; }
+    /* root */
+    .vtn.root { background: #1E293B; color: #F1F5F9; border-color: #475569; }
+    /* app */
+    .vtn.c-app  { background: #2D2463; color: #C4B5FD; border-color: #6D28D9; }
+    .vtn.c-pages{ background: #1E1B4B; color: #A5B4FC; border-color: #4338CA; }
+    .vtn.c-auth { background: #0C2340; color: #7DD3FC; border-color: #0369A1; }
+    .vtn.c-web  { background: #2D1F07; color: #FCD34D; border-color: #92400E; }
+    .vtn.c-acct { background: #2A1200; color: #FDBA74; border-color: #C2410C; }
+    /* api */
+    .vtn.c-api  { background: #052E16; color: #6EE7B7; border-color: #059669; }
+    /* back */
+    .vtn.c-back { background: #2D0F0F; color: #FCA5A5; border-color: #B91C1C; }
+    .vtn.c-lib  { background: #052E16; color: #86EFAC; border-color: #16A34A; }
+    .vtn.c-pris { background: #042F2E; color: #5EEAD4; border-color: #0F766E; }
+    .vtn.c-repo { background: #2E1065; color: #D8B4FE; border-color: #7E22CE; }
+    .vtn.c-svc  { background: #2D1900; color: #FED7AA; border-color: #C2410C; }
+    /* front */
+    .vtn.c-front{ background: #0C1A35; color: #93C5FD; border-color: #1D4ED8; }
+    .vtn.c-comp { background: #0F1E40; color: #BFDBFE; border-color: #2563EB; }
+    .vtn.c-hook { background: #2D0A31; color: #F0ABFC; border-color: #A21CAF; }
+    .vtn.c-file { background: #1C2333; color: #94A3B8; border-color: #334155; }
+    /* Legend */
+    .tree-legend {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; padding-bottom: 24px;
+      border-bottom: 1px solid #1E293B;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; color: #64748B;
+    }
+    .legend-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+
+    /* ── VIEW TABS ── */
+    .view-switcher {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 5px; margin-bottom: 36px;
+      width: fit-content;
+    }
+    .view-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 20px; border-radius: 8px; border: none;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background .18s, color .18s, box-shadow .18s;
+      background: transparent; color: var(--muted);
+    }
+    .view-tab:hover { background: var(--brand-soft); color: var(--brand); }
+    .view-tab.active {
+      background: var(--brand); color: white;
+      box-shadow: 0 2px 8px rgba(108,92,231,.35);
+    }
+
+    /* View visibility */
+    .view-dev  .client-only { display: none; }
+    .view-client .dev-only  { display: none; }
+    /* Default: show dev nav, hide client nav */
+    .view-dev  .nav-client  { display: none; }
+    .view-client .nav-dev   { display: none; }
+
+    /* ── CLIENT PAGE CARDS ── */
+    .page-zone { margin-bottom: 40px; }
+    .page-zone-title {
+      font-size: 12px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .page-zone-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .page-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .page-card {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 18px 20px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .page-card:hover { border-color: var(--brand); box-shadow: 0 2px 16px rgba(108,92,231,.1); }
+    .page-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+    .page-card-icon { font-size: 22px; flex-shrink: 0; }
+    .page-card-name { font-size: 14px; font-weight: 700; flex: 1; }
+    .page-card-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+    .page-card-url  { font-size: 11px; font-family: 'Courier New', monospace; color: var(--brand); margin-top: 8px; opacity: .7; }
+    .access-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px; border-radius: 100px; font-size: 10.5px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .access-badge.public   { background: #E6FDF8; color: #0F9271; }
+    .access-badge.auth     { background: #EDE9FF; color: #6C5CE7; }
+    .access-badge.admin    { background: #FFEBEE; color: #C62828; }
+
+    /* ── FOOTER ── */
+    .doc-footer {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      border-top: 1px solid var(--border); padding-top: 28px;
+      margin-top: 60px; font-size: 12px; color: var(--muted);
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  </style>
+</head>
+<body class="view-dev">
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <a href="#" class="top-bar-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Lency<span>.</span></a>
+  <span class="top-bar-label">Arborescence du projet</span>
+  <div class="top-bar-actions">
+    <button class="top-bar-btn outline" onclick="expandAll()">Tout ouvrir</button>
+    <button class="top-bar-btn outline" onclick="collapseAll()">Tout fermer</button>
+    <button class="top-bar-btn" onclick="window.print()">🖨️ PDF</button>
+  </div>
+  <div class="top-bar-progress" id="progress-bar"></div>
+</div>
+
+<!-- SIDE NAV -->
+<nav class="side-nav">
+  <div class="side-nav-title">Sections</div>
+  <button class="side-nav-link active" onclick="scrollTo('cover')">
+    <span class="dot" style="background:#6C5CE7"></span> Vue d'ensemble
+  </button>
+  <div class="side-nav-sep"></div>
+
+  <!-- NAV DEV -->
+  <div class="nav-dev">
+    <div class="side-nav-title">Visualisation</div>
+    <button class="side-nav-link" onclick="scrollTo('arbre')">
+      <span class="dot" style="background:#10B981"></span> 🌳 Arbre visuel
+    </button>
+    <button class="side-nav-link" onclick="scrollTo('api')">
+      <span class="dot" style="background:#00B894"></span> api/ Routes
+    </button>
+    <div class="side-nav-sep"></div>
+    <div class="side-nav-title">Références</div>
+    <button class="side-nav-link" onclick="scrollTo('flux')">
+      <span class="dot" style="background:#A29BFE"></span> Flux de données
+    </button>
+    <button class="side-nav-link" onclick="scrollTo('conventions')">
+      <span class="dot" style="background:#FDCB6E"></span> Conventions
+    </button>
+    <button class="side-nav-link" onclick="scrollTo('prisma')">
+      <span class="dot" style="background:#55EFC4"></span> Schéma Prisma
+    </button>
+  </div>
+
+  <!-- NAV CLIENT -->
+  <div class="nav-client">
+    <div class="side-nav-title">Pages</div>
+    <button class="side-nav-link" onclick="scrollTo('client-tree')">
+      <span class="dot" style="background:#10B981"></span> 🗺️ Toutes les pages
+    </button>
+  </div>
+</nav>
+
+<!-- WRAPPER -->
+<div class="wrapper">
+
+  <!-- COVER -->
+  <div class="cover" id="cover">
+    <div class="cover-eyebrow">Documentation technique</div>
+    <div class="cover-logo">Lency<span>.</span></div>
+    <div class="cover-title">Arborescence du projet</div>
+    <div class="cover-desc">
+      Structure complète du monorepo Next.js 16 — App Router, Route Handlers,
+      services, repositories, composants React et schémas Prisma.
+    </div>
+    <div class="cover-stats">
+      <div>
+        <div class="cover-stat-val">54</div>
+        <div class="cover-stat-label">Route Handlers</div>
+      </div>
+      <div>
+        <div class="cover-stat-val">6</div>
+        <div class="cover-stat-label">Fichiers Prisma</div>
+      </div>
+      <div>
+        <div class="cover-stat-val">3</div>
+        <div class="cover-stat-label">Zones d'app</div>
+      </div>
+      <div>
+        <div class="cover-stat-val">Next 16</div>
+        <div class="cover-stat-label">Framework</div>
+      </div>
+    </div>
+    <div class="cover-meta">Stack · Next.js 16 · React 19 · TypeScript · Prisma 7 · shadcn/ui · React Query 5</div>
+  </div>
+
+  <!-- VIEW SWITCHER -->
+  <div class="view-switcher">
+    <button class="view-tab active" id="tab-dev" onclick="setView('dev')">
+      🖥️ Vue développeur
+    </button>
+    <button class="view-tab" id="tab-client" onclick="setView('client')">
+      👤 Vue client
+    </button>
+  </div>
+
+  <!-- ══ DEV VIEW ══ -->
+  <div class="dev-only">
+
+  <!-- ══ ARBRE VISUEL ══ -->
+  <div class="section" id="arbre">
+    <div class="section-header">
+      <div class="section-icon" style="background:#E8F5E9; color:#1B5E20;">🌳</div>
+      <div>
+        <div class="section-title">Arbre visuel — Vue globale</div>
+        <div class="section-desc">La structure complète du projet en un seul coup d'œil — cliquez sur un nœud pour l'explorer</div>
+      </div>
+    </div>
+    <div class="section-divider"></div>
+
+    <div class="vtree-wrap">
+      <!-- Légende -->
+      <div class="tree-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#6D28D9"></div> app/ — Routes</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#059669"></div> api/ — Endpoints</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#B91C1C"></div> back/ — Serveur</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1D4ED8"></div> front/ — Client</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#334155"></div> fichiers</div>
+      </div>
+
+      <ul class="vtree">
+        <li>
+          <div class="vtn root lg"><span class="vi">📦</span><span>src/</span><span class="vd">Racine du projet</span></div>
+          <ul>
+
+            <!-- ═══ app/ ═══ -->
+            <li>
+              <div class="vtn c-app"><span class="vi">🚀</span><span>app/</span><span class="vd">Next.js App Router</span></div>
+              <ul>
+
+                <li>
+                  <div class="vtn c-pages sm"><span class="vi">📂</span><span>(pages)/</span><span class="vd">Route groups</span></div>
+                  <ul>
+
+                    <li>
+                      <div class="vtn c-pages xs"><span class="vi">🌐</span><span>(app)/</span><span class="vd">Zone connectée — AppShell</span></div>
+                      <ul>
+                        <li><div class="vtn c-file xs"><span class="vi">📡</span> community/ <span class="vd">page principale du feed</span></div></li>
+                        <li>
+                          <div class="vtn c-file xs"><span class="vi">📂</span> community/ <span class="vd">sous-routes</span></div>
+                          <ul>
+                            <li><div class="vtn c-file xs"><span class="vi">📚</span> resources/ <span class="vd">bibliothèque globale</span></div></li>
+                            <li><div class="vtn c-file xs"><span class="vi">🔖</span> saved/ <span class="vd">enregistrements</span></div></li>
+                            <li>
+                              <div class="vtn c-file xs"><span class="vi">🏘️</span> [slug]/ <span class="vd">page communauté dynamique</span></div>
+                              <ul>
+                                <li><div class="vtn c-file xs"><span class="vi">📄</span> page.tsx</div></li>
+                                <li><div class="vtn c-file xs"><span class="vi">💬</span> post/[id]/ <span class="vd">détail post</span></div></li>
+                                <li><div class="vtn c-file xs"><span class="vi">📚</span> resources/ + [resourceId]/ <span class="vd">détail ressource</span></div></li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </li>
+                        <li><div class="vtn c-file xs"><span class="vi">👤</span> user/[userName]/ <span class="vd">profil public</span></div></li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <div class="vtn c-auth xs"><span class="vi">🔐</span><span>(auth)/</span><span class="vd">Authentification — AuthShell</span></div>
+                      <ul>
+                        <li><div class="vtn c-file xs"><span class="vi">🔑</span> login/</div></li>
+                        <li><div class="vtn c-file xs"><span class="vi">📝</span> sign-up/</div></li>
+                        <li><div class="vtn c-file xs"><span class="vi">✉️</span> verify-email/ <span class="vd">code OTP</span></div></li>
+                        <li><div class="vtn c-file xs"><span class="vi">🆕</span> new-user/ <span class="vd">onboarding</span></div></li>
+                        <li><div class="vtn c-file xs"><span class="vi">🔄</span> forgot-password/ &nbsp;·&nbsp; reset-password/</div></li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <div class="vtn c-web xs"><span class="vi">🏠</span><span>(website)/</span><span class="vd">Site vitrine — WebsiteShell</span></div>
+                      <ul>
+                        <li><div class="vtn c-file xs"><span class="vi">🏡</span> home/ &nbsp;·&nbsp; about/ &nbsp;·&nbsp; pricing/</div></li>
+                        <li><div class="vtn c-file xs"><span class="vi">📰</span> blog/ + [slug]/ &nbsp;·&nbsp; contact/ &nbsp;·&nbsp; support/ &nbsp;·&nbsp; team/</div></li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <div class="vtn c-acct xs"><span class="vi">⚙️</span><span>account/</span><span class="vd">Dashboard privé — AccountShell</span></div>
+                      <ul>
+                        <li><div class="vtn c-file xs"><span class="vi">📋</span> settings/ → profile/ &nbsp;·&nbsp; security/ &nbsp;·&nbsp; billing/ &nbsp;·&nbsp; notifs/</div></li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <div class="vtn c-acct xs"><span class="vi">🛡️</span><span>admin/</span><span class="vd">Administration — AdminShell</span></div>
+                      <ul>
+                        <li><div class="vtn c-file xs"><span class="vi">👥</span> users/ &nbsp;·&nbsp; categories/ &nbsp;·&nbsp; blog/create/ &nbsp;·&nbsp; gallery/</div></li>
+                      </ul>
+                    </li>
+
+                  </ul>
+                </li>
+
+                <li>
+                  <div class="vtn c-api sm"><span class="vi">⚡</span><span>api/</span><span class="vd">54 Route Handlers REST</span></div>
+                  <ul>
+                    <li>
+                      <div class="vtn c-api xs"><span class="vi">📝</span> posts/ <span class="vd">8 routes</span></div>
+                      <ul>
+                        <li><div class="vtn c-file xs">GET+POST /posts &nbsp;·&nbsp; GET+PATCH+DELETE /posts/[id]</div></li>
+                        <li><div class="vtn c-file xs">POST /vote &nbsp;·&nbsp; /save &nbsp;·&nbsp; /report &nbsp;·&nbsp; /comments &nbsp;·&nbsp; /comments/[id]/vote</div></li>
+                        <li><div class="vtn c-file xs">GET /posts/followed &nbsp;·&nbsp; /posts/saved</div></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <div class="vtn c-api xs"><span class="vi">📚</span> resources/ <span class="vd">7 routes</span></div>
+                      <ul>
+                        <li><div class="vtn c-file xs">GET+POST /resources &nbsp;·&nbsp; [id] CRUD &nbsp;·&nbsp; /vote &nbsp;·&nbsp; /save &nbsp;·&nbsp; /comments &nbsp;·&nbsp; saved</div></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <div class="vtn c-api xs"><span class="vi">🏘️</span> categories/ &nbsp;·&nbsp; users/ &nbsp;·&nbsp; projects/ &nbsp;·&nbsp; badges/</div>
+                    </li>
+                    <li>
+                      <div class="vtn c-api xs"><span class="vi">📧</span> auth/ &nbsp;·&nbsp; emails/ &nbsp;·&nbsp; imagekit/auth/ &nbsp;·&nbsp; feedback/ &nbsp;·&nbsp; userConfig/</div>
+                    </li>
+                    <li>
+                      <div class="vtn c-api xs"><span class="vi">📍</span> events/ &nbsp;·&nbsp; spots/ &nbsp;·&nbsp; mapLocations/ &nbsp;·&nbsp; articles/ &nbsp;·&nbsp; mails/ &nbsp;·&nbsp; subscriptions/ &nbsp;·&nbsp; newsletterSubscribers/</div>
+                    </li>
+                  </ul>
+                </li>
+
+                <li><div class="vtn c-file xs"><span class="vi">📄</span> layout.tsx &nbsp;·&nbsp; unauthorized.tsx</div></li>
+
+              </ul>
+            </li>
+
+            <!-- ═══ back/ ═══ -->
+            <li>
+              <div class="vtn c-back"><span class="vi">🖥️</span><span>back/</span><span class="vd">Serveur uniquement — jamais importé côté client</span></div>
+              <ul>
+
+                <li>
+                  <div class="vtn c-lib sm"><span class="vi">🔧</span><span>lib/</span><span class="vd">Utilitaires serveur</span></div>
+                  <ul>
+                    <li><div class="vtn c-file xs"><span class="vi">🔐</span> auth.ts <span class="vd">config better-auth</span></div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">👤</span> auth-client.ts &nbsp;·&nbsp; auth-session.ts <span class="vd">getUser()</span></div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">🗄️</span> prisma.ts <span class="vd">instance singleton</span></div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">📧</span> send-auth-otp-email.ts &nbsp;·&nbsp; send-email-change-confirmation.ts &nbsp;·&nbsp; send-password-changed-email.ts</div></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <div class="vtn c-pris sm"><span class="vi">🗄️</span><span>prisma/</span><span class="vd">Schéma PostgreSQL modulaire</span></div>
+                  <ul>
+                    <li><div class="vtn c-file xs"><span class="vi">🏗️</span> schema.prisma <span class="vd">DB config + User + Session</span></div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">📝</span> content.prisma <span class="vd">Post, Category, Comment, Votes</span></div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">🔢</span> enums.prisma <span class="vd">PostFormat, ResourceType, Role…</span></div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">⚙️</span> config.prisma <span class="vd">Resource, Badge, UserConfig…</span></div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">🛒</span> projects.prisma &nbsp;·&nbsp; community.prisma &nbsp;·&nbsp; location.prisma</div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">🌱</span> seed.ts &nbsp;·&nbsp; migrations/ <span class="vd">35 migrations</span></div></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <div class="vtn c-repo sm"><span class="vi">🏛️</span><span>repositories/</span><span class="vd">Data access pur — *.action.ts</span></div>
+                  <ul>
+                    <li><div class="vtn c-file xs"><span class="vi">📝</span> posts &nbsp;·&nbsp; resources &nbsp;·&nbsp; categories &nbsp;·&nbsp; users &nbsp;·&nbsp; comments &nbsp;·&nbsp; projects</div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">📁</span> articles &nbsp;·&nbsp; badges &nbsp;·&nbsp; events &nbsp;·&nbsp; spots &nbsp;·&nbsp; gallery &nbsp;·&nbsp; images &nbsp;·&nbsp; profile</div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">⚙️</span> subscriptions &nbsp;·&nbsp; mails &nbsp;·&nbsp; feedback &nbsp;·&nbsp; userConfig &nbsp;·&nbsp; mapLocations &nbsp;·&nbsp; newsletterSubscribers &nbsp;·&nbsp; logout</div></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <div class="vtn c-svc sm"><span class="vi">⚙️</span><span>services/</span><span class="vd">Logique métier + auth — *.service.ts</span></div>
+                  <ul>
+                    <li><div class="vtn c-file xs"><span class="vi">📝</span> posts &nbsp;·&nbsp; resources &nbsp;·&nbsp; categories &nbsp;·&nbsp; users &nbsp;·&nbsp; comments &nbsp;·&nbsp; projects</div></li>
+                    <li><div class="vtn c-file xs"><span class="vi">📁</span> articles &nbsp;·&nbsp; badges &nbsp;·&nbsp; events &nbsp;·&nbsp; spots &nbsp;·&nbsp; subscriptions &nbsp;·&nbsp; mails &nbsp;·&nbsp; feedback &nbsp;·&nbsp; userConfig &nbsp;·&nbsp; mapLocations &nbsp;·&nbsp; newsletterSubscribers</div></li>
+                  </ul>
+                </li>
+
+              </ul>
+            </li>
+
+            <!-- ═══ front/ ═══ -->
+            <li>
+              <div class="vtn c-front"><span class="vi">🖌️</span><span>front/</span><span class="vd">Client uniquement — React, hooks, fetch wrappers</span></div>
+              <ul>
+
+                <li>
+                  <div class="vtn c-comp sm"><span class="vi">🧩</span><span>components/</span><span class="vd">Composants React organisés par domaine</span></div>
+                  <ul>
+                    <li>
+                      <div class="vtn c-comp xs"><span class="vi">🔒</span> Private/ <span class="vd">authentifié</span></div>
+                      <ul>
+                        <li><div class="vtn c-file xs"><span class="vi">📊</span> Account/ → Billing/ &nbsp;·&nbsp; Dashboard/ &nbsp;·&nbsp; Notifs/ &nbsp;·&nbsp; Profile/ &nbsp;·&nbsp; Security/</div></li>
+                        <li><div class="vtn c-file xs"><span class="vi">🔐</span> Auth/ <span class="vd">formulaires login/signup</span></div></li>
+                        <li><div class="vtn c-file xs"><span class="vi">⚡</span> Global/ → CreatePostForm &nbsp;·&nbsp; CreateResourceForm &nbsp;·&nbsp; CreateCategoryForm &nbsp;·&nbsp; Sidebar/</div></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <div class="vtn c-comp xs"><span class="vi">🌐</span> Public/ <span class="vd">accessible à tous</span></div>
+                      <ul>
+                        <li>
+                          <div class="vtn c-file xs"><span class="vi">👥</span> Community/</div>
+                          <ul>
+                            <li><div class="vtn c-file xs">Posts/ (PostText, PostImage, PostVideo, PostAudio)</div></li>
+                            <li><div class="vtn c-file xs">Resources/ &nbsp;·&nbsp; Category/ &nbsp;·&nbsp; Comments/ &nbsp;·&nbsp; Projects/ &nbsp;·&nbsp; User/ &nbsp;·&nbsp; Sidebar/</div></li>
+                          </ul>
+                        </li>
+                        <li><div class="vtn c-file xs"><span class="vi">📰</span> Blog/ &nbsp;·&nbsp; HomePage/ &nbsp;·&nbsp; Team/ &nbsp;·&nbsp; Global/ (Header/ Footer/ Navbar/)</div></li>
+                      </ul>
+                    </li>
+                    <li><div class="vtn c-file xs"><span class="vi">🎨</span> ui/ <span class="vd">shadcn/ui Radix</span> &nbsp;·&nbsp; Modals/ &nbsp;·&nbsp; Filter/ &nbsp;·&nbsp; map/ &nbsp;·&nbsp; providers/ &nbsp;·&nbsp; ux/</div></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <div class="vtn c-hook sm"><span class="vi">🎣</span><span>hooks/queries/</span><span class="vd">React Query — useQuery + useMutation</span></div>
+                  <ul>
+                    <li><div class="vtn c-file xs">use-posts &nbsp;·&nbsp; use-resources &nbsp;·&nbsp; use-categories &nbsp;·&nbsp; use-users &nbsp;·&nbsp; use-comments &nbsp;·&nbsp; use-projects &nbsp;·&nbsp; use-articles &nbsp;·&nbsp; …</div></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <div class="vtn c-api sm"><span class="vi">🔌</span><span>lib/api/</span><span class="vd">Fetch wrappers vers l'API</span></div>
+                  <ul>
+                    <li><div class="vtn c-file xs">posts.ts &nbsp;·&nbsp; resources.ts &nbsp;·&nbsp; upload.ts (ImageKit) &nbsp;·&nbsp; …</div></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <div class="vtn c-file sm"><span class="vi">📐</span><span>types/</span><span class="vd">Zod schemas + Prisma.GetPayload</span></div>
+                </li>
+                <li>
+                  <div class="vtn c-file sm"><span class="vi">📦</span><span>stores/</span><span class="vd">Zustand — use-recently-viewed.store.ts</span></div>
+                </li>
+                <li>
+                  <div class="vtn c-file sm"><span class="vi">🔗</span><span>context/</span><span class="vd">UserContext</span>&nbsp;<span class="vi" style="margin-left:12px;">✉️</span><span>emails/</span><span class="vd">React Email templates</span></div>
+                </li>
+
+              </ul>
+            </li>
+
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ══ FLUX ══ -->
+  <div class="section" id="flux">
+    <div class="section-header">
+      <div class="section-icon" style="background:#F0EEFF; color:#7C6FD6;">↔️</div>
+      <div>
+        <div class="section-title">Flux de données</div>
+        <div class="section-desc">Le chemin complet d'une requête, de l'UI jusqu'à PostgreSQL</div>
+      </div>
+    </div>
+    <div class="section-divider"></div>
+
+    <div style="background:var(--white); border:1px solid var(--border); border-radius:16px; padding:28px 32px; margin-bottom:20px;">
+      <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:20px;">Requête mutation (ex: créer un post)</div>
+      <div class="flow">
+        <div class="flow-node highlight">
+          <div class="fn-icon">🧩</div>
+          <div class="fn-name">Composant</div>
+          <div class="fn-sub">CreatePostForm.tsx</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">🎣</div>
+          <div class="fn-name">useMutation</div>
+          <div class="fn-sub">use-posts.ts</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">🔌</div>
+          <div class="fn-name">createPost()</div>
+          <div class="fn-sub">lib/api/posts.ts</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">⚡</div>
+          <div class="fn-name">POST /api/posts</div>
+          <div class="fn-sub">route.ts</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">⚙️</div>
+          <div class="fn-name">PostsService</div>
+          <div class="fn-sub">.create()</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">🏛️</div>
+          <div class="fn-name">PostsAction</div>
+          <div class="fn-sub">.create()</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node highlight">
+          <div class="fn-icon">🗄️</div>
+          <div class="fn-name">Prisma</div>
+          <div class="fn-sub">PostgreSQL</div>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:24px 0 20px;">Requête lecture (ex: charger le fil)</div>
+      <div class="flow">
+        <div class="flow-node highlight">
+          <div class="fn-icon">🧩</div>
+          <div class="fn-name">Composant</div>
+          <div class="fn-sub">community/page.tsx</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">🎣</div>
+          <div class="fn-name">usePosts()</div>
+          <div class="fn-sub">useQuery hook</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">💾</div>
+          <div class="fn-name">Cache RQ</div>
+          <div class="fn-sub">staleTime 5min</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">🔌</div>
+          <div class="fn-name">fetchPosts()</div>
+          <div class="fn-sub">lib/api/posts.ts</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">⚡</div>
+          <div class="fn-name">GET /api/posts</div>
+          <div class="fn-sub">route.ts</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="fn-icon">⚙️</div>
+          <div class="fn-name">Service</div>
+          <div class="fn-sub">→ Repository</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node highlight">
+          <div class="fn-icon">🗄️</div>
+          <div class="fn-name">Prisma</div>
+          <div class="fn-sub">PostgreSQL</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box tip">
+      <div class="info-box-icon">✅</div>
+      <div class="info-box-body">
+        <strong>Règle de séparation</strong>
+        <code>src/back/</code> n'est jamais importé depuis <code>src/front/</code> — et vice versa.
+        Le seul point de contact est <code>src/app/api/</code> via HTTP.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONVENTIONS ══ -->
+  <div class="section" id="conventions">
+    <div class="section-header">
+      <div class="section-icon" style="background:#FFF9E6; color:#C5962B;">📏</div>
+      <div>
+        <div class="section-title">Conventions de nommage</div>
+        <div class="section-desc">Règles à suivre pour tous les nouveaux fichiers</div>
+      </div>
+    </div>
+    <div class="section-divider"></div>
+
+    <table class="conv-table">
+      <thead>
+        <tr>
+          <th>Élément</th>
+          <th>Convention</th>
+          <th>Exemple</th>
+          <th>Emplacement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Composant React</td>
+          <td>PascalCase</td>
+          <td><span class="code-inline">PostCard.tsx</span></td>
+          <td>src/front/components/</td>
+        </tr>
+        <tr>
+          <td>Hook React Query</td>
+          <td><span class="code-inline">use-{entity}.ts</span></td>
+          <td><span class="code-inline">use-posts.ts</span></td>
+          <td>src/front/hooks/queries/</td>
+        </tr>
+        <tr>
+          <td>Hook custom</td>
+          <td><span class="code-inline">use-{feature}.ts</span></td>
+          <td><span class="code-inline">use-share.ts</span></td>
+          <td>src/front/hooks/</td>
+        </tr>
+        <tr>
+          <td>Repository</td>
+          <td><span class="code-inline">{entity}.action.ts</span></td>
+          <td><span class="code-inline">posts.action.ts</span></td>
+          <td>src/back/repositories/</td>
+        </tr>
+        <tr>
+          <td>Service</td>
+          <td><span class="code-inline">{entity}.service.ts</span></td>
+          <td><span class="code-inline">posts.service.ts</span></td>
+          <td>src/back/services/</td>
+        </tr>
+        <tr>
+          <td>Types / Schemas</td>
+          <td><span class="code-inline">{entity}.schema.ts</span></td>
+          <td><span class="code-inline">post.schema.ts</span></td>
+          <td>src/front/types/</td>
+        </tr>
+        <tr>
+          <td>Fetch wrapper</td>
+          <td>camelCase</td>
+          <td><span class="code-inline">fetchPosts, createPost</span></td>
+          <td>src/front/lib/api/</td>
+        </tr>
+        <tr>
+          <td>Store Zustand</td>
+          <td><span class="code-inline">use-{feature}.store.ts</span></td>
+          <td><span class="code-inline">use-recently-viewed.store.ts</span></td>
+          <td>src/front/stores/</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══ PRISMA ══ -->
+  <div class="section" id="prisma">
+    <div class="section-header">
+      <div class="section-icon" style="background:#E6FDF8; color:#00957A;">🗄️</div>
+      <div>
+        <div class="section-title">Schéma Prisma — Modèles principaux</div>
+        <div class="section-desc">6 fichiers .prisma — PostgreSQL via Neon</div>
+      </div>
+    </div>
+    <div class="section-divider"></div>
+
+    <div class="schema-grid">
+      <div class="schema-card">
+        <div class="schema-card-name">Post <span>content.prisma</span></div>
+        <div class="schema-field"><span class="schema-field-name">id</span><span class="schema-field-type">String</span><span class="schema-field-mod">@id cuid</span></div>
+        <div class="schema-field"><span class="schema-field-name">content</span><span class="schema-field-type">String</span></div>
+        <div class="schema-field"><span class="schema-field-name">format</span><span class="schema-field-type">PostFormat</span><span class="schema-field-mod">TEXT|IMAGE|VIDEO|AUDIO</span></div>
+        <div class="schema-field"><span class="schema-field-name">orientation</span><span class="schema-field-type">PostOrientation</span><span class="schema-field-mod">LANDSCAPE|PORTRAIT</span></div>
+        <div class="schema-field"><span class="schema-field-name">isPublished</span><span class="schema-field-type">Boolean</span></div>
+        <div class="schema-field"><span class="schema-field-name">upvoteCount</span><span class="schema-field-type">Int</span></div>
+        <div class="schema-field"><span class="schema-field-name">commentCount</span><span class="schema-field-type">Int</span></div>
+        <div class="schema-field"><span class="schema-field-name">saveCount</span><span class="schema-field-type">Int</span></div>
+        <div class="schema-field"><span class="schema-field-name">imageUrl / videoUrl / audioUrl</span><span class="schema-field-type">String?</span></div>
+        <div class="schema-field"><span class="schema-field-name">categoryId / authorId</span><span class="schema-field-type">String</span></div>
+      </div>
+
+      <div class="schema-card">
+        <div class="schema-card-name">Category <span>content.prisma</span></div>
+        <div class="schema-field"><span class="schema-field-name">slug</span><span class="schema-field-type">String</span><span class="schema-field-mod">@unique</span></div>
+        <div class="schema-field"><span class="schema-field-name">name</span><span class="schema-field-type">String</span></div>
+        <div class="schema-field"><span class="schema-field-name">visibility</span><span class="schema-field-type">Visibility</span><span class="schema-field-mod">PUBLIC|PRIVATE…</span></div>
+        <div class="schema-field"><span class="schema-field-name">iconUrl / bannerUrl</span><span class="schema-field-type">String?</span></div>
+        <div class="schema-field"><span class="schema-field-name">rules</span><span class="schema-field-type">String?</span></div>
+        <div class="schema-field"><span class="schema-field-name">members</span><span class="schema-field-type">Int</span></div>
+        <div class="schema-field"><span class="schema-field-name">postCount</span><span class="schema-field-type">Int</span></div>
+        <div class="schema-field"><span class="schema-field-name">subscriberCount</span><span class="schema-field-type">Int</span></div>
+        <div class="schema-field"><span class="schema-field-name">posts[]</span><span class="schema-field-type">Post[]</span></div>
+        <div class="schema-field"><span class="schema-field-name">ressources[]</span><span class="schema-field-type">Resource[]</span></div>
+      </div>
+
+      <div class="schema-card">
+        <div class="schema-card-name">Resource <span>config.prisma</span></div>
+        <div class="schema-field"><span class="schema-field-name">type</span><span class="schema-field-type">ResourceType</span><span class="schema-field-mod">ASSET|TUTORIAL|LINK</span></div>
+        <div class="schema-field"><span class="schema-field-name">title</span><span class="schema-field-type">String</span></div>
+        <div class="schema-field"><span class="schema-field-name">description</span><span class="schema-field-type">String?</span></div>
+        <div class="schema-field"><span class="schema-field-name">url</span><span class="schema-field-type">String?</span><span class="schema-field-mod">lien externe</span></div>
+        <div class="schema-field"><span class="schema-field-name">imageUrl / videoUrl / audioUrl</span><span class="schema-field-type">String?</span></div>
+        <div class="schema-field"><span class="schema-field-name">upvoteCount / saveCount</span><span class="schema-field-type">Int</span></div>
+        <div class="schema-field"><span class="schema-field-name">saves[]</span><span class="schema-field-type">ResourceSave[]</span></div>
+        <div class="schema-field"><span class="schema-field-name">comments[]</span><span class="schema-field-type">Comment[]</span></div>
+      </div>
+
+      <div class="schema-card">
+        <div class="schema-card-name">Comment <span>content.prisma</span></div>
+        <div class="schema-field"><span class="schema-field-name">content</span><span class="schema-field-type">String</span></div>
+        <div class="schema-field"><span class="schema-field-name">postId</span><span class="schema-field-type">String?</span><span class="schema-field-mod">polymorphique</span></div>
+        <div class="schema-field"><span class="schema-field-name">resourceId</span><span class="schema-field-type">String?</span><span class="schema-field-mod">polymorphique</span></div>
+        <div class="schema-field"><span class="schema-field-name">parentId</span><span class="schema-field-type">String?</span><span class="schema-field-mod">réponses imbriquées</span></div>
+        <div class="schema-field"><span class="schema-field-name">imageUrl / videoUrl</span><span class="schema-field-type">String?</span></div>
+        <div class="schema-field"><span class="schema-field-name">upvoteCount</span><span class="schema-field-type">Int</span></div>
+        <div class="schema-field"><span class="schema-field-name">downvoteCount</span><span class="schema-field-type">Int</span></div>
+        <div class="schema-field"><span class="schema-field-name">children[]</span><span class="schema-field-type">Comment[]</span></div>
+      </div>
+
+      <div class="schema-card">
+        <div class="schema-card-name">PostVote / PostSave <span>content.prisma</span></div>
+        <div class="schema-field"><span class="schema-field-name">userId + postId</span><span class="schema-field-type">String</span><span class="schema-field-mod">@@unique</span></div>
+        <div style="height:8px;"></div>
+        <div class="schema-card-name" style="margin-top:12px;">CategoryFollow <span>content.prisma</span></div>
+        <div class="schema-field"><span class="schema-field-name">userId + categoryId</span><span class="schema-field-type">String</span><span class="schema-field-mod">@@unique</span></div>
+        <div style="height:8px;"></div>
+        <div class="schema-card-name" style="margin-top:12px;">UserFollow <span>content.prisma</span></div>
+        <div class="schema-field"><span class="schema-field-name">followerId + followingId</span><span class="schema-field-type">String</span><span class="schema-field-mod">@@unique</span></div>
+      </div>
+
+      <div class="schema-card">
+        <div class="schema-card-name">Enums <span>enums.prisma</span></div>
+        <div class="schema-field"><span class="schema-field-name">PostFormat</span><span class="schema-field-type" style="font-size:10px;">TEXT IMAGE VIDEO AUDIO DESKTOP MOBILE</span></div>
+        <div class="schema-field"><span class="schema-field-name">PostOrientation</span><span class="schema-field-type">LANDSCAPE PORTRAIT</span></div>
+        <div class="schema-field"><span class="schema-field-name">ResourceType</span><span class="schema-field-type">ASSET TUTORIAL LINK</span></div>
+        <div class="schema-field"><span class="schema-field-name">Role</span><span class="schema-field-type">ADMIN USER MEMBER PREMIUM</span></div>
+        <div class="schema-field"><span class="schema-field-name">Visibility</span><span class="schema-field-type">PUBLIC PRIVATE MEMBERS_ONLY</span></div>
+        <div class="schema-field"><span class="schema-field-name">ProjectStatus</span><span class="schema-field-type">DRAFT PUBLISHED ARCHIVED</span></div>
+        <div class="schema-field"><span class="schema-field-name">SubscriptionStatus</span><span class="schema-field-type">ACTIVE CANCELED EXPIRED</span></div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- end .dev-only -->
+
+  <!-- ══ CLIENT VIEW ══ -->
+  <div class="client-only">
+
+    <div class="section" id="client-tree">
+      <div class="section-header">
+        <div class="section-icon" style="background:#E6FDF8; color:#0F9271;">🗺️</div>
+        <div>
+          <div class="section-title">Pages de l'application</div>
+          <div class="section-desc">Toutes les pages accessibles — organisées par zone</div>
+        </div>
+      </div>
+      <div class="section-divider"></div>
+
+      <div class="vtree-wrap">
+        <!-- Légende -->
+        <div class="tree-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#92400E"></div> Site public — sans compte</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#0369A1"></div> Connexion &amp; Inscription</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#6D28D9"></div> Communauté — connecté</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#C2410C"></div> Mon compte — connecté</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#B91C1C"></div> Administration — admin</div>
+        </div>
+
+        <ul class="vtree">
+          <li>
+            <div class="vtn root lg"><span class="vi">🌐</span><span>Lency</span><span class="vd">Application complète</span></div>
+            <ul>
+
+              <!-- SITE PUBLIC -->
+              <li>
+                <div class="vtn c-web"><span class="vi">🌍</span><span>Site public</span><span class="vd">accessible à tous, sans compte</span></div>
+                <ul>
+                  <li><div class="vtn c-file xs"><span class="vi">🏠</span><span>Accueil</span><span class="vd">/</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">ℹ️</span><span>À propos</span><span class="vd">/about</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">💰</span><span>Tarifs</span><span class="vd">/pricing</span></div></li>
+                  <li>
+                    <div class="vtn c-file xs"><span class="vi">📰</span><span>Blog</span><span class="vd">/blog</span></div>
+                    <ul>
+                      <li><div class="vtn c-file xs"><span class="vi">📄</span><span>Article</span><span class="vd">/blog/[article]</span></div></li>
+                    </ul>
+                  </li>
+                  <li><div class="vtn c-file xs"><span class="vi">✉️</span><span>Contact</span><span class="vd">/contact</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">🆘</span><span>Support</span><span class="vd">/support</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">👥</span><span>L'équipe</span><span class="vd">/team</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">📄</span><span>Mentions légales</span><span class="vd">/legal</span></div></li>
+                </ul>
+              </li>
+
+              <!-- AUTH -->
+              <li>
+                <div class="vtn c-auth"><span class="vi">🔐</span><span>Connexion &amp; Inscription</span><span class="vd">créer ou accéder à un compte</span></div>
+                <ul>
+                  <li><div class="vtn c-file xs"><span class="vi">🔑</span><span>Connexion</span><span class="vd">/login</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">📝</span><span>Inscription</span><span class="vd">/sign-up</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">✅</span><span>Vérification email</span><span class="vd">/verify-email</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">🎉</span><span>Bienvenue</span><span class="vd">/new-user — onboarding</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">🔄</span><span>Mot de passe oublié</span><span class="vd">/forgot-password</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">🔓</span><span>Nouveau mot de passe</span><span class="vd">/reset-password</span></div></li>
+                </ul>
+              </li>
+
+              <!-- COMMUNAUTÉ -->
+              <li>
+                <div class="vtn c-app"><span class="vi">💬</span><span>Communauté</span><span class="vd">connexion requise</span></div>
+                <ul>
+                  <li>
+                    <div class="vtn c-pages sm"><span class="vi">📡</span><span>Fil d'actualité</span><span class="vd">/community</span></div>
+                    <ul>
+                      <li><div class="vtn c-file xs"><span class="vi">📋</span><span>Onglet Général</span><span class="vd">tous les posts</span></div></li>
+                      <li><div class="vtn c-file xs"><span class="vi">🔥</span><span>Onglet Populaire</span><span class="vd">triés par votes</span></div></li>
+                      <li><div class="vtn c-file xs"><span class="vi">⭐</span><span>Onglet Suivis</span><span class="vd">catégories suivies</span></div></li>
+                    </ul>
+                  </li>
+                  <li><div class="vtn c-file xs"><span class="vi">📚</span><span>Bibliothèque</span><span class="vd">/community/resources</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">🔖</span><span>Enregistrements</span><span class="vd">/community/saved</span></div></li>
+                  <li>
+                    <div class="vtn c-pages sm"><span class="vi">🏘️</span><span>Page communauté</span><span class="vd">/community/[nom]</span></div>
+                    <ul>
+                      <li><div class="vtn c-file xs"><span class="vi">💬</span><span>Détail d'un post</span><span class="vd">/community/[slug]/post/[id]</span></div></li>
+                      <li><div class="vtn c-file xs"><span class="vi">📎</span><span>Détail d'une ressource</span><span class="vd">/community/[slug]/resources/[id]</span></div></li>
+                    </ul>
+                  </li>
+                  <li><div class="vtn c-file xs"><span class="vi">👤</span><span>Profil utilisateur</span><span class="vd">/community/user/[pseudo]</span></div></li>
+                </ul>
+              </li>
+
+              <!-- MON COMPTE -->
+              <li>
+                <div class="vtn c-acct"><span class="vi">⚙️</span><span>Mon compte</span><span class="vd">connexion requise</span></div>
+                <ul>
+                  <li><div class="vtn c-file xs"><span class="vi">📋</span><span>Mon profil</span><span class="vd">/account/settings/profile</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">🔒</span><span>Sécurité</span><span class="vd">/account/settings/security</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">💳</span><span>Abonnement</span><span class="vd">/account/settings/billing</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">🔔</span><span>Notifications</span><span class="vd">/account/settings/notifs</span></div></li>
+                </ul>
+              </li>
+
+              <!-- ADMIN -->
+              <li>
+                <div class="vtn c-back"><span class="vi">🛡️</span><span>Administration</span><span class="vd">réservé aux admins</span></div>
+                <ul>
+                  <li><div class="vtn c-file xs"><span class="vi">📊</span><span>Dashboard</span><span class="vd">/admin</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">👥</span><span>Gestion des membres</span><span class="vd">/admin/users</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">🏷️</span><span>Catégories</span><span class="vd">/admin/categories</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">✍️</span><span>Rédaction blog</span><span class="vd">/admin/blog/create</span></div></li>
+                  <li><div class="vtn c-file xs"><span class="vi">🖼️</span><span>Galerie</span><span class="vd">/admin/gallery</span></div></li>
+                </ul>
+              </li>
+
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- end .client-only -->
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div>
+      <strong>Lency</strong> — Arborescence v1.0<br>
+      Next.js 16 · React 19 · TypeScript · Prisma 7 · PostgreSQL
+    </div>
+    <div style="text-align:right;">
+      Mai 2026 · Généré depuis le code source
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function toggleCard(card) {
+    card.classList.toggle('open');
+  }
+  function expandAll() {
+    document.querySelectorAll('.tree-card').forEach(c => c.classList.add('open'));
+  }
+  function collapseAll() {
+    document.querySelectorAll('.tree-card').forEach(c => c.classList.remove('open'));
+  }
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 68;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+
+  // View switcher
+  function setView(mode) {
+    document.body.className = 'view-' + mode;
+    document.getElementById('tab-dev').classList.toggle('active', mode === 'dev');
+    document.getElementById('tab-client').classList.toggle('active', mode === 'client');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Progress bar + active nav
+  const devSections    = ['cover','arbre','api','flux','conventions','prisma'];
+  const clientSections = ['cover','client-tree'];
+
+  function updateNav() {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progress-bar').style.width = (total > 0 ? scrolled / total * 100 : 0) + '%';
+
+    const isClient = document.body.classList.contains('view-client');
+    const sections = isClient ? clientSections : devSections;
+
+    let active = 0;
+    for (let i = 0; i < sections.length; i++) {
+      const el = document.getElementById(sections[i]);
+      if (el && el.getBoundingClientRect().top <= 100) active = i;
+    }
+    document.querySelectorAll('.side-nav-link').forEach((btn, i) => {
+      btn.classList.toggle('active', i === active);
+    });
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+</script>
+
+</body>
+</html>

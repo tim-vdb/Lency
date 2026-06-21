@@ -17,41 +17,72 @@ model User {
   email                     String                 @unique
   password                  String?
   username                  String?                @unique
-  phone                     String?
   bio                       String?
-  avatarUrl                 String?
   role                      Role                   @default(MEMBER)
-  isPremium                 Boolean                @default(false)
+  isMarketplaceTalent       Boolean                @default(false)
+  readyToStart              Boolean                @default(false)
   cv                        String?
   portfolio                 String?
-  eventId                   String?
+  address                   String?
+  latitude                  Float?
+  longitude                 Float?
   createdAt                 DateTime               @default(now())
   updatedAt                 DateTime               @updatedAt
   emailVerified             Boolean                @default(false)
   image                     String?
+  avatarUrl                 String?
   name                      String?
   pendingEmail              String?
   emailChangeToken          String?
   emailChangeTokenExpiresAt DateTime?
-  articles                  Article[]
+  deletionToken                String?
+  deletionTokenExpiresAt       DateTime?
+  pendingPasswordHash          String?
+  passwordChangeToken          String?
+  passwordChangeTokenExpiresAt DateTime?
   creator                   Category[]             @relation("CreatedCategories")
   Categorys                 Category[]
   Comments                  Comment[]
-  NewsletterSubscribers     NewsletterSubscriber[]
   Posts                     Post[]
   projects                  Project[]
-  spots                     Spot[]
-  subscription              Subscription?
   configs                   UserConfig[]
   accounts                  Account[]
   sessions                  Session[]
   participants              Project[]              @relation("Participants")
-  badges                    Badge[]                @relation("UserBadge")
-  events                    Event[]                @relation("UserEvent")
   savedPosts                PostSave[]
   postVotes                 PostVote[]
-  hiddenPosts               PostHide[]
   reportedPosts             PostReport[]
+  reportedProjects          ProjectReport[]
+  categoryFollows           CategoryFollow[]
+  resources                 Resource[]             @relation("UserResources")
+  resourceVotes             ResourceVote[]
+  resourceSaves             ResourceSave[]
+  followers                 UserFollow[]           @relation("Following")
+  following                 UserFollow[]           @relation("Followers")
+  reportsMade               UserReport[]           @relation("UserReporters")
+  reportsReceived           UserReport[]           @relation("ReportedUsers")
+  socialLinks               UserSocialLink[]
+  feedbacks                 Feedback[]
+  blogs                     Blog[]
+  projectApplications       ProjectApplication[]
+  projectInvitations        ProjectInvitation[]
+  notifications             Notification[]
+  categoryNotifications     CategoryNotificationSubscription[]
+  projectMessages           ProjectMessage[]
+  directMessages            DirectMessage[]
+  conversations             Conversation[]     @relation("ConversationParticipants")
+}
+
+model UserSocialLink {
+  id        String   @id @default(cuid())
+  userId    String
+  platform  String
+  url       String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, platform])
+  @@map("user_social_links")
 }
 
 /// *
@@ -101,18 +132,31 @@ model Verification {
 }
 
 model ContactMessage {
-  id        String        @id @default(cuid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  prenom    String
-  nom       String
-  email     String
-  sujet     String
-  message   String        @db.Text
+  prenom  String
+  nom     String
+  email   String
+  sujet   String
+  message String @db.Text
 
-  type      ContactType   @default(CONTACT_GENERAL)
-  status    ContactStatus @default(EN_ATTENTE)
+  type   ContactType   @default(CONTACT_GENERAL)
+  status ContactStatus @default(EN_ATTENTE)
 
   @@map("contact_messages")
+}
+
+model Feedback {
+  id          String   @id @default(cuid())
+  description String   @db.Text
+  imageUrl    String?
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("feedbacks")
 }
