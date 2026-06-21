@@ -118,7 +118,7 @@ export function DirectMessageChat({ otherUser, onClose }: DirectMessageChatProps
             </div>
           ) : messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full gap-2 text-neutral-400">
-              <p className="text-sm">Démarrez la conversation !</p>
+              <p className="text-sm">                Démarrer la conversation !</p>
             </div>
           ) : (
             messages.map((msg) => (

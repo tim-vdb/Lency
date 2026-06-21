@@ -1,15 +1,23 @@
-import prisma from "../lib/prisma";
+// Event model not found in Prisma schema
+
+type StubEvent = {
+    id: string;
+    title: string;
+    description: string;
+    location: string | null;
+    startDate: Date;
+    endDate: Date;
+    participants: number;
+    typeEvent: "PHYSICAL" | "VIRTUAL";
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+};
 
 export const EventsAction = {
-    findById: async (id: string) => {
-        return prisma.event.findUnique({ where: { id } });
-    },
-
-    findAll: async () => {
-        return prisma.event.findMany();
-    },
-
-    create: async (userId: string, data: {
+    findById: async (_id: string): Promise<StubEvent | null> => null,
+    findAll: async (): Promise<StubEvent[]> => [],
+    create: async (_userId: string, _data: {
         title: string;
         description: string;
         location?: string | null;
@@ -17,17 +25,8 @@ export const EventsAction = {
         endDate: Date;
         participants: number;
         typeEvent: "PHYSICAL" | "VIRTUAL";
-    }) => {
-        return prisma.event.create({
-            data: {
-                ...data,
-                userId,
-                typeEvent: 'VIRTUAL',
-            },
-        });
-    },
-
-    update: async (id: string, data: {
+    }): Promise<StubEvent> => { throw new Error("Event model not implemented"); },
+    update: async (_id: string, _data: {
         title?: string;
         description?: string;
         location?: string | null;
@@ -35,14 +34,6 @@ export const EventsAction = {
         endDate?: Date;
         participants?: number;
         typeEvent?: "PHYSICAL" | "VIRTUAL";
-    }) => {
-        return prisma.event.update({
-            where: { id },
-            data,
-        });
-    },
-
-    delete: async (id: string) => {
-        return prisma.event.delete({ where: { id } });
-    },
+    }): Promise<StubEvent> => { throw new Error("Event model not implemented"); },
+    delete: async (_id: string): Promise<StubEvent> => { throw new Error("Event model not implemented"); },
 };

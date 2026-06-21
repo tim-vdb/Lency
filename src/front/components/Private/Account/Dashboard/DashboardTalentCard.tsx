@@ -34,7 +34,7 @@ export function DashboardTalentCard({ talent, className, style }: DashboardTalen
 
     return (
         <div
-            className={cn("bg-white rounded-xl border border-[#E8E8E1] p-4 flex flex-col gap-3", className)}
+            className={cn("bg-white dark:bg-neutral-800 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 p-4 flex flex-col gap-3", className)}
             style={style}
         >
             {/* Avatar + nom + adresse */}
@@ -45,7 +45,7 @@ export function DashboardTalentCard({ talent, className, style }: DashboardTalen
                         : initials}
                 </div>
                 <div className="flex flex-col gap-0.5 min-w-0">
-                    <span className="text-[16px] font-semibold text-[#000000] leading-snug line-clamp-1">
+                    <span className="text-[16px] font-semibold text-[#000000] dark:text-white leading-snug line-clamp-1">
                         {name}
                     </span>
                     {talent.address && (
@@ -68,7 +68,7 @@ export function DashboardTalentCard({ talent, className, style }: DashboardTalen
                     {roles.map((role) => (
                         <span
                             key={role}
-                            className="text-[11px] px-2 py-0.5 bg-[#F7F7F2] border border-[#E8E8E1] rounded-lg text-[#4C4A43] whitespace-nowrap"
+                            className="text-[11px] px-2 py-0.5 bg-[#F7F7F2] dark:bg-neutral-700 border border-[#E8E8E1] dark:border-neutral-600 rounded-lg text-[#4C4A43] dark:text-neutral-300 whitespace-nowrap"
                         >
                             {role}
                         </span>

@@ -28,7 +28,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
     if (compact) {
         return (
             <div className={cn(
-                "bg-white rounded-xl border border-[#E8E8E1] p-3 flex items-center gap-3",
+                "bg-white dark:bg-neutral-800 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 p-3 flex items-center gap-3",
                 className
             )} style={style}>
                 <div className="w-10 h-10 rounded-full bg-[#E8E8E1] shrink-0 overflow-hidden flex items-center justify-center text-xs font-semibold text-[#4C4A43]">
@@ -39,7 +39,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
                     )}
                 </div>
                 <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-                    <span className="text-[14px] font-semibold text-[#000000] leading-snug line-clamp-1">
+                    <span className="text-[14px] font-semibold text-[#000000] dark:text-white leading-snug line-clamp-1">
                         {project.title}
                     </span>
                     {(dateLabel || cityName) && (
@@ -60,7 +60,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
                     )}
                 </div>
                 <Link href={`/marketplace/${project.id}`} className="shrink-0">
-                    <button className="text-[12px] font-medium h-7 px-3 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] bg-white text-[#000000] hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]">
+                    <button className="text-[12px] font-medium h-7 px-3 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] dark:border-neutral-600 bg-white dark:bg-neutral-700 text-[#000000] dark:text-white hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]">
                         Rejoindre
                     </button>
                 </Link>
@@ -70,7 +70,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
 
     return (
         <div className={cn(
-            "bg-white rounded-xl border border-[#E8E8E1] p-4 flex flex-col gap-3",
+            "bg-white dark:bg-neutral-800 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 p-4 flex flex-col gap-3",
             className
         )} style={style}>
             {/* Ligne 1 : avatar + titre + date/lieu */}
@@ -83,7 +83,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
                     )}
                 </div>
                 <div className="flex flex-col gap-0.5 min-w-0">
-                    <span className="text-[16px] font-semibold text-[#000000] leading-snug line-clamp-2">
+                    <span className="text-[16px] font-semibold text-[#000000] dark:text-white leading-snug line-clamp-2">
                         {project.title}
                     </span>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-0">
@@ -104,7 +104,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
             </div>
 
             {/* Description */}
-            <p className="text-[13px] leading-[1.55] text-[#4C4A43] line-clamp-4 flex-1">
+            <p className="text-[13px] leading-[1.55] text-[#4C4A43] dark:text-neutral-400 line-clamp-4 flex-1">
                 {project.description}
             </p>
 
@@ -136,7 +136,7 @@ export function DashboardProjectCard({ project, className, style, compact = fals
                 {/* Bouton — gris par défaut, orange au survol */}
                 <Link href={`/marketplace/${project.id}`}>
                     <button
-                        className="text-[13px] font-medium h-8 px-4 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] bg-white text-[#000000] hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]"
+                        className="text-[13px] font-medium h-8 px-4 rounded-lg cursor-pointer whitespace-nowrap transition-colors border border-[#E8E8E1] dark:border-neutral-600 bg-white dark:bg-neutral-700 text-[#000000] dark:text-white hover:bg-[#EA3D0E] hover:text-white hover:border-[#EA3D0E]"
                     >
                         Rejoindre le projet
                     </button>

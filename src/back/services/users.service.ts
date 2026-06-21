@@ -1,9 +1,13 @@
 import { UsersAction } from "../repositories/users.action";
 import { PostsAction } from "../repositories/posts.action";
 import { getUser } from "../lib/auth-session";
+import { auth } from "../lib/auth";
 import { notifyNewFollower, notifyUserReadyStatusChanged } from "../lib/ably";
+import { sendAccountDeletionEmail } from "../lib/send-account-deletion-email";
 import { NotificationService } from "./notifications.service";
+import { headers } from "next/headers";
 import crypto from "crypto";
+import { verifyPassword, hashPassword } from "better-auth/crypto";
 
 export const UsersService = {
     findByIdUser: async (id: string) => {
@@ -125,7 +129,6 @@ export const UsersService = {
             firstname?: string;
             lastname?: string;
             username?: string;
-            phone?: string;
             bio?: string;
             image?: string;
             cv?: string;
@@ -181,20 +184,98 @@ export const UsersService = {
         return UsersAction.update(id, { role });
     },
 
-    deleteUser: async (id: string) => {
-        const currentUser = await getUser();
-        if (!currentUser) {
-            throw new Error("Unauthorized");
+    deleteUser: async (id: string, password?: string) => {
+        try {
+            console.warn("[deleteUser] Starting deletion process for user:", id);
+
+            const currentUser = await getUser();
+            if (!currentUser) {
+                throw new Error("Unauthorized");
+            }
+
+            // Allow users to delete their own account, or admins to delete anyone
+            if (currentUser.id !== id && currentUser.role !== "ADMIN") {
+                throw new Error("Forbidden");
+            }
+
+            const targetUser = await UsersService.findByIdUser(id);
+            console.warn("[deleteUser] Found target user:", targetUser.email);
+
+            // If user has a password (email/password auth), require password verification
+            if (targetUser.password && password) {
+                console.warn("[deleteUser] Verifying password...");
+                try {
+                    await auth.api.signInEmail({
+                        body: { email: targetUser.email, password },
+                        headers: await headers(),
+                    });
+                    console.warn("[deleteUser] Password verified");
+                } catch (err) {
+                    console.error("[deleteUser] Password verification failed:", err);
+                    throw new Error("Invalid password");
+                }
+            } else if (targetUser.password && !password) {
+                throw new Error("Password required");
+            }
+
+            // Generate deletion token (24h expiration)
+            console.warn("[deleteUser] Generating deletion token...");
+            const rawToken = crypto.randomBytes(32).toString('hex');
+            const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+            const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+            // Save token to user
+            console.warn("[deleteUser] Saving deletion token to user...");
+            await UsersAction.saveDeletionToken(id, {
+                deletionToken: hashedToken,
+                deletionTokenExpiresAt: expiresAt,
+            });
+
+            // Send confirmation email
+            console.warn("[deleteUser] Sending confirmation email to:", targetUser.email);
+            await sendAccountDeletionEmail({
+                email: targetUser.email,
+                firstname: targetUser.firstname,
+                confirmationToken: rawToken,
+            });
+
+            console.warn("[deleteUser] Email sent successfully");
+            return { message: "Email de confirmation envoyé" };
+        } catch (error) {
+            console.error("[deleteUser] Error:", error);
+            throw error;
         }
+    },
 
-        // Allow users to delete their own account, or admins to delete anyone
-        if (currentUser.id !== id && currentUser.role !== "ADMIN") {
-            throw new Error("Forbidden");
+    confirmDeleteUser: async (rawToken: string) => {
+        try {
+            console.warn("[confirmDeleteUser] Starting with token:", rawToken);
+            const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+            console.warn("[confirmDeleteUser] Hashed token:", hashedToken);
+
+            const user = await UsersAction.findByDeletionToken(hashedToken);
+            console.warn("[confirmDeleteUser] Found user:", user?.email);
+
+            if (!user) {
+                console.warn("[confirmDeleteUser] User not found");
+                throw new Error("TOKEN_INVALID_OR_EXPIRED");
+            }
+
+            console.warn("[confirmDeleteUser] Token expires at:", user.deletionTokenExpiresAt);
+            if (!user.deletionTokenExpiresAt || user.deletionTokenExpiresAt < new Date()) {
+                console.warn("[confirmDeleteUser] Token expired");
+                throw new Error("TOKEN_EXPIRED");
+            }
+
+            console.warn("[confirmDeleteUser] Deleting user...");
+            // Delete the user
+            const result = await UsersAction.delete(user.id);
+            console.warn("[confirmDeleteUser] User deleted successfully");
+            return result;
+        } catch (error) {
+            console.error("[confirmDeleteUser] Error:", error);
+            throw error;
         }
-
-        await UsersService.findByIdUser(id);
-
-        return UsersAction.delete(id);
     },
 
     initiateEmailChange: async (userId: string, newEmail: string) => {
@@ -230,6 +311,39 @@ export const UsersService = {
     hasCredentialAccount: async (userId: string) => {
         const account = await UsersAction.findCredentialAccount(userId);
         return !!account?.password;
+    },
+
+    initiatePasswordChange: async (userId: string, currentPassword: string, newPassword: string) => {
+        const credentialAccount = await UsersAction.findCredentialAccount(userId);
+        if (!credentialAccount?.password) throw new Error("NO_CREDENTIAL_ACCOUNT");
+
+        const valid = await verifyPassword({ hash: credentialAccount.password, password: currentPassword });
+        if (!valid) throw new Error("INVALID_PASSWORD");
+
+        const newPasswordHash = await hashPassword(newPassword);
+        const rawToken = crypto.randomBytes(32).toString("hex");
+        const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+        await UsersAction.savePendingPasswordChange(userId, {
+            pendingPasswordHash: newPasswordHash,
+            passwordChangeToken: hashedToken,
+            passwordChangeTokenExpiresAt: expiresAt,
+        });
+
+        return rawToken;
+    },
+
+    confirmPasswordChange: async (rawToken: string) => {
+        const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+        const user = await UsersAction.findByPasswordChangeToken(hashedToken);
+
+        if (!user) throw new Error("TOKEN_INVALID_OR_EXPIRED");
+        if (!user.pendingPasswordHash) throw new Error("NO_PENDING_PASSWORD");
+
+        await UsersAction.applyPasswordChange(user.id, user.pendingPasswordHash);
+
+        return user;
     },
 
     upsertSocialLink: async (platform: string, url: string) => {

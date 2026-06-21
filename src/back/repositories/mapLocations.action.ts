@@ -4,13 +4,13 @@ export const MapLocationsAction = {
     findById: async (id: string) => {
         return prisma.mapLocation.findUnique({
             where: { id },
-            include: { Spots: true, Projects: true },
+            include: { Projects: true },
         });
     },
 
     findAll: async () => {
         return prisma.mapLocation.findMany({
-            include: { Spots: true, Projects: true },
+            include: { Projects: true },
         });
     },
 

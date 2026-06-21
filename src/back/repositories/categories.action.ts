@@ -20,7 +20,7 @@ export const CategoriesAction = {
 
     findPostsByCategoryId: async (categoryId: string, userId?: string) => {
         const posts = await prisma.post.findMany({
-            where: { categoryId },
+            where: { categoryId, isPublished: true },
             include: { author: true, category: true },
             orderBy: { createdAt: "desc" },
         });
@@ -62,7 +62,7 @@ export const CategoriesAction = {
         const categoryIds = follows.map((f) => f.categoryId);
         if (categoryIds.length === 0) return [];
         const posts = await prisma.post.findMany({
-            where: { categoryId: { in: categoryIds } },
+            where: { categoryId: { in: categoryIds }, isPublished: true },
             include: { author: true, category: true },
             orderBy: { createdAt: "desc" },
         });

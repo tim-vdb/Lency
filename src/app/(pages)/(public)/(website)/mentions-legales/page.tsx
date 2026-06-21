@@ -8,12 +8,12 @@ export const metadata: Metadata = {
 
 export default function MentionsLegalesPage() {
   return (
-    <main className="p-8 sm:p-12 md:p-16 lg:px-24 lg:py-12">
+    <main className="p-8 sm:p-12 md:p-16 lg:px-24 lg:py-12 bg-white dark:bg-neutral-900 min-h-screen text-black dark:text-white">
       <h1 className="text-4xl md:text-5xl font-cooper font-bold mb-8 text-center md:text-left">
         Mentions légales
       </h1>
 
-      <section className="mb-6 prose prose-lg">
+      <section className="mb-6 prose dark:prose-invert prose-lg">
         <p>
           Conformément aux dispositions de la loi n°2004-575 du 21 juin 2004
           pour la confiance dans l’économie numérique, il est précisé aux
@@ -23,7 +23,7 @@ export default function MentionsLegalesPage() {
         </p>
       </section>
 
-      <section className="mb-6 prose prose-lg">
+      <section className="mb-6 prose dark:prose-invert prose-lg">
         <h2 className="text-2xl font-cooper mb-3">1. Éditeur du Site</h2>
         <p>
           Le site <span className="font-bold">Mölkky Lyon</span> est édité par :

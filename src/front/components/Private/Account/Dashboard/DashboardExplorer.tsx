@@ -121,7 +121,7 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
             <div className="shrink-0">
                 <button
                     onClick={() => setFiltersOpen((v) => !v)}
-                    className="flex items-center gap-2 text-sm font-medium text-[#4C4A43] hover:text-black transition-colors cursor-pointer"
+                    className="flex items-center gap-2 text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
                 >
                     <SlidersHorizontal className="w-4 h-4" />
                     Filtres
@@ -131,7 +131,7 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
                 </button>
 
                 {filtersOpen && (
-                    <div className="mt-3 p-4 bg-[#F7F7F2] rounded-xl border border-[#E8E8E1]">
+                    <div className="mt-3 p-4 bg-[#F7F7F2] dark:bg-neutral-800 rounded-xl border border-[#E8E8E1] dark:border-neutral-700">
                         {mode === "projets"
                             ? <MapFilters titleSuggestions={titleSuggestions} values={projectFilters} onChange={handleProjectFilterChange} />
                             : <TalentFilters values={talentFilters} onChange={handleTalentFilterChange} />}
@@ -140,7 +140,7 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
             </div>
 
             {/* Map */}
-            <Card className="border border-[#E8E8E1] overflow-hidden py-0 shrink-0 w-full rounded-xl" style={{ height: "clamp(220px, 30.6vh, 330px)" }}>
+            <Card className="border border-[#E8E8E1] dark:border-neutral-700 overflow-hidden py-0 shrink-0 w-full rounded-xl" style={{ height: "clamp(220px, 30.6vh, 330px)" }}>
                 <CardContent className="p-0 h-full">
                     {mode === "projets"
                         ? <ProjectsMap projects={filteredProjects} />
@@ -152,9 +152,9 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
             <div className="shrink-0">
                 {mode === "projets" ? (
                     filteredProjects.length === 0 ? (
-                        <p className="text-sm text-[#8C8A85] text-center py-6">Aucun projet trouvé</p>
+                        <p className="text-sm text-neutral-400 text-center py-6">Aucun projet trouvé</p>
                     ) : (
-                        <div className="grid grid-cols-2 gap-3 pb-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-2">
                             {filteredProjects.map((p) => (
                                 <DashboardProjectCard
                                     key={p.id}
@@ -165,9 +165,9 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
                     )
                 ) : (
                     filteredTalents.length === 0 ? (
-                        <p className="text-sm text-[#8C8A85] text-center py-6">Aucun talent trouvé</p>
+                        <p className="text-sm text-neutral-400 text-center py-6">Aucun talent trouvé</p>
                     ) : (
-                        <div className="grid grid-cols-2 gap-3 pb-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-2">
                             {filteredTalents.map((t) => (
                                 <DashboardTalentCard
                                     key={t.id}

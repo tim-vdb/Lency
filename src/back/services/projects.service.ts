@@ -16,8 +16,8 @@ export type CreateProjectInput = {
     startDate?: string;
     roles?: string[];
     visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
+    status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
     city?: string;
-    status?: "PUBLISHED" | "DRAFT";
     latitude?: number;
     longitude?: number;
 };
@@ -68,9 +68,9 @@ export const ProjectsService = {
             }),
         });
 
-        if (!project) throw new Error("Failed to create project");
-
-        await NotifyNewProject(user.id, project.id)
+        if (project?.status === "PUBLISHED") {
+            await NotifyNewProject(user.id, project.id)
+        }
 
         return project;
     },

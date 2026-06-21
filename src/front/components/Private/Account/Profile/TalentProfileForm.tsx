@@ -16,9 +16,11 @@ import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function TalentProfileForm() {
     const user = useUser();
+    const router = useRouter();
     const { mutate: updateUser, isPending } = useUpdateUser();
     const { data: configs } = useMyConfigs();
     const { mutate: createConfig, isPending: createPending } = useCreateUserConfig();
@@ -50,7 +52,16 @@ export function TalentProfileForm() {
                 },
             },
             {
-                onSuccess: () => toast.success("Profil talent mis à jour."),
+                onSuccess: () => {
+                    toast.success("Profil talent mis à jour.");
+                    form.reset({
+                        bio: values.bio,
+                        portfolio: values.portfolio,
+                        cv: values.cv,
+                        isMarketplaceTalent: values.isMarketplaceTalent,
+                    });
+                    router.refresh();
+                },
                 onError: () => toast.error("Une erreur est survenue."),
             }
         );
@@ -84,7 +95,7 @@ export function TalentProfileForm() {
             <CardHeader>
                 <CardTitle>Profil talent</CardTitle>
                 <CardDescription>
-                    Complétez votre profil pour apparaître dans la marketplace des talents et être contacté pour des projets.
+                    Compléter votre profil pour apparaître dans la marketplace des talents et être contacté pour des projets.
                 </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-6">
@@ -100,7 +111,7 @@ export function TalentProfileForm() {
                                     <div className="flex flex-col gap-0.5">
                                         <p className="text-sm font-medium">Visible dans la marketplace</p>
                                         <p className="text-xs text-muted-foreground">
-                                            Activez pour apparaître publiquement dans la liste des talents disponibles.
+                                            Activer pour apparaître publiquement dans la liste des talents disponibles.
                                         </p>
                                     </div>
                                     <Switch

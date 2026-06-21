@@ -35,7 +35,6 @@ export const PostsAction = {
         title?: string;
         content?: string;
         isPublished?: boolean;
-        isLocked?: boolean;
         categoryId?: string;
         imageUrl?: string;
         videoUrl?: string;
@@ -82,7 +81,7 @@ export const PostsAction = {
 
     findAll: async (userId?: string, authorId?: string) => {
         const posts = await prisma.post.findMany({
-            where: authorId ? { authorId } : undefined,
+            where: authorId ? { authorId, isPublished: true } : { isPublished: true },
             include: { author: true, category: true },
             orderBy: { createdAt: "desc" },
         });

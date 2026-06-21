@@ -87,7 +87,7 @@ export async function createMail(input: CreateMailInput): Promise<Mail> {
     const response = await fetch('/api/mails', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=utf-8',
         },
         body: JSON.stringify(input),
     })

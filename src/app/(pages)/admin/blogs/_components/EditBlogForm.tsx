@@ -1,12 +1,13 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2, UploadCloud, X } from "lucide-react"
-import { useRef, useState } from "react"
+import { Loader2, Plus, UploadCloud, X } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { Badge } from "@/front/components/ui/badge"
 import { Button } from "@/front/components/ui/button"
 import {
     Form,
@@ -17,31 +18,96 @@ import {
     FormMessage,
 } from "@/front/components/ui/form"
 import { Input } from "@/front/components/ui/input"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/front/components/ui/select"
 import { Switch } from "@/front/components/ui/switch"
 import { Textarea } from "@/front/components/ui/textarea"
-import { BLOG_TAGS, type Blog } from "@/front/lib/api/blogs"
+import { BLOG_TAG_SUGGESTIONS, type Blog } from "@/front/lib/api/blogs"
 import { useUpdateBlog } from "@/front/queries/blogs"
 import { uploadToImageKit } from "@/front/lib/upload"
 import { useRouter } from "next/navigation"
 
-// ─── Schema ───────────────────────────────────────────────────────────────────
-
 const EditBlogSchema = z.object({
     title: z.string().min(1, "Le titre est requis"),
     content: z.string().min(1, "Le contenu est requis"),
-    tag: z.enum(["VIDEO", "MOTION", "OUTILS"], { message: "Choisissez un tag" }),
+    tags: z.array(z.string()).min(1, "Au moins un tag requis"),
     coverUrl: z.string().optional(),
     isPublished: z.boolean(),
 })
 
 type EditBlogValues = z.infer<typeof EditBlogSchema>
+
+// ─── TagsInput ────────────────────────────────────────────────────────────────
+
+function TagsInput({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
+    const [input, setInput] = useState("")
+    const [open, setOpen] = useState(false)
+    const wrapperRef = useRef<HTMLDivElement>(null)
+
+    const filtered = input.length > 0
+        ? BLOG_TAG_SUGGESTIONS.filter(s => s.toLowerCase().includes(input.toLowerCase()) && !value.includes(s))
+        : BLOG_TAG_SUGGESTIONS.filter(s => !value.includes(s))
+
+    useEffect(() => {
+        function handleClickOutside(e: MouseEvent) {
+            if (wrapperRef.current && !wrapperRef.current.contains(e.target as HTMLElement)) setOpen(false)
+        }
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => document.removeEventListener("mousedown", handleClickOutside)
+    }, [])
+
+    function add(v: string) {
+        const trimmed = v.trim()
+        if (!trimmed || value.includes(trimmed)) return
+        onChange([...value, trimmed])
+        setInput("")
+        setOpen(false)
+    }
+
+    return (
+        <div className="flex flex-col gap-2">
+            {value.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                    {value.map(v => (
+                        <Badge key={v} variant="secondary" className="gap-1 pr-1 text-xs font-normal">
+                            {v}
+                            <button type="button" onClick={() => onChange(value.filter(r => r !== v))} className="ml-0.5 hover:text-destructive transition-colors">
+                                <X className="w-3 h-3" />
+                            </button>
+                        </Badge>
+                    ))}
+                </div>
+            )}
+            <div ref={wrapperRef} className="relative">
+                <div className="flex gap-2">
+                    <Input
+                        value={input}
+                        onChange={e => { setInput(e.target.value); setOpen(true) }}
+                        onFocus={() => setOpen(true)}
+                        onKeyDown={e => {
+                            if (e.key === "Enter") { e.preventDefault(); add(input) }
+                            if (e.key === "Escape") setOpen(false)
+                        }}
+                        placeholder="Vidéo, Motion, Outils…"
+                        className="h-8 text-sm"
+                    />
+                    <Button type="button" size="sm" variant="outline" className="h-8 px-2 shrink-0" onClick={() => add(input)} disabled={!input.trim()}>
+                        <Plus className="size-4" />
+                    </Button>
+                </div>
+                {open && filtered.length > 0 && (
+                    <ul className="absolute z-50 top-full mt-1 left-0 right-0 max-h-48 overflow-y-auto rounded-md border border-border bg-popover shadow-md text-sm">
+                        {filtered.map(s => (
+                            <li key={s}>
+                                <button type="button" className="w-full text-left px-3 py-1.5 hover:bg-accent hover:text-accent-foreground" onMouseDown={e => { e.preventDefault(); add(s) }}>
+                                    {s}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+        </div>
+    )
+}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -62,7 +128,7 @@ export default function EditBlogForm({ blog, onSuccess }: EditBlogFormProps) {
         defaultValues: {
             title: blog.title,
             content: blog.content,
-            tag: blog.tag,
+            tags: blog.tags,
             coverUrl: blog.coverUrl ?? undefined,
             isPublished: blog.status === "PUBLISHED",
         },
@@ -94,7 +160,7 @@ export default function EditBlogForm({ blog, onSuccess }: EditBlogFormProps) {
                 data: {
                     title: values.title,
                     content: values.content,
-                    tag: values.tag,
+                    tags: values.tags,
                     coverUrl: values.coverUrl,
                     status: values.isPublished ? "PUBLISHED" : "DRAFT",
                 },
@@ -111,197 +177,139 @@ export default function EditBlogForm({ blog, onSuccess }: EditBlogFormProps) {
     }
 
     const isPublished = form.watch("isPublished")
-    const titleValue = form.watch("title")
-    const contentValue = form.watch("content")
 
     return (
-        <div className="w-full max-w-2xl mx-auto">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    {/* ── Titre ── */}
-                    <FormField
-                        control={form.control}
-                        name="title"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-base font-semibold">Titre</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Titre de l'article..."
-                                        {...field}
-                                        className="h-11 text-base"
-                                    />
-                                </FormControl>
-                                <div className="text-xs text-gray-400 text-right">
-                                    {titleValue.length} caractères
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+
+                {/* ── Cover ── */}
+                <div className="flex flex-col gap-1.5">
+                    <FormLabel>Image de couverture</FormLabel>
+                    {coverPreview ? (
+                        <div className="relative rounded-xl overflow-hidden">
+                            <img src={coverPreview} alt="cover" className="w-full h-48 object-cover" />
+                            <button
+                                type="button"
+                                onClick={clearCover}
+                                className="absolute top-2 right-2 rounded-full bg-black/60 p-0.5 text-white hover:bg-black/80 transition-colors"
+                            >
+                                <X className="size-3.5" />
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            type="button"
+                            disabled={uploading}
+                            onClick={() => fileInputRef.current?.click()}
+                            className="w-full rounded-xl border-2 border-dashed border-gray-200 px-4 py-8 text-center text-sm text-neutral-400 hover:border-gray-400 hover:text-neutral-600 transition-colors disabled:opacity-50"
+                        >
+                            {uploading ? (
+                                <div className="flex items-center justify-center gap-2">
+                                    <Loader2 className="size-4 animate-spin" />
+                                    Upload…
                                 </div>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* ── Catégorie ── */}
-                    <FormField
-                        control={form.control}
-                        name="tag"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-base font-semibold">Catégorie</FormLabel>
-                                <Select value={field.value} onValueChange={field.onChange}>
-                                    <FormControl>
-                                        <SelectTrigger className="h-11">
-                                            <SelectValue placeholder="Choisir une catégorie" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {BLOG_TAGS.map(({ value, label }) => (
-                                            <SelectItem key={value} value={value}>
-                                                {label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* ── Contenu ── */}
-                    <FormField
-                        control={form.control}
-                        name="content"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-base font-semibold">Contenu</FormLabel>
-                                <FormControl>
-                                    <Textarea
-                                        placeholder="Écrivez le contenu de l'article..."
-                                        {...field}
-                                        rows={12}
-                                        className="resize-none text-base"
-                                    />
-                                </FormControl>
-                                <div className="text-xs text-gray-400 text-right">
-                                    {contentValue.length} caractères
+                            ) : (
+                                <div className="flex flex-col items-center gap-1.5">
+                                    <UploadCloud className="size-5" />
+                                    <span className="text-xs">Cliquez pour ajouter une image</span>
+                                    <span className="text-[10px] opacity-60">JPG, PNG, WebP</span>
                                 </div>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                            )}
+                        </button>
+                    )}
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            if (file) handleFileUpload(file)
+                        }}
                     />
+                </div>
 
-                    {/* ── Image de couverture ── */}
+                {/* ── Titre ── */}
+                <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Titre</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Titre de l'article…" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                {/* ── Contenu ── */}
+                <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Contenu</FormLabel>
+                            <FormControl>
+                                <Textarea
+                                    placeholder="Rédigez votre article…"
+                                    className="min-h-40 resize-none"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                {/* ── Tags + Publier ── */}
+                <div className="flex gap-3 items-start">
                     <FormField
                         control={form.control}
-                        name="coverUrl"
-                        render={({ field: _field }) => (
-                            <FormItem>
-                                <FormLabel className="text-base font-semibold">
-                                    Image de couverture
-                                </FormLabel>
-
-                                {coverPreview ? (
-                                    <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
-                                        <img
-                                            src={coverPreview}
-                                            alt="Preview"
-                                            className="w-full h-full object-cover"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={clearCover}
-                                            className="absolute top-2 right-2 rounded-lg bg-white/80 p-1 hover:bg-white transition"
-                                        >
-                                            <X className="size-4 text-gray-600" />
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <FormControl>
-                                        <div
-                                            onClick={() => fileInputRef.current?.click()}
-                                            className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition"
-                                        >
-                                            <UploadCloud className="size-6 text-gray-400 mb-2" />
-                                            <span className="text-sm text-gray-500">
-                                                Cliquez pour ajouter une image
-                                            </span>
-                                            <input
-                                                ref={fileInputRef}
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={(e) => {
-                                                    const file = e.target.files?.[0]
-                                                    if (file) handleFileUpload(file)
-                                                }}
-                                                className="hidden"
-                                            />
-                                        </div>
-                                    </FormControl>
-                                )}
-                                {uploading && (
-                                    <div className="text-sm text-gray-500 flex items-center gap-2">
-                                        <Loader2 className="size-4 animate-spin" />
-                                        Upload en cours...
-                                    </div>
-                                )}
+                        name="tags"
+                        render={({ field }) => (
+                            <FormItem className="flex-1">
+                                <FormLabel>Tags</FormLabel>
+                                <FormControl>
+                                    <TagsInput value={field.value} onChange={field.onChange} />
+                                </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
 
-                    {/* ── Statut ── */}
                     <FormField
                         control={form.control}
                         name="isPublished"
                         render={({ field }) => (
-                            <FormItem>
-                                <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-4">
-                                    <div className="flex flex-col gap-1">
-                                        <FormLabel className="text-base font-semibold cursor-pointer">
-                                            {isPublished ? "✨ Publié" : "📝 Brouillon"}
-                                        </FormLabel>
-                                        <p className="text-sm text-gray-500">
-                                            {isPublished
-                                                ? "Cet article est visible publiquement"
-                                                : "Cet article n'est visible que pour les admins"}
-                                        </p>
-                                    </div>
-                                    <FormControl>
-                                        <Switch
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                </div>
+                            <FormItem className="flex items-center gap-2 rounded-lg border px-3 py-[9px] shrink-0 mt-[22px]">
+                                <FormControl>
+                                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                </FormControl>
+                                <FormLabel className="text-xs cursor-pointer leading-none mb-0">
+                                    {field.value ? "Publier" : "Brouillon"}
+                                </FormLabel>
                             </FormItem>
                         )}
                     />
+                </div>
 
-                    {/* ── Actions ── */}
-                    <div className="flex items-center gap-3 pt-4">
-                        <Button
-                            type="submit"
-                            size="lg"
-                            disabled={isPending || uploading}
-                            className="w-full"
-                        >
-                            {isPending && <Loader2 className="size-4 animate-spin mr-2" />}
-                            {isPending
-                                ? "Modification en cours..."
-                                : isPublished
-                                    ? "✨ Publier l'article"
-                                    : "💾 Sauvegarder"}
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="lg"
-                            onClick={() => router.back()}
-                        >
-                            Annuler
-                        </Button>
-                    </div>
-                </form>
-            </Form>
-        </div>
+                {/* ── Submit ── */}
+                <div className="flex items-center gap-3 pt-1">
+                    <Button type="submit" disabled={isPending || uploading} className="flex-1">
+                        {isPending ? (
+                            <>
+                                <Loader2 className="size-4 animate-spin" />
+                                Enregistrement…
+                            </>
+                        ) : isPublished ? "Publier l'article" : "Sauvegarder en brouillon"}
+                    </Button>
+                    <Button type="button" variant="outline" onClick={() => router.back()}>
+                        Annuler
+                    </Button>
+                </div>
+            </form>
+        </Form>
     )
 }

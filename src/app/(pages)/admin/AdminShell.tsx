@@ -6,7 +6,7 @@ import { SidebarInset, SidebarProvider } from "@/front/components/ui/sidebar"
 import { UserProvider } from "@/front/states/contexts/user.context"
 import type { User } from "@/back/generated/prisma_client"
 import { usePathname } from "next/navigation"
-import Header from "../../../front/components/Private/Global/Header"
+import Header from "@/front/components/Private/Global/Header"
 import { cn } from "@/front/lib/utils"
 
 export function AdminShell({ user, children }: { user: User | null; children: React.ReactNode }) {
@@ -16,14 +16,14 @@ export function AdminShell({ user, children }: { user: User | null; children: Re
     return (
         <UserProvider user={user}>
             <div className="bg-gray-lighter dark:bg-gray-dark min-h-screen">
-                <SidebarProvider className="isolate">
+                <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
                     <Sheet>
                         <AppSidebar />
                         <SidebarInset className="relative bg-transparent!">
                             <Header />
                             <main
                                 className={cn(
-                                    "overflow-y-auto pr-2 rounded-xl",
+                                    "overflow-y-auto pr-2 rounded-xl dark:text-white",
                                     isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : ""
                                 )}
                             >

@@ -140,7 +140,7 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
       console.warn("[Ably] 📨 community new_follower received:", msg.data);
     });
 
-    // Nouveau post dans une catégorie — invalide pour TOUS les viewers (bell ON ou OFF)
+    // Nouveau post dans une communauté — invalide pour TOUS les viewers (bell ON ou OFF)
     communityFeedChannel.subscribe("category_post_created", (msg) => {
       console.warn("[Ably] 📨 category_post_created received:", msg.data);
       queryClient.invalidateQueries({ queryKey: ["categories", msg.data.categoryId, "posts"] });
@@ -189,14 +189,14 @@ export function AblyInitializer({ children }: { children?: React.ReactNode }) {
       }
     });
 
-    // Nouveau post dans une catégorie suivie
+    // Nouveau post dans une communauté suivie
     userChannel.subscribe("category_new_post", (msg) => {
       console.warn("[Ably] 📨 category_new_post received:", msg.data);
       queryClient.invalidateQueries({ queryKey: notificationQueries.list().queryKey });
       queryClient.invalidateQueries({ queryKey: ["categories", msg.data.categoryId, "posts"] });
     });
 
-    // Nouvelle ressource dans une catégorie suivie
+    // Nouvelle ressource dans une communauté suivie
     userChannel.subscribe("category_new_resource", (msg) => {
       console.warn("[Ably] 📨 category_new_resource received:", msg.data);
       queryClient.invalidateQueries({ queryKey: notificationQueries.list().queryKey });

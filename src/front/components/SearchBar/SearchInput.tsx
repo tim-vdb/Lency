@@ -21,14 +21,14 @@ function SearchInput({ query, inputRef, onChange, onFocus }, ref) {
             "bg-white dark:bg-transparent",
             "focus-within:border-neutral-300 dark:focus-within:border-neutral-700"
         )}>
-            <Search className="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 shrink-0" />
+            <Search className="w-3.5 h-3.5 text-neutral-400 dark:text-zinc-400 shrink-0" />
             <input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => onChange(e.target.value)}
                 onFocus={onFocus}
                 placeholder="Rechercher…"
-                className="flex-1 min-w-0 bg-transparent text-sm text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 outline-none"
+                className="flex-1 min-w-0 bg-transparent text-sm text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-zinc-400 outline-none"
             />
             {query ? (
                 <button
@@ -38,7 +38,7 @@ function SearchInput({ query, inputRef, onChange, onFocus }, ref) {
                     <X className="w-3.5 h-3.5" />
                 </button>
             ) : (
-                <kbd className="hidden sm:flex items-center gap-0.5 text-[10px] text-neutral-400 dark:text-neutral-600 font-mono shrink-0">
+                <kbd className="hidden sm:flex items-center gap-0.5 text-[10px] text-neutral-400 dark:text-zinc-400 font-mono shrink-0">
                     <span className="text-xs">⌘</span>K
                 </kbd>
             )}

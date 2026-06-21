@@ -48,14 +48,19 @@ export async function DELETE(
 ) {
     try {
         const { userId } = await params;
-        await UsersService.deleteUser(userId);
-        return new NextResponse(null, { status: 204 });
+        const { password } = await req.json().catch(() => ({}));
+        const result = await UsersService.deleteUser(userId, password);
+        return NextResponse.json(result);
     } catch (error) {
         if (error instanceof Error) {
             if (error.message === "Unauthorized")
                 return NextResponse.json({ error: error.message }, { status: 401 });
             if (error.message === "User not found")
                 return NextResponse.json({ error: error.message }, { status: 404 });
+            if (error.message === "Invalid password")
+                return NextResponse.json({ error: "Mot de passe incorrect" }, { status: 400 });
+            if (error.message === "Password required")
+                return NextResponse.json({ error: "Le mot de passe est requis" }, { status: 400 });
         }
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }

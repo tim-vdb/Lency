@@ -2,7 +2,6 @@ enum Role {
   ADMIN
   USER
   MEMBER
-  PREMIUM
 }
 
 enum ResourceType {
@@ -17,26 +16,10 @@ enum ProjectStatus {
   ARCHIVED
 }
 
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELED
-  EXPIRED
-}
-
 enum Visibility {
   PUBLIC
   PRIVATE
   MEMBERS_ONLY
-}
-
-enum GalleryType {
-  EVENT
-  GALLERY
-}
-
-enum TypeEvent {
-  PHYSICAL
-  VIRTUAL
 }
 
 enum PostFormat {
@@ -72,12 +55,6 @@ enum BlogStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
-}
-
-enum BlogTag {
-  VIDEO
-  MOTION
-  OUTILS
 }
 
 enum ProjectLevel {
@@ -117,4 +94,14 @@ enum ProjectType {
   DOCUMENTAIRE
   YOUTUBE
   AUTRE
+}
+
+enum AdminEmailBox {
+  SUPPORT
+  DEV
+}
+
+enum AdminEmailType {
+  RECEIVED
+  SENT
 }

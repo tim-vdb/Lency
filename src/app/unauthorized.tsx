@@ -10,10 +10,10 @@ export default function unauthorized() {
           <div className='mx-auto w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6'>
             <ShieldXIcon className='w-8 h-8 text-red-500' />
           </div>
-          <h1 className='text-2xl font-bold text-gray-900 mb-3'>
+          <h1 className='text-2xl font-bold text-neutral-900 mb-3'>
             Access denied
           </h1>
-          <p className='text-gray-600 mb-8 leading-relaxed'>
+          <p className='text-neutral-600 mb-8 leading-relaxed'>
             You need to be logged in to access this page with the right permissions
           </p>
           <div className='flex flex-col gap-2'>
@@ -33,7 +33,7 @@ export default function unauthorized() {
           </div>
 
         </div>
-        <p className='text-center text-sm text-gray-500 mt-6'>
+        <p className='text-center text-sm text-neutral-500 mt-6'>
           Si vous pensez qu'il s'agit d'une erreur, contactez un administrateur.
         </p>
       </div>

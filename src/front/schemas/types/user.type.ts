@@ -6,7 +6,6 @@ export type UserProfileBase = Prisma.UserGetPayload<{
         projects: { include: { mapLocation: true } };
         participants: { select: { id: true; title: true } };
         configs: { select: { title: true; content: true } };
-        badges: true;
         categoryFollows: { include: { category: true } };
         followers: {
             include: {
@@ -39,7 +38,6 @@ export type UserProfileBase = Prisma.UserGetPayload<{
                 Posts: true;
                 projects: true;
                 categoryFollows: true;
-                badges: true;
                 followers: true;
             };
         };

@@ -90,7 +90,7 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
                             name="imageUrl"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Screenshot (optionnel)</FormLabel>
+                                    <FormLabel>Capture d'écran (optionnel)</FormLabel>
                                     <FormControl>
                                         <ImageKitUploader
                                             value={field.value ?? null}

@@ -66,22 +66,22 @@ export default function MapFilters({ titleSuggestions, values, onChange }: MapFi
         <div className="grid grid-cols-2 gap-3">
             {/* Titre */}
             <div className="relative col-span-2">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8C8A85] pointer-events-none z-10" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none z-10" />
                 <Input
                     placeholder="Chercher un projet..."
                     value={values.title}
                     onChange={(e) => handleTitleChange(e.target.value)}
                     onFocus={() => values.title.length > 0 && setShowTitleSuggestions(true)}
                     onBlur={() => setTimeout(() => setShowTitleSuggestions(false), 150)}
-                    className="pl-9 border-[#E8E8E1] text-[#4C4A43] placeholder:text-[#8C8A85] text-[13px]"
+                    className="pl-9 border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 dark:placeholder:text-neutral-500 text-[13px]"
                 />
                 {showTitleSuggestions && titleSuggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E8E1] rounded-xl shadow-md z-50 max-h-48 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-md z-50 max-h-48 overflow-y-auto">
                         {titleSuggestions.map((s) => (
                             <button
                                 key={s.id}
                                 onMouseDown={() => handleSuggestionClick(s.title)}
-                                className="w-full text-left px-3 py-2 text-[13px] text-[#4C4A43] hover:bg-[#F7F7F2] transition-colors first:rounded-t-xl last:rounded-b-xl"
+                                className="w-full text-left px-3 py-2 text-[13px] text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors first:rounded-t-xl last:rounded-b-xl"
                             >
                                 {s.title}
                             </button>
@@ -92,7 +92,7 @@ export default function MapFilters({ titleSuggestions, values, onChange }: MapFi
 
             {/* Type de projet */}
             <Select value={values.projectType} onValueChange={(v) => onChange("projectType", v)}>
-                <SelectTrigger className="border-[#E8E8E1] text-[#4C4A43] text-[13px]">
+                <SelectTrigger className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px]">
                     <SelectValue placeholder="Type de projet" />
                 </SelectTrigger>
                 <SelectContent>
@@ -105,7 +105,7 @@ export default function MapFilters({ titleSuggestions, values, onChange }: MapFi
 
             {/* Niveau */}
             <Select value={values.level} onValueChange={(v) => onChange("level", v)}>
-                <SelectTrigger className="border-[#E8E8E1] text-[#4C4A43] text-[13px]">
+                <SelectTrigger className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px]">
                     <SelectValue placeholder="Niveau" />
                 </SelectTrigger>
                 <SelectContent>
@@ -118,7 +118,7 @@ export default function MapFilters({ titleSuggestions, values, onChange }: MapFi
 
             {/* Rémunération */}
             <Select value={values.remuneration} onValueChange={(v) => onChange("remuneration", v)}>
-                <SelectTrigger className="border-[#E8E8E1] text-[#4C4A43] text-[13px]">
+                <SelectTrigger className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px]">
                     <SelectValue placeholder="Rémunération" />
                 </SelectTrigger>
                 <SelectContent>
@@ -131,7 +131,7 @@ export default function MapFilters({ titleSuggestions, values, onChange }: MapFi
 
             {/* Mode de travail */}
             <Select value={values.workMode} onValueChange={(v) => onChange("workMode", v)}>
-                <SelectTrigger className="border-[#E8E8E1] text-[#4C4A43] text-[13px]">
+                <SelectTrigger className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px]">
                     <SelectValue placeholder="Mode de travail" />
                 </SelectTrigger>
                 <SelectContent>
@@ -144,19 +144,19 @@ export default function MapFilters({ titleSuggestions, values, onChange }: MapFi
 
             {/* Plages de dates */}
             <div className="col-span-2 flex items-center gap-2">
-                <span className="text-[12px] text-[#8C8A85] shrink-0 w-4">Du</span>
+                <span className="text-[12px] text-neutral-400 shrink-0 w-4">Du</span>
                 <Input
                     type="date"
                     value={values.dateFrom}
                     onChange={(e) => onChange("dateFrom", e.target.value)}
-                    className="border-[#E8E8E1] text-[#4C4A43] text-[13px] flex-1"
+                    className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px] flex-1"
                 />
-                <span className="text-[12px] text-[#8C8A85] shrink-0 w-4">au</span>
+                <span className="text-[12px] text-neutral-400 shrink-0 w-4">au</span>
                 <Input
                     type="date"
                     value={values.dateTo}
                     onChange={(e) => onChange("dateTo", e.target.value)}
-                    className="border-[#E8E8E1] text-[#4C4A43] text-[13px] flex-1"
+                    className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px] flex-1"
                 />
             </div>
         </div>

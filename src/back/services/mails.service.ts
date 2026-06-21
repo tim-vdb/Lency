@@ -1,6 +1,9 @@
 import { MailsAction } from "../repositories/mails.action";
+import { UsersAction } from "../repositories/users.action";
+import { AdminEmailAction } from "../repositories/admin-email.action";
+import { NotificationService } from "./notifications.service";
 import { getUser } from "../lib/auth-session";
-import { ContactStatus, ContactType } from "../generated/prisma_client";
+import { ContactStatus, ContactType, AdminEmailBox, AdminEmailType } from "../generated/prisma_client";
 
 
 export const MailsService = {
@@ -50,10 +53,43 @@ export const MailsService = {
             throw new Error("Email invalide");
         if (!data.sujet || data.sujet.trim().length < 3)
             throw new Error("Sujet trop court");
-        if (!data.message || data.message.trim().length < 10)
+        if (!data.message || data.message.trim().length < 5)
             throw new Error("Message trop court");
 
-        return MailsAction.create(data);
+        const mail = await MailsAction.create(data);
+        const senderName = `${data.prenom} ${data.nom}`;
+
+        // Créer une AdminEmail dans la boîte "SUPPORT"
+        const adminEmail = await AdminEmailAction.create({
+            type: AdminEmailType.RECEIVED,
+            box: AdminEmailBox.SUPPORT,
+            fromEmail: data.email,
+            fromName: senderName,
+            toEmail: "support@infos.lency.net",
+            subject: data.sujet,
+            textContent: data.message,
+        });
+
+        // Créer une notification pour chaque admin
+        const admins = await UsersAction.findAllAdmins();
+
+        for (const admin of admins) {
+            await NotificationService.createForUser(
+                admin.id,
+                "support_message",
+                "Nouveau message support",
+                `Nouveau message support de ${senderName}: ${data.sujet}`,
+                {
+                    mailId: adminEmail.id,
+                    senderName: "Support Lency",
+                    fromName: senderName,
+                    sujet: data.sujet,
+                    type: data.type || ContactType.CONTACT_GENERAL,
+                }
+            );
+        }
+
+        return mail;
     },
 
     updateMailStatus: async (id: string, status: ContactStatus) => {

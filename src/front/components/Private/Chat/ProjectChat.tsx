@@ -81,7 +81,7 @@ export function ProjectChat({ projectId }: ProjectChatProps) {
           </div>
         ) : messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-2">
-            <p className="text-sm text-gray">Aucun message pour l'instant. Démarrez la conversation !</p>
+            <p className="text-sm text-gray">            Aucun message pour l'instant. Démarrer la conversation !</p>
           </div>
         ) : (
           messages.map((msg) => (

@@ -10,8 +10,8 @@ export default function NotFound() {
                     <div className="mx-auto w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mb-6">
                         <SearchXIcon className="w-8 h-8 text-neutral-400" />
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900 mb-3">Page introuvable</h1>
-                    <p className="text-gray-600 mb-8 leading-relaxed">
+                    <h1 className="text-2xl font-bold text-neutral-900 mb-3">Page introuvable</h1>
+                    <p className="text-neutral-600 mb-8 leading-relaxed">
                         Cette page n'existe pas ou a été déplacée.
                     </p>
                     <Button asChild className="w-full">

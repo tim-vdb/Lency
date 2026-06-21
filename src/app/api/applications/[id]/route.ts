@@ -15,7 +15,9 @@ export async function GET(
         if (!application) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
         // Seul le propriétaire du projet peut voir la candidature complète
-        if (application.project.ownerId !== user.id) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const appData = application as any;
+        if (!appData.project || appData.project.ownerId !== user.id) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 

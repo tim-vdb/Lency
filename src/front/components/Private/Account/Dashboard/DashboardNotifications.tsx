@@ -119,7 +119,6 @@ export function DashboardNotifications({ className, style }: { className?: strin
                     bio: full.user.bio ?? null,
                     portfolio: full.user.portfolio ?? null,
                     cv: full.user.cv ?? null,
-                    badges: full.user.badges ?? [],
                     configs: full.user.configs ?? [],
                 },
             });
@@ -170,17 +169,17 @@ export function DashboardNotifications({ className, style }: { className?: strin
 
     return (
         <>
-            <div className={cn("bg-white rounded-xl border border-neutral-200 flex flex-col overflow-hidden", className)} style={style}>
+            <div className={cn("bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-700 flex flex-col overflow-hidden", className)} style={style}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 shrink-0">
-                    <h3 className="text-[18px] font-bold text-black">Notifications</h3>
+                <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
+                    <h3 className="text-[18px] font-bold text-black dark:text-white">Notifications</h3>
                     {notifications.length > 0 && (
                         <button
-                            className="p-1.5 hover:bg-neutral-100 rounded-lg cursor-pointer transition-colors"
+                            className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg cursor-pointer transition-colors"
                             onClick={() => notifications.forEach((n) => dismiss(n.id))}
                             title="Tout supprimer"
                         >
-                            <Trash2 className="w-4 h-4 text-neutral-400 hover:text-red-400" />
+                            <Trash2 className="w-4 h-4 text-neutral-400 dark:text-neutral-500 hover:text-red-400" />
                         </button>
                     )}
                 </div>
@@ -191,16 +190,16 @@ export function DashboardNotifications({ className, style }: { className?: strin
                         <div className="flex flex-col gap-3 px-3 pt-2">
                             {Array.from({ length: 4 }).map((_, i) => (
                                 <div key={i} className="flex gap-3 items-start">
-                                    <div className="w-10 h-10 rounded-full bg-neutral-100 animate-pulse shrink-0" />
+                                    <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-800 animate-pulse shrink-0" />
                                     <div className="flex-1 space-y-2 pt-1">
-                                        <div className="h-3 bg-neutral-100 rounded animate-pulse w-3/4" />
-                                        <div className="h-3 bg-neutral-100 rounded animate-pulse w-1/2" />
+                                        <div className="h-3 bg-neutral-100 dark:bg-neutral-800 rounded animate-pulse w-3/4" />
+                                        <div className="h-3 bg-neutral-100 dark:bg-neutral-800 rounded animate-pulse w-1/2" />
                                     </div>
                                 </div>
                             ))}
                         </div>
                     ) : groups.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full gap-3 text-neutral-400 py-10">
+                        <div className="flex flex-col items-center justify-center h-full gap-3 text-neutral-400 dark:text-neutral-500 py-10">
                             <Bell className="w-9 h-9" />
                             <p className="text-[13px]">Aucune notification</p>
                         </div>

@@ -15,7 +15,7 @@ export const BlogsService = {
     createBlog: async (data: {
         title: string;
         content: string;
-        tag: "VIDEO" | "MOTION" | "OUTILS";
+        tags: string[];
         coverUrl?: string;
         status?: "DRAFT" | "PUBLISHED" | "ARCHIVED";
     }) => {
@@ -25,7 +25,7 @@ export const BlogsService = {
 
         if (!data.title) throw new Error("Title is required");
         if (!data.content) throw new Error("Content is required");
-        if (!data.tag) throw new Error("Tag is required");
+        if (!data.tags?.length) throw new Error("Tags are required");
 
         return BlogsAction.create(user.id, data);
     },
@@ -35,8 +35,8 @@ export const BlogsService = {
         data: {
             title?: string;
             content?: string;
-            tag?: "VIDEO" | "MOTION" | "OUTILS";
-            coverUrl?: string;
+            tags?: string[];
+            coverUrl?: string | null;
             status?: "DRAFT" | "PUBLISHED" | "ARCHIVED";
         }
     ) => {

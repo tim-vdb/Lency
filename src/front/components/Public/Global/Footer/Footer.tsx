@@ -1,64 +1,63 @@
 'use client';
 
-import FooterNavbar from '@/front/components/Public/Global/Navbar/FooterNavbar';
-import SocialMedia from '@/front/components/Public/Global/Footer/components/SocialMedia';
 import { cn } from '@/front/lib/utils';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import LencyIcon from '@/front/components/ui/lency-icon';
+import Link from 'next/link';
+import LencyLogo from '@/front/components/ui/lency-logo';
+
+const LINK_CLASS = "text-[20px] text-neutral-800 dark:text-neutral-300 hover:text-[#EA3D0E] dark:hover:text-[#EA3D0E] transition-colors";
+
+const LEGAL_LINKS = [
+  { label: "Conditions d'utilisation", href: '#' },
+  { label: 'Politique de confidentialité', href: '#' },
+  { label: 'Politique de cookies', href: '#' },
+  { label: 'Mentions légales', href: '/mentions-legales' },
+];
+
+const APP_LINKS = [
+  { label: 'Communauté', href: '/community' },
+  { label: 'Projets', href: '/marketplace' },
+];
+
+const COMPANY_LINKS = [
+  { label: 'À propos', href: '/about' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Support', href: '/support' },
+];
 
 export default function Footer() {
-  const date = new Date();
-  const year = date.getFullYear();
   const pathname = usePathname();
-  const isAdmin = pathname.startsWith("/admin");
+  const isAdmin = pathname.startsWith('/admin');
 
   return (
-    <footer className={cn("shadow-md bg-white text-gray-800 py-10 dark:bg-neutral-900 dark:text-gray-200", isAdmin ? "px-4" : "md:px-20 lg:px-20 xl:px-20")}>
-      <div className="container grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-20 [&_h3]:mt-5">
-        <div className="flex flex-col justify-center items-start">
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2 mb-4">
-              <LencyIcon className="w-auto h-10" />
-              <p className="text-xl font-bold">Lency - Inc.</p>
-            </div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Voluptatem laboriosam quam enim ut ipsa exercitationem? Natus?
-            </p>
-          </div>
-          <SocialMedia />
-        </div>
+    <footer className={cn('bg-white dark:bg-neutral-900 py-12 border-t border-neutral-100 dark:border-neutral-800', isAdmin ? 'px-4' : 'md:px-20 lg:px-20 xl:px-20')}>
+      <div className="container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <FooterColumn links={LEGAL_LINKS} />
+        <FooterColumn links={APP_LINKS} />
+        <FooterColumn links={COMPANY_LINKS} />
 
-        <FooterNavbar />
-      </div>
-
-      {/* Copyright */}
-      <div className="flex flex-col-reverse justify-between items-center gap-4 px-4 border-t border-neutral-500 mt-10 pt-6 text-center md:px-0 md:gap-0 md:flex-row">
-        <p className="text-xs text-neutral-600 dark:text-neutral-400">
-          © {year} Lency - Inc. - All rights reserved.
-        </p>
-        <div className="flex items-center gap-8">
-          <Link
-            href="/privacy-policy"
-            className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
-          >
-            Privacy Policy
-          </Link>
-          <Link
-            href="/terms-of-service"
-            className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
-          >
-            Terms of Service
-          </Link>
-          <Link
-            href="/cookie-policy"
-            className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
-          >
-            Cookie Policy
-          </Link>
+        <div className="flex flex-col items-center gap-3 text-center">
+          <LencyLogo className="w-auto h-10" />
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-[220px]">
+            Communauté audiovisuelle pour apprendre, collaborer et progresser.
+          </p>
+          <div className="w-full border-t border-neutral-200 dark:border-neutral-700 mt-1" />
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterColumn({ links }: { links: { label: string; href: string }[] }) {
+  return (
+    <ul className="flex flex-col gap-3">
+      {links.map((link) => (
+        <li key={link.label}>
+          <Link href={link.href} className={LINK_CLASS}>
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }

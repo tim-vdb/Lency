@@ -25,7 +25,7 @@ export default function DesktopNavbar() {
             'text-sm font-medium transition-colors',
             pathname === href
               ? 'text-[#EA3D0E]'
-              : 'text-neutral-800 dark:text-gray-300 hover:text-[#EA3D0E]'
+              : 'text-neutral-800 dark:text-neutral-300 hover:text-[#EA3D0E]'
           )}
         >
           {label}

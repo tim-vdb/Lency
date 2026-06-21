@@ -14,25 +14,25 @@ import { RecentlyViewedUserSync } from "@/front/components/providers/RecentlyVie
 export function AppShell({ user, children }: { user: User | null; children: React.ReactNode }) {
     return (
         <QueryProvider>
-        <UserProvider user={user}>
-            <RecentlyViewedUserSync />
-            <AblyInitializer>
-                <div className="bg-gray-lighter dark:bg-gray-dark min-h-screen">
-                    <SidebarProvider className="gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
-                        <Sheet>
-                            <AppSidebar />
-                            <SidebarInset className="relative bg-transparent">
-                                <Header />
-                                <main className="pt-2 md:pt-16 h-[calc(100vh-1rem)] overflow-y-auto pr-2">
-                                    {children}
-                                </main>
-                            </SidebarInset>
-                        </Sheet>
-                    </SidebarProvider>
-                </div>
-                <ModalRenderer />
-            </AblyInitializer>
-        </UserProvider>
+            <UserProvider user={user}>
+                <RecentlyViewedUserSync />
+                <AblyInitializer>
+                    <div className="h-screen overflow-hidden bg-gray-lighter dark:bg-gray-dark dark:text-white">
+                        <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
+                            <Sheet>
+                                <AppSidebar />
+                                <SidebarInset className="relative bg-transparent!">
+                                    <Header />
+                                    <main className="pt-2 md:pt-16 h-[calc(100vh-1rem)] overflow-y-auto pr-2 dark:text-white bg-gray-lighter dark:bg-gray-dark">
+                                        {children}
+                                    </main>
+                                </SidebarInset>
+                            </Sheet>
+                        </SidebarProvider>
+                    </div>
+                    <ModalRenderer />
+                </AblyInitializer>
+            </UserProvider>
         </QueryProvider>
     )
 }

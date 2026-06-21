@@ -29,9 +29,9 @@ export function DashboardTabs({ className }: { className?: string }) {
     if (expanded && activeTab !== "explorer") {
         const label = MAIN_TABS.find((t) => t.id === activeTab)?.label ?? "";
         return (
-            <div className="fixed inset-0 z-50 bg-white dark:bg-neutral-950 flex flex-col">
+            <div className="fixed inset-0 z-50 bg-white dark:bg-neutral-900 flex flex-col">
                 <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 shrink-0">
-                    <h2 className="text-lg font-semibold">{label}</h2>
+                    <h2 className="text-lg font-semibold text-black dark:text-white">{label}</h2>
                     <Button variant="ghost" size="icon" onClick={() => setExpanded(false)}>
                         <X className="w-5 h-5" />
                     </Button>
@@ -48,7 +48,7 @@ export function DashboardTabs({ className }: { className?: string }) {
             {/* Header row */}
             <div className="flex items-center gap-3 shrink-0">
                 {/* Main tab bar — style segmented control */}
-                <div className="flex items-center bg-[#F7F7F2] rounded-lg p-1 gap-0.5">
+                <div className="flex items-center bg-[#F7F7F2] dark:bg-neutral-800 rounded-lg p-1 gap-0.5">
                     {MAIN_TABS.map((tab) => (
                         <button
                             key={tab.id}
@@ -57,7 +57,7 @@ export function DashboardTabs({ className }: { className?: string }) {
                                 "px-5 py-2 rounded-lg text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
                                 activeTab === tab.id
                                     ? "bg-[#000000] text-white shadow-sm"
-                                    : "text-[#000000] hover:bg-[#E8E8E1]"
+                                    : "text-[#000000] dark:text-neutral-300 hover:bg-[#E8E8E1] dark:hover:bg-neutral-700"
                             )}
                         >
                             {tab.label}
@@ -67,7 +67,7 @@ export function DashboardTabs({ className }: { className?: string }) {
 
                 {/* Explorer sub-tabs — uniquement si Explorer actif */}
                 {activeTab === "explorer" && (
-                    <div className="flex items-center bg-[#F7F7F2] rounded-lg p-1 gap-0.5">
+                    <div className="flex items-center bg-[#F7F7F2] dark:bg-neutral-800 rounded-lg p-1 gap-0.5">
                         {EXPLORER_MODES.map((m) => (
                             <button
                                 key={m.id}
@@ -76,7 +76,7 @@ export function DashboardTabs({ className }: { className?: string }) {
                                     "px-4 py-2 rounded-lg text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
                                     explorerMode === m.id
                                         ? "bg-[#EA3D0E] text-white shadow-sm"
-                                        : "text-[#000000] hover:bg-[#E8E8E1]"
+                                        : "text-[#000000] dark:text-neutral-300 hover:bg-[#E8E8E1] dark:hover:bg-neutral-700"
                                 )}
                             >
                                 {m.label}
@@ -88,9 +88,9 @@ export function DashboardTabs({ className }: { className?: string }) {
                 {/* Expand — toujours à droite */}
                 <button
                     onClick={() => setExpanded(true)}
-                    className="ml-auto p-1.5 hover:bg-[#F7F7F2] rounded-lg cursor-pointer transition-colors"
+                    className="ml-auto p-1.5 hover:bg-[#F7F7F2] dark:hover:bg-neutral-800 rounded-lg cursor-pointer transition-colors"
                 >
-                    <Maximize2 className="w-4 h-4 text-[#8C8A85]" />
+                    <Maximize2 className="w-4 h-4 text-[#8C8A85] dark:text-neutral-400" />
                 </button>
             </div>
 

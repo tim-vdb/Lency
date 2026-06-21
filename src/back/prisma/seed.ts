@@ -72,7 +72,6 @@ async function main() {
             firstname: "Sophie",
             lastname: "Martin",
             username: "sophiemartin",
-            role: "PREMIUM",
             emailVerified: true,
             image: null,
         },
@@ -313,20 +312,20 @@ async function main() {
     console.log("✅ Comments created")
 
     // ─── Badges ──────────────────────────────────────────────────────────────
+    // Note: Badge model not found in schema, skipping badge seed
+    // await prisma.badge.upsert({
+    //     where: { id: "badge-early-adopter" },
+    //     update: {},
+    //     create: {
+    //         id: "badge-early-adopter",
+    //         name: "Early Adopter",
+    //         description: "Membre depuis les débuts de Lency",
+    //         active: true,
+    //         users: { connect: [{ id: admin.id }, { id: user1.id }, { id: user2.id }, { id: userBasic.id }, { id: userPremium.id }] },
+    //     },
+    // })
 
-    await prisma.badge.upsert({
-        where: { id: "badge-early-adopter" },
-        update: {},
-        create: {
-            id: "badge-early-adopter",
-            name: "Early Adopter",
-            description: "Membre depuis les débuts de Lency",
-            active: true,
-            users: { connect: [{ id: admin.id }, { id: user1.id }, { id: user2.id }, { id: userBasic.id }, { id: userPremium.id }] },
-        },
-    })
-
-    console.log("✅ Badges created")
+    console.log("✅ Badges section skipped")
     console.log("🌱 Seed completed!")
 }
 

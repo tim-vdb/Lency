@@ -1,20 +1,5 @@
 /// *
-/// CONTENU - ARTICLES, POSTS & COMMENTS
-model Article {
-  id        String   @id @default(cuid())
-  title     String
-  slug      String   @unique
-  excerpt   String?
-  content   String
-  published Boolean  @default(false)
-  image     String?
-  views     Int      @default(0)
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-}
-
+/// CONTENU - POSTS & COMMENTS
 model Category {
   id              String           @id @default(cuid())
   slug            String           @unique
@@ -48,7 +33,6 @@ model Category {
 model Post {
   id           String       @id @default(cuid())
   content      String
-  isLocked     Boolean      @default(false)
   categoryId   String
   authorId     String
   format       PostFormat      @default(TEXT)
