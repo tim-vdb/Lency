@@ -84,7 +84,7 @@ export function TalentProfileForm() {
             <CardHeader>
                 <CardTitle>Profil talent</CardTitle>
                 <CardDescription>
-                    Complétez votre profil pour apparaître dans la marketplace des talents et être contacté pour des projets.
+                    Compléter votre profil pour apparaître dans la marketplace des talents et être contacté pour des projets.
                 </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-6">
@@ -100,7 +100,7 @@ export function TalentProfileForm() {
                                     <div className="flex flex-col gap-0.5">
                                         <p className="text-sm font-medium">Visible dans la marketplace</p>
                                         <p className="text-xs text-muted-foreground">
-                                            Activez pour apparaître publiquement dans la liste des talents disponibles.
+                                            Activer pour apparaître publiquement dans la liste des talents disponibles.
                                         </p>
                                     </div>
                                     <Switch

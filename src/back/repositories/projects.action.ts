@@ -32,7 +32,7 @@ export const ProjectsAction = {
 
     findAll: async () => {
         return prisma.project.findMany({
-            where: { visibility: { not: "PRIVATE" } },
+            where: { status: "PUBLISHED", visibility: { not: "PRIVATE" } },
             include: { owner: true, participants: true, mapLocation: true },
             orderBy: { createdAt: "desc" },
         });
@@ -52,6 +52,7 @@ export const ProjectsAction = {
                 roles: data.roles ?? [],
                 attachments: data.attachments ?? [],
                 visibility: data.visibility ?? "PUBLIC",
+                status: data.status ?? "PUBLISHED",
                 owner: { connect: { id: userId } },
                 ...(data.mapLocation?.name && {
                     mapLocation: {
@@ -141,12 +142,7 @@ export const ProjectsAction = {
         await prisma.project.delete({ where: { id } });
 
         if (project?.mapLocationId) {
-            const stillUsed = await prisma.spot.findFirst({
-                where: { mapLocationId: project.mapLocationId },
-            });
-            if (!stillUsed) {
-                await prisma.mapLocation.delete({ where: { id: project.mapLocationId } });
-            }
+            await prisma.mapLocation.delete({ where: { id: project.mapLocationId } });
         }
     },
 };

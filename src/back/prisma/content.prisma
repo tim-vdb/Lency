@@ -33,7 +33,6 @@ model Category {
 model Post {
   id           String       @id @default(cuid())
   content      String
-  isLocked     Boolean      @default(false)
   categoryId   String
   authorId     String
   format       PostFormat      @default(TEXT)

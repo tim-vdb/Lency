@@ -23,5 +23,7 @@ export default async function ResourceDetailPage({ params }: Props) {
     const resource = await ResourcesService.findByIdResource(resourceId).catch(() => null);
     if (!resource) notFound();
 
+    ResourcesService.incrementViewCount(resourceId).catch(() => {});
+
     return <ResourceDetailPageClient slug={slug} resourceId={resourceId} />;
 }

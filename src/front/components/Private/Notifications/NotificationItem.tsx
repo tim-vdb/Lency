@@ -108,6 +108,10 @@ export function NotificationItem({ notification, onDismiss, onOpenResponse, inSh
 }
 
 function resolveHref(type: string, data: Record<string, unknown>): string | null {
+    if (type === "support_message") {
+        const mailId = typeof data.mailId === "string" ? data.mailId : null;
+        return mailId ? `/admin/emails?box=SUPPORT&mailId=${mailId}` : "/admin/emails?box=SUPPORT";
+    }
     if (type === "category_new_post") {
         const slug = typeof data.categorySlug === "string" ? data.categorySlug : null;
         const postId = typeof data.postId === "string" ? data.postId : null;

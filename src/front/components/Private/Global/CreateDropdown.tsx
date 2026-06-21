@@ -19,7 +19,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/front/components/ui/tabs"
 import { cn } from "@/front/lib/utils"
 import { useUser } from "@/front/states/contexts/user.context"
-import { FileText, FolderKanban, Link2, Plus, Tag, NotebookText } from "lucide-react"
+import { FileText, FolderKanban, Plus, Tag, NotebookText, BookOpen } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
 import { CreateCategoryForm } from "./CreateCategoryForm"
@@ -27,20 +27,23 @@ import { CreatePostForm } from "./CreatePostForm"
 import { CreateProjectForm } from "./CreateProjectForm"
 import { CreateResourceForm } from "./CreateResourceForm"
 import { DraftsTab, DraftCount, type EditDraft } from "./DraftsTab"
+import { useCategories } from "@/front/queries/categories"
 
 type CreateType = "post" | "project" | "category" | "resource" | "drafts"
 
 const CREATE_ITEMS = [
     { value: "post" as const, icon: FileText, label: "Post", description: "Texte, image, vidéo ou audio", supportsDraft: true },
     { value: "project" as const, icon: FolderKanban, label: "Projet", description: "Chercher des collaborateurs", supportsDraft: true },
-    { value: "category" as const, icon: Tag, label: "Communauté", description: "Créer un espace thématique", supportsDraft: false },
-    { value: "resource" as const, icon: Link2, label: "Ressource", description: "Asset, tutoriel ou lien", supportsDraft: false },
+    { value: "category" as const, icon: Tag, label: "Communauté", description: "Nouvelle communauté", supportsDraft: false },
+    { value: "resource" as const, icon: BookOpen, label: "Ressource", description: "Asset, tutoriel ou lien", supportsDraft: false },
 ]
 
 // ─── Main component ────────────────────────────────────────────────────────────
 
 export function CreateDropdown() {
     const user = useUser()
+    const { data: categories = [] } = useCategories()
+    const hasCategories = categories.length > 0
     const [modalOpen, setModalOpen] = useState(false)
     const [authModalOpen, setAuthModalOpen] = useState(false)
     const [activeType, setActiveType] = useState<CreateType>("post")
@@ -77,17 +80,31 @@ export function CreateDropdown() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent side="bottom" align="end" sideOffset={8} className="min-w-48">
                     <DropdownMenuGroup>
-                        {CREATE_ITEMS.map(({ value, icon: Icon }) => (
-                            <DropdownMenuItem key={value} className="cursor-pointer" onClick={() => handleSelect(value)}>
-                                <Icon className="size-4" />
-                                {value === "post" ? "Créer un post"
-                                    : value === "project" ? "Créer un projet"
-                                        : value === "category" ? "Créer une communauté"
-                                            : "Créer une ressource"}
-                            </DropdownMenuItem>
-                        ))}
+                        {CREATE_ITEMS.map(({ value, icon: Icon }) => {
+                            const isDisabled = !hasCategories && (value === "post" || value === "resource")
+                            return (
+                                <DropdownMenuItem
+                                    key={value}
+                                    className={cn("cursor-pointer", isDisabled && "opacity-50 pointer-events-none")}
+                                    disabled={isDisabled}
+                                    onSelect={() => setTimeout(() => handleSelect(value), 0)}
+                                >
+                                    <Icon className="size-4" />
+                                    {value === "post" ? "Créer un post"
+                                        : value === "project" ? "Créer un projet"
+                                            : value === "category" ? "Créer une communauté"
+                                                : "Créer une ressource"}
+                                    {isDisabled && (
+                                        <span className="ml-auto text-xs text-muted-foreground">Créer une communauté d'abord</span>
+                                    )}
+                                </DropdownMenuItem>
+                            )
+                        })}
                         {user && (
-                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleSelect("drafts")}>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onSelect={() => setTimeout(() => handleSelect("drafts"), 0)}
+                            >
                                 <NotebookText className="size-4" />
                                 Mes brouillons
                             </DropdownMenuItem>
@@ -118,7 +135,7 @@ export function CreateDropdown() {
                             {/* Sidebar */}
                             <TabsList
                                 className={cn(
-                                    "flex flex-col h-full w-52 shrink-0",
+                                    "flex flex-col h-full w-72 shrink-0",
                                     "justify-start gap-0.5 rounded-none",
                                     "border-r bg-muted/30 p-3",
                                 )}
@@ -127,21 +144,25 @@ export function CreateDropdown() {
                                 <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 px-2 pt-5 pb-1.5">
                                     Créer
                                 </p>
-                                {CREATE_ITEMS.map(({ value, icon: Icon, label, description }) => (
-                                    <TabsTrigger
-                                        key={value}
-                                        value={value}
-                                        className="w-full justify-start flex-col items-start px-3 py-2.5 h-auto data-[state=active]:bg-background"
-                                    >
-                                        <span className="flex items-center gap-2 w-full">
-                                            <Icon className="size-3.5 shrink-0" />
-                                            <span className="font-medium text-sm">{label}</span>
-                                        </span>
-                                        <span className="text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight">
-                                            {description}
-                                        </span>
-                                    </TabsTrigger>
-                                ))}
+                                {CREATE_ITEMS.map(({ value, icon: Icon, label, description }) => {
+                                    const isDisabled = !hasCategories && (value === "post" || value === "resource")
+                                    return (
+                                        <TabsTrigger
+                                            key={value}
+                                            value={value}
+                                            disabled={isDisabled}
+                                            className={cn("w-full justify-start flex-col items-start px-3 py-2.5 h-auto data-[state=active]:bg-background", isDisabled && "opacity-50 cursor-not-allowed")}
+                                        >
+                                            <span className="flex items-center gap-2 w-full">
+                                                <Icon className="size-3.5 shrink-0" />
+                                                <span className="font-medium text-sm">{label}</span>
+                                            </span>
+                                            <span className="text-[11px] text-muted-foreground font-normal mt-0.5 pl-5 text-left leading-tight">
+                                                {description}
+                                            </span>
+                                        </TabsTrigger>
+                                    )
+                                })}
 
                                 {/* Brouillons */}
                                 <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 px-2 pt-4 pb-1.5">

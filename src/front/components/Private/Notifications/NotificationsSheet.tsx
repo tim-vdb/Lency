@@ -127,6 +127,7 @@ export default function NotificationsSheet() {
     );
     const projectGroups = groupProjectNotifications(notifications);
     const dmNotifications = notifications.filter(n => n.type === "dm_message" && !n.read);
+    const supportMessages = notifications.filter(n => n.type === "support_message" && !n.read);
 
     const actionProps = { onOpenResponse: handleOpenResponse, isLoadingApp };
 
@@ -135,13 +136,36 @@ export default function NotificationsSheet() {
             if (!prefs.show_messages) return <EmptyState />;
             if (isLoadingConv) return <Spinner />;
             return (
-                <ConversationsList
-                    conversations={conversations}
-                    currentUserId={currentUser?.id}
-                    dmNotifications={dmNotifications}
-                    onOpenChat={setOpenDMUser}
-                    onDismissNotif={dismiss}
-                />
+                <div className="flex flex-col gap-4">
+                    {supportMessages.length > 0 && (
+                        <div>
+                            <p className="text-xs font-semibold text-muted-foreground mb-2 px-2">SUPPORT</p>
+                            <div className="flex flex-col gap-2">
+                                {supportMessages.map(n => (
+                                    <NotificationItem
+                                        key={n.id}
+                                        notification={n}
+                                        onDismiss={() => dismiss(n.id)}
+                                        {...actionProps}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    {(conversations.length > 0 || dmNotifications.length > 0) && (
+                        <div>
+                            {supportMessages.length > 0 && <p className="text-xs font-semibold text-muted-foreground mb-2 px-2">MESSAGES DIRECTS</p>}
+                            <ConversationsList
+                                conversations={conversations}
+                                currentUserId={currentUser?.id}
+                                dmNotifications={dmNotifications}
+                                onOpenChat={setOpenDMUser}
+                                onDismissNotif={dismiss}
+                            />
+                        </div>
+                    )}
+                    {supportMessages.length === 0 && conversations.length === 0 && <EmptyState />}
+                </div>
             );
         }
 
@@ -184,6 +208,7 @@ export default function NotificationsSheet() {
                 dmNotifications={dmNotifications}
                 projectGroups={prefs.show_projects ? projectGroups : []}
                 communityNotifs={prefs.show_community ? communityNotifs : []}
+                supportMessages={supportMessages}
                 onOpenChat={prefs.show_messages ? setOpenDMUser : () => {}}
                 onDismissNotif={dismiss}
                 onDismissGroup={(group) => group.notifications.forEach(n => dismiss(n.id))}

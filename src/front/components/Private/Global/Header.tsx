@@ -1,6 +1,6 @@
 "use client";
 
-import { BadgeCheck, Bell } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Separator } from "../../ui/separator";
 import { SheetTrigger } from "../../ui/sheet";
 import { NavUser } from "./Sidebar/nav-user";
@@ -12,7 +12,6 @@ import { CreateDropdown } from "./CreateDropdown";
 import BreadcrumbAuto from "./BreadcrumbAuto";
 import SearchBar from "../../SearchBar/SearchBar";
 import { useNotificationsQuery } from "@/front/queries/notifications";
-import { toast } from "sonner";
 
 export default function Header({ className }: { className?: string }) {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -23,7 +22,7 @@ export default function Header({ className }: { className?: string }) {
     const unreadCount = notifications.filter((n) => !n.read).length;
 
     const isFixedLayout = pathname !== "/account" && pathname !== "/admin"
-    const isDashboard = pathname === "/account"
+    const isDashboard = pathname === "/account" || pathname === "/admin"
 
 
     useEffect(() => {
@@ -41,7 +40,7 @@ export default function Header({ className }: { className?: string }) {
 
     return (
         <header className={cn(
-            "flex h-14 shrink-0 mr-1 items-center gap-2 border dark:border-neutral-400 backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-black/40 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14",
+            "flex h-14 shrink-0 mr-1 items-center gap-2 border dark:border-zinc-700 backdrop-blur-xs backdrop-brightness-100 bg-white/40 dark:backdrop-blur-xs dark:backdrop-brightness-60 dark:bg-card/60 rounded-xl transition-[width,height,left,border-radius,background-color] duration-800 ease-in-out group-has-data-[collapsible=icon]/sidebar-wrapper:h-14",
             isDashboard && "mr-2",
             isScrolled && "rounded-t-none",
             isFixedLayout && "md:fixed top-2 z-40",
@@ -56,7 +55,6 @@ export default function Header({ className }: { className?: string }) {
                     <SearchBar />
                     <CreateDropdown />
                     <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
-                    <BadgeCheck className="cursor-pointer w-6 h-6 min-w-6 min-h-6" onClick={() => toast.info("En développement")} />
                     <SheetTrigger className="cursor-pointer relative flex">
                         <Bell className="w-6 h-6 min-w-6 min-h-6 fill-white text-black dark:fill-black/20 dark:text-white" />
                         {unreadCount > 0 && (

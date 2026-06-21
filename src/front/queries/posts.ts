@@ -96,7 +96,7 @@ export const useCreatePost = () => {
     return useMutation({
         mutationFn: createPost,
         onSuccess: (_data, variables) => {
-            // Invalide tous les contextes où les posts apparaissent (liste, auteur, catégorie, followed…)
+            // Invalide tous les contextes où les posts apparaissent (liste, auteur, communauté, followed…)
             queryClient.invalidateQueries({ queryKey: POST_ROOT })
             queryClient.invalidateQueries({ queryKey: ["categories", variables.categoryId, "posts"] })
             queryClient.invalidateQueries({ queryKey: SEARCH_ROOT })

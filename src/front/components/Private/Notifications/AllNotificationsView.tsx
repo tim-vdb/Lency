@@ -12,6 +12,7 @@ interface AllNotificationsViewProps {
     dmNotifications: DBNotification[];
     projectGroups: ProjectGroup[];
     communityNotifs: DBNotification[];
+    supportMessages?: DBNotification[];
     onOpenChat: (user: ConversationParticipant) => void;
     onDismissNotif: (id: string) => void;
     onDismissGroup: (group: ProjectGroup) => void;
@@ -25,6 +26,7 @@ export function AllNotificationsView({
     dmNotifications,
     projectGroups,
     communityNotifs,
+    supportMessages = [],
     onOpenChat,
     onDismissNotif,
     onDismissGroup,
@@ -34,7 +36,8 @@ export function AllNotificationsView({
     const hasConv = dmNotifications.length > 0;
     const hasProjects = projectGroups.length > 0;
     const hasCommunity = communityNotifs.length > 0;
-    const sectionCount = [hasConv, hasProjects, hasCommunity].filter(Boolean).length;
+    const hasSupport = supportMessages.length > 0;
+    const sectionCount = [hasConv, hasProjects, hasCommunity, hasSupport].filter(Boolean).length;
 
     if (sectionCount === 0) return <EmptyState />;
 
@@ -42,6 +45,21 @@ export function AllNotificationsView({
 
     return (
         <div className="flex flex-col gap-5">
+            {hasSupport && (
+                <section>
+                    {showLabels && <SectionLabel>Support</SectionLabel>}
+                    <div className="flex flex-col gap-3">
+                        {supportMessages.map(n => (
+                            <NotificationItem
+                                key={n.id}
+                                notification={n}
+                                onDismiss={() => onDismissNotif(n.id)}
+                                onOpenResponse={onOpenResponse}
+                            />
+                        ))}
+                    </div>
+                </section>
+            )}
             {hasConv && (
                 <section>
                     {showLabels && <SectionLabel>Messages</SectionLabel>}

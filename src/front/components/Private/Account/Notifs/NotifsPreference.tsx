@@ -2,7 +2,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/front/components/ui/card";
 import { Field, FieldDescription, FieldLabel } from "@/front/components/ui/field";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/front/components/ui/select";
 import { Switch } from "@/front/components/ui/switch";
 import { Separator } from "@/front/components/ui/separator";
 import { MessageSquare } from "lucide-react";
@@ -70,46 +69,7 @@ export default function NotifsPreference() {
                         />
                     </Field>
 
-                    <Separator />
 
-                    <Field>
-                        <FieldLabel>Fréquence des résumés</FieldLabel>
-                        <Select
-                            value={prefs.digest_frequency}
-                            disabled={isSaving}
-                            onValueChange={(v) => updatePref("digest_frequency", v as typeof prefs.digest_frequency)}
-                        >
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Sélectionner une fréquence" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="realtime">Temps réel</SelectItem>
-                                <SelectItem value="daily">Quotidien</SelectItem>
-                                <SelectItem value="weekly">Hebdomadaire</SelectItem>
-                                <SelectItem value="monthly">Mensuel</SelectItem>
-                                <SelectItem value="never">Jamais</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>Langue des notifications</FieldLabel>
-                        <Select
-                            value={prefs.language}
-                            disabled={isSaving}
-                            onValueChange={(v) => updatePref("language", v as typeof prefs.language)}
-                        >
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Sélectionner une langue" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="fr">Français</SelectItem>
-                                <SelectItem value="en">English</SelectItem>
-                                <SelectItem value="es">Español</SelectItem>
-                                <SelectItem value="de">Deutsch</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </Field>
                 </div>
             </CardContent>
         </Card>

@@ -465,7 +465,7 @@ export default function UserProfilePageClient({ username }: { username: string }
                             ...(user.participants ?? []),
                         ]} />
                         <UserFollowingCommunities follows={user.categoryFollows} />
-                        <UserAchievementsCard badges={user.badges} userId={user.id} />
+                        <UserAchievementsCard badges={[]} userId={user.id} />
 
                         {isOwnProfile && user.following && user.following.length > 0 && (
                             <Card>

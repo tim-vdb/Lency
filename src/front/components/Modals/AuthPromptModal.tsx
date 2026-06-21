@@ -23,9 +23,9 @@ export function AuthPromptModal({ id }: AuthPromptModalProps) {
         <Dialog open={true} onOpenChange={(v) => !v && closeModal(id)}>
             <DialogContent className="max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Rejoignez la communauté</DialogTitle>
+                    <DialogTitle>Rejoindre la communauté</DialogTitle>
                     <DialogDescription>
-                        Créez un compte pour aimer, enregistrer, commenter et interagir avec
+                        Créer un compte pour aimer, enregistrer, commenter et interagir avec
                         les publications.
                     </DialogDescription>
                 </DialogHeader>

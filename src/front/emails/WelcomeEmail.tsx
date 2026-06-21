@@ -93,20 +93,20 @@ export const WelcomeEmail = ({
                         />
 
                         <Container className="bg-white rounded-xl border border-gray-200 p-8">
-                            <Heading className="my-0 mb-5 text-center text-4xl leading-tight text-gray-900">
+                            <Heading className="my-0 mb-5 text-center text-4xl leading-tight text-neutral-900">
                                 Bienvenue sur Lency
                             </Heading>
 
-                            <Text className="text-lg leading-7 text-gray-900 text-left mb-3">
+                            <Text className="text-lg leading-7 text-neutral-900 text-left mb-3">
                                 Felicitations {firstName ? `${firstName} !` : '!'} Vous venez de rejoindre Lency, la plateforme d'audiovisuel pour creer votre projet.
                             </Text>
 
-                            <Text className="text-lg leading-7 text-gray-900 text-left mb-4">
+                            <Text className="text-lg leading-7 text-neutral-900 text-left mb-4">
                                 Retrouvez ci-dessous les options pour debuter :
                             </Text>
 
                             <Section className="text-left mb-5">
-                                <ul className="m-0 pl-5 text-base leading-7 text-gray-900">
+                                <ul className="m-0 pl-5 text-base leading-7 text-neutral-900">
                                     {emailSteps?.map(({ id, Description }) => (
                                         <li key={id} className="mb-3">{Description}</li>
                                     ))}
@@ -146,7 +146,7 @@ export const WelcomeEmail = ({
                                     </Column>
                                 </Row>
                             </Section>
-                            <Text className="mt-[18px] mb-0 text-center text-gray-400 text-sm">
+                            <Text className="mt-[18px] mb-0 text-center text-neutral-400 text-sm">
                                 Lency, 44 Montgomery Street, Suite 300 San Francisco, CA
                             </Text>
                         </Container>

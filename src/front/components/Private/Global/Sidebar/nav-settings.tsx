@@ -2,6 +2,7 @@
 
 import { Bell, ChevronRight, Settings2, Shield, User2 } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   Collapsible,
   CollapsibleContent,
@@ -23,6 +24,8 @@ const settingsItems = [
 ]
 
 export function NavSettings() {
+  const pathname = usePathname()
+
   return (
     <SidebarMenu>
       <Collapsible asChild className="group/collapsible">
@@ -36,16 +39,19 @@ export function NavSettings() {
           </CollapsibleTrigger>
           <CollapsibleContent>
             <SidebarMenuSub>
-              {settingsItems.map((item) => (
-                <SidebarMenuSubItem key={item.title}>
-                  <SidebarMenuSubButton asChild>
-                    <Link href={item.url}>
-                      <item.icon className="size-4" />
-                      <span className="items_sidebar">{item.title}</span>
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              ))}
+              {settingsItems.map((item) => {
+                const isActive = pathname === item.url
+                return (
+                  <SidebarMenuSubItem key={item.title}>
+                    <SidebarMenuSubButton asChild className={isActive ? "bg-orange dark:bg-black text-white [&>svg]:text-white [&_svg]:text-white" : ""}>
+                      <Link href={item.url}>
+                        <item.icon className="size-4" />
+                        <span className="items_sidebar">{item.title}</span>
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                )
+              })}
             </SidebarMenuSub>
           </CollapsibleContent>
         </SidebarMenuItem>

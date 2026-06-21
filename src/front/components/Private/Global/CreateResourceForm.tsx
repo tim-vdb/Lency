@@ -32,7 +32,7 @@ import { uploadToImageKit } from "@/front/lib/upload"
 import { ResourceWithUserState } from "@/front/schemas/types/resource.type"
 
 const RESOURCE_TYPE_LABELS: Record<string, string> = {
-    ASSET: "Asset(s)",
+    ASSET: "Ressource(s)",
     TUTORIAL: "Tutoriel(s)",
     LINK: "Lien(s)",
 }
@@ -341,7 +341,7 @@ export function CreateResourceForm({ onSuccess, initialData, mode = "create" }: 
                 }
             >
                 {/* ── Étape 1 : Référence ── */}
-                <MultistepStep title="Référence" description="Type, catégorie et titre de la ressource.">
+                <MultistepStep title="Référence" description="Type, communauté et titre de la ressource.">
                     <div className="grid grid-cols-2 gap-3">
                         <FormField
                             control={form.control}

@@ -9,30 +9,24 @@ export interface NotifPreferences {
     show_projects: boolean;
     show_community: boolean;
     show_messages: boolean;
-    push_enabled: boolean;
-    push_mentions: boolean;
-    push_project_updates: boolean;
     email_product_updates: boolean;
     email_weekly_reports: boolean;
     email_security_alerts: boolean;
-    email_marketing: boolean;
-    digest_frequency: "realtime" | "daily" | "weekly" | "monthly" | "never";
-    language: "fr" | "en" | "es" | "de";
+    push_enabled: boolean;
+    push_mentions: boolean;
+    push_project_updates: boolean;
 }
 
 const DEFAULTS: NotifPreferences = {
     show_projects: true,
     show_community: true,
     show_messages: true,
-    push_enabled: true,
-    push_mentions: true,
-    push_project_updates: false,
     email_product_updates: true,
-    email_weekly_reports: true,
+    email_weekly_reports: false,
     email_security_alerts: true,
-    email_marketing: false,
-    digest_frequency: "weekly",
-    language: "fr",
+    push_enabled: false,
+    push_mentions: false,
+    push_project_updates: false,
 };
 
 export function useNotifPreferences() {

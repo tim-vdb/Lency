@@ -15,6 +15,7 @@ export interface CreateProjectInput {
     startDate?: string;
     roles?: string[];
     visibility?: Visibility;
+    status?: ProjectStatus;
     city?: string;
     latitude?: number;
     longitude?: number;

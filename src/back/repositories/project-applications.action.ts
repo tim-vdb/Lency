@@ -10,7 +10,7 @@ export const ProjectApplicationAction = {
     prisma.projectApplication.findUnique({
       where: { id },
       include: {
-        user: { include: { configs: true, badges: true } },
+        user: { include: { configs: true } },
         project: true,
       },
     }),
@@ -23,7 +23,6 @@ export const ProjectApplicationAction = {
         user: {
           include: {
             configs: true,
-            badges: true,
             socialLinks: true,
             categoryFollows: { include: { category: true } },
           },

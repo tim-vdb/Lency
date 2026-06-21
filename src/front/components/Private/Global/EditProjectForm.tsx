@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2, Plus, Upload, X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { toast } from "sonner"
 import { EditProjectSchema, type EditProjectValues } from "@/front/schemas/zod/project.zod"
 
@@ -179,7 +179,7 @@ export function EditProjectForm({ project, onSuccess }: EditProjectFormProps) {
         : ""
 
     const form = useForm<EditProjectValues>({
-        resolver: zodResolver(EditProjectSchema),
+        resolver: zodResolver(EditProjectSchema) as unknown as Resolver<EditProjectValues>,
         defaultValues: {
             title: project.title,
             description: project.description,

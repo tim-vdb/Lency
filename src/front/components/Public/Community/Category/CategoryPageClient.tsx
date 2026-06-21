@@ -193,7 +193,7 @@ export default function CategoryPageClient({ slug }: { slug: string }) {
             <div className="sticky top-0 self-start min-w-sm max-w-sm hidden xl:block">
                 <Card className="overflow-hidden py-0 gap-0">
 
-                    {/* Infos catégorie */}
+                    {/* Infos communauté */}
                     <div className="p-4 flex flex-col gap-3">
                         <div className="flex items-center justify-between gap-2">
                             <p className="font-semibold text-sm truncate">{category.name}</p>

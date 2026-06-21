@@ -12,22 +12,29 @@ export async function sendEmailChangeConfirmation({
     firstName,
     confirmationToken,
 }: SendEmailChangeConfirmationParams): Promise<void> {
+    if (!process.env.RESEND_API_KEY) {
+        console.error('[send-email-change-confirmation] RESEND_API_KEY is not defined');
+        throw new Error('Email service not configured');
+    }
+
     const resend = new Resend(process.env.RESEND_API_KEY)
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-    const confirmationUrl = `${baseUrl}/api/users/confirm-email-change?token=${confirmationToken}`
+    const baseUrl = process.env.BASE_URL || 'http://localhost:3000'
+    const confirmationUrl = `${baseUrl}/confirm-email-change?token=${confirmationToken}`
 
     try {
+        console.log('[send-email-change-confirmation] Sending email to:', email);
         await resend.emails.send({
-            from: process.env.RESEND_FROM_AUTH_EMAIL || 'noreply@lency.net',
+            from: 'support@infos.lency.net',
             to: email,
-            subject: 'Confirmez votre nouvelle adresse email - Lency',
+            subject: 'Confirmez votre nouvelle adresse email — Lency',
             react: EmailChangeConfirmation({
                 firstName,
                 confirmationUrl,
             }),
         })
+        console.log('[send-email-change-confirmation] Email sent successfully');
     } catch (error) {
-        console.error('Failed to send email change confirmation:', error)
+        console.error('[send-email-change-confirmation] Error:', error)
         throw error
     }
 }

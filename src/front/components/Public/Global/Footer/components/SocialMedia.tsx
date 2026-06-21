@@ -13,7 +13,7 @@ export default function SocialMedia() {
     return (
         <div>
             <div className="flex flex-col">
-                <h3 className="text-lg mb-4">Connect with us</h3>
+                <h3 className="text-lg mb-4">Nous suivre</h3>
                 <div className="flex space-x-4 justify-center md:justify-start">
                     <Link
                         href=""

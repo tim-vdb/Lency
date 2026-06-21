@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const CreatePostSchema = z.object({
     content: z.string().min(1, "Le contenu est requis"),
-    categoryId: z.string().min(1, "Choisissez une catégorie"),
+    categoryId: z.string().min(1, "Choisissez une communauté"),
     format: z.enum(["TEXT", "IMAGE", "VIDEO", "AUDIO"]),
     orientation: z.enum(["LANDSCAPE", "PORTRAIT"]).optional(),
     isPublished: z.boolean(),

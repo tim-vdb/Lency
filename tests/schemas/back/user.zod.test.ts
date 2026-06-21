@@ -70,7 +70,6 @@ describe("updateUserSchema", () => {
             firstname: "Jean",
             lastname: "Dupont",
             username: "jdupont",
-            phone: "0612345678",
             bio: "Dev créatif",
             image: "https://img.com/photo.jpg",
             avatarUrl: "https://img.com/avatar.jpg",

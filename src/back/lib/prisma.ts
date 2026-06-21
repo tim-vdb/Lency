@@ -25,7 +25,12 @@ function stripSslMode(url: string): string {
 
 const prismaOptions: Prisma.PrismaClientOptions = process.env.NODE_ENV === 'production'
     ? { adapter: new PrismaNeonHttp(connectionString, {}) }
-    : { adapter: new PrismaPg(new Pool({ connectionString: stripSslMode(connectionString), ssl: { rejectUnauthorized: true } })) };
+    : { adapter: new PrismaPg(new Pool({
+        connectionString: stripSslMode(connectionString),
+        ssl: { rejectUnauthorized: true },
+        statement_timeout: 30000,
+        application_name: 'lency'
+    })) };
 
 const prisma: PrismaClient =
     globalForPrisma.prisma ??

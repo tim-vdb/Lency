@@ -16,7 +16,11 @@ interface UserAchievementsCardProps {
     userId: string;
 }
 
-export default function UserAchievementsCard({ badges, userId }: UserAchievementsCardProps) {
+export default function UserAchievementsCard({ badges = [], userId }: UserAchievementsCardProps) {
+    if (!badges || badges.length === 0) {
+        return null;
+    }
+
     const previewCount = Math.min(badges.length, 3);
     const preview = badges.slice(0, previewCount);
     const remaining = badges.length - previewCount;

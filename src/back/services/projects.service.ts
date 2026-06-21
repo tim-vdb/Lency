@@ -15,6 +15,7 @@ export type CreateProjectInput = {
     startDate?: string;
     roles?: string[];
     visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
+    status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
     city?: string;
     latitude?: number;
     longitude?: number;
@@ -60,12 +61,15 @@ export const ProjectsService = {
             startDate: data.startDate ? new Date(data.startDate) : undefined,
             roles: data.roles,
             visibility: data.visibility,
+            status: data.status,
             ...(data.city && {
                 mapLocation: { name: data.city, latitude: data.latitude ?? 0, longitude: data.longitude ?? 0 },
             }),
         });
 
-        await NotifyNewProject(user.id, project.id)
+        if (project.status === "PUBLISHED") {
+            await NotifyNewProject(user.id, project.id)
+        }
 
         return project;
     },

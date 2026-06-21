@@ -42,8 +42,8 @@ export default function ResetPasswordOTP({
       >
         <Body className="bg-panel py-6 font-sans">
           <Container className="mx-auto max-w-[560px] rounded-xl border border-border bg-white p-8">
-            <Heading className="m-0 mb-4 text-2xl text-gray-900">Reset your password</Heading>
-            <Text className="text-base text-gray-700">
+            <Heading className="m-0 mb-4 text-2xl text-neutral-900">Reset your password</Heading>
+            <Text className="text-base text-neutral-700">
               {firstName ? `Hi ${firstName},` : 'Hi,'} use this OTP code to reset your password.
             </Text>
 
@@ -51,7 +51,7 @@ export default function ResetPasswordOTP({
               <Text className="m-0 text-[34px] font-bold tracking-[0.28em] text-brand">{otp}</Text>
             </Section>
 
-            <Text className="text-sm text-gray-600">
+            <Text className="text-sm text-neutral-600">
               This code expires in {expiresInMinutes} minutes. If you did not request a password reset, please secure your account.
             </Text>
           </Container>

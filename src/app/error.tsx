@@ -17,8 +17,8 @@ export default function GlobalError({ error: _error, reset }: Props) {
                     <div className="mx-auto w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6">
                         <AlertCircleIcon className="w-8 h-8 text-red-400" />
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900 mb-3">Une erreur est survenue</h1>
-                    <p className="text-gray-600 mb-8 leading-relaxed">
+                    <h1 className="text-2xl font-bold text-neutral-900 mb-3">Une erreur est survenue</h1>
+                    <p className="text-neutral-600 mb-8 leading-relaxed">
                         Quelque chose s'est mal passé. Vous pouvez réessayer ou revenir à l'accueil.
                     </p>
                     <div className="flex flex-col gap-2">

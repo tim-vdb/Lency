@@ -14,7 +14,7 @@ export default function Footer() {
   const isAdmin = pathname.startsWith("/admin");
 
   return (
-    <footer className={cn("shadow-md bg-white text-gray-800 py-10 dark:bg-neutral-900 dark:text-gray-200", isAdmin ? "px-4" : "md:px-20 lg:px-20 xl:px-20")}>
+    <footer className={cn("shadow-md bg-white text-neutral-800 py-10 dark:bg-neutral-900 dark:text-neutral-200", isAdmin ? "px-4" : "md:px-20 lg:px-20 xl:px-20")}>
       <div className="container grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-20 [&_h3]:mt-5">
         <div className="flex flex-col justify-center items-start">
           <div className="flex flex-col">
@@ -36,26 +36,26 @@ export default function Footer() {
       {/* Copyright */}
       <div className="flex flex-col-reverse justify-between items-center gap-4 px-4 border-t border-neutral-500 mt-10 pt-6 text-center md:px-0 md:gap-0 md:flex-row">
         <p className="text-xs text-neutral-600 dark:text-neutral-400">
-          © {year} Lency - Inc. - All rights reserved.
+          © {year} Lency - Tous droits réservés.
         </p>
         <div className="flex items-center gap-8">
           <Link
             href="/privacy-policy"
             className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
           >
-            Privacy Policy
+            Politique de confidentialité
           </Link>
           <Link
             href="/terms-of-service"
             className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
           >
-            Terms of Service
+            Conditions d'utilisation
           </Link>
           <Link
             href="/cookie-policy"
             className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 hover:dark:text-white hover:underline transition"
           >
-            Cookie Policy
+            Politique de cookies
           </Link>
         </div>
       </div>

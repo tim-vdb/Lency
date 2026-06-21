@@ -36,14 +36,14 @@ export function DashboardFeaturedProjects({ className, style }: { className?: st
             {/* Fullscreen overlay */}
             {isExpanded && (
                 <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-8">
-                    <div className="bg-white rounded-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E8E1]">
-                            <h2 className="text-[20px] font-bold text-[#000000]">Projet à la Une</h2>
+                    <div className="bg-white dark:bg-neutral-900 rounded-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E8E1] dark:border-neutral-700">
+                            <h2 className="text-[20px] font-bold text-[#000000] dark:text-white">Projet à la Une</h2>
                             <button
                                 onClick={() => setIsExpanded(false)}
-                                className="p-1.5 hover:bg-[#F7F7F2] rounded-lg cursor-pointer transition-colors"
+                                className="p-1.5 hover:bg-[#F7F7F2] dark:hover:bg-neutral-800 rounded-lg cursor-pointer transition-colors"
                             >
-                                <X className="w-5 h-5 text-[#8C8A85]" />
+                                <X className="w-5 h-5 text-[#8C8A85] dark:text-neutral-400" />
                             </button>
                         </div>
                         <div className="flex flex-wrap gap-4 p-6 overflow-y-auto">
@@ -59,15 +59,15 @@ export function DashboardFeaturedProjects({ className, style }: { className?: st
                 </div>
             )}
 
-            <div className={cn("bg-white rounded-xl border border-[#E8E8E1] px-6 py-5 flex flex-col", className)} style={style}>
+            <div className={cn("bg-white dark:bg-neutral-900 rounded-xl border border-[#E8E8E1] dark:border-neutral-700 px-6 py-5 flex flex-col", className)} style={style}>
                 {/* Header */}
                 <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-[20px] font-bold text-[#000000]">Projet à la Une</h2>
+                    <h2 className="text-[20px] font-bold text-[#000000] dark:text-white">Projet à la Une</h2>
                     <button
                         onClick={() => setIsExpanded(true)}
-                        className="p-1.5 hover:bg-[#F7F7F2] rounded-lg cursor-pointer transition-colors"
+                        className="p-1.5 hover:bg-[#F7F7F2] dark:hover:bg-neutral-800 rounded-lg cursor-pointer transition-colors"
                     >
-                        <Maximize2 className="w-4 h-4 text-[#8C8A85]" />
+                        <Maximize2 className="w-4 h-4 text-[#8C8A85] dark:text-neutral-400" />
                     </button>
                 </div>
 
@@ -81,7 +81,7 @@ export function DashboardFeaturedProjects({ className, style }: { className?: st
                             style={{ scrollbarWidth: "none" }}
                         >
                             {latest.length === 0 ? (
-                                <p className="text-sm text-[#8C8A85] py-6">Aucun projet disponible</p>
+                                <p className="text-sm text-[#8C8A85] dark:text-neutral-400 py-6">Aucun projet disponible</p>
                             ) : (
                                 latest.map((p) => (
                                     <DashboardProjectCard
@@ -100,9 +100,9 @@ export function DashboardFeaturedProjects({ className, style }: { className?: st
                     {latest.length > 3 && (
                         <button
                             onClick={scroll}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-9 h-9 bg-white border border-[#E8E8E1] shadow-md rounded-full flex items-center justify-center cursor-pointer hover:bg-[#F7F7F2] transition-colors z-10"
+                            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-9 h-9 bg-white dark:bg-neutral-800 border border-[#E8E8E1] dark:border-neutral-700 shadow-md rounded-full flex items-center justify-center cursor-pointer hover:bg-[#F7F7F2] dark:hover:bg-neutral-700 transition-colors z-10"
                         >
-                            <ChevronRight className="w-5 h-5 text-[#4C4A43]" />
+                            <ChevronRight className="w-5 h-5 text-[#4C4A43] dark:text-neutral-300" />
                         </button>
                     )}
                 </div>

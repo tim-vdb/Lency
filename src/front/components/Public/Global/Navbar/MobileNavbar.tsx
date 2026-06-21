@@ -23,7 +23,7 @@ export default function MobileNavbar({
     base: 'block px-3 py-2 rounded-md text-base font-medium transition-colors font-cooper',
     isActive: 'bg-yellow-550 text-white',
     notActive:
-      'text-neutral-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700',
+      'text-neutral-900 dark:text-neutral-300 hover:bg-gray-100 dark:hover:bg-neutral-700',
   };
 
   return (
@@ -63,7 +63,7 @@ export default function MobileNavbar({
               : linksClasses.notActive
           )}
         >
-          Pricing
+          Tarifs
         </Link>
         <Link
           href="/about"
@@ -73,7 +73,7 @@ export default function MobileNavbar({
             isActive('/about') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
-          About
+          À propos
         </Link>
         <Link
           href="/contact"
@@ -85,7 +85,7 @@ export default function MobileNavbar({
               : linksClasses.notActive
           )}
         >
-          Contact Us
+          Contact
         </Link>
         <Link
           href="/team"
@@ -95,7 +95,7 @@ export default function MobileNavbar({
             isActive('/team') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
-          Our Team
+          Équipe
         </Link>
         <Link
           href="/docs"
@@ -105,7 +105,7 @@ export default function MobileNavbar({
             isActive('/docs') ? linksClasses.isActive : linksClasses.notActive
           )}
         >
-          Docs
+          Documentation
         </Link>
         <Link
           href="/blog"

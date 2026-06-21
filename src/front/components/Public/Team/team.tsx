@@ -4,21 +4,21 @@ import Link from 'next/link';
 const members = [
   {
     name: 'Timothée VAN DEN BOSCH',
-    role: 'Founder - Developer - CTO',
+    role: 'Fondateur - Développeur - CTO',
     avatar: '/images/team/pro/Timothée_VDB.webp',
     linkedIn: 'https://www.linkedin.com/in/timothee-van-den-bosch',
     portfolio: 'https://tim-vdb.github.io',
   },
   {
     name: 'Nolan CAZAIN',
-    role: 'Co-Founder - Videographer - CEO',
+    role: 'Co-Fondateur - Vidéaste - CEO',
     avatar: '/images/team/pro/Nolan_CAZAIN.avif',
     linkedIn: 'https://www.linkedin.com/in/no5',
     portfolio: 'https://nolancazain.com',
   },
   {
     name: 'Guerric COCHELIN',
-    role: 'Developer - CFO',
+    role: 'Développeur - CFO',
     avatar: '/images/team/pro/Guerric_COCHELIN.png',
     linkedIn: 'https://www.linkedin.com/in/guerric-cochelin-497ab61b1',
     portfolio: 'https://guerricco.github.io/portfolio',
@@ -32,7 +32,7 @@ const members = [
   },
   {
     name: 'Alexandre BOULET',
-    role: 'Chief Marketing Officer',
+    role: 'Responsable Marketing',
     avatar: '/images/team/pro/Alexandre_BOULET.png',
     linkedIn: 'https://www.linkedin.com/in/alexandre-boulet-176791291',
   },
@@ -43,19 +43,17 @@ export default function TeamSection() {
     <section className="bg-gray-50 py-16 md:py-32 dark:bg-transparent">
       <div className="mx-auto max-w-5xl border-t px-6">
         <span className="text-caption -ml-6 -mt-3.5 block w-max bg-gray-50 px-6 dark:bg-gray-950">
-          Team
+                  Équipe
         </span>
         <div className="mt-12 gap-4 sm:grid sm:grid-cols-2 md:mt-24">
           <div className="sm:w-2/5">
             <h2 className="text-3xl font-bold sm:text-4xl mt-0">
-              Our dream team
+                  Notre équipe de rêve
             </h2>
           </div>
           <div className="mt-6 sm:mt-0">
             <p>
-              During the working process, we perform regular fitting with the
-              client because he is the only person who can feel whether a new
-              suit fits or not.
+              Pendant le processus de développement, nous échangeons régulièrement avec nos utilisateurs pour nous assurer que notre plateforme répond parfaitement à leurs besoins.
             </p>
           </div>
         </div>
@@ -65,11 +63,11 @@ export default function TeamSection() {
               <div key={index} className="group group/image overflow-hidden">
                 <div
                   className={cn(
-                    'bg-neutral-900 overflow-hidden rounded-md',
+                    'bg-neutral-900 dark:bg-zinc-800 overflow-hidden rounded-md',
                     member.name === 'Timothée VAN DEN BOSCH' ||
                       member.name === 'Guerric COCHELIN' ||
                       member.name === 'Alexandre BOULET'
-                      ? 'dark:bg-white'
+                      ? 'dark:bg-zinc-700'
                       : ''
                   )}
                 >

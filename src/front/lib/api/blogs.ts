@@ -1,10 +1,16 @@
 export type BlogStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED"
-export type BlogTag = "VIDEO" | "MOTION" | "OUTILS"
 
-export const BLOG_TAGS: { value: BlogTag; label: string }[] = [
-    { value: "VIDEO", label: "Vidéo" },
-    { value: "MOTION", label: "Motion" },
-    { value: "OUTILS", label: "Outils" },
+export const BLOG_TAG_SUGGESTIONS: string[] = [
+    "Vidéo",
+    "Motion",
+    "Outils",
+    "Tutoriel",
+    "Technique",
+    "News",
+    "Inspiration",
+    "Workflow",
+    "Color grading",
+    "Son",
 ]
 
 export interface Blog {
@@ -12,7 +18,7 @@ export interface Blog {
     title: string
     content: string
     coverUrl?: string | null
-    tag: BlogTag
+    tags: string[]
     status: BlogStatus
     authorId: string
     createdAt: Date
@@ -22,7 +28,7 @@ export interface Blog {
 export interface CreateBlogInput {
     title: string
     content: string
-    tag: BlogTag
+    tags: string[]
     coverUrl?: string | null
     status?: BlogStatus
 }
@@ -30,7 +36,7 @@ export interface CreateBlogInput {
 export interface UpdateBlogInput {
     title?: string
     content?: string
-    tag?: BlogTag
+    tags?: string[]
     coverUrl?: string | null
     status?: BlogStatus
 }
