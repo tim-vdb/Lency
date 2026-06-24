@@ -18,7 +18,7 @@ function formatDate(date: Date | undefined) {
     return '';
   }
 
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString('fr-FR', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
@@ -42,8 +42,8 @@ interface DatePickerProps {
 export function DatePicker({
   value,
   onChange,
-  placeholder = 'June 01, 2025',
-  label = 'Subscription Date',
+  placeholder = '01 juin 2025',
+  label = "Date d'abonnement",
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
   const [month, setMonth] = React.useState<Date | undefined>(value);
@@ -87,7 +87,7 @@ export function DatePicker({
               className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
             >
               <CalendarIcon className="size-3.5" />
-              <span className="sr-only">Select date</span>
+              <span className="sr-only">Sélectionner une date</span>
             </Button>
           </PopoverTrigger>
           <PopoverContent
