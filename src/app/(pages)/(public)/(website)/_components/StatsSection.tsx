@@ -11,13 +11,13 @@ const stats = [
 
 export default function StatsSection() {
   return (
-    <section className="w-full py-20 px-8 lg:px-16">
+    <section className="w-full py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
         {/* Col 1: stats */}
         <div className="lg:w-1/4 flex flex-col gap-8 shrink-0">
           {stats.map(({ value, label }) => (
             <div key={value} className="flex flex-col gap-1">
-              <span className="text-[54px] font-black text-[#EA3D0E] leading-tight">
+              <span className="text-[40px] sm:text-[54px] font-black text-[#EA3D0E] leading-tight">
                 {value}
               </span>
               <span className="text-[16px] text-neutral-500 dark:text-neutral-400 leading-snug">
