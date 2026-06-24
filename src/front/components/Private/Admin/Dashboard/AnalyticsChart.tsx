@@ -61,11 +61,11 @@ const chartData = [
 
 const chartConfig = {
   users: {
-    label: "Users",
+    label: "Utilisateurs",
     color: "var(--chart-1)",
   },
   projects: {
-    label: "Projects",
+    label: "Projets",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
@@ -76,8 +76,8 @@ interface AnalyticsChartProps {
 }
 
 export function AnalyticsChart({
-  title = "User & Project Growth",
-  description = "Showing users and projects created over time",
+  title = "Croissance utilisateurs & projets",
+  description = "Utilisateurs et projets créés au fil du temps",
 }: AnalyticsChartProps) {
   const [timeRange, setTimeRange] = React.useState("90d");
 
@@ -105,19 +105,19 @@ export function AnalyticsChart({
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
             className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
-            aria-label="Select a value"
+            aria-label="Sélectionner une période"
           >
-            <SelectValue placeholder="Last 3 months" />
+            <SelectValue placeholder="3 derniers mois" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
             <SelectItem value="90d" className="rounded-lg">
-              Last 3 months
+              3 derniers mois
             </SelectItem>
             <SelectItem value="30d" className="rounded-lg">
-              Last 30 days
+              30 derniers jours
             </SelectItem>
             <SelectItem value="7d" className="rounded-lg">
-              Last 7 days
+              7 derniers jours
             </SelectItem>
           </SelectContent>
         </Select>
@@ -163,7 +163,7 @@ export function AnalyticsChart({
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
+                return date.toLocaleDateString("fr-FR", {
                   month: "short",
                   day: "numeric",
                 });
@@ -174,7 +174,7 @@ export function AnalyticsChart({
               content={
                 <ChartTooltipContent
                   labelFormatter={(value: string | number) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                    return new Date(value).toLocaleDateString("fr-FR", {
                       month: "short",
                       day: "numeric",
                     });
