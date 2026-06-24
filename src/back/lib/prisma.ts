@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from '../generated/prisma_client';
-import { PrismaNeonHttp } from '@prisma/adapter-neon';
+import { PrismaNeon } from '@prisma/adapter-neon';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 
@@ -24,7 +24,7 @@ function stripSslMode(url: string): string {
 }
 
 const prismaOptions: Prisma.PrismaClientOptions = process.env.NODE_ENV === 'production'
-    ? { adapter: new PrismaNeonHttp(connectionString, {}) }
+    ? { adapter: new PrismaNeon({ connectionString }) }
     : { adapter: new PrismaPg(new Pool({
         connectionString: stripSslMode(connectionString),
         ssl: { rejectUnauthorized: true },
