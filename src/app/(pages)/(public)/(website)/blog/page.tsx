@@ -27,7 +27,7 @@ export default async function BlogPage() {
     const filteredBlogs = isAdmin ? blogs : blogs.filter((b: BlogWithAuthor) => b.status === "PUBLISHED")
 
     return (
-        <main className="min-h-screen bg-white dark:bg-neutral-900">
+        <div className="min-h-screen bg-white dark:bg-neutral-900">
             <section className="w-full py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mb-8 md:mb-12">
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 dark:text-white">
@@ -36,6 +36,6 @@ export default async function BlogPage() {
                 </div>
                 <BlogList blogs={filteredBlogs} isAdmin={isAdmin} />
             </section>
-        </main>
+        </div>
     )
 }

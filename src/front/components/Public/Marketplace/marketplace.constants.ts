@@ -1,4 +1,13 @@
-export const PROJECT_TYPES = ["Court métrage", "Long métrage", "Série", "Clip", "Documentaire", "Autre"];
+export const PROJECT_TYPE_VALUES: Record<string, string> = {
+    "Court métrage": "COURT_METRAGE",
+    "Long métrage": "LONG_METRAGE",
+    "Série": "SERIE",
+    "Clip": "CLIP",
+    "Documentaire": "DOCUMENTAIRE",
+    "YouTube": "YOUTUBE",
+    "Autre": "AUTRE",
+};
+export const PROJECT_TYPES = Object.keys(PROJECT_TYPE_VALUES);
 export const DATE_OPTIONS = ["Aujourd'hui", "Cette semaine", "Ce mois", "Cette année"];
 export const WORKMODE_OPTIONS = ["Présentiel", "Distanciel", "Hybride"];
 export const REMUNERATION_OPTIONS = ["Rémunéré", "Non rémunéré"];

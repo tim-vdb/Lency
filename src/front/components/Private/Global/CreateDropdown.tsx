@@ -50,7 +50,7 @@ export function CreateDropdown() {
         if (!user) { setAuthModalOpen(true); return }
         setEditingDraft(null)
         setActiveType(type)
-        setModalOpen(true)
+        setTimeout(() => setModalOpen(true), 0)
     }
 
     function handleEdit(draft: EditDraft) {
@@ -106,6 +106,7 @@ export function CreateDropdown() {
                             "w-full max-w-[820px] h-[90vh] sm:h-[600px]",
                             "flex overflow-hidden rounded-xl",
                         )}
+                        onCloseAutoFocus={(e) => e.preventDefault()}
                     >
                         <DialogTitle className="sr-only">Créer du contenu</DialogTitle>
                         <DialogDescription className="sr-only">Formulaire de création de contenu</DialogDescription>

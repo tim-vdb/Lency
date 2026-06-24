@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import HeroAudiovisuel from "./home/_components/HeroAudiovisuel";
-import FeatureHighlights from "./home/_components/FeatureHighlights";
-import StatsSection from "./home/_components/StatsSection";
-import HowToJoin from "./home/_components/HowToJoin";
-import TestimonialsSection from "./home/_components/TestimonialsSection";
-import FAQHome from "./home/_components/FaqHome";
-import ProfileCTA from "./home/_components/ProfileCTA";
+import HeroAudiovisuel from "./_components/HeroAudiovisuel";
+import FeatureHighlights from "./_components/FeatureHighlights";
+import StatsSection from "./_components/StatsSection";
+import HowToJoin from "./_components/HowToJoin";
+import TestimonialsSection from "./_components/TestimonialsSection";
+import FAQHome from "./_components/FaqHome";
+import ProfileCTA from "./_components/ProfileCTA";
 
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white dark:bg-neutral-900">
+    <div className="min-h-screen bg-white dark:bg-neutral-900">
       <HeroAudiovisuel />
       <FeatureHighlights />
       <StatsSection />
@@ -24,6 +24,6 @@ export default function HomePage() {
       <TestimonialsSection />
       <FAQHome />
       <ProfileCTA />
-    </main>
+    </div>
   );
 }

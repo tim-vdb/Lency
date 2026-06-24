@@ -6,6 +6,7 @@ import { useProjects } from "@/front/queries/projects";
 import { Briefcase, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
+import { PROJECT_TYPE_VALUES } from "./marketplace.constants";
 import ProjectCard from "./Projects/ProjectCard";
 
 function ProjectCardSkeleton() {
@@ -33,7 +34,7 @@ export default function MarketplaceCategoryPageClient({ type }: { type: string }
         return projects.filter(
             (p) =>
                 p.status === "PUBLISHED" &&
-                p.projectType?.toLowerCase() === type.toLowerCase()
+                p.projectType === PROJECT_TYPE_VALUES[type]
         );
     }, [projects, type]);
 
