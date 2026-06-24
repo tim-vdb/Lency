@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
     const conversation = await ConversationService.getOrCreateConversation(otherUserId);
     return NextResponse.json({ conversation });
   } catch (error) {
+    console.error("[POST /api/conversations]", error);
     if (error instanceof Error) {
       if (error.message === "Unauthorized") return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
       if (error.message === "Cannot DM yourself") return NextResponse.json({ error: "Impossible de vous écrire" }, { status: 400 });

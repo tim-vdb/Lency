@@ -81,7 +81,7 @@ export default function HowToJoin() {
             asChild
             className="text-[14px] w-fit mt-4 bg-[#EA3D0E] hover:bg-[#d13509] text-white px-6 sm:px-8 h-11 sm:h-12 rounded-[4px]"
           >
-            <Link href="/register">Créer un compte</Link>
+            <Link href="/sign-up">Créer un compte</Link>
           </Button>
         </div>
       </div>

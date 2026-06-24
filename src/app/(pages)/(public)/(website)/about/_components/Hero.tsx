@@ -7,17 +7,17 @@ export default function Hero() {
       <div className="flex flex-col-reverse md:flex-row items-center gap-10 md:gap-16">
         {/* Left — text + CTA */}
         <div className="flex-1 flex flex-col gap-6 md:gap-8 text-center md:text-left">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white leading-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
             Apprends, crée, connecte-toi
           </h1>
-          <p className="text-sm sm:text-base text-neutral-500 dark:text-neutral-400 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 leading-relaxed">
             Lency aide les débutants et créatifs à apprendre, collaborer et
             évoluer plus rapidement.
           </p>
           <div className="flex justify-center md:justify-start">
             <Button
               variant="outline"
-              className="w-full max-w-xs sm:max-w-sm rounded-xl border-gray-300 dark:border-neutral-600 bg-[#F9B8B8] dark:bg-neutral-700 hover:bg-[#f5a0a0] dark:hover:bg-neutral-600 text-neutral-800 dark:text-white font-medium py-5 sm:py-6 text-sm sm:text-base"
+              className="w-full max-w-xs sm:max-w-sm rounded-xl border-[#EA3D0E] bg-[#EA3D0E] hover:bg-[#c4300a] text-white font-medium py-5 sm:py-6 text-sm sm:text-base"
             >
               Commencer
             </Button>

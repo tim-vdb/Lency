@@ -11,7 +11,7 @@ import { CarouselSection } from "../CarouselSection";
 import { EmptyState } from "../EmptyState";
 import { FilterSelect } from "../Filtrage/FilterSelect";
 import { FiltersPanel } from "../Filtrage/FiltersPanel";
-import { DATE_OPTIONS, LEVEL_OPTIONS, LEVEL_VALUES, PROJECT_TYPES, REMUNERATION_OPTIONS, REMUNERATION_VALUES, WORKMODE_OPTIONS, WORKMODE_VALUES } from "../marketplace.constants";
+import { DATE_OPTIONS, LEVEL_OPTIONS, LEVEL_VALUES, PROJECT_TYPES, PROJECT_TYPE_VALUES, REMUNERATION_OPTIONS, REMUNERATION_VALUES, WORKMODE_OPTIONS, WORKMODE_VALUES } from "../marketplace.constants";
 import { projectFilterParsers } from "../marketplace.params";
 import { OnboardingProjectCard } from "../OnboardingCards";
 import { ProjectSkeleton } from "../Skeletons";
@@ -64,7 +64,7 @@ export function ProjectsTab({ isNewUser, onOpenProjectModal }: {
     }, [published]);
 
     const filtered = useMemo(() => published.filter((p) => {
-        if (pType && p.projectType?.toLowerCase() !== pType.toLowerCase()) return false;
+        if (pType && p.projectType !== PROJECT_TYPE_VALUES[pType]) return false;
         if (pWorkMode && p.workMode !== WORKMODE_VALUES[pWorkMode]) return false;
         if (pLevel && p.level !== LEVEL_VALUES[pLevel]) return false;
         if (pRemu && p.remunerationType !== REMUNERATION_VALUES[pRemu]) return false;
@@ -74,13 +74,13 @@ export function ProjectsTab({ isNewUser, onOpenProjectModal }: {
     }), [published, pType, pWorkMode, pLevel, pRemu, pCity, pDate]);
 
     const byType = useMemo(() => {
-        const knownTypes = PROJECT_TYPES.map((t) => t.toLowerCase());
+        const knownEnumValues = new Set(Object.values(PROJECT_TYPE_VALUES));
         const map = new Map<string, ProjectWithOwner[]>();
-        for (const type of PROJECT_TYPES) {
-            const items = filtered.filter((p) => p.projectType?.toLowerCase() === type.toLowerCase());
-            if (items.length > 0) map.set(type, items);
+        for (const [label, enumValue] of Object.entries(PROJECT_TYPE_VALUES)) {
+            const items = filtered.filter((p) => p.projectType === enumValue);
+            if (items.length > 0) map.set(label, items);
         }
-        const others = filtered.filter((p) => !p.projectType || !knownTypes.includes(p.projectType.toLowerCase()));
+        const others = filtered.filter((p) => !p.projectType || !knownEnumValues.has(p.projectType));
         if (others.length > 0) map.set("Autre", [...(map.get("Autre") ?? []), ...others]);
         return map;
     }, [filtered]);

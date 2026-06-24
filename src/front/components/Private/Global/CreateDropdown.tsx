@@ -48,14 +48,9 @@ export function CreateDropdown() {
 
     function handleSelect(type: CreateType) {
         if (!user) { setAuthModalOpen(true); return }
-        // All three updates in the same deferred batch — ensures the modal
-        // opens with the correct tab in one atomic render, and lets Radix
-        // finish its DropdownMenu cleanup (pointer-events) before the Dialog opens.
-        setTimeout(() => {
-            setEditingDraft(null)
-            setActiveType(type)
-            setModalOpen(true)
-        }, 0)
+        setEditingDraft(null)
+        setActiveType(type)
+        setTimeout(() => setModalOpen(true), 0)
     }
 
     function handleEdit(draft: EditDraft) {
@@ -111,6 +106,7 @@ export function CreateDropdown() {
                             "w-full max-w-[820px] h-[90vh] sm:h-[600px]",
                             "flex overflow-hidden rounded-xl",
                         )}
+                        onCloseAutoFocus={(e) => e.preventDefault()}
                     >
                         <DialogTitle className="sr-only">Créer du contenu</DialogTitle>
                         <DialogDescription className="sr-only">Formulaire de création de contenu</DialogDescription>
