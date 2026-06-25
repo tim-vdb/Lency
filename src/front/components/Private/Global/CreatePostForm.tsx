@@ -316,7 +316,7 @@ export function CreatePostForm({ onSuccess, initialData, mode = "create" }: Crea
                         name="content"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>{contentType === "TEXT" ? "Contenu" : "Description (optionnel)"}</FormLabel>
+                                <FormLabel>{contentType === "TEXT" ? "Contenu" : "Description"}</FormLabel>
                                 <FormControl>
                                     <Textarea
                                         placeholder={contentType === "TEXT" ? "Écrivez votre contenu…" : "Ajoutez une description…"}
