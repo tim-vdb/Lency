@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 type Section = { id: string; label: string };
@@ -28,7 +28,7 @@ function scrollTo(id: string) {
   window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
 }
 
-function ChapterLabel({ n, label }: { n: number; label: string }) {
+function ChapterLabel({ n, label: _label }: { n: number; label: string }) {
   return (
     <div className="flex items-center gap-2 mb-3">
       <span className="inline-flex items-center gap-2 bg-orange-50 text-[#EA3D0E] rounded-full px-3.5 py-1 text-xs font-bold uppercase tracking-wide">

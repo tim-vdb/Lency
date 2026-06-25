@@ -5,8 +5,6 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogOverlay,
-    DialogPortal,
     DialogTitle
 } from "@/front/components/ui/dialog"
 import {
@@ -98,9 +96,7 @@ export function CreateDropdown() {
 
             {/* Modal de création */}
             <Dialog open={modalOpen} onOpenChange={handleModalClose}>
-                <DialogPortal>
-                    <DialogOverlay />
-                    <DialogContent
+                <DialogContent
                         className={cn(
                             "p-0 gap-0",
                             "w-full max-w-[820px] h-[90vh] sm:h-[600px]",
@@ -192,14 +188,11 @@ export function CreateDropdown() {
                             </TabsContent>
                         </Tabs>
                     </DialogContent>
-                </DialogPortal>
             </Dialog>
 
             {/* Auth Required Modal */}
             <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
-                <DialogPortal>
-                    <DialogOverlay />
-                    <DialogContent className="max-w-md">
+                <DialogContent className="max-w-md">
                         <DialogTitle>Authentification requise</DialogTitle>
                         <DialogDescription>
                             Vous devez vous connecter ou créer un compte pour créer du contenu.
@@ -215,7 +208,6 @@ export function CreateDropdown() {
                             </Link>
                         </div>
                     </DialogContent>
-                </DialogPortal>
             </Dialog>
         </>
     )

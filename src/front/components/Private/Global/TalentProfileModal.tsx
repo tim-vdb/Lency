@@ -12,8 +12,6 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogOverlay,
-    DialogPortal,
     DialogTitle,
 } from "@/front/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/front/components/ui/form"
@@ -484,8 +482,6 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogPortal>
-                <DialogOverlay />
                 <DialogContent className="p-0 gap-0 w-full max-w-[820px] h-[600px] flex overflow-hidden rounded-xl">
                     <DialogTitle className="sr-only">Profil talent</DialogTitle>
                     <DialogDescription className="sr-only">Modifier votre profil talent</DialogDescription>
@@ -699,7 +695,6 @@ export function TalentProfileModal({ open, onOpenChange }: TalentProfileModalPro
                         </MultistepForm>
                     </Form>
                 </DialogContent>
-            </DialogPortal>
         </Dialog>
     )
 }

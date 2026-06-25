@@ -16,8 +16,6 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogOverlay,
-    DialogPortal,
     DialogTitle,
 } from "@/front/components/ui/dialog";
 import {
@@ -304,18 +302,15 @@ export default function ResourceDetail({ resource }: { resource: ResourceWithUse
 
             {/* ── Edit dialog ── */}
             <Dialog open={editOpen} onOpenChange={setEditOpen}>
-                <DialogPortal>
-                    <DialogOverlay />
-                    <DialogContent className="p-0 gap-0 w-full max-w-[820px] h-[600px] flex overflow-hidden rounded-xl">
-                        <DialogTitle className="sr-only">Modifier la ressource</DialogTitle>
-                        <DialogDescription className="sr-only">Formulaire de modification de la ressource</DialogDescription>
-                        <CreateResourceForm
-                            mode="edit"
-                            initialData={resource}
-                            onSuccess={() => setEditOpen(false)}
-                        />
-                    </DialogContent>
-                </DialogPortal>
+                <DialogContent className="p-0 gap-0 w-full max-w-[820px] h-[600px] flex overflow-hidden rounded-xl">
+                    <DialogTitle className="sr-only">Modifier la ressource</DialogTitle>
+                    <DialogDescription className="sr-only">Formulaire de modification de la ressource</DialogDescription>
+                    <CreateResourceForm
+                        mode="edit"
+                        initialData={resource}
+                        onSuccess={() => setEditOpen(false)}
+                    />
+                </DialogContent>
             </Dialog>
 
             {/* ── Delete dialog ── */}

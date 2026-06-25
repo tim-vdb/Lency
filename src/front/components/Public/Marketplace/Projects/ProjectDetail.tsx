@@ -20,8 +20,6 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogOverlay,
-    DialogPortal,
     DialogTitle,
 } from "@/front/components/ui/dialog";
 import {
@@ -402,14 +400,11 @@ export default function ProjectDetail({ project }: { project: ProjectWithOwner }
 
             {/* ── Modal édition ── */}
             <Dialog open={editOpen} onOpenChange={setEditOpen} >
-                <DialogPortal>
-                    <DialogOverlay />
                     <DialogContent className="p-0 gap-0 w-full max-w-[820px] h-[600px] flex overflow-hidden rounded-xl">
                         <DialogTitle className="sr-only">Modifier le projet</DialogTitle>
                         <DialogDescription className="sr-only">Formulaire de modification du projet</DialogDescription>
                         <EditProjectForm project={project} onSuccess={() => setEditOpen(false)} />
                     </DialogContent>
-                </DialogPortal>
             </Dialog>
 
             {/* ── Confirmation suppression ── */}

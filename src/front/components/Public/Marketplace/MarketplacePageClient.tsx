@@ -2,7 +2,7 @@
 
 import { CreateProjectForm } from "@/front/components/Private/Global/CreateProjectForm";
 import { TalentProfileModal } from "@/front/components/Private/Global/TalentProfileModal";
-import { Dialog, DialogContent, DialogDescription, DialogOverlay, DialogPortal, DialogTitle } from "@/front/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/front/components/ui/dialog";
 import { useUser } from "@/front/states/contexts/user.context";
 import { useMarketplaceStore } from "@/front/states/stores/marketplace.store";
 import { cn } from "@/front/lib/utils";
@@ -84,16 +84,13 @@ export default function MarketplacePageClient() {
             }
 
             <Dialog open={projectModalOpen} onOpenChange={setProjectModalOpen}>
-                <DialogPortal>
-                    <DialogOverlay />
-                    <DialogContent className="p-0 gap-0 w-full max-w-2xl max-h-[85vh] flex overflow-hidden rounded-xl">
-                        <DialogTitle className="sr-only">Publier un projet</DialogTitle>
-                        <DialogDescription className="sr-only">Formulaire de création de projet</DialogDescription>
-                        <div className="flex-1 overflow-y-auto p-6">
-                            <CreateProjectForm onSuccess={() => setProjectModalOpen(false)} />
-                        </div>
-                    </DialogContent>
-                </DialogPortal>
+                <DialogContent className="p-0 gap-0 w-full max-w-2xl max-h-[85vh] flex overflow-hidden rounded-xl">
+                    <DialogTitle className="sr-only">Publier un projet</DialogTitle>
+                    <DialogDescription className="sr-only">Formulaire de création de projet</DialogDescription>
+                    <div className="flex-1 overflow-y-auto p-6">
+                        <CreateProjectForm onSuccess={() => setProjectModalOpen(false)} />
+                    </div>
+                </DialogContent>
             </Dialog>
 
             <TalentProfileModal open={talentModalOpen} onOpenChange={setTalentModalOpen} />
