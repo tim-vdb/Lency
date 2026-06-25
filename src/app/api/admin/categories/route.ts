@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { Prisma } from "@prisma/client"
+import { Prisma } from "@/back/generated/prisma_client"
 import { AdminCategoriesService } from "@/back/services/admin-data.service"
 
 export async function GET() {
