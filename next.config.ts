@@ -2,6 +2,9 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // Build autonome — requis pour un déploiement Docker / hors Vercel.
+  // Génère .next/standalone avec uniquement les dépendances nécessaires au runtime.
+  output: 'standalone',
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**.ufs.sh' },

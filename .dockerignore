@@ -1,0 +1,36 @@
+# Dépendances et builds (réinstallés / régénérés dans l'image)
+node_modules
+.next
+out
+build
+dist
+
+# Client Prisma généré (régénéré au build via `prisma generate`)
+src/back/generated
+
+# Git / CI
+.git
+.gitignore
+.github
+
+# Env & secrets — JAMAIS dans l'image (passés au runtime)
+.env
+.env.*
+.doppler
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Outils / éditeur
+.vscode
+.idea
+*.log
+npm-debug.log*
+
+# Divers
+README.md
+.DS_Store
+coverage
+.vercel

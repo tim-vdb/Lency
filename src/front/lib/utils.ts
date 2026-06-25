@@ -51,5 +51,7 @@ export function getInitialName(author: { firstname?: string | null; lastname?: s
         .join("") || "?";
 }
 
-export const zodEnum = <T extends Record<string, string>>(e: T) =>
-    z.enum(Object.values(e) as [string, ...string[]]);
+export const zodEnum = <T extends Record<string, string>>(
+    e: T,
+    params?: { message: string },
+) => z.enum(Object.values(e) as [T[keyof T], ...T[keyof T][]], params);

@@ -1,12 +1,30 @@
 import * as Ably from "ably";
 
-// Initialiser le client Ably avec la clé API
-const apiKey = process.env.ABLY_API_KEY;
-if (!apiKey) {
-  throw new Error("ABLY_API_KEY est manquante");
+// Initialisation paresseuse (lazy) du client Ably.
+// On n'instancie le client qu'à la première utilisation réelle, pas à l'import
+// du module : ça évite de planter au build Next ("Collecting page data") ou dans
+// tout contexte où ABLY_API_KEY n'est pas encore disponible.
+let _ably: Ably.Rest | null = null;
+
+function getAbly(): Ably.Rest {
+  if (_ably) return _ably;
+  const apiKey = process.env.ABLY_API_KEY;
+  if (!apiKey) {
+    throw new Error("ABLY_API_KEY est manquante");
+  }
+  _ably = new Ably.Rest({ key: apiKey });
+  return _ably;
 }
 
-export const ably = new Ably.Rest({ key: apiKey });
+// Proxy lazy : conserve l'API existante (`ably.channels`, `ably.auth`…) tout en
+// déclenchant l'initialisation seulement au premier accès, au runtime.
+export const ably = new Proxy({} as Ably.Rest, {
+  get(_target, prop) {
+    const client = getAbly();
+    const value = Reflect.get(client, prop);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+});
 
 /**
  * Envoyer une notification au propriétaire quand il reçoit une candidature
