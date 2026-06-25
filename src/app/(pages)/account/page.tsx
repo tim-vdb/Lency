@@ -28,8 +28,8 @@ export default function DashboardAccount() {
                     <DashboardTabs className="flex-1 flex flex-col overflow-hidden w-full" />
                 </div>
 
-                {/* Notifications */}
-                <div className="w-full md:shrink-0 min-h-[300px] md:min-h-0 md:w-[clamp(240px,calc(27.9vw-67px),329px)]">
+                {/* Notifications — caché sur mobile, accessible via la cloche du header */}
+                <div className="hidden md:block w-full md:shrink-0 md:min-h-0 md:w-[clamp(240px,calc(27.9vw-67px),329px)]">
                     <DashboardNotifications className="h-full w-full" />
                 </div>
             </div>

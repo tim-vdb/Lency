@@ -143,7 +143,7 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
             </div>
 
             {/* Map */}
-            <Card className="border border-[#E8E8E1] dark:border-neutral-700 overflow-hidden py-0 shrink-0 w-full rounded-xl isolate" style={{ height: "clamp(220px, 30.6vh, 330px)" }}>
+            <Card className="border border-[#E8E8E1] dark:border-neutral-700 overflow-hidden py-0 shrink-0 w-full rounded-xl isolate h-[260px] md:h-[clamp(220px,30.6vh,330px)]">
                 <CardContent className="p-0 h-full">
                     {mode === "projets"
                         ? <ProjectsMap projects={filteredProjects} flyTo={projectFilters.locationLat !== null && projectFilters.locationLon !== null ? { lat: projectFilters.locationLat, lon: projectFilters.locationLon } : undefined} />

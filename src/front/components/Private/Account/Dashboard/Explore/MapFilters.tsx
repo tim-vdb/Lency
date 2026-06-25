@@ -166,22 +166,26 @@ export default function MapFilters({ titleSuggestions, values, onChange }: MapFi
                 </SelectContent>
             </Select>
 
-            {/* Plages de dates */}
-            <div className="col-span-2 flex items-center gap-2">
-                <span className="text-[12px] text-neutral-400 shrink-0 w-4">Du</span>
-                <Input
-                    type="date"
-                    value={values.dateFrom}
-                    onChange={(e) => onChange("dateFrom", e.target.value)}
-                    className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px] flex-1"
-                />
-                <span className="text-[12px] text-neutral-400 shrink-0 w-4">au</span>
-                <Input
-                    type="date"
-                    value={values.dateTo}
-                    onChange={(e) => onChange("dateTo", e.target.value)}
-                    className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px] flex-1"
-                />
+            {/* Plages de dates — 2 lignes sur mobile, 1 ligne sur desktop */}
+            <div className="col-span-2 flex flex-col sm:flex-row sm:items-center gap-2">
+                <div className="flex items-center gap-2 flex-1">
+                    <span className="text-[12px] text-neutral-400 shrink-0">Du</span>
+                    <Input
+                        type="date"
+                        value={values.dateFrom}
+                        onChange={(e) => onChange("dateFrom", e.target.value)}
+                        className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px] flex-1 min-w-0"
+                    />
+                </div>
+                <div className="flex items-center gap-2 flex-1">
+                    <span className="text-[12px] text-neutral-400 shrink-0">au</span>
+                    <Input
+                        type="date"
+                        value={values.dateTo}
+                        onChange={(e) => onChange("dateTo", e.target.value)}
+                        className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 text-[13px] flex-1 min-w-0"
+                    />
+                </div>
             </div>
         </div>
     )
