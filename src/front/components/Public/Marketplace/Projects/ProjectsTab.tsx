@@ -1,6 +1,6 @@
 "use client";
 
-import { useProjects } from "@/front/queries/projects";
+import { useMyProjects, useProjects } from "@/front/queries/projects";
 import { useMarketplaceStore } from "@/front/states/stores/marketplace.store";
 import { ProjectWithOwner } from "@/front/schemas/types/project.type";
 import { Briefcase } from "lucide-react";
@@ -41,6 +41,8 @@ export function ProjectsTab({ isNewUser, onOpenProjectModal }: {
     onOpenProjectModal: () => void;
 }) {
     const { data: projects, isPending } = useProjects();
+    const { data: myProjects } = useMyProjects();
+    const hasOwnProject = (myProjects?.length ?? 0) > 0;
     const { filtersOpen } = useMarketplaceStore();
 
     const [{ pType, pWorkMode, pLevel, pRemu, pCity, pDate }, setFilters] = useQueryStates(projectFilterParsers, { shallow: true, scroll: false });
@@ -102,7 +104,7 @@ export function ProjectsTab({ isNewUser, onOpenProjectModal }: {
                 </div>
             ) : byType.size === 0 ? (
                 <div className="flex flex-col gap-4">
-                    {isNewUser && <OnboardingProjectCard onAction={onOpenProjectModal} />}
+                    {isNewUser && !hasOwnProject && <OnboardingProjectCard onAction={onOpenProjectModal} />}
                     <EmptyState
                         icon={<Briefcase className="w-8 h-8 text-neutral-300" />}
                         title="Aucun projet trouvé"
@@ -113,7 +115,7 @@ export function ProjectsTab({ isNewUser, onOpenProjectModal }: {
                 </div>
             ) : (
                 <div className="flex flex-col gap-8">
-                    {isNewUser && <OnboardingProjectCard onAction={onOpenProjectModal} />}
+                    {isNewUser && !hasOwnProject && <OnboardingProjectCard onAction={onOpenProjectModal} />}
                     {Array.from(byType.entries()).map(([type, items]) => (
                         <CarouselSection key={type} label={type} href={`/marketplace/categories/${encodeURIComponent(type)}`} count={items.length}>
                             {items.map((project) => (

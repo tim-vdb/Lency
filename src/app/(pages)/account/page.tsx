@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function DashboardAccount() {
     return (
-        <div className="flex flex-col bg-[#F7F7F2] dark:bg-neutral-950 w-full pb-4 md:pb-0 md:overflow-hidden md:h-full" style={{ padding: "12px 12px 0 12px", gap: "24px" }}>
+        <div className="flex flex-col bg-[#F7F7F2] dark:bg-neutral-950 w-full pb-4 md:pb-0 md:overflow-hidden md:h-full min-h-full" style={{ padding: "12px 12px 0 12px", gap: "24px" }}>
 
             {/* ── Projet à la Une ── */}
             <DashboardFeaturedProjects
@@ -28,8 +28,8 @@ export default function DashboardAccount() {
                     <DashboardTabs className="flex-1 flex flex-col overflow-hidden w-full" />
                 </div>
 
-                {/* Notifications */}
-                <div className="w-full md:shrink-0 min-h-[300px] md:min-h-0 md:w-[clamp(240px,calc(27.9vw-67px),329px)]">
+                {/* Notifications — caché sur mobile, accessible via la cloche du header */}
+                <div className="hidden md:block w-full md:shrink-0 md:min-h-0 md:w-[clamp(240px,calc(27.9vw-67px),329px)]">
                     <DashboardNotifications className="h-full w-full" />
                 </div>
             </div>
