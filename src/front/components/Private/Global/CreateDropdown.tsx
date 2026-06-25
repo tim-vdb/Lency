@@ -70,7 +70,7 @@ export function CreateDropdown() {
                         className="flex gap-2 ml-auto cursor-pointer border-neutral-300 bg-orange hover:bg-orange/80 rounded-sm"
                     >
                         <Plus className="w-4 h-4 border border-white text-white rounded-[3px]" />
-                        <span className="text-white">Créer</span>
+                        <span className="hidden sm:inline text-white">Créer</span>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent side="bottom" align="end" sideOffset={8} className="min-w-48">

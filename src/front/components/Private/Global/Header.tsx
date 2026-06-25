@@ -48,16 +48,28 @@ export default function Header({ className }: { className?: string }) {
             isFixedLayout && "md:fixed top-2 z-40",
             isFixedLayout && state === "expanded"
                 ? "md:left-[14.3rem] md:right-2"
-                : isFixedLayout && "md:left-16.5 md:right-2",
+                : isFixedLayout && "md:left-[4.125rem] md:right-2",
             className
         )}>
             <div className="flex items-center justify-between gap-2 px-4 w-full">
-                <BreadcrumbAuto />
-                <div className="flex items-center gap-2">
-                    <SearchBar />
-                    <CreateDropdown />
-                    <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
-                    <SheetTrigger className="cursor-pointer relative flex">
+                {/* Mobile: hamburger pour ouvrir la sidebar depuis le côté */}
+                <SidebarTrigger className="md:hidden shrink-0" />
+
+                {/* Desktop: breadcrumb */}
+                <div className="hidden md:flex flex-1 min-w-0">
+                    <BreadcrumbAuto />
+                </div>
+
+                <div className="flex items-center gap-2 ml-auto">
+                    {/* Recherche + créer */}
+                    <div className="flex items-center gap-2">
+                        <SearchBar />
+                        <CreateDropdown />
+                        <Separator orientation="vertical" className="hidden sm:block data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
+                    </div>
+
+                    {/* Cloche: toujours visible, ouvre les notifications (store indépendant) */}
+                    <button type="button" onClick={openNotifications} className="cursor-pointer relative flex shrink-0">
                         <Bell className="w-6 h-6 min-w-6 min-h-6 fill-white text-black dark:fill-black/20 dark:text-white" />
                         {unreadCount > 0 && (
                             <span className="absolute -top-1 left-3 flex h-4 w-4">
@@ -67,8 +79,9 @@ export default function Header({ className }: { className?: string }) {
                                 </span>
                             </span>
                         )}
-                    </SheetTrigger>
-                    <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
+                    </button>
+
+                    <Separator orientation="vertical" className="hidden sm:block data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
                     <NavUser />
                 </div>
             </div>

@@ -75,6 +75,11 @@
   --color-neutral-650: oklch(43.9% 0 0);
   --color-neutral-750: oklch(37.1% 0 0);
   --color-neutral-850: oklch(20.5% 0 0);
+
+  /* Valeurs hors-échelle Tailwind — nécessaires pour que le build prod génère ces classes */
+  --duration-800: 800ms;
+  --duration-900: 900ms;
+  --brightness-60: 0.6;
 }
 
 @layer components {
