@@ -10,7 +10,7 @@ export default function TalentCard({ talent }: { talent: Talent }) {
     const displayName = getDisplayName(talent);
     const initials = getInitialName(talent);
     const avatarSrc = talent.avatarUrl ?? talent.image ?? null;
-    const followerCount = talent._count.followers;
+    const level = talent._count.Posts + talent._count.projects * 5;
     const profileHref = talent.username ? `/user/${talent.username}` : `/user/${talent.id}`;
 
     const roles = getTalentRoles(talent);
@@ -46,9 +46,9 @@ export default function TalentCard({ talent }: { talent: Talent }) {
                             </div>
                         )}
                     </div>
-                    {followerCount > 0 && (
+                    {level > 0 && (
                         <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 bg-orange rounded-full flex items-center justify-center font-['Poppins',sans-serif] font-medium text-[10px] text-white leading-none">
-                            {followerCount > 99 ? "99+" : followerCount}
+                            {level > 99 ? "99+" : level}
                         </span>
                     )}
                 </div>
