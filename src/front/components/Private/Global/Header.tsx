@@ -45,7 +45,7 @@ export default function Header({ className }: { className?: string }) {
             isFixedLayout && "md:fixed top-2 z-40",
             isFixedLayout && state === "expanded"
                 ? "md:left-[14.3rem] md:right-2"
-                : isFixedLayout && "md:left-16.5 md:right-2",
+                : isFixedLayout && "md:left-[4.125rem] md:right-2",
             className
         )}>
             <div className="flex items-center justify-between gap-2 px-4 w-full">
@@ -62,7 +62,7 @@ export default function Header({ className }: { className?: string }) {
                     <div className="flex items-center gap-2">
                         <SearchBar />
                         <CreateDropdown />
-                        <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
+                        <Separator orientation="vertical" className="hidden sm:block data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
                     </div>
 
                     {/* Cloche: toujours visible, ouvre les notifications (store indépendant) */}
@@ -78,7 +78,7 @@ export default function Header({ className }: { className?: string }) {
                         )}
                     </button>
 
-                    <Separator orientation="vertical" className="data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
+                    <Separator orientation="vertical" className="hidden sm:block data-[orientation=vertical]:h-6 border border-neutral-500 mx-2" />
                     <NavUser />
                 </div>
             </div>
