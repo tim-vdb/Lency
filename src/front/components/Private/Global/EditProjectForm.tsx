@@ -27,6 +27,7 @@ import {
 import { Textarea } from "@/front/components/ui/textarea"
 import { Badge } from "@/front/components/ui/badge"
 import { MultistepForm, MultistepStep, MultistepNavigation } from "@/front/components/ui/multistep-form"
+import { AddressAutocompleteInput } from "@/front/components/ui/address-autocomplete-input"
 import { useUpdateProject } from "@/front/queries/projects"
 import { uploadToImageKit } from "@/front/lib/upload"
 import { ProjectWithOwner } from "@/front/schemas/types/project.type"
@@ -188,6 +189,8 @@ export function EditProjectForm({ project, onSuccess }: EditProjectFormProps) {
             remunerationType: (project.remunerationType as EditProjectValues["remunerationType"]) ?? undefined,
             workMode: (project.workMode as EditProjectValues["workMode"]) ?? undefined,
             city: project.mapLocation?.name ?? "",
+            latitude: project.mapLocation?.latitude ?? undefined,
+            longitude: project.mapLocation?.longitude ?? undefined,
             startDate: startDateStr,
             visibility: (project.visibility === "MEMBERS_ONLY" ? "PUBLIC" : project.visibility as EditProjectValues["visibility"]) ?? "PUBLIC",
             bannerUrl: project.bannerUrl ?? "",
@@ -226,6 +229,8 @@ export function EditProjectForm({ project, onSuccess }: EditProjectFormProps) {
                 level: values.level,
                 workMode: values.workMode,
                 city: values.city,
+                latitude: values.latitude,
+                longitude: values.longitude,
                 startDate: values.startDate || undefined,
                 roles: values.roles,
                 visibility: values.visibility,
@@ -393,7 +398,17 @@ export function EditProjectForm({ project, onSuccess }: EditProjectFormProps) {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Ville <span className="text-muted-foreground font-normal text-xs">(optionnel)</span></FormLabel>
-                                    <FormControl><Input placeholder="Paris, Lyon…" {...field} /></FormControl>
+                                    <FormControl>
+                                        <AddressAutocompleteInput
+                                            value={field.value ?? ""}
+                                            onChange={field.onChange}
+                                            onSelect={(_address, lat, lon) => {
+                                                form.setValue("latitude", lat)
+                                                form.setValue("longitude", lon)
+                                            }}
+                                            placeholder="Paris, Lyon…"
+                                        />
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

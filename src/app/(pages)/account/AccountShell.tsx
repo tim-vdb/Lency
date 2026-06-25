@@ -31,7 +31,7 @@ export function AccountShell({ user, children }: { user: User | null; children: 
                                         className={cn(
                                             "dark:text-white bg-transparent",
                                             isDashboard
-                                                ? "overflow-hidden pr-2 flex-1"
+                                                ? "overflow-y-auto md:overflow-hidden pr-2 h-[calc(100svh-1rem)]"
                                                 : cn("overflow-y-auto pr-2", isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : "")
                                         )}
                                     >

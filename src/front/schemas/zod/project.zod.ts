@@ -33,6 +33,8 @@ export const EditProjectSchema = z.object({
     remunerationType: zodEnum(RemunerationType) as unknown as z.ZodType<RemunerationType | undefined>,
     workMode: zodEnum(WorkMode) as unknown as z.ZodType<WorkMode | undefined>,
     city: z.string().max(255).optional(),
+    latitude: z.number().optional(),
+    longitude: z.number().optional(),
     startDate: z.string().optional(),
     visibility: zodEnum(Visibility) as unknown as z.ZodType<Visibility>,
     bannerUrl: z.string().optional(),
