@@ -92,7 +92,7 @@ export default function ContactForm() {
 
           {/* Haut : titre + description */}
           <div className="flex flex-col gap-4">
-            <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black text-[#EA3D0E] uppercase leading-[1.05] tracking-tight text-left">
+            <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black text-[#EA3D0E] uppercase leading-[1.05] tracking-tight text-left font-chunko">
               Contactez notre service support
             </h1>
             <p className="text-[15px] sm:text-[16px] text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-xs">

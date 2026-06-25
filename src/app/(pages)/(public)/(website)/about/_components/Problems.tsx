@@ -18,8 +18,8 @@ const problems = [
 export default function Problems() {
   return (
     <section className="w-full py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-snug mb-12 md:mb-20">
-        Aujourd'hui, les créateurs audiovisuels <br className="hidden sm:block" /> sont dispersés
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#EA3D0E] leading-snug mb-12 md:mb-20 font-chunko">
+        Aujourd'hui, les createurs audiovisuels <br className="hidden sm:block" /> sont disperses
       </h2>
 
       <div className="flex flex-col sm:flex-row items-center sm:items-start justify-center gap-12 sm:gap-16 lg:gap-28">

@@ -66,7 +66,7 @@ export default function HeroAudiovisuel() {
               <span className="text-white/60 text-sm font-semibold uppercase tracking-widest">
                 La plateforme audiovisuelle
               </span>
-              <h1 className="font-black text-white uppercase text-left leading-[1.05] tracking-tight text-[38px] sm:text-[52px] lg:text-[68px]">
+              <h1 className="font-black text-white uppercase text-left leading-[1.05] tracking-tight text-[38px] sm:text-[52px] lg:text-[68px] font-chunko">
                 Progresse plus vite dans l&apos;audiovisuel
               </h1>
             </div>

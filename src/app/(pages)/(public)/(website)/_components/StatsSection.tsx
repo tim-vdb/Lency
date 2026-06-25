@@ -48,8 +48,8 @@ export default function StatsSection() {
 
         {/* Col 3: text */}
         <div className="lg:w-5/12 flex flex-col gap-6">
-          <h2 className="text-[24px] font-black text-neutral-900 dark:text-white leading-tight">
-            Ne laisse plus tes idées dormir dans tes tiroirs.
+          <h2 className="text-[24px] font-black text-neutral-900 dark:text-white leading-tight font-chunko">
+            Ne laisse plus tes idees dormir dans tes tiroirs.
           </h2>
           <p className="text-[16px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
             On a tous commencé quelque part. Que tu veuilles{" "}
