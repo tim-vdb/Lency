@@ -48,7 +48,7 @@ export default function HowToJoin() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 md:gap-20">
         {/* Left: title */}
         <div className="md:w-2/5 flex flex-col justify-center">
-          <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black text-[#EA3D0E] uppercase leading-tight">
+          <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black text-[#EA3D0E] uppercase leading-tight font-chunko">
             Comment on se lance sur Lency ?
           </h2>
         </div>
