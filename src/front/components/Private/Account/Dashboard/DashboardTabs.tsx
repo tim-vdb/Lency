@@ -95,9 +95,9 @@ export function DashboardTabs({ className }: { className?: string }) {
             </div>
 
             {/* Content — flex-col pour que chaque onglet puisse utiliser flex-1 */}
-            <div className="flex-1 min-h-0 mt-4 flex flex-col overflow-hidden">
+            <div className="flex-1 min-h-0 mt-4 relative overflow-hidden">
                 {activeTab === "communautes" && (
-                    <div className="flex-1 min-h-0 overflow-y-auto">
+                    <div className="absolute inset-0 overflow-y-auto">
                         <DashboardCommunities />
                     </div>
                 )}

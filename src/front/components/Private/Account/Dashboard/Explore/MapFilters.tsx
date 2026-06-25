@@ -5,6 +5,7 @@ import { Input } from "@/front/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/front/components/ui/select"
 import { Search } from "lucide-react"
 import { ProjectType, ProjectLevel, RemunerationType, WorkMode } from "@/back/generated/prisma_client/edge"
+import { AddressAutocompleteInput } from "@/front/components/ui/address-autocomplete-input"
 
 const PROJECT_TYPE_LABELS: Record<ProjectType, string> = {
     COURT_METRAGE: "Court-métrage",
@@ -41,6 +42,9 @@ export interface MapFiltersValues {
     workMode: string
     dateFrom: string
     dateTo: string
+    locationAddress: string
+    locationLat: number | null
+    locationLon: number | null
 }
 
 interface MapFiltersProps {
@@ -64,6 +68,26 @@ export default function MapFilters({ titleSuggestions, values, onChange }: MapFi
 
     return (
         <div className="grid grid-cols-2 gap-3">
+            {/* Lieu */}
+            <div className="col-span-2">
+                <AddressAutocompleteInput
+                    value={values.locationAddress}
+                    onChange={(v) => {
+                        onChange("locationAddress", v)
+                        if (!v) {
+                            onChange("locationLat", null)
+                            onChange("locationLon", null)
+                        }
+                    }}
+                    onSelect={(_address, lat, lon) => {
+                        onChange("locationLat", lat)
+                        onChange("locationLon", lon)
+                    }}
+                    placeholder="Filtrer par lieu…"
+                    className="border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 dark:placeholder:text-neutral-500 text-[13px]"
+                />
+            </div>
+
             {/* Titre */}
             <div className="relative col-span-2">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none z-10" />
