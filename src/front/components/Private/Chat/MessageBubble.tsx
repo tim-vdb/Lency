@@ -42,8 +42,8 @@ export function MessageBubble({ content, createdAt, sender, isMe, imageUrls = []
         {/* Bulle texte */}
         {content && (
           <div className={`px-3 py-2 rounded-2xl text-sm leading-relaxed ${isMe
-            ? "bg-amber-500 text-white rounded-tr-sm"
-            : "bg-neutral-100 text-neutral-900 rounded-tl-sm"
+            ? "bg-[#ffeae5] text-white rounded-tr-sm"
+            : "bg-[#f5f5f5] text-neutral-900 rounded-tl-sm"
             }`}>
             {content}
           </div>

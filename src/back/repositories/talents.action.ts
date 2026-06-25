@@ -25,7 +25,7 @@ export const TalentsAction = {
                     where: { title: { in: ["roles", "audiovisual", "preferences"] } },
                     select: { title: true, content: true },
                 },
-                _count: { select: { followers: true, participants: true, projects: true } },
+                _count: { select: { followers: true, participants: true, projects: true, Posts: true } },
             },
             orderBy: { createdAt: "desc" },
         }),

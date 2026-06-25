@@ -7,9 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function SupportPage() {
-  return (
-    <div>
-      <ContactForm />
-    </div>
-  )
+  return <ContactForm />
 }
