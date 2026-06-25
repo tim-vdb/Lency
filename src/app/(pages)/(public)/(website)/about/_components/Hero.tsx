@@ -7,8 +7,8 @@ export default function Hero() {
       <div className="flex flex-col-reverse md:flex-row items-center gap-10 md:gap-16">
         {/* Left — text + CTA */}
         <div className="flex-1 flex flex-col gap-6 md:gap-8 text-center md:text-left">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
-            Apprends, crée, connecte-toi
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#EA3D0E] leading-tight font-chunko">
+            Apprends, cree, connecte-toi
           </h1>
           <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 leading-relaxed">
             Lency aide les débutants et créatifs à apprendre, collaborer et

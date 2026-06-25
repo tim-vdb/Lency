@@ -34,6 +34,7 @@ const PLATFORMS = [
     { value: "bluesky", label: "Bluesky", icon: FaBluesky },
     { value: "linkedin", label: "LinkedIn", icon: FaLinkedin },
     { value: "github", label: "GitHub", icon: FaGithub },
+    {value: "portfolio", label: "Portfolio", icon: Briefcase},
 ] as const;
 
 function getPlatformIcon(value: string) {
@@ -117,7 +118,7 @@ function AddSocialLinkDialog({ user, children }: { user: UserProfile; children: 
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className="max-w-sm">
                 <DialogHeader>
-                    <DialogTitle>Ajouter un réseau social</DialogTitle>
+                    <DialogTitle>Ajouter un lien</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -126,11 +127,11 @@ function AddSocialLinkDialog({ user, children }: { user: UserProfile; children: 
                             name="platform"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Réseau</FormLabel>
+                                    <FormLabel>Plateforme</FormLabel>
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Choisir un réseau..." />
+                                                <SelectValue placeholder="Choisir une plateforme..." />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
@@ -325,7 +326,7 @@ export default function UserProfileHeader({ user }: { user: UserProfile }) {
                             <AddSocialLinkDialog user={user}>
                                 <button className="flex items-center gap-1 text-xs text-neutral-400 hover:text-foreground transition-colors text-left mt-0.5">
                                     <Plus className="w-3 h-3 shrink-0" />
-                                    Ajouter un réseau social
+                                    Ajouter un lien
                                 </button>
                             </AddSocialLinkDialog>
                         )}

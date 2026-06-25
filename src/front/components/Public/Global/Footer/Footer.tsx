@@ -8,9 +8,10 @@ import LencyLogo from '@/front/components/ui/lency-logo';
 const LINK_CLASS = "text-[20px] text-neutral-800 dark:text-neutral-300 hover:text-[#EA3D0E] dark:hover:text-[#EA3D0E] transition-colors";
 
 const LEGAL_LINKS = [
-  { label: "Conditions d'utilisation", href: '#' },
-  { label: 'Politique de confidentialité', href: '#' },
-  { label: 'Politique de cookies', href: '#' },
+  { label: 'CGV', href: '/cgv' },
+  { label: "Conditions d'utilisation", href: '/cgu' },
+  { label: 'Politique de confidentialité', href: '/politique-de-confidentialite' },
+  { label: 'Politique de cookies', href: '/politique-de-cookies' },
   { label: 'Mentions légales', href: '/mentions-legales' },
 ];
 
@@ -23,6 +24,7 @@ const COMPANY_LINKS = [
   { label: 'À propos', href: '/about' },
   { label: 'Blog', href: '/blog' },
   { label: 'Support', href: '/support' },
+  { label: 'Guide utilisateur', href: '/guide-utilisateur' },
 ];
 
 export default function Footer() {

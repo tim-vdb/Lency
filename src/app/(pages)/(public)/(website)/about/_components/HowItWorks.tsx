@@ -25,8 +25,8 @@ const steps = [
 export default function HowItWorks() {
   return (
     <section className="w-full py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-12 md:mb-20">
-        Comment ça marche ?
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#EA3D0E] mb-12 md:mb-20 font-chunko">
+        Comment ca marche ?
       </h2>
 
       {/* Mobile — liste verticale simple */}

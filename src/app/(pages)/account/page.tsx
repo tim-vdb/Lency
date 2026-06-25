@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function DashboardAccount() {
     return (
-        <div className="flex flex-col bg-[#F7F7F2] dark:bg-neutral-950 w-full pb-4 md:pb-0 md:overflow-hidden md:h-full" style={{ padding: "12px 12px 0 12px", gap: "24px" }}>
+        <div className="flex flex-col bg-[#F7F7F2] dark:bg-neutral-950 w-full pb-4 md:pb-0 md:overflow-hidden md:h-full min-h-full" style={{ padding: "12px 12px 0 12px", gap: "24px" }}>
 
             {/* ── Projet à la Une ── */}
             <DashboardFeaturedProjects

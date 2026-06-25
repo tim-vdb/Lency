@@ -30,7 +30,7 @@ export default function FeatureHighlights() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 md:gap-16">
         {/* Left: title */}
         <div className="md:w-2/5 flex flex-col gap-4">
-          <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black text-[#EA3D0E] uppercase leading-tight">
+          <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black text-[#EA3D0E] uppercase leading-tight font-chunko">
             Tout pour tes projets.
           </h2>
           <p className="text-[15px] sm:text-[16px] text-neutral-600 dark:text-neutral-400 leading-relaxed">
