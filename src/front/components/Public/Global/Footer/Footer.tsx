@@ -23,6 +23,7 @@ const COMPANY_LINKS = [
   { label: 'À propos', href: '/about' },
   { label: 'Blog', href: '/blog' },
   { label: 'Support', href: '/support' },
+  { label: 'Guide utilisateur', href: '/guide-utilisateur' },
 ];
 
 export default function Footer() {
