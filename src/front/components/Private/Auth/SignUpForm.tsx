@@ -89,7 +89,7 @@ export default function SignUpForm() {
     }
 
     return (
-        <div className="flex items-center justify-center text-foreground h-[calc(100svh-5rem)]">
+        <div className="flex items-center justify-center text-foreground min-h-[calc(100svh-5rem)] pt-20 pb-6 sm:pt-6 sm:pb-6">
             <div className="bg-white dark:bg-zinc-900 border-4 border-zinc-200 dark:border-zinc-700 rounded-3xl p-10 w-full max-w-md shadow-lg">
 
                 {/* HEADER */}
