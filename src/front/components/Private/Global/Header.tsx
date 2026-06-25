@@ -1,14 +1,12 @@
 "use client";
 
-"use client";
-
 import { Bell } from "lucide-react";
 import { Separator } from "../../ui/separator";
-import { SheetTrigger } from "../../ui/sheet";
+import { useNotificationsSheetStore } from "@/front/states/stores/notifications-sheet.store";
 import { NavUser } from "./Sidebar/nav-user";
 import { useState, useEffect } from "react";
 import { cn } from "@/front/lib/utils";
-import { useSidebar } from "../../ui/sidebar";
+import { useSidebar, SidebarTrigger } from "../../ui/sidebar";
 import { usePathname } from "next/navigation";
 import { CreateDropdown } from "./CreateDropdown";
 import BreadcrumbAuto from "./BreadcrumbAuto";
@@ -20,12 +18,12 @@ export default function Header({ className }: { className?: string }) {
     const { state } = useSidebar()
     const pathname = usePathname()
 
+    const { open: openNotifications } = useNotificationsSheetStore();
     const { data: notifications = [] } = useNotificationsQuery();
     const unreadCount = notifications.filter((n) => !n.read).length;
 
     const isFixedLayout = pathname !== "/account" && pathname !== "/admin"
     const isDashboard = pathname === "/account" || pathname === "/admin"
-
 
     useEffect(() => {
         const handleScroll = () => {
@@ -34,7 +32,6 @@ export default function Header({ className }: { className?: string }) {
                 setIsScrolled(scrollElement.scrollTop > 0)
             }
         }
-
         const scrollElement = document.querySelector('main')
         scrollElement?.addEventListener('scroll', handleScroll)
         return () => scrollElement?.removeEventListener('scroll', handleScroll)

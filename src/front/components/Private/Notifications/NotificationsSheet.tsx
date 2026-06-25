@@ -1,12 +1,13 @@
 "use client";
 
 import { Settings2 } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { Button } from "@/front/components/ui/button";
-import { SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/front/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/front/components/ui/sheet";
+import { useNotificationsSheetStore } from "@/front/states/stores/notifications-sheet.store";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/front/components/ui/tooltip";
 import {
     useNotificationsQuery,
@@ -39,11 +40,11 @@ const ALL_TABS: { id: TabType; label: string; prefKey: "show_projects" | "show_m
 ];
 
 export default function NotificationsSheet() {
+    const { isOpen, close } = useNotificationsSheetStore();
     const [activeTab, setActiveTab] = useState<TabType>("all");
     const [openDMUser, setOpenDMUser] = useState<ConversationParticipant | null>(null);
     const [pendingResponseApp, setPendingResponseApp] = useState<ApplicationForModal | null>(null);
     const [detailNotif, setDetailNotif] = useState<DBNotification | null>(null);
-    const closeSheetRef = useRef<HTMLButtonElement>(null);
 
     const { data: notifications = [], isLoading } = useNotificationsQuery();
     const { mutate: dismiss } = useDismissNotification();
@@ -218,72 +219,70 @@ export default function NotificationsSheet() {
 
     return (
         <>
-            <SheetContent className="flex flex-col w-full max-w-md bg-background border-l border-border shadow-2xl p-0">
-                {/* Header */}
-                <div className="px-6 pt-6 pb-0 border-b border-border">
-                    <SheetHeader className="mb-0 space-y-0">
-                        <div className="flex items-center gap-3 mb-4 pr-8">
-                            <SheetTitle className="text-base font-semibold tracking-tight flex-1">
-                                Notifications
-                            </SheetTitle>
-                            <TooltipProvider delayDuration={300}>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-7 w-7 text-muted-foreground hover:text-foreground shrink-0"
-                                            asChild
-                                        >
-                                            <Link href="/account/settings/notifs">
-                                                <Settings2 className="h-4 w-4" />
-                                            </Link>
-                                        </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="bottom">
-                                        Paramètres des notifications
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                        </div>
+            <Sheet open={isOpen} onOpenChange={(o) => { if (!o) close(); }}>
+                <SheetContent className="flex flex-col w-full max-w-md bg-background border-l border-border shadow-2xl p-0">
+                    {/* Header */}
+                    <div className="px-6 pt-6 pb-0 border-b border-border">
+                        <SheetHeader className="mb-0 space-y-0">
+                            <div className="flex items-center gap-3 mb-4 pr-8">
+                                <SheetTitle className="text-base font-semibold tracking-tight flex-1">
+                                    Notifications
+                                </SheetTitle>
+                                <TooltipProvider delayDuration={300}>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-7 w-7 text-muted-foreground hover:text-foreground shrink-0"
+                                                asChild
+                                            >
+                                                <Link href="/account/settings/notifs">
+                                                    <Settings2 className="h-4 w-4" />
+                                                </Link>
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="bottom">
+                                            Paramètres des notifications
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            </div>
 
-                        {/* Tabs */}
-                        <div className="flex gap-0">
-                            {visibleTabs.map((tab) => (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => setActiveTab(tab.id)}
-                                    className={`flex-1 py-2.5 px-2 text-xs font-medium border-b-2 transition-colors ${
-                                        activeTab === tab.id
-                                            ? "border-foreground text-foreground"
-                                            : "border-transparent text-muted-foreground hover:text-foreground"
-                                    }`}
-                                >
-                                    {tab.label}
-                                </button>
-                            ))}
-                        </div>
-                    </SheetHeader>
-                </div>
+                            {/* Tabs */}
+                            <div className="flex gap-0">
+                                {visibleTabs.map((tab) => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        className={`flex-1 py-2.5 px-2 text-xs font-medium border-b-2 transition-colors ${
+                                            activeTab === tab.id
+                                                ? "border-foreground text-foreground"
+                                                : "border-transparent text-muted-foreground hover:text-foreground"
+                                        }`}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </SheetHeader>
+                    </div>
 
-                {/* Content */}
-                <div className="flex-1 overflow-y-auto px-6 py-4">
-                    {renderContent()}
-                </div>
-            </SheetContent>
+                    {/* Content */}
+                    <div className="flex-1 overflow-y-auto px-6 py-4">
+                        {renderContent()}
+                    </div>
+                </SheetContent>
+            </Sheet>
 
             {openDMUser && (
                 <DirectMessageChat otherUser={openDMUser} onClose={() => setOpenDMUser(null)} />
             )}
 
-            <SheetClose ref={closeSheetRef} asChild>
-                <button className="hidden" aria-hidden tabIndex={-1} />
-            </SheetClose>
-
             <NotificationDetailModal
                 notification={detailNotif}
                 onClose={() => setDetailNotif(null)}
-                onCloseSheet={() => closeSheetRef.current?.click()}
+                onCloseSheet={close}
             />
 
             <ApplicationResponseModal
