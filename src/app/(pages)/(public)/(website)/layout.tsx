@@ -15,9 +15,11 @@ export default async function WebsiteLayout({
 
   return (
     <UserProvider user={user}>
-      <HeaderPublic />
-      <main>{children}</main>
-      <Footer />
+      <div className="min-h-screen flex flex-col">
+        <HeaderPublic />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
       <ModalRenderer />
     </UserProvider>
   );

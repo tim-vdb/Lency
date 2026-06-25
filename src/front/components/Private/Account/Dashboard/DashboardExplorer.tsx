@@ -31,6 +31,9 @@ const INITIAL_PROJECT_FILTERS: MapFiltersValues = {
     workMode: "Tout",
     dateFrom: "",
     dateTo: "",
+    locationAddress: "",
+    locationLat: null,
+    locationLon: null,
 };
 
 const INITIAL_TALENT_FILTERS: TalentFiltersValues = {
@@ -108,7 +111,7 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
                 </div>
                 <div className="flex-1 overflow-hidden">
                     {mode === "projets"
-                        ? <ProjectsMap projects={filteredProjects} />
+                        ? <ProjectsMap projects={filteredProjects} flyTo={projectFilters.locationLat !== null && projectFilters.locationLon !== null ? { lat: projectFilters.locationLat, lon: projectFilters.locationLon } : undefined} />
                         : <TalentsMap talents={filteredTalents} />}
                 </div>
             </div>
@@ -116,7 +119,7 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
     }
 
     return (
-        <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-y-auto">
+        <div className="absolute inset-0 flex flex-col gap-3 overflow-y-auto">
             {/* Filtres */}
             <div className="shrink-0">
                 <button
@@ -140,10 +143,10 @@ export function DashboardExplorer({ mode, expanded, onCollapse }: DashboardExplo
             </div>
 
             {/* Map */}
-            <Card className="border border-[#E8E8E1] dark:border-neutral-700 overflow-hidden py-0 shrink-0 w-full rounded-xl" style={{ height: "clamp(220px, 30.6vh, 330px)" }}>
+            <Card className="border border-[#E8E8E1] dark:border-neutral-700 overflow-hidden py-0 shrink-0 w-full rounded-xl isolate h-[260px] md:h-[clamp(220px,30.6vh,330px)]">
                 <CardContent className="p-0 h-full">
                     {mode === "projets"
-                        ? <ProjectsMap projects={filteredProjects} />
+                        ? <ProjectsMap projects={filteredProjects} flyTo={projectFilters.locationLat !== null && projectFilters.locationLon !== null ? { lat: projectFilters.locationLat, lon: projectFilters.locationLon } : undefined} />
                         : <TalentsMap talents={filteredTalents} />}
                 </CardContent>
             </Card>

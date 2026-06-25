@@ -28,13 +28,13 @@ export default function SearchBar() {
             {/* Trigger dans le header */}
             <DialogPrimitive.Trigger asChild>
                 <button className={cn(
-                    "relative flex items-center gap-2 px-3 h-8 rounded-lg w-full",
+                    "relative flex items-center gap-2 px-2.5 sm:px-3 h-8 rounded-lg sm:w-full",
                     "border border-neutral-200 dark:border-neutral-800",
                     "bg-white dark:bg-transparent",
                     "hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
                 )}>
                     <Search className="w-3.5 h-3.5 text-neutral-400 dark:text-zinc-400 shrink-0" />
-                    <span className="flex-1 text-left text-sm text-neutral-400 dark:text-zinc-400">
+                    <span className="hidden sm:flex flex-1 text-left text-sm text-neutral-400 dark:text-zinc-400">
                         Rechercher…
                     </span>
                     <kbd className="hidden sm:flex items-center gap-0.5 text-[10px] text-neutral-400 dark:text-zinc-400 font-mono shrink-0">

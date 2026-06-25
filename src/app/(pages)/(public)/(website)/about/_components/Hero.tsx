@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="w-full py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="w-full pt-24 sm:pt-28 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="flex flex-col-reverse md:flex-row items-center gap-10 md:gap-16">
         {/* Left — text + CTA */}
         <div className="flex-1 flex flex-col gap-6 md:gap-8 text-center md:text-left">
