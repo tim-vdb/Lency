@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { useRef } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import type { Project } from "@/front/lib/api/projects";
@@ -53,15 +53,6 @@ const icon = L.icon({
 
 interface ProjectsMapInnerProps {
     projects: Project[];
-    flyTo?: { lat: number; lon: number };
-}
-
-function FlyToLocation({ lat, lon }: { lat: number; lon: number }) {
-    const map = useMap();
-    useEffect(() => {
-        map.flyTo([lat, lon], 12, { duration: 1.2 });
-    }, [lat, lon, map]);
-    return null;
 }
 
 function PopupCard({ project }: { project: Project }) {
@@ -167,7 +158,7 @@ function HoverMarker({ project }: { project: Project }) {
     );
 }
 
-export function ProjectsMapInner({ projects, flyTo }: ProjectsMapInnerProps) {
+export function ProjectsMapInner({ projects }: ProjectsMapInnerProps) {
     return (
         <>
             <style>{COMPACT_POPUP_STYLES}</style>
@@ -176,7 +167,6 @@ export function ProjectsMapInner({ projects, flyTo }: ProjectsMapInnerProps) {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution="© OpenStreetMap"
                 />
-                {flyTo && <FlyToLocation lat={flyTo.lat} lon={flyTo.lon} />}
                 {projects
                     .filter((p) => p.mapLocation)
                     .map((p) => (

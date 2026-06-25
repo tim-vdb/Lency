@@ -13,8 +13,8 @@ const features = [
 export default function Need() {
   return (
     <section className="w-full py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#EA3D0E] leading-snug mb-10 md:mb-16 font-chunko">
-        Lency centralise tout ce dont un <br className="hidden sm:block" /> creatif a besoin
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-snug mb-10 md:mb-16">
+        Lency centralise tout ce dont un <br className="hidden sm:block" /> créatif a besoin
       </h2>
 
       <div className="flex justify-center">

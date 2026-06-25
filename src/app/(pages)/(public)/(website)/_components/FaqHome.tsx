@@ -37,7 +37,7 @@ export default function FAQHome() {
   return (
     <section className="w-full py-12 sm:py-16 lg:py-20 px-6 sm:px-8 lg:px-16 dark:bg-neutral-950">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black mb-8 sm:mb-10 text-center text-[#EA3D0E] font-chunko">
+        <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black mb-8 sm:mb-10 text-center text-[#EA3D0E]">
           FAQ
         </h2>
         <Accordion type="single" collapsible defaultValue="item-0">

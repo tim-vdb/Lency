@@ -31,8 +31,8 @@ export default function TestimonialsSection() {
 
         {/* Right: title + testimonial */}
         <div className="flex-1 flex flex-col gap-5 sm:gap-6">
-          <h2 className="text-[28px] sm:text-[36px] lg:text-[48px] font-black text-[#EA3D0E] uppercase leading-tight font-chunko">
-            Ils ont trouve leur equipe sur Lency
+          <h2 className="text-[28px] sm:text-[36px] lg:text-[48px] font-black text-[#EA3D0E] uppercase leading-tight">
+            Ils ont trouvé leur équipe sur Lency
           </h2>
 
           <div className="bg-[#FAF7F2] dark:bg-neutral-800 rounded-2xl p-6 sm:p-8 flex flex-col gap-4 sm:gap-5">

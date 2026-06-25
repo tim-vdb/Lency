@@ -52,7 +52,7 @@ model Post {
   votes        PostVote[]
   reports      PostReport[]
   author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  category     Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category     Category     @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
   @@index([authorId])

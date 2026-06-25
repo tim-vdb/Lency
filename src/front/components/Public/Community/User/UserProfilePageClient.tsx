@@ -190,11 +190,11 @@ function ParticipatedProjectsCard({ projects }: { projects: { id: string; title:
 
 export function UserProfileSkeleton() {
     return (
-        <div className="max-w-5xl mx-auto flex flex-col gap-4 sm:gap-6 px-4 sm:px-0">
+        <div className="max-w-5xl mx-auto flex flex-col gap-6">
             {/* Header : card gauche + stats droite */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
+            <div className="flex gap-6 items-center">
                 {/* Card gauche */}
-                <Card className="w-full sm:shrink-0 sm:w-64 py-5 sm:min-w-md">
+                <Card className="shrink-0 w-64 py-5 min-w-md">
                     <CardContent className="flex flex-col gap-4 px-5">
                         {/* Avatar + nom */}
                         <div className="flex items-center gap-3">
@@ -226,7 +226,7 @@ export function UserProfileSkeleton() {
                 </Card>
 
                 {/* Stats droite */}
-                <div className="flex items-center justify-around w-full sm:flex-1 py-2 sm:py-4">
+                <div className="flex items-center justify-around flex-1 py-4">
                     {[...Array(3)].map((_, i) => (
                         <div key={i} className="flex flex-col items-center gap-3">
                             <Skeleton className="h-16 w-24 rounded-md" />
@@ -243,15 +243,15 @@ export function UserProfileSkeleton() {
                     <Skeleton className="h-9 w-20 rounded-md" />
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-6 items-start">
+                <div className="flex gap-6 items-start">
                     {/* Posts */}
-                    <div className="flex-1 min-w-0 flex flex-col gap-4">
+                    <div className="flex-1 flex flex-col gap-4">
                         <PostSkeleton />
                         <PostImageSkeleton />
                         <PostSkeleton />
                     </div>
                     {/* Sidebar */}
-                    <div className="w-full md:w-60 md:shrink-0 flex flex-col gap-3">
+                    <div className="w-60 shrink-0 flex flex-col gap-3">
                         <Skeleton className="h-9 w-full rounded-md" />
                         <Card>
                             <CardContent className="p-4 flex flex-col gap-2">
@@ -321,10 +321,10 @@ export default function UserProfilePageClient({ username }: { username: string }
     }
 
     return (
-        <div className="max-w-5xl mx-auto flex flex-col gap-4 sm:gap-6 px-4 sm:px-0">
+        <div className="max-w-5xl mx-auto flex flex-col gap-6">
 
             {/* ── Header : card gauche + stats droite ── */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
+            <div className="flex gap-6 items-center">
                 <UserProfileHeader user={user} />
                 <UserStats user={user} />
             </div>
@@ -356,7 +356,7 @@ export default function UserProfilePageClient({ username }: { username: string }
                 </div>
 
                 {/* Colonnes : contenu gauche + sidebar droite */}
-                <div className="flex flex-col md:flex-row gap-6 mt-6 items-start">
+                <div className="flex gap-6 mt-6 items-start">
 
                     {/* Contenu principal */}
                     <div className="flex-1 min-w-0">
@@ -419,7 +419,7 @@ export default function UserProfilePageClient({ username }: { username: string }
                         </TabsContent>
                     </div>
 
-                    <div className="w-full md:w-60 md:shrink-0 flex flex-col gap-3 md:sticky md:top-2 md:self-start">
+                    <div className="w-60 shrink-0 flex flex-col gap-3 sticky top-2 self-start">
                         {isOwnProfile && (
                             <TooltipProvider>
                                 <Tooltip>

@@ -18,7 +18,7 @@ export interface Talent {
     cv: string | null;
     categoryFollows: { category: { id: string; name: string } }[];
     configs: TalentConfig[];
-    _count: { followers: number; participants: number; projects: number; Posts: number };
+    _count: { followers: number; participants: number; projects: number };
 }
 
 export function getTalentRoles(talent: Talent): string[] {

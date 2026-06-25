@@ -33,8 +33,6 @@ export const EditProjectSchema = z.object({
     remunerationType: z.nativeEnum(RemunerationType).optional(),
     workMode: z.nativeEnum(WorkMode).optional(),
     city: z.string().max(255).optional(),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
     startDate: z.string().optional(),
     visibility: z.nativeEnum(Visibility),
     bannerUrl: z.string().optional(),

@@ -1,9 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  env: {
-    BETTER_AUTH_URL: process.env.BASE_URL ?? 'http://localhost:3000',
-  },
+  /* config options here */
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**.ufs.sh' },
@@ -17,7 +15,6 @@ const nextConfig: NextConfig = {
     authInterrupts: true,
   },
   turbopack: {
-    root: __dirname,
     rules: {
       "*.svg": {
         loaders: ["@svgr/webpack"],

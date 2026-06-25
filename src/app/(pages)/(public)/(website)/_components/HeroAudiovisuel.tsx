@@ -59,14 +59,14 @@ export default function HeroAudiovisuel() {
           className="absolute -top-10 -right-10 select-none pointer-events-none opacity-30"
         />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-20 py-28 lg:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-20 py-32">
           {/* Left: text content */}
           <div className="flex flex-col gap-8 w-full lg:max-w-[500px] shrink-0 ">
             <div className="flex flex-col gap-3">
               <span className="text-white/60 text-sm font-semibold uppercase tracking-widest">
                 La plateforme audiovisuelle
               </span>
-              <h1 className="font-black text-white uppercase text-left leading-[1.05] tracking-tight text-[38px] sm:text-[52px] lg:text-[68px] font-chunko">
+              <h1 className="font-black text-white uppercase text-left leading-[1.05] tracking-tight text-[56px] lg:text-[68px]">
                 Progresse plus vite dans l&apos;audiovisuel
               </h1>
             </div>

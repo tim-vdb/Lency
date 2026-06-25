@@ -1,8 +1,8 @@
 "use client"
 
 import { AppSidebar } from "@/front/components/Private/Global/Sidebar/app-sidebar"
+import { Sheet } from "@/front/components/ui/sheet"
 import { SidebarInset, SidebarProvider } from "@/front/components/ui/sidebar"
-import NotificationsSheet from "@/front/components/Private/Notifications/NotificationsSheet"
 import { UserProvider } from "@/front/states/contexts/user.context"
 import type { User } from "@/back/generated/prisma_client"
 import { usePathname } from "next/navigation"
@@ -24,22 +24,23 @@ export function AccountShell({ user, children }: { user: User | null; children: 
                     <AblyInitializer>
                         <div className="h-screen overflow-hidden bg-gray-lighter dark:bg-gray-dark dark:text-white">
                             <SidebarProvider className="min-h-screen gap-2 isolate pr-0! p-2 [&>div]:transition-all [&>div]:duration-800">
-                                <AppSidebar />
-                                <SidebarInset className="relative bg-transparent!">
-                                    <Header />
-                                    <main
-                                        className={cn(
-                                            "dark:text-white bg-transparent",
-                                            isDashboard
-                                                ? "overflow-y-auto md:overflow-hidden pr-2 h-[calc(100svh-1rem)]"
-                                                : cn("overflow-y-auto pr-2", isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : "")
-                                        )}
-                                    >
-                                        {children}
-                                    </main>
-                                </SidebarInset>
+                                <Sheet>
+                                    <AppSidebar />
+                                    <SidebarInset className="relative bg-transparent!">
+                                        <Header />
+                                        <main
+                                            className={cn(
+                                                "dark:text-white bg-transparent",
+                                                isDashboard
+                                                    ? "overflow-hidden pr-2 flex-1"
+                                                    : cn("overflow-y-auto pr-2", isFixedLayout ? "pt-16 h-[calc(100vh-1rem)]" : "")
+                                            )}
+                                        >
+                                            {children}
+                                        </main>
+                                    </SidebarInset>
+                                </Sheet>
                             </SidebarProvider>
-                            <NotificationsSheet />
                         </div>
                     </AblyInitializer>
                 </ActiveChatProvider>

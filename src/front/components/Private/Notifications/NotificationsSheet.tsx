@@ -1,13 +1,12 @@
 "use client";
 
 import { Settings2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { Button } from "@/front/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/front/components/ui/sheet";
-import { useNotificationsSheetStore } from "@/front/states/stores/notifications-sheet.store";
+import { SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/front/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/front/components/ui/tooltip";
 import {
     useNotificationsQuery,
@@ -40,11 +39,11 @@ const ALL_TABS: { id: TabType; label: string; prefKey: "show_projects" | "show_m
 ];
 
 export default function NotificationsSheet() {
-    const { isOpen, close } = useNotificationsSheetStore();
     const [activeTab, setActiveTab] = useState<TabType>("all");
     const [openDMUser, setOpenDMUser] = useState<ConversationParticipant | null>(null);
     const [pendingResponseApp, setPendingResponseApp] = useState<ApplicationForModal | null>(null);
     const [detailNotif, setDetailNotif] = useState<DBNotification | null>(null);
+    const closeSheetRef = useRef<HTMLButtonElement>(null);
 
     const { data: notifications = [], isLoading } = useNotificationsQuery();
     const { mutate: dismiss } = useDismissNotification();
@@ -219,7 +218,6 @@ export default function NotificationsSheet() {
 
     return (
         <>
-            <Sheet open={isOpen} onOpenChange={(o) => { if (!o) close(); }}>
             <SheetContent className="flex flex-col w-full max-w-md bg-background border-l border-border shadow-2xl p-0">
                 {/* Header */}
                 <div className="px-6 pt-6 pb-0 border-b border-border">
@@ -273,16 +271,19 @@ export default function NotificationsSheet() {
                     {renderContent()}
                 </div>
             </SheetContent>
-            </Sheet>
 
             {openDMUser && (
                 <DirectMessageChat otherUser={openDMUser} onClose={() => setOpenDMUser(null)} />
             )}
 
+            <SheetClose ref={closeSheetRef} asChild>
+                <button className="hidden" aria-hidden tabIndex={-1} />
+            </SheetClose>
+
             <NotificationDetailModal
                 notification={detailNotif}
                 onClose={() => setDetailNotif(null)}
-                onCloseSheet={close}
+                onCloseSheet={() => closeSheetRef.current?.click()}
             />
 
             <ApplicationResponseModal

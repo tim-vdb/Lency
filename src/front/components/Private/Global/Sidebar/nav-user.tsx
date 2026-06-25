@@ -106,7 +106,7 @@ export function NavUser() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onSelect={() => setTimeout(() => setFeedbackOpen(true), 0)} className="cursor-pointer">
+                  <DropdownMenuItem onSelect={() => setFeedbackOpen(true)} className="cursor-pointer">
                     <MessageSquare className="size-4" />
 Retours
                   </DropdownMenuItem>

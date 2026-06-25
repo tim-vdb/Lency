@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { Prisma } from "@prisma/client"
 import { AdminCategoriesService } from "@/back/services/admin-data.service"
 
 type Params = { params: Promise<{ categoryId: string }> }
@@ -17,8 +16,6 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     } catch (error) {
         if (error instanceof Error && error.message === "Unauthorized")
             return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
-        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002")
-            return NextResponse.json({ error: "Une communauté avec ce slug existe déjà" }, { status: 409 })
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
     }
 }

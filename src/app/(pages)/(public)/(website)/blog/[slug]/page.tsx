@@ -73,7 +73,7 @@ export default async function BlogDetailPage({
             </Link>
 
             {/* Titre et meta */}
-            <h1 className="text-4xl sm:text-5xl font-bold text-neutral-900 dark:text-white mb-4 font-chunko">
+            <h1 className="text-4xl sm:text-5xl font-bold text-neutral-900 dark:text-white mb-4">
               {blog.title}
             </h1>
 

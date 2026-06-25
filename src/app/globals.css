@@ -9,14 +9,6 @@
   font-display: swap;
 } */
 
-@font-face {
-  font-family: "Chunko Bold Demo";
-  src: url("/font/chunko-bold-demo.regular.otf") format("opentype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 @plugin "@midudev/tailwind-animations";
@@ -53,7 +45,6 @@
 
 @theme {
   --font-poppins: 'Poppins', sans-serif;
-  --font-chunko: 'Chunko Bold Demo', sans-serif;
   /* --font-cooper: 'Cooper', sans-serif; */
 
   --color-orange: #ea3d0e;
@@ -90,10 +81,6 @@
       transform: translateY(0);
     }
   }
-}
-
-@utility font-chunko {
-  font-family: 'Chunko Bold Demo', sans-serif;
 }
 
 @utility container {

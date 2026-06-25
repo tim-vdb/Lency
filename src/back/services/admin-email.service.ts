@@ -120,31 +120,25 @@ export const AdminEmailService = {
 
         let htmlContent: string | undefined = input.html
         let textContent: string | undefined = input.text
-
-        // Parse "Name <email>" format from the from field
-        const fromMatch = input.from.match(/^(.+?)\s*<([^>]+)>$/)
-        const parsedFromEmail = fromMatch ? fromMatch[2].trim() : input.from.trim()
-        const parsedFromName = fromMatch ? fromMatch[1].trim() : undefined
-
-        let fromName: string | undefined = input.sender?.name ?? parsedFromName
+        let fromName: string | undefined = input.sender?.name
 
         // Fetch full email content via Resend receiving API
         if (input.email_id) {
             try {
                 const res = await fetch(
-                    `https://api.resend.com/emails/receiving/${input.email_id}`,
+                    `https://api.resend.com/emails/receiving/${input.email_id}?html_format=data_uri`,
                     { headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` } }
                 )
                 if (res.ok) {
-                    const data = await res.json() as { html?: string | null; text?: string | null; from?: string }
-                    if (data.html) htmlContent = data.html
-                    if (data.text) textContent = data.text
-                    if (data.from) {
+                    const data = await res.json() as { html?: string; text?: string; from?: string }
+                    htmlContent = data.html ?? undefined
+                    textContent = data.text ?? undefined
+                    if (!fromName && data.from) {
                         const match = data.from.match(/^(.+?)\s*</)
                         if (match) fromName = match[1].trim()
                     }
                 } else {
-                    console.error("[inbound] Resend receiving API error:", res.status, await res.text())
+                    console.error("[inbound] Resend receiving API error:", res.status)
                 }
             } catch (err) {
                 console.error("[inbound] failed to fetch email content:", err)
@@ -155,7 +149,7 @@ export const AdminEmailService = {
             messageId,
             type: AdminEmailType.RECEIVED,
             box: matchedBox,
-            fromEmail: input.sender?.email ?? parsedFromEmail,
+            fromEmail: input.sender?.email ?? input.from,
             fromName,
             toEmail: BOX_ADDRESS[matchedBox],
             subject: input.subject,

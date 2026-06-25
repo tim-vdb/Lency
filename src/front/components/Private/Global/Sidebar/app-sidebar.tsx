@@ -13,6 +13,7 @@ import {
 } from "@/front/components/ui/sidebar"
 import Link from "next/link"
 import * as React from "react"
+import NotificationsSheet from "@/front/components/Private/Notifications/NotificationsSheet"
 import { NavMain } from "./nav-main"
 import { NavProjects } from "./nav-projects"
 import { NavPublic } from "./nav-public"
@@ -59,6 +60,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavPublic />
       </SidebarContent>
       <SidebarFooter>
+        <NotificationsSheet />
+
         {isAdmin && (
           <DashboardButton isCollapsed={isCollapsed} />
         )}
