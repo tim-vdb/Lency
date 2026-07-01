@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Build autonome — requis pour un déploiement Docker / hors Vercel.
+  // Génère .next/standalone avec uniquement les dépendances nécessaires au runtime.
+  output: 'standalone',
   env: {
     BETTER_AUTH_URL: process.env.BASE_URL ?? 'http://localhost:3000',
   },

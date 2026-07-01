@@ -1,0 +1,82 @@
+# ============================================================================
+# Lency — docker-compose pour un déploiement / test autonome hors Vercel
+#
+# Lance deux services :
+#   - postgres : une base PostgreSQL locale (remplace Neon)
+#   - app      : l'application Next.js (buildée depuis le Dockerfile)
+#
+# Usage :
+#   docker compose up --build
+#   → app dispo sur http://localhost:3000
+#
+# Les secrets externes (Ably, Resend, ImageKit, Google…) sont ici en valeurs
+# par défaut factices : l'app démarre sans eux. Renseigne-les via un fichier
+# .env (ou l'environnement de ton hébergeur) pour activer ces services.
+# ============================================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: lency-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lency}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lency}
+      POSTGRES_DB: ${POSTGRES_DB:-lency}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lency}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Applique les migrations Prisma puis se termine. L'app attend sa réussite.
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrate
+    container_name: lency-migrate
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lency}:${POSTGRES_PASSWORD:-lency}@postgres:5432/${POSTGRES_DB:-lency}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lency-app
+    ports:
+      - "3000:3000"
+    environment:
+      # NODE_ENV=development → l'app utilise l'adapter Prisma "pg" (Postgres
+      # standard) au lieu de l'adapter Neon HTTP, donc compatible avec ce
+      # Postgres local. En prod sur Neon, laisser NODE_ENV=production.
+      NODE_ENV: development
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lency}:${POSTGRES_PASSWORD:-lency}@postgres:5432/${POSTGRES_DB:-lency}
+      BASE_URL: ${BASE_URL:-http://localhost:3000}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-dev-only-secret-change-in-prod}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      # Auth Google (optionnel en local)
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      # Services externes — valeurs factices par défaut (l'app boote sans)
+      ABLY_API_KEY: ${ABLY_API_KEY:-dummy:dummy}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      IMAGEKIT_PRIVATE_KEY: ${IMAGEKIT_PRIVATE_KEY:-}
+      NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY: ${NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  pgdata:
