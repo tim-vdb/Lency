@@ -5,8 +5,8 @@ const zodEnum = <T extends Record<string, string>>(e: T) =>
     z.enum(Object.values(e) as unknown as [T[keyof T], ...T[keyof T][]]);
 
 export const createProjectSchema = z.object({
-    title: z.string().min(1, "Requis"),
-    description: z.string().min(1, "Requis"),
+    title: z.string().min(1, "Requis").max(150),
+    description: z.string().min(1, "Requis").max(2000),
     bannerUrl: z.string().optional(),
     projectType: zodEnum(ProjectType),
     remunerationType: zodEnum(RemunerationType).optional(),
