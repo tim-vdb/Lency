@@ -14,13 +14,13 @@ export default function UserStats({ user }: { user: UserProfile }) {
     ];
 
     return (
-        <div className="flex items-center justify-around flex-1 py-4">
+        <div className="flex items-center justify-around w-full sm:flex-1 py-3 sm:py-4">
             {stats.map((stat) => (
                 <div key={stat.label} className="flex flex-col items-center gap-1">
-                    <span className="text-5xl font-black text-orange leading-none tabular-nums">
+                    <span className="text-3xl sm:text-5xl font-black text-orange leading-none tabular-nums">
                         {formatStat(stat.value)}
                     </span>
-                    <span className="text-2xl font-bold text-foreground mt-1">{stat.label}</span>
+                    <span className="text-sm sm:text-2xl font-bold text-foreground mt-1">{stat.label}</span>
                 </div>
             ))}
         </div>
