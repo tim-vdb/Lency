@@ -42,14 +42,13 @@ export async function createProject(input: CreateProjectInput): Promise<ProjectW
         body: JSON.stringify(input),
     });
     if (!res.ok) {
-        const text = await res.text(); // lire en brut d'abord
+        const text = await res.text();
         let error: Record<string, string> = {};
         try {
             error = JSON.parse(text);
         } catch {
-            // la réponse n'est pas du JSON (HTML d'erreur Next.js, string vide, etc.)
+            // Pas du JSON
         }
-        console.error(`Erreur création projet [${res.status}]:`, text);
         throw new Error(error.error || error.message || `Erreur ${res.status}`);
     }
     return (await res.json()).project;

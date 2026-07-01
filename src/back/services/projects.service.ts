@@ -3,24 +3,7 @@ import { ProjectsAction } from "../repositories/projects.action";
 import { getUser } from "../lib/auth-session";
 import { NotifyNewProject, notifyProjectStatusChanged, notifyProjectVisibilityChanged } from "../lib/ably";
 import { NotificationService } from "./notifications.service";
-
-
-export type CreateProjectInput = {
-    title: string;
-    description: string;
-    bannerUrl?: string;
-    projectType: ProjectType;
-    remunerationType?: RemunerationType;
-    level?: ProjectLevel;
-    workMode?: WorkMode;
-    startDate?: string;
-    roles?: string[];
-    visibility?: "PUBLIC" | "PRIVATE" | "MEMBERS_ONLY";
-    status?: "PUBLISHED" | "DRAFT" | "ARCHIVED";
-    city?: string;
-    latitude?: number;
-    longitude?: number;
-};
+import type { CreateProjectInput } from "../schemas/types/project.type";
 
 export const ProjectsService = {
     findByIdProject: async (id: string) => {

@@ -14,7 +14,7 @@ export async function GET() {
 }
 
 export const POST = createZodRoute()
-     .body(createProjectSchema)
+    .body(createProjectSchema)
     .handler(async (_req, { body }) => {
         try {
             const newProject = await ProjectsService.createProject(body);
