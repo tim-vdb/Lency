@@ -20,6 +20,9 @@ export default function ExploreBlock({ className }: { className?: string }) {
         workMode: "PRESENTIEL",
         dateFrom: "",
         dateTo: "",
+        locationAddress: "",
+        locationLat: null,
+        locationLon: null,
     })
     const [isMapExpanded, setIsMapExpanded] = useState(false)
 

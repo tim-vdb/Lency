@@ -10,9 +10,9 @@ import { DashboardExplorer } from "./DashboardExplorer";
 type MainTab = "communautes" | "explorer";
 type ExplorerMode = "projets" | "talents";
 
-const MAIN_TABS: { id: MainTab; label: string }[] = [
+const MAIN_TABS: { id: MainTab; label: string; mobileLabel?: string }[] = [
     { id: "communautes", label: "Communautés" },
-    { id: "explorer", label: "Explorer & Marketplace" },
+    { id: "explorer", label: "Explorer & Marketplace", mobileLabel: "Explorer" },
 ];
 
 const EXPLORER_MODES: { id: ExplorerMode; label: string }[] = [
@@ -45,35 +45,67 @@ export function DashboardTabs({ className }: { className?: string }) {
 
     return (
         <div className={cn("flex flex-col", className)}>
-            {/* Header row */}
-            <div className="flex items-center gap-3 shrink-0">
-                {/* Main tab bar — style segmented control */}
-                <div className="flex items-center bg-[#F7F7F2] dark:bg-neutral-800 rounded-lg p-1 gap-0.5">
-                    {MAIN_TABS.map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={cn(
-                                "px-5 py-2 rounded-lg text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
-                                activeTab === tab.id
-                                    ? "bg-[#000000] text-white shadow-sm"
-                                    : "text-[#000000] dark:text-neutral-300 hover:bg-[#E8E8E1] dark:hover:bg-neutral-700"
-                            )}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
+            {/* Header — 2 lignes sur mobile, 1 ligne sur desktop */}
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center shrink-0">
+                {/* Ligne principale : onglets principaux + sub-tabs desktop + expand */}
+                <div className="flex items-center gap-2 flex-1">
+                    {/* Main tab bar */}
+                    <div className="flex items-center bg-[#F7F7F2] dark:bg-neutral-800 rounded-lg p-1 gap-0.5">
+                        {MAIN_TABS.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={cn(
+                                    "px-3 sm:px-5 py-2 rounded-lg text-[13px] sm:text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
+                                    activeTab === tab.id
+                                        ? "bg-[#000000] text-white shadow-sm"
+                                        : "text-[#000000] dark:text-neutral-300 hover:bg-[#E8E8E1] dark:hover:bg-neutral-700"
+                                )}
+                            >
+                                <span className="sm:hidden">{tab.mobileLabel ?? tab.label}</span>
+                                <span className="hidden sm:inline">{tab.label}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Sub-tabs Explorer — inline sur desktop uniquement */}
+                    {activeTab === "explorer" && (
+                        <div className="hidden sm:flex items-center bg-[#F7F7F2] dark:bg-neutral-800 rounded-lg p-1 gap-0.5">
+                            {EXPLORER_MODES.map((m) => (
+                                <button
+                                    key={m.id}
+                                    onClick={() => setExplorerMode(m.id)}
+                                    className={cn(
+                                        "px-4 py-2 rounded-lg text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
+                                        explorerMode === m.id
+                                            ? "bg-[#EA3D0E] text-white shadow-sm"
+                                            : "text-[#000000] dark:text-neutral-300 hover:bg-[#E8E8E1] dark:hover:bg-neutral-700"
+                                    )}
+                                >
+                                    {m.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Expand — toujours à droite */}
+                    <button
+                        onClick={() => setExpanded(true)}
+                        className="ml-auto p-1.5 hover:bg-[#F7F7F2] dark:hover:bg-neutral-800 rounded-lg cursor-pointer transition-colors"
+                    >
+                        <Maximize2 className="w-4 h-4 text-[#8C8A85] dark:text-neutral-400" />
+                    </button>
                 </div>
 
-                {/* Explorer sub-tabs — uniquement si Explorer actif */}
+                {/* Sub-tabs Explorer — deuxième ligne sur mobile uniquement */}
                 {activeTab === "explorer" && (
-                    <div className="flex items-center bg-[#F7F7F2] dark:bg-neutral-800 rounded-lg p-1 gap-0.5">
+                    <div className="flex sm:hidden items-center bg-[#F7F7F2] dark:bg-neutral-800 rounded-lg p-1 gap-0.5 self-start">
                         {EXPLORER_MODES.map((m) => (
                             <button
                                 key={m.id}
                                 onClick={() => setExplorerMode(m.id)}
                                 className={cn(
-                                    "px-4 py-2 rounded-lg text-[14px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
+                                    "px-3 py-2 rounded-lg text-[13px] font-medium transition-colors cursor-pointer whitespace-nowrap leading-none",
                                     explorerMode === m.id
                                         ? "bg-[#EA3D0E] text-white shadow-sm"
                                         : "text-[#000000] dark:text-neutral-300 hover:bg-[#E8E8E1] dark:hover:bg-neutral-700"
@@ -84,20 +116,12 @@ export function DashboardTabs({ className }: { className?: string }) {
                         ))}
                     </div>
                 )}
-
-                {/* Expand — toujours à droite */}
-                <button
-                    onClick={() => setExpanded(true)}
-                    className="ml-auto p-1.5 hover:bg-[#F7F7F2] dark:hover:bg-neutral-800 rounded-lg cursor-pointer transition-colors"
-                >
-                    <Maximize2 className="w-4 h-4 text-[#8C8A85] dark:text-neutral-400" />
-                </button>
             </div>
 
-            {/* Content — flex-col pour que chaque onglet puisse utiliser flex-1 */}
-            <div className="flex-1 min-h-0 mt-4 flex flex-col overflow-hidden">
+            {/* Content */}
+            <div className="flex-1 min-h-0 mt-4 relative overflow-hidden">
                 {activeTab === "communautes" && (
-                    <div className="flex-1 min-h-0 overflow-y-auto">
+                    <div className="absolute inset-0 overflow-y-auto">
                         <DashboardCommunities />
                     </div>
                 )}
